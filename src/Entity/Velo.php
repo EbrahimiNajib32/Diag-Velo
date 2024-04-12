@@ -1,0 +1,246 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\VeloRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: VeloRepository::class)]
+class Velo
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $numero_de_serie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $marque = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $ref_recyclerie = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $couleur = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $poids = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    private ?string $taille_roues = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    private ?string $taille_cadre = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $etat = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $url_photo = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date_de_réception = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date_de_vente = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
+    #[ORM\Column]
+    private ?int $année = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $emplacement = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $commentaire = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNumeroDeSerie(): ?string
+    {
+        return $this->numero_de_serie;
+    }
+
+    public function setNumeroDeSerie(string $numero_de_serie): static
+    {
+        $this->numero_de_serie = $numero_de_serie;
+
+        return $this;
+    }
+
+    public function getMarque(): ?string
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(string $marque): static
+    {
+        $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getRefRecyclerie(): ?int
+    {
+        return $this->ref_recyclerie;
+    }
+
+    public function setRefRecyclerie(?int $ref_recyclerie): static
+    {
+        $this->ref_recyclerie = $ref_recyclerie;
+
+        return $this;
+    }
+
+    public function getCouleur(): ?string
+    {
+        return $this->couleur;
+    }
+
+    public function setCouleur(?string $couleur): static
+    {
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    public function getPoids(): ?int
+    {
+        return $this->poids;
+    }
+
+    public function setPoids(?int $poids): static
+    {
+        $this->poids = $poids;
+
+        return $this;
+    }
+
+    public function getTailleRoues(): ?string
+    {
+        return $this->taille_roues;
+    }
+
+    public function setTailleRoues(string $taille_roues): static
+    {
+        $this->taille_roues = $taille_roues;
+
+        return $this;
+    }
+
+    public function getTailleCadre(): ?string
+    {
+        return $this->taille_cadre;
+    }
+
+    public function setTailleCadre(string $taille_cadre): static
+    {
+        $this->taille_cadre = $taille_cadre;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getUrlPhoto(): ?string
+    {
+        return $this->url_photo;
+    }
+
+    public function setUrlPhoto(string $url_photo): static
+    {
+        $this->url_photo = $url_photo;
+
+        return $this;
+    }
+
+    public function getDateDeRéception(): ?\DateTimeInterface
+    {
+        return $this->date_de_réception;
+    }
+
+    public function setDateDeRéception(\DateTimeInterface $date_de_réception): static
+    {
+        $this->date_de_réception = $date_de_réception;
+
+        return $this;
+    }
+
+    public function getDateDeVente(): ?\DateTimeInterface
+    {
+        return $this->date_de_vente;
+    }
+
+    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
+    {
+        $this->date_de_vente = $date_de_vente;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAnnée(): ?int
+    {
+        return $this->année;
+    }
+
+    public function setAnnée(int $année): static
+    {
+        $this->année = $année;
+
+        return $this;
+    }
+
+    public function getEmplacement(): ?string
+    {
+        return $this->emplacement;
+    }
+
+    public function setEmplacement(string $emplacement): static
+    {
+        $this->emplacement = $emplacement;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(string $commentaire): static
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+}
