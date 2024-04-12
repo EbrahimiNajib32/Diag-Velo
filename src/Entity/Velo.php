@@ -42,7 +42,7 @@ class Velo
     private ?string $url_photo = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_de_réception = null;
+    private ?\DateTimeInterface $date_de_reception = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_de_vente = null;
@@ -172,14 +172,14 @@ class Velo
         return $this;
     }
 
-    public function getDateDeRéception(): ?\DateTimeInterface
+    public function getDateDeReception(): ?\DateTimeInterface
     {
-        return $this->date_de_réception;
+        return $this->date_de_reception;
     }
 
-    public function setDateDeRéception(\DateTimeInterface $date_de_réception): static
+    public function setDateDeReception(\DateTimeInterface $date_de_reception): static
     {
-        $this->date_de_réception = $date_de_réception;
+        $this->date_de_reception = $date_de_reception;
 
         return $this;
     }
@@ -208,14 +208,14 @@ class Velo
         return $this;
     }
 
-    public function getAnnée(): ?int
+    public function getAnnee(): ?int
     {
-        return $this->année;
+        return $this->annee;
     }
 
-    public function setAnnée(int $année): static
+    public function setAnnée(int $annee): static
     {
-        $this->année = $année;
+        $this->annee = $annee;
 
         return $this;
     }

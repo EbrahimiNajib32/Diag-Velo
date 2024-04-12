@@ -21,14 +21,14 @@ class VeloInfoType extends AbstractType
             ->add('taille_cadre')
             ->add('etat')
             ->add('url_photo')
-            ->add('date_de_réception', null, [
+            ->add('date_de_reception', null, [
                 'widget' => 'single_text'
             ])
             ->add('date_de_vente', null, [
                 'widget' => 'single_text'
             ])
             ->add('type')
-            ->add('année')
+            ->add('annee')
             ->add('emplacement')
             ->add('commentaire')
         ;

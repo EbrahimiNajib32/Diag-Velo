@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Velo{% endblock %}
+
+{% block body %}
+    <style>
+        .velo-form-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 16px/1.5 sans-serif; }
+        .velo-form-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div class="velo-form-wrapper">
+        <h1>Ajouter un nouveau Velo</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-success">Ajouter Velo</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
