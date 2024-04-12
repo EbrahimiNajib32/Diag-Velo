@@ -51,7 +51,7 @@ class Velo
     private ?string $type = null;
 
     #[ORM\Column]
-    private ?int $année = null;
+    private ?int $annee = null;
 
     #[ORM\Column(length: 255)]
     private ?string $emplacement = null;
@@ -213,7 +213,7 @@ class Velo
         return $this->annee;
     }
 
-    public function setAnnée(int $annee): static
+    public function setAnnee(int $annee): static
     {
         $this->annee = $annee;
 
