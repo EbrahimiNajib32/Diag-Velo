@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Velo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class VeloInfoType extends AbstractType
 {
@@ -31,13 +31,18 @@ class VeloInfoType extends AbstractType
             ->add('annee')
             ->add('emplacement')
             ->add('commentaire')
-        ;
+           ->add('ref_recyclerie_search', TextType::class, [
+                          'label' => 'Numéro de recyclerie',
+                          'required' => false, // Rendre le champ facultatif
+                          'mapped' => false,  // Ce champ ne sera pas mappé à l'entité Velo
+
+                      ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Velo::class,
+            'data_class' => Velo::class, // Assurez-vous que cela correspond à votre entité Velo
         ]);
     }
 }

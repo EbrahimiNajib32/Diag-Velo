@@ -3,17 +3,31 @@
 {% block title %}Create New Velo{% endblock %}
 
 {% block body %}
-    <style>
-        .velo-form-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 16px/1.5 sans-serif; }
-        .velo-form-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
+<style>
+    .velo-form-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 16px/1.5 sans-serif;
+    }
+    .button-group {
+        text-align: right; /* Aligns the buttons to the right */
+        margin-top: 1em;
+    }
+    .btn {
+        padding: 0.5em 1em;
+        margin-right: 0.5em;
+    }
+</style>
 
-    <div class="velo-form-wrapper">
-        <h1>Ajouter un nouveau Velo</h1>
-
-        {{ form_start(form) }}
+<div class="velo-form-wrapper">
+    <h1>Ajouter un nouveau Velo</h1>
+    {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button type="submit" class="btn btn-success">Ajouter Velo</button>
-        {{ form_end(form) }}
-    </div>
+        <div class="button-group">
+            <button type="submit" class="btn btn-success">Ajouter Velo</button>
+             <button type="submit" name="search" class="btn btn-info">Rechercher par numéro de recyclerie</button>
+        </div>
+    {{ form_end(form) }}
+</div>
 {% endblock %}
