@@ -38,6 +38,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/ProjetVelo.iml
+.idea/php.xml
 
 # AWS User-specific
 .idea/**/aws.xml
