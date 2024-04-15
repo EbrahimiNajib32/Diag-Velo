@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue{% endblock %}
+
+{% block body %}
+    <div class="fixed top-0 left-0">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="">
+    </div>
+    <div class="fixed top-0 right-0">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+    </div>
+    <div class="max-w-lg mx-auto text-center py-20">
+        <h1 class="text-4xl font-bold mb-4">Bienvenue</h1>
+
+    </div>
+    <div class="text-center portrait:text-3xl">
+        <p>Explorez notre application pour découvrir comment nous sauvons des vélos de la casse et les remettons en état pour une mobilité durable dans la région Mulhousienne !</p>
+    </div>
+    <div class="max-w-lg mx-auto text-center portrait:max-w-2xl">
+        <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg mt-10">
+            <a href="/velo/new" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>
+                Saisir un vélo
+            </a>
+            <a href="#" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-card-checklist text-3xl mr-4 portrait:text-6xl"></i>
+                Diagnostique vélo
+            </a>
+            <a href="#" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-arrow-up-left-circle text-3xl mr-4 portrait:text-6xl"></i>
+                Reprendre un diagnostique
+            </a>
+            <a href="#" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-eyeglasses text-3xl mr-4 portrait:text-6xl"></i>
+                Consulter un vélo
+            </a>
+        </div>
+    </div>
+{% endblock %}
