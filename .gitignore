@@ -38,6 +38,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/ProjetVelo.iml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -160,4 +161,11 @@ fabric.properties
 .history
 .ionide
 
+
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm,visualstudiocode
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
