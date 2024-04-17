@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\DiagnosticRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Velo;
+use App\Entity\Utilisateur;
 
 #[ORM\Entity(repositoryClass: DiagnosticRepository::class)]
 class Diagnostic
@@ -108,4 +110,38 @@ class Diagnostic
 
         return $this;
     }
-}
+    
+    #[ORM\ManyToOne(targetEntity: Velo::class)]
+    #[ORM\JoinColumn(name: "id_velo", referencedColumnName: "id")]
+    
+    private ?Velo $velo;
+    
+    
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
+    #[ORM\JoinColumn(name: "id_utilisateur", referencedColumnName: "id")]
+    
+    private ?Utilisateur $utilisateur;
+    
+    public function getVelo(): ?Velo
+    {
+    return $this->velo;
+    }
+    
+    public function setVelo(?Velo $velo): static
+    {
+    $this->velo = $velo;
+    return $this;
+    }
+    
+    public function getUtilisateur(): ?Utilisateur
+    {
+    return $this->utilisateur;
+    }
+    
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+    $this->utilisateur = $utilisateur;
+    
+    return $this;
+    }
+    }
