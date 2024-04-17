@@ -1,10 +1,13 @@
 <?php
+
+// src/Controller/VeloController.php
 // src/Controller/VeloController.php
 
 namespace App\Controller;
 
 use App\Entity\Velo;
 use App\Form\VeloInfoType;
+use App\Form\SearchVeloType; // Importez le formulaire de recherche
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,32 +24,22 @@ class VeloController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // La sauvegarde du nouveau vélo
             $entityManager->persist($velo);
             $entityManager->flush();
 
-            // Vérification si une recherche par 'ref_recyclerie_search' a été demandée
-            if ($form->has('ref_recyclerie')) {
-                $refRecyclerie = $form->get('ref_recyclerie')->getData();
-                if ($refRecyclerie) {
-                    // Exécution de la recherche si un critère de recherche est fourni
-                    $velos = $entityManager->getRepository(Velo::class)->findBy(['ref_recyclerie' => $refRecyclerie]);
-
-                    // Vous pouvez ajouter ici une redirection vers une page de résultats, ou modifier la vue pour afficher les résultats
-                    return $this->render('velo/search_results.html.twig', [
-                        'velos' => $velos,
-                        'form' => $form->createView(), // Réafficher le formulaire avec les résultats
-                    ]);
-                }
-            }
-
-            // Redirection après l'enregistrement si aucune recherche n'est effectuée
+            // Redirection après enregistrement
             return $this->redirectToRoute('velo_success');
         }
 
-        // Affichage du formulaire (vide ou avec erreurs)
+        // Créer le formulaire de recherche
+        $searchForm = $this->createForm(SearchVeloType::class);
+        $searchForm->handleRequest($request);
+
+        // Ajouter ici la logique pour la recherche si nécessaire
+
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
+            'searchForm' => $searchForm->createView(), // Passer le formulaire de recherche au template Twig
         ]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Form;
 
 use App\Entity\Velo;
@@ -31,18 +32,14 @@ class VeloInfoType extends AbstractType
             ->add('annee')
             ->add('emplacement')
             ->add('commentaire')
-           ->add('ref_recyclerie_search', TextType::class, [
-                          'label' => 'Numéro de recyclerie',
-                          'required' => false, // Rendre le champ facultatif
-                          'mapped' => false,  // Ce champ ne sera pas mappé à l'entité Velo
 
-                      ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Velo::class, // Assurez-vous que cela correspond à votre entité Velo
+            'data_class' => Velo::class,
         ]);
     }
 }
