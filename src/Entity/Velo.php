@@ -59,6 +59,10 @@ class Velo
     #[ORM\Column(type: Types::TEXT)]
     private ?string $commentaire = null;
 
+    #[ORM\ManyToOne(inversedBy: 'id')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Proprietaire $proprietaire = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -240,6 +244,18 @@ class Velo
     public function setCommentaire(string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
+
+    public function setProprietaire(?Proprietaire $proprietaire): static
+    {
+        $this->proprietaire = $proprietaire;
 
         return $this;
     }
