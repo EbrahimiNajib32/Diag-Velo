@@ -3,26 +3,26 @@
 {% block body %}
         <div class="container mx-auto">
             <h1 class="text-3xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
-            <table class="max-w-3xl mx-auto text-center border border-gray-300 rounded">
-                <thead>
-                <tr class="bg-gray-200 rounded-lg text-black">
-                    <th class="px-4 py-2">Reference</th>
-                    <th class="px-4 py-2">Marque</th>
-                    <th class="px-4 py-2">Type</th>
-                    <th class="px-4 py-2">Couleur</th>
-                    <th class="px-4 py-2">Date Reception</th>
-                    <th class="px-4 py-2"></th>
+            <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
+                <thead class="bg-gray-200">
+                <tr class=" text-black">
+                    <th class="px-2 py-2">Reference<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Date Reception<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2"></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for velo in velosWithDiagnostics %}
-                    <tr class="border-b border-r">
-                        <td class="px-4 py-2">{{ velo.ref_recyclerie }}</td>
-                        <td class="px-4 py-2">{{ velo.marque }}</td>
-                        <td class="px-4 py-2">{{ velo.type }}</td>
-                        <td class="px-4 py-2">{{ velo.couleur }}</td>
-                        <td class="px-4 py-2">{{ velo.date_reception }}</td>
-                        <td class="px-4 py-2">
+                    <tr class="border">
+                        <td class="px-4 py-2 border-r border-b">{{ velo.ref_recyclerie }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ velo.type }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ velo.date_reception }}</td>
+                        <td class="px-4 py-2 ">
                             <button class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
                                 Reprendre
                             </button>
