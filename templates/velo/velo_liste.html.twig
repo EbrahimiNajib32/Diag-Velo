@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="fixed top-0 left-0">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="">
+    </div>
+    <div class="fixed top-0 right-0">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+    </div>
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold text-center text-black mb-6 ">Liste des vélos</h1>
+        <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
+            <thead class="bg-gray-200">
+            <tr class=" text-black">
+                <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Référence recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Date de Reception<i class="ml-1 bi bi-arrow-down-up"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for velo in velos %}
+                <tr class="border">
+                    <td class="px-4 py-2 border-r border-b">{{ velo.numero_de_serie }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.ref_recyclerie }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.date_de_reception|date('d/m/Y')}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

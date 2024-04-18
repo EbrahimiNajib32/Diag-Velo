@@ -36,7 +36,7 @@ class VeloController extends AbstractController
     }
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    public function index(EntityManagerInterface $entityManager): Response
     {
         $velos = $entityManager->getRepository(Velo::class)->findAll();
 
@@ -50,6 +50,8 @@ class VeloController extends AbstractController
                 'date_de_reception' => $velo->getDateDeReception(),
             ];
         }
-        return new JsonResponse($velosData);
+        return $this->render('velo/velo_liste.html.twig', [
+            'velos' => $velosData,
+        ]);
     }
 }
