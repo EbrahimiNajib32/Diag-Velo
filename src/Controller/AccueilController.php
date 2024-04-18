@@ -24,7 +24,8 @@ class AccueilController extends AbstractController
             $refRecyclerie = $searchForm->getData()['ref_recyclerie_search'];
 
             // Rechercher le vélo correspondant dans la base de données
-            $velo = $this->getDoctrine()->getRepository(Velo::class)->findOneBy(['refRecyclerie' => $refRecyclerie]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
 
             // Si un vélo correspondant est trouvé, passer ses informations au template
             if ($velo) {
@@ -32,8 +33,13 @@ class AccueilController extends AbstractController
                     'velo' => $velo,
                 ]);
             } else {
-                // Gérer le cas où aucun vélo n'est trouvé avec la référence de recyclérie saisie
+                // Gérer le cas où aucun vélo n'est trouvé avec la référence de recyclérie spécifiée
                 // Par exemple, afficher un message d'erreur ou rediriger vers une autre page
+                return $this->render('accueil/index.html.twig', [
+                    'controller_name' => 'AccueilController',
+                    'searchForm' => $searchForm->createView(),
+                    'error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.',
+                ]);
             }
         }
 
@@ -42,5 +48,28 @@ class AccueilController extends AbstractController
             'controller_name' => 'AccueilController',
             'searchForm' => $searchForm->createView(),
         ]);
+    }
+
+    #[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
+    public function veloDetails($ref_Recyclerie = null): Response
+    {
+        // Obtenez le gestionnaire d'entités de Doctrine en utilisant $this->getDoctrine()
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // Recherchez le vélo correspondant dans la base de données en fonction de la référence de recyclérie
+        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
+
+        // Si un vélo correspondant est trouvé, passez ses informations au template
+        if ($velo) {
+            return $this->render('accueil/velo_details.html.twig', [
+                'velo' => $velo,
+            ]);
+        } else {
+            // Gérer le cas où aucun vélo n'est trouvé avec la référence de recyclérie spécifiée
+            // Par exemple, afficher un message d'erreur ou rediriger vers une autre page
+            return $this->render('accueil/velo_details.html.twig', [
+                'error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.',
+            ]);
+        }
     }
 }

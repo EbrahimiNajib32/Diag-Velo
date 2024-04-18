@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du vélo{% endblock %}
+
+{% block body %}
+    <h1>Détails du vélo</h1>
+    <p>Référence de recyclérie : {{ velo.ref_recyclerie }}</p>
+    <p>Nom : {{ velo.nom }}</p>
+    <p>Description : {{ velo.description }}</p>
+    <!-- Ajoutez d'autres détails du vélo ici -->
+{% endblock %}
