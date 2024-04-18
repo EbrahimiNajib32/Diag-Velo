@@ -4,28 +4,8 @@
 
 {% block body %}
     <div class="flex flex-col items-center pt-6 sm:pt-0 bg-gray-100">
-        <nav class="p-3 rounded-b-lg">
-            <div class="flex items-center justify-between">
-                <a href="/velo/new" class="bg-[#209b85] hover:bg-[#50c7ac] text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full ">
-                    <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>
-                    Saisir un vélo
-                </a>
-                <a href="#" class="bg-[#209b85] hover:bg-[#50c7ac] text-white rounded-lg px-3 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full ">
-                    <i class="bi bi-card-checklist text-3xl mr-4 portrait:text-6xl"></i>
-                </a>
-                <a href="#" class="bg-[#209b85] hover:bg-[#50c7ac] text-white rounded-lg px-3 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full ">
-                    <i class="bi bi-arrow-up-left-circle text-3xl mr-4 portrait:text-6xl"></i>
-                </a>
-                <a href="#" class="bg-[#209b85] hover:bg-[#50c7ac] text-white rounded-lg px-3 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full ">
-                    <i class="bi bi-eyeglasses text-3xl mr-4 portrait:text-6xl"></i>
-                </a>
-            </div>
-        </nav>
-
-        <div class="w-full sm:max-w-md
-mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <h1 class="text-xl font-bold text-gray-900 mb-6">Saisir un vélo</h1>
-
+        <div class="w-full sm:max-w-2xl mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Saisir un vélo</h1>
 
             {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
             {% for field in form %}
@@ -44,3 +24,4 @@ mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
         </div>
     </div>
 {% endblock %}
+
