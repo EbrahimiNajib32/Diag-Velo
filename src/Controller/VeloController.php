@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Velo;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,26 @@ class VeloController extends AbstractController
 
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): Response
+    {
+        $velos = $entityManager->getRepository(Velo::class)->findAll();
+
+        $velosData = [];
+        foreach ($velos as $velo) {
+            $velosData[] = [
+                'numero_de_serie' => $velo->getNumeroDeSerie(),
+                'marque' => $velo->getMarque(),
+                'ref_recyclerie' => $velo->getRefRecyclerie(),
+                'couleur' => $velo->getCouleur(),
+                'date_de_reception' => $velo->getDateDeReception(),
+            ];
+        }
+        return $this->render('velo/velo_liste.html.twig', [
+            'velos' => $velosData,
         ]);
     }
 }
