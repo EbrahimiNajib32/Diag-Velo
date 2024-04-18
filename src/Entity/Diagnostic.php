@@ -29,7 +29,7 @@ class Diagnostic
     private ?\DateTimeInterface $date_diagnostic = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $coup_reparation = null;
+    private ?int $cout_reparation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $conclusion = null;
@@ -87,9 +87,9 @@ class Diagnostic
         return $this;
     }
 
-    public function getCoupReparation(): ?int
+    public function getCoutReparation(): ?int
     {
-        return $this->coup_reparation;
+        return $this->cout_reparation;
     }
 
     public function setCoupReparation(?int $coup_reparation): static
