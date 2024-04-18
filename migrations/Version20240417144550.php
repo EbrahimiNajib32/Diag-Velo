@@ -60,7 +60,7 @@ final class Version20240417144550 extends AbstractMigration
         id_velo INT NOT NULL, 
         id_user INT NOT NULL, 
         date_diagnostic DATETIME NOT NULL, 
-        coup_reparation INT DEFAULT NULL, 
+        cout_reparation INT DEFAULT NULL, 
         conclusion VARCHAR(255) DEFAULT NULL, 
         INDEX IDX_FA7C8889BE696DF7 (id_velo), 
         PRIMARY KEY(id)
