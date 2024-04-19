@@ -84,10 +84,10 @@ final class Version20240417144550 extends AbstractMigration
     ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
         $this->addSql('ALTER TABLE velo ADD proprietaire_id INT NOT NULL');
-        $this->addSql('ALTER TABLE utilisateur ADD CONSTRAINT FK_FA7C8889BE696DF8 FOREIGN KEY (id) REFERENCES diagnostic (id)');
+        $this->addSql('ALTER TABLE diagnostic ADD CONSTRAINT FK_FA7C8889BE696DF8 FOREIGN KEY (id_user) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE diagnostic ADD CONSTRAINT FK_FA7C8889BE696DF7 FOREIGN KEY (id_velo) REFERENCES velo (id)');
         $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE100665FF6085E FOREIGN KEY (id_diagnostic) REFERENCES diagnostic (id)');
-        $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE100669FDDF749 FOREIGN KEY (id_element) REFERENCES element_control (id)'); 
+        $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE100669FDDF749 FOREIGN KEY (id_element) REFERENCES element_control (id)');
         $this->addSql('ALTER TABLE velo ADD CONSTRAINT FK_354971F576C50E4A FOREIGN KEY (proprietaire_id) REFERENCES proprietaire (id)');
         $this->addSql('CREATE INDEX IDX_354971F576C50E4A ON velo (proprietaire_id)');
     }
