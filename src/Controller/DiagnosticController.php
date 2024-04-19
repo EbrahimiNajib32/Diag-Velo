@@ -120,7 +120,7 @@ class DiagnosticController extends AbstractController
 //    }
 
     #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-    public function diagnosticEnCours(EntityManagerInterface $entityManager): JsonResponse
+    public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
         $filteredDiagnostics = [];
@@ -129,46 +129,41 @@ class DiagnosticController extends AbstractController
             $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
             if (empty($elements)) {
-                continue;
+                continue; // Skip diagnostics with no elements
             }
 
-            $unfinishedElements = [];
             $allElementsOK = true;
 
             foreach ($elements as $element) {
-                $etat = $element->getEtatControl();
-                $veloElement = $element->getElementControl();
-
-                if ($etat->getNomEtat() !== 'OK') {
+                if ($element->getEtatControl()->getNomEtat() !== 'OK') {
                     $allElementsOK = false;
-                    $unfinishedElements[] = [
-                        'id' => $element->getId(),
-                        'commentaire' => $element->getCommentaire(),
-                        'element' => $veloElement->getElement(),
-                        'etat' => $etat->getNomEtat(),
-                    ];
+                    break; // Break early since we found an element not OK
                 }
             }
 
+            // Only include diagnostics where not all elements are 'OK'
             if (!$allElementsOK) {
+                $velo = $diagnostic->getVelo(); // Assuming getVelo() fetches the bike related to the diagnostic
                 $filteredDiagnostics[] = [
-                    'id' => $diagnostic->getId(),
-                    'id_velo' => $diagnostic->getVelo()->getId(),
-                    'id_user' => $diagnostic->getIdUser(),
-                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-                    'cout_reparation' => $diagnostic->getCoutReparation(),
-                    'conclusion' => $diagnostic->getConclusion(),
-                    'elements' => $unfinishedElements,
+                    'diagnostic' => $diagnostic,
+                    'veloDetails' => [
+                        'id' => $velo->getId(),
+                        'couleur' => $velo->getCouleur(),
+                        'marque' => $velo->getMarque(),
+                        'refRecyclerie' => $velo->getRefRecyclerie(),
+                        'type' => $velo->getType(),
+                        'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
+                    ]
                 ];
             }
         }
 
-        if (empty($filteredDiagnostics)) {
-            return new JsonResponse(['message' => 'No unfinished diagnostics found'], Response::HTTP_NOT_FOUND);
-        }
-
-        return new JsonResponse($filteredDiagnostics);
+        // Render a Twig template, passing the filtered diagnostics
+        return $this->render('diagnostic_en_cour/index.html.twig', [
+            'filteredDiagnostics' => $filteredDiagnostics
+        ]);
     }
+
 
     #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
     public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
