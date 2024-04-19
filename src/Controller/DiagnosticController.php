@@ -42,8 +42,8 @@ class DiagnosticController extends AbstractController
 
             $diagnosticData[] = [
                 'id' => $diagnostic->getId(),
-                'id_velo' => $diagnostic->getVelo()->getId(), // Assuming getVelo() returns an object from which you can get the ID.
-                'id_user' => $diagnostic->getIdUser(), // Directly use the user ID, no need to call getId() on it.
+                'id_velo' => $diagnostic->getVelo()->getId(),
+                'id_user' => $diagnostic->getIdUser(),
                 'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
                 'cout_reparation' => $diagnostic->getCoutReparation(),
                 'conclusion' => $diagnostic->getConclusion(),
@@ -53,4 +53,42 @@ class DiagnosticController extends AbstractController
 
         return new JsonResponse($diagnosticData);
     }
+
+    #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
+    public function diagnosticById(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
+
+        if (!$diagnostic) {
+            return new JsonResponse(['message' => 'Diagnostic not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
+        $elementData = [];
+        foreach ($elements as $element) {
+            $etat = $element->getEtatControl();
+            $veloElement = $element->getElementControl();
+
+            $elementData[] = [
+                'id' => $element->getId(),
+                'commentaire' => $element->getCommentaire(),
+                'element' => $veloElement->getElement(),
+                'piece' => $etat->getNomEtat(),
+            ];
+        }
+
+        $diagnosticData = [
+            'id' => $diagnostic->getId(),
+            'id_velo' => $diagnostic->getVelo()->getId(),
+            'id_user' => $diagnostic->getIdUser(),
+            'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+            'cout_reparation' => $diagnostic->getCoutReparation(),
+            'conclusion' => $diagnostic->getConclusion(),
+            'elements' => $elementData,
+        ];
+
+        return new JsonResponse($diagnosticData);
+    }
 }
+
