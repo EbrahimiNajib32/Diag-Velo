@@ -1,12 +1,35 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Détails du Vélo{% endblock %}
 
 {% block body %}
 <h1>Détails du Vélo</h1>
-<p>Référence de recyclérie : {{ velo.refRecyclerie }}</p>
-<p>Nom : {{ velo.nom }}</p>
-<p>Description : {{ velo.description }}</p>
-<!-- Vous pouvez ajouter plus de détails ici -->
+<ul>
+    <li>Numéro de série: {{ velo.numeroDeSerie }}</li>
+    <li>Marque: {{ velo.marque }}</li>
+    <li>Référence Recyclerie: {{ velo.refRecyclerie }}</li>
+    <li>Couleur: {{ velo.couleur }}</li>
+    <li>Poids: {{ velo.poids }}</li>
+    <li>Taille des Roues: {{ velo.tailleRoues }}</li>
+    <li>Taille du Cadre: {{ velo.tailleCadre }}</li>
+    <li>État: {{ velo.etat }}</li>
+    <li>URL Photo: {{ velo.urlPhoto }}</li>
+    <li>Date de Réception: {{ velo.dateDeReception|date('Y-m-d') }}</li>
+    <li>Date de Vente: {{ velo.dateDeVente|date('Y-m-d') }}</li>
+    <li>Type: {{ velo.type }}</li>
+    <li>Année: {{ velo.annee }}</li>
+    <li>Emplacement: {{ velo.emplacement }}</li>
+    <li>Commentaire: {{ velo.commentaire }}</li>
+</ul>
+{% if velo.proprietaire %}
+    <h2>Informations du Propriétaire</h2>
+    <ul>
+        <li>Nom: {{ velo.proprietaire.nom }}</li>
+        <li>Téléphone: {{ velo.proprietaire.telephone }}</li>
+        <li>Email: {{ velo.proprietaire.email }}</li>
+    </ul>
+{% else %}
+    <p>Ce vélo n'a pas de propriétaire actuellement.</p>
+{% endif %}
 {% endblock %}
-git add

@@ -45,21 +45,27 @@ class AccueilController extends AbstractController
             'searchForm' => $searchForm->createView(),
         ]);
     }
+// Route pour les détails du vélo
+#[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
+public function veloDetails(EntityManagerInterface $entityManager, $ref_recyclerie = null): Response
+{
+    $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]);
 
-    // Route pour les détails du vélo
-    #[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
-    public function veloDetails(EntityManagerInterface $entityManager, $ref_recyclerie = null): Response
-    {
-        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]);
+    if ($velo) {
+        return $this->render('velo/détails/velo_details.html.twig', [
+            'velo' => $velo,
+        ]);
+    } else {
+        // Ajoutez un message flash pour afficher l'erreur sur la page d'accueil
+        $this->addFlash(
+            'error',
+            'Aucun vélo trouvé avec la référence de recyclérie spécifiée.'
+        );
 
-        if ($velo) {
-            return $this->render('accueil/velo_details.html.twig', [
-                'velo' => $velo,
-            ]);
-        } else {
-            return $this->render('accueil/velo_details.html.twig', [
-                'error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.',
-            ]);
-        }
+        // Redirigez l'utilisateur vers la route de la page d'accueil
+        return $this->redirectToRoute('app_accueil');
     }
+}
+
+
 }
