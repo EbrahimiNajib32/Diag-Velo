@@ -25,21 +25,6 @@ class DiagnosticController extends AbstractController
         $diagnosticData = [];
 
         foreach ($diagnostics as $diagnostic) {
-            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
-
-            $elementData = [];
-            foreach ($elements as $element) {
-                $etat = $element->getEtatControl();
-                $veloElement = $element->getElementControl();
-
-                $elementData[] = [
-                    'id' => $element->getId(),
-                    'commentaire' => $element->getCommentaire(),
-                    'element' => $veloElement->getElement(),
-                    'piece'=>$etat->getNomEtat(),
-                ];
-            }
-
             $diagnosticData[] = [
                 'id' => $diagnostic->getId(),
                 'id_velo' => $diagnostic->getVelo()->getId(),
@@ -47,7 +32,6 @@ class DiagnosticController extends AbstractController
                 'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
                 'cout_reparation' => $diagnostic->getCoutReparation(),
                 'conclusion' => $diagnostic->getConclusion(),
-                'elements' => $elementData,
             ];
         }
 
