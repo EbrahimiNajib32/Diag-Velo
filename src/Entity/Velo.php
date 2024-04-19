@@ -248,10 +248,10 @@ class Velo
         return $this;
     }
 
-   public function getProprietaireId(): ?int
-   {
-       return $this->proprietaire ? $this->proprietaire->getId() : null;
-   }
+    public function getProprietaire(): ?Proprietaire
+    {
+        return $this->proprietaire;
+    }
 
     public function setProprietaire(?Proprietaire $proprietaire): static
     {

@@ -20,9 +20,7 @@
         <li>Année: {{ velo.annee }}</li>
         <li>Emplacement: {{ velo.emplacement }}</li>
         <li>Commentaire: {{ velo.commentaire }}</li>
-        <li>Propriétaire ID: {{ velo.getProprietaireId() }}</li>
-
-
+  <li>Propriétaire ID: {{ velo.getProprietaire().getId() }}</li>
         <p>Ce vélo n'a pas de propriétaire actuellement.</p>
 
 {% endblock %}
