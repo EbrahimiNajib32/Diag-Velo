@@ -1,5 +1,4 @@
 <?php
-// Importer les classes nécessaires
 namespace App\Controller;
 
 use App\Entity\Velo;
@@ -8,64 +7,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface; // Gardez cette ligne ici, une seule fois
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccueilController extends AbstractController
 {
-    // Route pour la page d'accueil
-    #[Route('/', name: 'app_accueil')]
+    #[Route('/', name: 'app_accueil', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
-    {
-        // Créer le formulaire de recherche de vélo
-        $searchForm = $this->createForm(SearchVeloType::class);
+    {$velo = $entityManager->getRepository(velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]);
+        $searchForm = $this->createForm(SearchVeloType::class); // Utilisation de SearchVeloType avec la bonne casse
         $searchForm->handleRequest($request);
 
-        // Vérifier si le formulaire est soumis et valide
-        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $refRecyclerie = $searchForm->getData()['ref_recyclerie_search'];
+      if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+          $refRecyclerie = $searchForm->get('ref_recyclerie')->getData(); // Récupère la valeur du champ ref_recyclerie
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
-
-            if ($velo) {
-                return $this->render('accueil/velo_details.html.twig', [
-                    'velo' => $velo,
-                ]);
-            } else {
-                return $this->render('accueil/index.html.twig', [
-                    'controller_name' => 'AccueilController',
-                    'searchForm' => $searchForm->createView(),
-                    'error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.',
-                ]);
-            }
-        }
+          // Rediriger vers la page de détails du vélo avec le numéro de recyclérie
+          return $this->redirectToRoute('velo_details', ['ref_recyclerie' => $refRecyclerie]);
+      }
 
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'searchForm' => $searchForm->createView(),
         ]);
     }
-// Route pour les détails du vélo
-#[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
-public function veloDetails(EntityManagerInterface $entityManager, $ref_recyclerie = null): Response
-{
-    $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]);
 
-    if ($velo) {
-        return $this->render('velo/détails/velo_details.html.twig', [
-            'velo' => $velo,
-        ]);
-    } else {
-        // Ajoutez un message flash pour afficher l'erreur sur la page d'accueil
-        $this->addFlash(
-            'error',
-            'Aucun vélo trouvé avec la référence de recyclérie spécifiée.'
-        );
+    #[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
+    public function veloDetails(EntityManagerInterface $entityManager, $ref_recyclerie = null): Response
+    {
+        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]); // Utilisation de Velo avec la bonne casse
 
-        // Redirigez l'utilisateur vers la route de la page d'accueil
-        return $this->redirectToRoute('app_accueil');
+        if ($velo) {
+            return $this->render('velo/détails/velo_details.html.twig', ['velo' => $velo]);
+        } else {
+            $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
+            return $this->redirectToRoute('app_accueil', ['error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.']);
+        }
     }
-}
-
-
 }

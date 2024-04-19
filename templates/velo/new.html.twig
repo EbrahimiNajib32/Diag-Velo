@@ -1,18 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create New Velo{% endblock %}
+{% block title %}Saisir un vélo{% endblock %}
 
 {% block body %}
-    <style>
-        .velo-form-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 16px/1.5 sans-serif; }
-        .velo-form-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
+    <div class="flex flex-col items-center pt-6 sm:pt-0 bg-gray-100">
+        <div class="w-full sm:max-w-2xl mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Saisir un vélo</h1>
 
-    <div class="velo-form-wrapper">
-        <h1>Ajouter un nouveau Velo</h1>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit" class="btn btn-success">Ajouter Velo</button>
-        {{ form_end(form) }}
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            {% for field in form %}
+                <div class="space-y-1">
+                    {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(field, {'attr': {'class': 'appearance-none block w-full bg-gray-50 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'}}) }}
+                </div>
+            {% endfor %}
+
+            <div class="flex items-center justify-between">
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-[#209b85] hover:bg-[#50c7ac] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#50c7ac]">
+                    Soumettre
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}
+
