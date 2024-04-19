@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class VeloController extends AbstractController
 {
@@ -36,22 +37,20 @@ class VeloController extends AbstractController
     }
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request ): Response
     {
-        $velos = $entityManager->getRepository(Velo::class)->findAll();
+        $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_reception')
+            ->getQuery();
 
-        $velosData = [];
-        foreach ($velos as $velo) {
-            $velosData[] = [
-                'numero_de_serie' => $velo->getNumeroDeSerie(),
-                'marque' => $velo->getMarque(),
-                'ref_recyclerie' => $velo->getRefRecyclerie(),
-                'couleur' => $velo->getCouleur(),
-                'date_de_reception' => $velo->getDateDeReception(),
-            ];
-        }
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         return $this->render('velo/velo_liste.html.twig', [
-            'velos' => $velosData,
+            'pagination' => $pagination,
         ]);
     }
 }
