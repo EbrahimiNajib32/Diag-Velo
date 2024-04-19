@@ -58,7 +58,7 @@ class DiagnosticController extends AbstractController
                 'id' => $element->getId(),
                 'commentaire' => $element->getCommentaire(),
                 'element' => $veloElement->getElement(),
-                'piece' => $etat->getNomEtat(),
+                'etat' => $etat->getNomEtat(),
             ];
         }
 
@@ -74,5 +74,132 @@ class DiagnosticController extends AbstractController
 
         return new JsonResponse($diagnosticData);
     }
+//    #[Route('/diagnosticAvecElement', name: 'app_diagnostics_avec_elements', methods: ['GET'])]
+//    public function diagnosticAvecElement(EntityManagerInterface $entityManager): JsonResponse
+//    {
+//
+//        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+//
+//        $filteredDiagnostics = [];
+//
+//
+//        foreach ($diagnostics as $diagnostic) {
+//            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+//
+//            if (!empty($elements)) {
+//                $elementData = [];
+//                foreach ($elements as $element) {
+//                    $etat = $element->getEtatControl();
+//                    $veloElement = $element->getElementControl();
+//
+//                    $elementData[] = [
+//                        'id' => $element->getId(),
+//                        'commentaire' => $element->getCommentaire(),
+//                        'element' => $veloElement->getElement(),
+//                        'etat' => $etat->getNomEtat(),
+//                    ];
+//                }
+//
+//                $filteredDiagnostics[] = [
+//                    'id' => $diagnostic->getId(),
+//                    'id_velo' => $diagnostic->getVelo()->getId(),
+//                    'id_user' => $diagnostic->getIdUser(),
+//                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+//                    'cout_reparation' => $diagnostic->getCoutReparation(),
+//                    'conclusion' => $diagnostic->getConclusion(),
+//                    'elements' => $elementData,
+//                ];
+//            }
+//        }
+//
+//        if (empty($filteredDiagnostics)) {
+//            return new JsonResponse(['message' => 'No diagnostics with elements found'], Response::HTTP_NOT_FOUND);
+//        }
+//
+//        return new JsonResponse($filteredDiagnostics);
+//    }
+
+    #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
+    public function diagnosticEnCours(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+        $filteredDiagnostics = [];
+
+        foreach ($diagnostics as $diagnostic) {
+            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
+            if (empty($elements)) {
+                continue;
+            }
+
+            $unfinishedElements = [];
+            $allElementsOK = true;
+
+            foreach ($elements as $element) {
+                $etat = $element->getEtatControl();
+                $veloElement = $element->getElementControl();
+
+                if ($etat->getNomEtat() !== 'OK') {
+                    $allElementsOK = false;
+                    $unfinishedElements[] = [
+                        'id' => $element->getId(),
+                        'commentaire' => $element->getCommentaire(),
+                        'element' => $veloElement->getElement(),
+                        'etat' => $etat->getNomEtat(),
+                    ];
+                }
+            }
+
+            if (!$allElementsOK) {
+                $filteredDiagnostics[] = [
+                    'id' => $diagnostic->getId(),
+                    'id_velo' => $diagnostic->getVelo()->getId(),
+                    'id_user' => $diagnostic->getIdUser(),
+                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                    'cout_reparation' => $diagnostic->getCoutReparation(),
+                    'conclusion' => $diagnostic->getConclusion(),
+                    'elements' => $unfinishedElements,
+                ];
+            }
+        }
+
+        if (empty($filteredDiagnostics)) {
+            return new JsonResponse(['message' => 'No unfinished diagnostics found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse($filteredDiagnostics);
+    }
+
+    #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
+    public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+        $filteredDiagnostics = [];
+
+        foreach ($diagnostics as $diagnostic) {
+            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
+            if (empty($elements)) {
+                $filteredDiagnostics[] = [
+                    'id' => $diagnostic->getId(),
+                    'id_velo' => $diagnostic->getVelo()->getId(),
+                    'id_user' => $diagnostic->getIdUser(),
+                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                    'cout_reparation' => $diagnostic->getCoutReparation(),
+                    'conclusion' => $diagnostic->getConclusion(),
+                ];
+            }
+        }
+
+        if (empty($filteredDiagnostics)) {
+            return new JsonResponse(['message' => 'No diagnostics without started elements found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse($filteredDiagnostics);
+    }
+
+
+
+
 }
 
