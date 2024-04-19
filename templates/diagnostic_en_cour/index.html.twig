@@ -15,15 +15,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for velo in velosWithDiagnostics %}
+                {% for item in filteredDiagnostics %}
                     <tr class="border">
-                        <td class="px-4 py-2 border-r border-b">{{ velo.ref_recyclerie }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ velo.type }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ velo.date_reception }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateReception }}</td>
                         <td class="px-4 py-2 ">
-                            <button class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
+                            <button id="{{ item.veloDetails.id}}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
                                 Reprendre
                             </button>
                         </td>
@@ -33,3 +33,4 @@
             </table>
         </div>
 {% endblock %}
+
