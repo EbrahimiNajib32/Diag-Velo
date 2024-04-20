@@ -3,6 +3,3 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-velo_details:
-    path: /velo/details/{ref_recyclerie}
-    controller: 'App\Controller\AccueilController::veloDetails'

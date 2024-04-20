@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Velo;
@@ -20,7 +19,8 @@ class AccueilController extends AbstractController
         $searchForm->handleRequest($request);
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $refRecyclerie = $searchForm->get('ref_recyclerie')->getData();
+        $refRecyclerie = $searchForm->get('ref_recyclerie_search')->getData();
+
             return $this->redirectToRoute('velo_details', ['ref_recyclerie' => $refRecyclerie]);
         }
 
@@ -29,17 +29,19 @@ class AccueilController extends AbstractController
             'searchForm' => $searchForm->createView(),
         ]);
     }
-
-    #[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
-    public function veloDetails(EntityManagerInterface $entityManager, $ref_recyclerie = null): Response
-    {
-        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]); // Utilisation de Velo avec la bonne casse
-
-        if ($velo) {
-            return $this->render('velo/détails/velo_details.html.twig', ['velo' => $velo]);
-        } else {
-            $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
-            return $this->redirectToRoute('app_accueil', ['error_message' => 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.']);
-        }
+#[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
+public function veloDetails(EntityManagerInterface $entityManager, Request $request, $ref_recyclerie = null): Response
+{
+    if ($ref_recyclerie === null) {
+        $refRecyclerie = $request->query->get('ref_recyclerie');
     }
+    $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
+
+    if (!$velo) {
+        $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
+        return $this->redirectToRoute('app_accueil');
+    }
+
+    return $this->render('velo/détails/velo_details.html.twig', ['velo' => $velo]);
+}
 }
