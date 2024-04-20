@@ -12,6 +12,7 @@ use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
 use App\Entity\ElementControl;
+use App\Form\DiagnosticType;
 
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -192,9 +193,66 @@ class DiagnosticController extends AbstractController
 
         return new JsonResponse($filteredDiagnostics);
     }
+    #[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $diagnostic = new Diagnostic();
+        $form = $this->createForm(DiagnosticType::class, $diagnostic);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($diagnostic);
+            $entityManager->flush(); // Ensure the Diagnostic entity is persisted to get its ID for relationships
 
+            // Handle dynamic etat_ and commentaire_ fields after Diagnostic is saved
+            $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+            foreach ($elements as $element) {
+                $etatKey = 'etat_' . $element->getId();
+                $commentKey = 'commentaire_' . $element->getId();
+                if ($form->has($etatKey) && $form->has($commentKey)) {
+                    $etatId = $form->get($etatKey)->getData();
+                    $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatId);
+                    $comment = $form->get($commentKey)->getData();
 
+                    $diagnosticElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
+                        'diagnostic' => $diagnostic,
+                        'elementcontrol' => $element
+                    ]) ?? new DiagnosticElement();
+
+                    $diagnosticElement->setDiagnostic($diagnostic);
+                    $diagnosticElement->setElementControl($element);
+                    if ($etatControl) {
+                        $diagnosticElement->setEtatControl($etatControl);
+                    }
+                    $diagnosticElement->setCommentaire($comment);
+
+                    $entityManager->persist($diagnosticElement);
+                }
+            }
+
+            $entityManager->flush(); // Save or update all DiagnosticElement entities
+
+            return $this->redirectToRoute('/'); // Redirect after successful POST
+        }
+
+        // Retrieve elements from the database and categorize them
+        $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $categorizedElements = [];
+        foreach ($elements as $element) {
+            $fullElement = $element->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+            $categorizedElements[$category][] = $element;
+        }
+
+        return $this->render('diagnostic/new.html.twig', [
+            'diagnosticForm' => $form->createView(),
+            'diagnosticElements' => $categorizedElements, // Pass the categorized elements to the template
+        ]);
+    }
 
 }
 
