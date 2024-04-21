@@ -24,10 +24,25 @@ class DiagnosticType extends AbstractType
     {
         $this->entityManager = $entityManager;
     }
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Diagnostic::class,
+            'diagnostic' => null,
+            'diagnosticElements' => [],
+        ]);
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $elements = $this->entityManager->getRepository(ElementControl::class)->findAll();
+        $diagnostic = $options['diagnostic'];
+        $diagnosticElements = $options['diagnosticElements'];
+
+        // Build a map of element IDs to their current states
+        $elementStates = [];
+        foreach ($diagnosticElements as $diagElement) {
+            $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
+        }
 
         $builder
             ->add('cout_reparation')
@@ -41,14 +56,25 @@ class DiagnosticType extends AbstractType
                 'choice_label' => 'Nom',
             ]);
 
+        foreach ($diagnosticElements as $diagElement) {
+            $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
+            $elementComments[$diagElement->getElementControl()->getId()] = $diagElement->getCommentaire();
+        }
+
+        $elements = $this->entityManager->getRepository(ElementControl::class)->findAll();
         foreach ($elements as $element) {
-            $builder->add('etat_' . $element->getId(), ChoiceType::class, [
+            $elementId = $element->getId();
+            $currentState = $elementStates[$elementId] ?? null;
+            $currentComment = $elementComments[$elementId] ?? '';
+
+            $builder->add('etat_' . $elementId, ChoiceType::class, [
                 'choices' => [
                     'OK' => 1,
                     'Pas OK' => 2,
                     'À reviser' => 3,
                     'N/A' => 4,
                 ],
+                'data' => $currentState,
                 'expanded' => true,
                 'multiple' => false,
                 'label' => $element->getElement(),
@@ -56,21 +82,15 @@ class DiagnosticType extends AbstractType
                 'mapped' => false,
                 'placeholder' => false,
             ]);
-            // Ensure similar setup for 'commentaire_' fields
-            $builder->add('commentaire_' . $element->getId(), TextareaType::class, [
+
+            $builder->add('commentaire_' . $elementId, TextareaType::class, [
+                'data' => $currentComment,
                 'required' => false,
                 'mapped' => false,
                 'attr' => ['placeholder' => 'Ajouter commentaire...'],
                 'label' => false,
             ]);
         }
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Diagnostic::class,
-        ]);
     }
 }
 
