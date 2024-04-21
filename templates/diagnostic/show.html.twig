@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Diagnostic{% endblock %}
+
+{% block body %}
+    <div>
+        <h1>Diagnostic #{{ diagnostic.id }}</h1>
+        <p>Date du diagnostic: {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
+        <p>Coût de réparation: {{ diagnostic.coutReparation }}</p>
+        <p>Conclusion: {{ diagnostic.conclusion }}</p>
+    </div>
+
+    {% for element in elements %}
+        <div>
+            <p>Élément: {{ element.element }}</p>
+            <p>Commentaire: {{ element.commentaire }}</p>
+            <p>État: {{ element.etat }}</p>
+        </div>
+    {% else %}
+        <p>Aucun élément de diagnostic trouvé.</p>
+    {% endfor %}
+{% endblock %}

@@ -39,7 +39,7 @@ class DiagnosticController extends AbstractController
     }
 
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function diagnosticById(int $id, EntityManagerInterface $entityManager): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
@@ -72,8 +72,16 @@ class DiagnosticController extends AbstractController
             'elements' => $elementData,
         ];
 
-        return new JsonResponse($diagnosticData);
+        return $this->render('diagnostic/show.html.twig', [
+            'diagnostic' => $diagnostic,
+            'elements' => $elementData,
+        ]);
     }
+
+
+
+
+
 //    #[Route('/diagnosticAvecElement', name: 'app_diagnostics_avec_elements', methods: ['GET'])]
 //    public function diagnosticAvecElement(EntityManagerInterface $entityManager): JsonResponse
 //    {
