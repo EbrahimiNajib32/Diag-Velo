@@ -30,7 +30,6 @@ class DiagnosticType extends AbstractType
         $elements = $this->entityManager->getRepository(ElementControl::class)->findAll();
 
         $builder
-            ->add('date_diagnostic', null, ['widget' => 'single_text'])
             ->add('cout_reparation')
             ->add('conclusion')
             ->add('velo', EntityType::class, [
@@ -55,6 +54,7 @@ class DiagnosticType extends AbstractType
                 'label' => $element->getElement(),
                 'required' => false,
                 'mapped' => false,
+                'placeholder' => false,
             ]);
             // Ensure similar setup for 'commentaire_' fields
             $builder->add('commentaire_' . $element->getId(), TextareaType::class, [

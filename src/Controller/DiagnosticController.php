@@ -130,7 +130,7 @@ class DiagnosticController extends AbstractController
             $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
             if (empty($elements)) {
-                continue; // Skip diagnostics with no elements
+                continue;
             }
 
             $allElementsOK = true;
@@ -138,13 +138,13 @@ class DiagnosticController extends AbstractController
             foreach ($elements as $element) {
                 if ($element->getEtatControl()->getNomEtat() !== 'OK') {
                     $allElementsOK = false;
-                    break; // Break early since we found an element not OK
+                    break;
                 }
             }
 
-            // Only include diagnostics where not all elements are 'OK'
+
             if (!$allElementsOK) {
-                $velo = $diagnostic->getVelo(); // Assuming getVelo() fetches the bike related to the diagnostic
+                $velo = $diagnostic->getVelo();
                 $filteredDiagnostics[] = [
                     'diagnostic' => $diagnostic,
                     'veloDetails' => [
@@ -201,18 +201,31 @@ class DiagnosticController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($diagnostic);
-            $entityManager->flush(); // Ensure the Diagnostic entity is persisted to get its ID for relationships
+            $diagnostic->setDateDiagnostic(new \DateTime());
 
-            // Handle dynamic etat_ and commentaire_ fields after Diagnostic is saved
+            $entityManager->persist($diagnostic);
+            $entityManager->flush();
+
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
             foreach ($elements as $element) {
                 $etatKey = 'etat_' . $element->getId();
                 $commentKey = 'commentaire_' . $element->getId();
+
                 if ($form->has($etatKey) && $form->has($commentKey)) {
                     $etatId = $form->get($etatKey)->getData();
-                    $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatId);
                     $comment = $form->get($commentKey)->getData();
+
+                    $etatControl = null;
+
+                    if ($etatId) {
+                        $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatId);
+
+                        if (!$etatControl) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
 
                     $diagnosticElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
                         'diagnostic' => $diagnostic,
@@ -230,12 +243,11 @@ class DiagnosticController extends AbstractController
                 }
             }
 
-            $entityManager->flush(); // Save or update all DiagnosticElement entities
+            $entityManager->flush();
 
-            return $this->redirectToRoute('/'); // Redirect after successful POST
+            return $this->redirectToRoute('app_accueil');
         }
 
-        // Retrieve elements from the database and categorize them
         $elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $categorizedElements = [];
         foreach ($elements as $element) {
@@ -250,7 +262,7 @@ class DiagnosticController extends AbstractController
 
         return $this->render('diagnostic/new.html.twig', [
             'diagnosticForm' => $form->createView(),
-            'diagnosticElements' => $categorizedElements, // Pass the categorized elements to the template
+            'diagnosticElements' => $categorizedElements,
         ]);
     }
 
