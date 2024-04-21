@@ -1,0 +1,19 @@
+{# templates/error/404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}404 Not Found{% endblock %}
+
+{% block body %}
+    <div class="text-center p-5">
+        <h1 class="text-xl font-bold mb-3">404 Not Found</h1>
+        <p>{{ message }}</p>
+        <pre>
+            __o         __o          __o         __o         __o
+        _`\<,_      _`\<,_      _`\<,_      _`\<,_      _`\<,_
+       (_)/ (_)    (_)/ (_)    (_)/ (_)    (_)/ (_)    (_)/ (_)
+
+        </pre>
+        <p>Sorry, the page you are looking for could not be found.</p>
+        <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:underline">Return to home</a>
+    </div>
+{% endblock %}

@@ -44,8 +44,12 @@ class DiagnosticController extends AbstractController
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
         if (!$diagnostic) {
-            return new JsonResponse(['message' => 'Diagnostic not found'], Response::HTTP_NOT_FOUND);
+            $content = $this->renderView('error/404.html.twig', [
+                'message' => 'Diagnostic not found'
+            ]);
+            return new Response($content, Response::HTTP_NOT_FOUND);
         }
+
 
         $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
