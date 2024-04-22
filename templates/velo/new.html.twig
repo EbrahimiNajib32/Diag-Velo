@@ -3,24 +3,100 @@
 {% block title %}Saisir un vélo{% endblock %}
 
 {% block body %}
-    <div class="flex flex-col items-center pt-6 sm:pt-0 bg-gray-100">
-        <div class="w-full sm:max-w-2xl mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <h1 class="text-2xl font-bold text-gray-900 mb-6">Saisir un vélo</h1>
+    <style>
+        .color-choice {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #000000; /* Default border color */
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
 
-            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
-            {% for field in form %}
-                <div class="space-y-1">
-                    {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                    {{ form_widget(field, {'attr': {'class': 'appearance-none block w-full bg-gray-50 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'}}) }}
+        .color-choice:hover {
+            transform: scale(1.1);
+        }
+
+        .color-choice input[type=checkbox] {
+            display: none; /* Hides the actual checkbox */
+        }
+
+        .color-choice input[type=checkbox]:checked + span {
+            color: rgba(255, 255, 255, 0); /* Optional: makes the color name visible when checked */
+        }
+
+        .color-choice input[type=checkbox]:checked + label {
+            border-color: blue; /* Changes border to blue when selected */
+            box-shadow: 0 0 0 2px blue; /* Adds a blue halo effect */
+        }
+
+    </style>
+
+
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
+        <div class="max-w-xl w-full mx-auto">
+            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
+                <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
+                {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+                <div class="grid grid-cols-2 gap-4 ">
+                    {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+                    <div>
+                        <h1 class="text-center">Couleurs</h1>
+                        <div class="grid grid-cols-5 gap-1">
+                            {% for color in form.couleur %}
+                                <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
+                                    {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{ form_row(form.marque, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.taille_roues, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.date_de_vente, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.date_de_reception, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.type, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.annee, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.url_photo, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    <div class="text-center border border-black rounded p-2">
+                        <h4 class="border-b border-black font-bold" >Propriétaire</h4>
+                        {{ form_row(form.proprietaire.telephone, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                        {{ form_row(form.proprietaire.email, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                        {{ form_row(form.proprietaire.nom_proprio, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    </div>
+                    {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 </div>
-            {% endfor %}
-
-            <div class="flex items-center justify-between">
-            <button type="submit" class="btn btn-primary">Soumettre</button>
-
+                <button type="submit" class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
+                {{ form_end(form) }}
             </div>
-            {{ form_end(form) }}
         </div>
     </div>
-{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorChoices = document.querySelectorAll('.color-choice');
 
+            colorChoices.forEach(choice => {
+                const checkbox = choice.querySelector('input[type=checkbox]');
+
+                choice.addEventListener('click', function() {
+                    checkbox.checked = !checkbox.checked; // Toggle checkbox
+                    if (checkbox.checked) {
+                        choice.style.borderColor = 'blue'; // Change border to blue
+                        choice.style.boxShadow = '0 0 0 2px blue'; // Blue halo effect
+                    } else {
+                        choice.style.borderColor = '#000000'; // Revert to default
+                        choice.style.boxShadow = 'none'; // Remove halo
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
