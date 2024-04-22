@@ -16,8 +16,6 @@ class Diagnostic
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_diagnostic = null;
 
     #[ORM\Column]
     private ?int $id_velo = null;
@@ -41,12 +39,12 @@ class Diagnostic
 
     public function getIdDiagnostic(): ?int
     {
-        return $this->id_diagnostic;
+        return $this->id;
     }
 
-    public function setIdDiagnostic(int $id_diagnostic): static
+    public function setIdDiagnostic(int $id): static
     {
-        $this->id_diagnostic = $id_diagnostic;
+        $this->id = $id;
 
         return $this;
     }
@@ -118,7 +116,7 @@ class Diagnostic
     
     
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
-    #[ORM\JoinColumn(name: "id_utilisateur", referencedColumnName: "id")]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id")]
     
     private ?Utilisateur $utilisateur;
     

@@ -89,8 +89,22 @@ class DiagnosticElement
     #[ORM\JoinColumn(name: "id_element", referencedColumnName: "id")]
     
     private ?ElementControl $elementcontrol;
-    
-    
+
+    #[ORM\ManyToOne(targetEntity: EtatControl::class)]
+    #[ORM\JoinColumn(name: "id_etat", referencedColumnName: "id")]
+    private ?EtatControl $etatControl;
+
+    public function getEtatControl(): ?EtatControl
+    {
+        return $this->etatControl;
+    }
+
+    public function setEtatControl(?EtatControl $etatControl): self
+    {
+        $this->etatControl = $etatControl;
+        return $this;
+    }
+
     public function getDiagnostic(): ?Diagnostic
     {
     return $this->diagnostic;

@@ -13,9 +13,6 @@ class ElementControl
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_element = null;
-
     #[ORM\Column(length: 255)]
     private ?string $element = null;
 
@@ -24,17 +21,6 @@ class ElementControl
         return $this->id;
     }
 
-    public function getIdElement(): ?int
-    {
-        return $this->id_element;
-    }
-
-    public function setIdElement(int $id_element): static
-    {
-        $this->id_element = $id_element;
-
-        return $this;
-    }
 
     public function getElement(): ?string
     {

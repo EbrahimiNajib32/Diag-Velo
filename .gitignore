@@ -40,6 +40,8 @@
 .idea/**/shelf
 .idea/ProjetVelo.iml
 .idea/php.xml
+.idea/phpspec.xml
+.idea/codeception.xml
 
 # AWS User-specific
 .idea/**/aws.xml

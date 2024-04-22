@@ -31,4 +31,6 @@ final class Version20240417212908 extends AbstractMigration
         $this->addSql('ALTER TABLE diagnostic_element DROP FOREIGN KEY FK_FA7C8889BE696DF2');
 
     }
+    }
 }
+
