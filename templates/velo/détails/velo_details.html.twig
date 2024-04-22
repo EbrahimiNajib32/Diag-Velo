@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Vélo{% endblock %}
+
+{% block body %}
+    <div class="details-container">
+        <h1>Détails du Vélo</h1>
+        <ul class="details-list">
+            <li>Marque: {{ velo.marque }}</li>
+            <li>Référence recyclerie: {{ velo.getRefRecyclerie() }}</li>
+            <li>Couleur: {{ velo.couleur }}</li>
+            <li>Poids: {{ velo.poids }}</li>
+            <li>Taille des Roues: {{ velo.getTailleRoues() }}</li>
+            <li>Taille du Cadre: {{ velo.getTailleCadre() }}</li>
+            <li>État: {{ velo.etat }}</li>
+            <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
+            <li>Date de Réception: {{ velo.getDateDeReception()|date('Y-m-d') }}</li>
+            <li>Date de Vente: {{ velo.getDateDeVente()|date('Y-m-d') }}</li>
+            <li>Type: {{ velo.type }}</li>
+            <li>Année: {{ velo.annee }}</li>
+            <li>Emplacement: {{ velo.emplacement }}</li>
+            <li>Commentaire: {{ velo.commentaire }}</li>
+            <li>Propriétaire ID: {{ velo.getProprietaire().getId() }}</li>
+        </ul>
+
+           <div class="details-container">
+                 <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
+           </div>
+
+        {% if not velo.getProprietaire() %}
+            <p>Ce vélo n'a pas de propriétaire actuellement.</p>
+
+
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .details-container {
+        background-color: #f7fafc; /* C'est l'équivalent de bg-gray-100 dans Tailwind */
+        padding: 11px;
+        border-radius: 6px;
+        max-width: 900px; /* Augmenté de 800px à 900px */
+        margin: auto;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .details-list {
+        list-style: none;
+        padding: 0;
+    }
+    .details-list li {
+        background-color: #38b2ac; /* Le code hexadécimal pour bg-teal-500 */
+        color: #ffffff; /* Pour le texte en blanc */
+        margin-bottom: 20px;
+        padding: 9px; /* Augmenté de 10px à 15px pour plus de largeur */
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #285e61; /* Une teinte plus foncée pour le titre si nécessaire */
+        margin-bottom: 2px;
+    }
+    a {
+        color: #ffffff; /* Pour que les liens soient en blanc comme le texte des éléments de liste */
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    p {
+        text-align: center;
+        color: #285e61; /* Même couleur que le titre pour le texte du paragraphe */
+        margin-top: 20px; /* Ajouté pour donner plus d'espace après la liste si nécessaire */
+    }
+      .back-to-home {
+            display: inline-block;
+            background-color: #285e61; /* Couleur de fond pour le bouton */
+            color: #ffffff; /* Couleur de texte pour le bouton */
+            padding: 6px 13px; /* Espacement autour du texte */
+            border-radius: 3px; /* Bords arrondis pour le bouton */
+            text-decoration: none; /* Aucun soulignement pour le texte du bouton */
+            margin-bottom: 10px; /* Marge en dessous du bouton */
+        }
+        .back-to-home:hover {
+            background-color: #2e7d32; /* Couleur de fond au survol */
+        }
+
+
+</style>
+{% endblock %}
