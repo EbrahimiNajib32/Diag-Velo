@@ -11,14 +11,26 @@
     </div>
     <div class="max-w-lg mx-auto text-center py-20">
         <h1 class="text-4xl font-bold mb-4">Bienvenue</h1>
-
     </div>
     <div class="text-center portrait:text-3xl">
         <p>Explorez notre application pour découvrir comment nous sauvons des vélos de la casse et les remettons en état pour une mobilité durable dans la région Mulhousienne !</p>
     </div>
+    <form action="{{ path('velo_details', {'ref_recyclerie': app.request.query.get('ref_recyclerie', '') }) }}" method="GET" class="max-w-lg mx-auto">
+        <div class="flex justify-center items-center">
+            <div class="relative mr-2">
+                <input type="text" name="ref_recyclerie" placeholder="Numéro de recyclérie" class="border-4 border-black-600 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-500 transition-colors duration-200 focus:ring-2 focus:ring-teal-500" value="{{ app.request.query.get('ref_recyclerie', '') }}">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="bi bi-search text-gray-400 text-3xl portrait:text-6xl"></i>
+                </div>
+            </div>
+            <button type="submit" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 portrait:text-4xl">
+                Rechercher
+            </button>
+        </div>
+    </form>
     <div class="max-w-lg mx-auto text-center portrait:max-w-2xl">
-        <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg mt-10">
-            <a href="/velo/new" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+        <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg mt-3">
+            <a href="{{ path('velo_new') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
                 <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>
                 Saisir un vélo
             </a>
@@ -29,10 +41,6 @@
             <a href="/diagnosticEnCours" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
                 <i class="bi bi-arrow-up-left-circle text-3xl mr-4 portrait:text-6xl"></i>
                 Reprendre un diagnostique
-            </a>
-            <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-eyeglasses text-3xl mr-4 portrait:text-6xl"></i>
-                Consulter un vélo
             </a>
         </div>
     </div>

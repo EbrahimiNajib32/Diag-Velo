@@ -1,5 +1,4 @@
 <?php
-
 // src/Controller/VeloController.php
 
 namespace App\Controller;
@@ -14,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
+
+
 class VeloController extends AbstractController
 {
     #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
@@ -27,7 +28,7 @@ class VeloController extends AbstractController
             $entityManager->persist($velo);
             $entityManager->flush();
 
-            // Redirect after saving
+            // Redirection après enregistrement
             return $this->redirectToRoute('velo_success');
         }
 
