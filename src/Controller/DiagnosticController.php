@@ -53,15 +53,23 @@ class DiagnosticController extends AbstractController
 
         $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
-        $elementData = [];
+        $categorizedElements = [];
         foreach ($elements as $element) {
             $etat = $element->getEtatControl();
             $veloElement = $element->getElementControl();
+            $fullElement = $veloElement->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            $detail = $parts[1] ?? '';
 
-            $elementData[] = [
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+
+            $categorizedElements[$category][] = [
                 'id' => $element->getId(),
                 'commentaire' => $element->getCommentaire(),
-                'element' => $veloElement->getElement(),
+                'detail' => $detail,
                 'etat' => $etat->getNomEtat(),
             ];
         }
@@ -73,12 +81,11 @@ class DiagnosticController extends AbstractController
             'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
             'cout_reparation' => $diagnostic->getCoutReparation(),
             'conclusion' => $diagnostic->getConclusion(),
-            'elements' => $elementData,
         ];
 
         return $this->render('diagnostic/show.html.twig', [
             'diagnostic' => $diagnostic,
-            'elements' => $elementData,
+            'categorizedElements' => $categorizedElements
         ]);
     }
 

@@ -3,20 +3,55 @@
 {% block title %}Diagnostic{% endblock %}
 
 {% block body %}
-    <div>
-        <h1>Diagnostic #{{ diagnostic.id }}</h1>
-        <p>Date du diagnostic: {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
-        <p>Coût de réparation: {{ diagnostic.coutReparation }}</p>
-        <p>Conclusion: {{ diagnostic.conclusion }}</p>
-    </div>
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col">
+            <h1 class="block text-gray-700 font-bold mb-4 text-xl text-center">Diagnostic {{ diagnostic.id }}</h1>
 
-    {% for element in elements %}
-        <div>
-            <p>Élément: {{ element.element }}</p>
-            <p>Commentaire: {{ element.commentaire }}</p>
-            <p>État: {{ element.etat }}</p>
+            <div class="text-center mb-6">
+                <p class="text-gray-700 text-base">Date du diagnostic: {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
+                <p class="text-gray-700 text-base">Coût de réparation: {{ diagnostic.coutReparation }}</p>
+                <p class="text-gray-700 text-base">Conclusion: {{ diagnostic.conclusion }}</p>
+            </div>
+
+            <!-- Début de la grille pour deux colonnes -->
+            <div class="grid md:grid-cols-2 gap-4">
+                {% for category, categorizedElements in categorizedElements %}
+                    <!-- Section pour chaque catégorie du diagnostic -->
+                    <div class="mb-8">
+                        <h3 class="font-bold text-lg mb-2">{{ category }}</h3>
+                        <table class="min-w-full border-collapse border border-slate-500">
+                            <thead>
+                            <tr>
+                                <th class="border border-slate-600 px-4 py-2">Détail</th>
+                                <th class="border border-slate-600 px-4 py-2">État</th>
+                                <th class="border border-slate-600 px-4 py-2">Commentaire</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for detail in categorizedElements %}
+                                <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-white' }}">
+                                    <td class="border border-slate-700 px-4 py-2">{{ detail.detail }}</td>
+                                    <td class="border border-slate-700 px-4 py-2">{{ detail.etat }}</td>
+                                    <td class="border border-slate-700 px-4 py-2">
+                                        {% if detail.commentaire %}
+                                            {{ detail.commentaire }}
+                                        {% else %}
+                                            Aucun commentaire disponible.
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="border border-slate-700 px-4 py-2">Aucun élément de diagnostic trouvé pour cette catégorie.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-gray-700 text-base">Aucun élément de diagnostic trouvé.</p>
+                {% endfor %}
+            </div>
         </div>
-    {% else %}
-        <p>Aucun élément de diagnostic trouvé.</p>
-    {% endfor %}
+    </div>
 {% endblock %}
