@@ -49,7 +49,7 @@ class VeloController extends AbstractController
     {
         $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_reception')
-            ->where('v.dateVente IS NULL') // Exclure les vélos avec une date de vente définie
+            ->where('v.date_de_vente IS NULL') // Exclure les vélos avec une date de vente définie
             ->getQuery();
 
         $pagination = $paginator->paginate(
