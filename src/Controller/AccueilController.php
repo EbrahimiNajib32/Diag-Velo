@@ -10,11 +10,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+
 class AccueilController extends AbstractController
 {
     #[Route('/', name: 'app_accueil', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
+
+
         $searchForm = $this->createForm(SearchVeloType::class);
         $searchForm->handleRequest($request);
 

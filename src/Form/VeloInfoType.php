@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Form;
-
+                                        use App\Entity\Proprietaire; // Make sure this is correct
 use App\Entity\Velo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+                                            use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class VeloInfoType extends AbstractType
 {
@@ -33,7 +34,16 @@ class VeloInfoType extends AbstractType
             ->add('emplacement')
             ->add('commentaire')
 
+
+
+                                                                        ->add('proprietaire', ProprietaireType::class, [
+                                                                                    // Les options nécessaires
+                                                                                ])
+
+
+
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

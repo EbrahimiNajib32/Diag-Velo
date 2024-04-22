@@ -29,6 +29,14 @@ class Proprietaire
         $this->id = new ArrayCollection();
     }
 
+//
+// public function __construct()
+// {
+//     $this->velos = new ArrayCollection();
+//     // Autres collections pour d'autres relations OneToMany
+// }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -38,6 +46,12 @@ class Proprietaire
     {
         return $this->nom_proprio;
     }
+
+
+                                                                     public function displayName(): string
+                                                                      {
+                                                                          return $this->nom_proprio . ' ' . $this->nom_proprio;
+                                                                      }
 
     public function setNomProprio(string $nom_proprio): static
     {
