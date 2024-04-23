@@ -21,7 +21,6 @@ class VeloController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-
         $velo = new Velo();
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
