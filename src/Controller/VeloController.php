@@ -50,13 +50,19 @@ class VeloController extends AbstractController
     {
         $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_reception')
-            ->getQuery();
+            ->where('v.date_de_vente IS NULL'); // Exclure les vélos avec une date de vente définie
+
+
 
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
+
+         // Exécuter la requête et récupérer les résultats
+        $velos = $query->getQuery()->getResult();
+
 
         return $this->render('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
