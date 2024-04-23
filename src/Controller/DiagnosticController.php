@@ -74,6 +74,19 @@ class DiagnosticController extends AbstractController
             ];
         }
 
+        // Fetch the bike details associated with the diagnostic
+        $bike = $diagnostic->getVelo();
+        $bikeDetails = [
+            'id' => $bike->getId(),
+            'numero_de_serie' => $bike->getNumeroDeSerie(),
+            'ref_recyclerie' => $bike->getRefRecyclerie(),
+            'marque' => $bike->getMarque(),
+            'type' => $bike->getType(),
+            'couleur' => $bike->getCouleur(),
+            'taille_roues' => $bike->getTailleRoues(),
+            'taille_cadre' => $bike->getTailleCadre(),
+        ];
+
         $diagnosticData = [
             'id' => $diagnostic->getId(),
             'id_velo' => $diagnostic->getVelo()->getId(),
@@ -85,6 +98,7 @@ class DiagnosticController extends AbstractController
 
         return $this->render('diagnostic/show.html.twig', [
             'diagnostic' => $diagnostic,
+            'bike' => $bikeDetails,
             'categorizedElements' => $categorizedElements
         ]);
     }

@@ -3,15 +3,31 @@
 {% block title %}Diagnostic{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 pt-8">
         <div class="flex flex-col">
             <h1 class="block text-gray-700 font-bold mb-4 text-xl text-center">Diagnostic {{ diagnostic.id }}</h1>
+            <div class="flex justify-between">
 
-            <div class="text-center mb-6">
-                <p class="text-gray-700 text-base">Date du diagnostic: {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
-                <p class="text-gray-700 text-base">Coût de réparation: {{ diagnostic.coutReparation }}</p>
-                <p class="text-gray-700 text-base">Conclusion: {{ diagnostic.conclusion }}</p>
+                <div class="w-1/2 p-4 text-left">
+                    <p class="text-gray-700 text-base font-bold">Date du diagnostic: <span class="font-normal">{{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</span></p>
+                    <p class="text-gray-700 text-base font-bold">Coût de réparation: <span class="font-normal">{{ diagnostic.coutReparation }}</span></p>
+                    <p class="text-gray-700 text-base font-bold">Conclusion: <span class="font-normal">{{ diagnostic.conclusion }}</span></p>
+                </div>
+
+                <div class="w-1/2 p-4 text-right">
+                    <h2 class="text-lg font-bold mb-2">Informations du vélo:</h2>
+                    <p><span class="font-bold">Identifiant:</span> {{ bike.id }}</p>
+                    <p><span class="font-bold">Numéro de série:</span> {{ bike.numero_de_serie }}</p>
+                    <p><span class="font-bold">Ref Recyclérie:</span> {{ bike.ref_recyclerie}}</p>
+                    <p><span class="font-bold">Type:</span> {{ bike.type }}</p>
+                    <p><span class="font-bold">Marque:</span> {{ bike.marque }}</p>
+                    <p><span class="font-bold">Couleur:</span> {{ bike.couleur}}</p>
+                    <p><span class="font-bold">Taille roues:</span> {{ bike.taille_roues}} pouces</p>
+                    <p><span class="font-bold">Taille cadre:</span> {{ bike.taille_cadre}} cm</p>
+                </div>
             </div>
+
+
 
             <!-- Début de la grille pour deux colonnes -->
             <div class="grid md:grid-cols-2 gap-4">
