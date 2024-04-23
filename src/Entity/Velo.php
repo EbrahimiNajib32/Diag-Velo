@@ -58,10 +58,15 @@ class Velo
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $commentaire = null;
+//
+//     #[ORM\ManyToOne(inversedBy: 'proprietaire')]
+//     #[ORM\JoinColumn(nullable: false)]
+//     private ?Proprietaire $proprietaire = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Proprietaire $proprietaire = null;
+#[ORM\ManyToOne(inversedBy: 'velos')]
+#[ORM\JoinColumn(nullable: false)]
+private ?Proprietaire $proprietaire = null;
+
 
     public function getId(): ?int
     {

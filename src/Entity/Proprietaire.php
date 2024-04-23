@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\ProprietaireRepository;
@@ -24,9 +23,12 @@ class Proprietaire
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $email = null;
 
+    #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Velo::class)]
+    private Collection $velos;
+
     public function __construct()
     {
-        $this->id = new ArrayCollection();
+        $this->velos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -39,10 +41,9 @@ class Proprietaire
         return $this->nom_proprio;
     }
 
-    public function setNomProprio(string $nom_proprio): static
+    public function setNomProprio(string $nom_proprio): self
     {
         $this->nom_proprio = $nom_proprio;
-
         return $this;
     }
 
@@ -51,10 +52,9 @@ class Proprietaire
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): static
+    public function setTelephone(int $telephone): self
     {
         $this->telephone = $telephone;
-
         return $this;
     }
 
@@ -63,32 +63,34 @@ class Proprietaire
         return $this->email;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function addId(velo $id): static
+    public function addVelo(Velo $velo): self
     {
-        if (!$this->id->contains($id)) {
-            $this->id->add($id);
-            $id->setProprietaire($this);
+        if (!$this->velos->contains($velo)) {
+            $this->velos[] = $velo;
+            $velo->setProprietaire($this);
         }
-
         return $this;
     }
 
-    public function removeId(velo $id): static
+    public function removeVelo(Velo $velo): self
     {
-        if ($this->id->removeElement($id)) {
-            // set the owning side to null (unless already changed)
-            if ($id->getProprietaire() === $this) {
-                $id->setProprietaire(null);
+        if ($this->velos->removeElement($velo)) {
+            if ($velo->getProprietaire() === $this) {
+                $velo->setProprietaire(null);
             }
         }
-
         return $this;
+    }
+
+    // Assurez-vous que les champs pour displayName existent ou ajustez la méthode
+    public function displayName(): string
+    {
+        return $this->nom_proprio; // Simplifiez si vous avez seulement un nom
     }
 }

@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Velo;
 use App\Entity\Utilisateur;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: DiagnosticRepository::class)]
 class Diagnostic
@@ -90,9 +92,9 @@ class Diagnostic
         return $this->cout_reparation;
     }
 
-    public function setCoupReparation(?int $coup_reparation): static
+    public function setCoutReparation(?int $cout_reparation): static
     {
-        $this->coup_reparation = $coup_reparation;
+        $this->cout_reparation = $cout_reparation;
 
         return $this;
     }
@@ -119,7 +121,45 @@ class Diagnostic
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id")]
     
     private ?Utilisateur $utilisateur;
-    
+
+    #[ORM\OneToMany(targetEntity: DiagnosticElement::class, mappedBy: 'diagnostic', cascade: ['persist', 'remove'])]
+
+    private Collection $diagnosticElements;
+
+    public function __construct()
+    {
+        $this->diagnosticElements = new ArrayCollection();
+    }
+
+    public function getDiagnosticElements(): Collection
+    {
+        return $this->diagnosticElements;
+    }
+
+
+    public function addDiagnosticElement(DiagnosticElement $diagnosticElement): self
+    {
+        if (!$this->diagnosticElements->contains($diagnosticElement)) {
+            $this->diagnosticElements[] = $diagnosticElement;
+            $diagnosticElement->setDiagnostic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiagnosticElement(DiagnosticElement $diagnosticElement): self
+    {
+        if ($this->diagnosticElements->removeElement($diagnosticElement)) {
+            // Set the owning side to null (unless already changed)
+            if ($diagnosticElement->getDiagnostic() === $this) {
+                $diagnosticElement->setDiagnostic(null);
+            }
+        }
+
+        return $this;
+    }
+
+
     public function getVelo(): ?Velo
     {
     return $this->velo;

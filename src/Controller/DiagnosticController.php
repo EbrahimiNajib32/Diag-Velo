@@ -12,6 +12,7 @@ use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
 use App\Entity\ElementControl;
+use App\Form\DiagnosticType;
 
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -153,7 +154,7 @@ class DiagnosticController extends AbstractController
 //    }
 
     #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-    public function diagnosticEnCours(EntityManagerInterface $entityManager): JsonResponse
+    public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
         $filteredDiagnostics = [];
@@ -165,43 +166,38 @@ class DiagnosticController extends AbstractController
                 continue;
             }
 
-            $unfinishedElements = [];
-            $allElementsOK = true;
+            $okCount = 0;
 
             foreach ($elements as $element) {
-                $etat = $element->getEtatControl();
-                $veloElement = $element->getElementControl();
-
-                if ($etat->getNomEtat() !== 'OK') {
-                    $allElementsOK = false;
-                    $unfinishedElements[] = [
-                        'id' => $element->getId(),
-                        'commentaire' => $element->getCommentaire(),
-                        'element' => $veloElement->getElement(),
-                        'etat' => $etat->getNomEtat(),
-                    ];
+                if ($element->getEtatControl()->getNomEtat() === 'OK') {
+                    $okCount++;
                 }
             }
 
-            if (!$allElementsOK) {
+
+            if ($okCount < 35) {
+                $velo = $diagnostic->getVelo();
                 $filteredDiagnostics[] = [
-                    'id' => $diagnostic->getId(),
-                    'id_velo' => $diagnostic->getVelo()->getId(),
-                    'id_user' => $diagnostic->getIdUser(),
-                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-                    'cout_reparation' => $diagnostic->getCoutReparation(),
-                    'conclusion' => $diagnostic->getConclusion(),
-                    'elements' => $unfinishedElements,
+                    'diagnostic' => $diagnostic,
+                    'veloDetails' => [
+                        'id' => $velo->getId(),
+                        'couleur' => $velo->getCouleur(),
+                        'marque' => $velo->getMarque(),
+                        'refRecyclerie' => $velo->getRefRecyclerie(),
+                        'type' => $velo->getType(),
+                        'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
+                    ]
                 ];
             }
         }
 
-        if (empty($filteredDiagnostics)) {
-            return new JsonResponse(['message' => 'No unfinished diagnostics found'], Response::HTTP_NOT_FOUND);
-        }
-
-        return new JsonResponse($filteredDiagnostics);
+        // Render a Twig template, passing the filtered diagnostics
+        return $this->render('diagnostic_en_cour/index.html.twig', [
+            'filteredDiagnostics' => $filteredDiagnostics
+        ]);
     }
+
+
 
     #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
     public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
@@ -230,9 +226,182 @@ class DiagnosticController extends AbstractController
 
         return new JsonResponse($filteredDiagnostics);
     }
+    #[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $diagnostic = new Diagnostic();
+        $form = $this->createForm(DiagnosticType::class, $diagnostic);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $diagnostic->setDateDiagnostic(new \DateTime());
 
+            $entityManager->persist($diagnostic);
+            $entityManager->flush();
 
+            $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+            foreach ($elements as $element) {
+                $etatKey = 'etat_' . $element->getId();
+                $commentKey = 'commentaire_' . $element->getId();
 
+                if ($form->has($etatKey) && $form->has($commentKey)) {
+                    $etatId = $form->get($etatKey)->getData();
+                    $comment = $form->get($commentKey)->getData();
+
+                    $etatControl = null;
+
+                    if ($etatId) {
+                        $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatId);
+
+                        if (!$etatControl) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+
+                    $diagnosticElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
+                        'diagnostic' => $diagnostic,
+                        'elementcontrol' => $element
+                    ]) ?? new DiagnosticElement();
+
+                    $diagnosticElement->setDiagnostic($diagnostic);
+                    $diagnosticElement->setElementControl($element);
+                    if ($etatControl) {
+                        $diagnosticElement->setEtatControl($etatControl);
+                    }
+                    $diagnosticElement->setCommentaire($comment);
+
+                    $entityManager->persist($diagnosticElement);
+                }
+            }
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $categorizedElements = [];
+        foreach ($elements as $element) {
+            $fullElement = $element->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+            $categorizedElements[$category][] = $element;
+        }
+
+        return $this->render('diagnostic/new.html.twig', [
+            'diagnosticForm' => $form->createView(),
+            'diagnosticElements' => $categorizedElements,
+        ]);
+    }
+    #[Route('/diagnostic/reprendre/{id}', name: 'reprendre_diagnostic', methods: ['GET', 'POST'])]
+    public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
+        if (!$diagnostic) {
+            $this->addFlash('error', 'Diagnostic not found.');
+            return $this->redirectToRoute('app_error');
+        }
+
+        $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+        $form = $this->createForm(DiagnosticType::class, $diagnostic, [
+            'diagnostic' => $diagnostic,
+            'diagnosticElements' => $diagnosticElements
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+
+            foreach ($elements as $element) {
+                $etatField = 'etat_' . $element->getId();
+                $commentField = 'commentaire_' . $element->getId();
+
+                $etatValue = $form->has($etatField) ? $form->get($etatField)->getData() : null;
+                $commentValue = $form->has($commentField) ? $form->get($commentField)->getData() : null;
+
+                $diagElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
+                    'diagnostic' => $diagnostic,
+                    'elementcontrol' => $element
+                ]);
+
+                if (!$diagElement) {
+                    $diagElement = new DiagnosticElement();
+                    $diagElement->setDiagnostic($diagnostic);
+                    $diagElement->setElementControl($element);
+
+                }
+
+                if ($etatValue !== null) {
+                    $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatValue);
+                    if ($etatControl) {
+                        $diagElement->setEtatControl($etatControl);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+
+                $diagElement->setCommentaire($commentValue);
+                $entityManager->persist($diagElement);
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Diagnostic updated successfully.');
+            return $this->redirectToRoute('app_diagnostic_en_cours');
+        }
+
+        $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $categorizedElements = [];
+        foreach ($elements as $element) {
+            $fullElement = $element->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+            $categorizedElements[$category][] = $element;
+        }
+
+        return $this->render('diagnostic/reprendre.html.twig', [
+            'diagnosticForm' => $form->createView(),
+            'diagnostic' => $diagnostic,
+            'diagnosticElements' => $categorizedElements,
+        ]);
+    }
+
+    #[Route('/diagnostics/velo/{id}', name: 'app_diagnostics_by_velo_id', methods: ['GET'])]
+    public function diagnosticsByVeloId(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer les diagnostics associés au vélo en fonction de son ID
+        $query = $entityManager->createQuery(
+            'SELECT d FROM App\Entity\Diagnostic d WHERE d.id_velo = :id'
+        )->setParameter('id', $id);
+
+        $diagnostics = $query->getResult();
+
+        // Construire la réponse avec les détails des diagnostics
+        $diagnosticsData = [];
+        foreach ($diagnostics as $diagnostic) {
+            $diagnosticsData[] = [
+                'id' => $diagnostic->getId(),
+                'id_velo' => $diagnostic->getIdVelo(),
+                'id_user' => $diagnostic->getIdUser(),
+                'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                'cout_reparation' => $diagnostic->getCoutReparation(),
+                'conclusion' => $diagnostic->getConclusion(),
+                // Ajoutez d'autres détails du diagnostic si nécessaire
+            ];
+        }
+
+        // Retourner les détails des diagnostics au format JSON
+        return new JsonResponse($diagnosticsData);
+    }
 }
 

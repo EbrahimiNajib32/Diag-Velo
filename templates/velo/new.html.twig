@@ -3,25 +3,36 @@
 {% block title %}Saisir un vélo{% endblock %}
 
 {% block body %}
-    <div class="flex flex-col items-center pt-6 sm:pt-0 bg-gray-100">
-        <div class="w-full sm:max-w-2xl mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <h1 class="text-2xl font-bold text-gray-900 mb-6">Saisir un vélo</h1>
+<div class="flex flex-col items-center pt-6 sm:pt-0 bg-gray-100"> <!-- Arrière-plan de la page en gris -->
+    <div class="w-full sm:max-w-2xl mt-6 px-6 py-4 shadow-md overflow-hidden sm:rounded-lg" style="background-color: #38b2ac; color: white;"> <!-- Fond du formulaire en vert et texte en blanc -->
+        <h1 class="text-2xl font-bold mb-6">Saisir un vélo</h1> <!-- Titre du formulaire en blanc pour contraste -->
 
-            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
-            {% for field in form %}
-                <div class="space-y-1">
-                    {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                    {{ form_widget(field, {'attr': {'class': 'appearance-none block w-full bg-gray-50 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'}}) }}
-                </div>
-            {% endfor %}
-
-            <div class="flex items-center justify-between">
-                <button type="submit" class="w-full flex justify-center py-2 px-4 border-0 rounded-md shadow-sm text-sm font-medium text-white bg-[#209b85] hover:bg-[#50c7ac] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#50c7ac]">
-                    Soumettre
-                </button>
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+        <div class="flex flex-wrap -mx-3 mb-6">
+            {% set half = (form|length / 2) | round(0, 'ceil') %}
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                {% for field in form[0:half] %}
+                    <div class="space-y-1">
+                        {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: white;'}}) }}
+                        {{ form_widget(field, {'attr': {'class': 'appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'}}) }}
+                    </div>
+                {% endfor %}
             </div>
-            {{ form_end(form) }}
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                {% for field in form[half:] %}
+                    <div class="space-y-1">
+                        {{ form_label(field, null, {'label_attr': {'class': 'block text-sm font-medium', 'style': 'color: white;'}}) }}
+                        {{ form_widget(field, {'attr': {'class': 'appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-{% endblock %}
 
+        <div class="flex items-center justify-between">
+            <button type="submit" class="btn btn-primary" style="background-color: white; color: #38b2ac; border-color: #38b2ac;">Soumettre</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
+</div>
+{% endblock %}
