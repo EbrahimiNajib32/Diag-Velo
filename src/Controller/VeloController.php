@@ -26,22 +26,25 @@ class VeloController extends AbstractController
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
-           //dump($request->request->all());
-        ($form->isSubmitted());
-        ($form->isValid());
+        //$request->request->all());
+       // $form->isSubmitted());
+       // $form->isValid());
 
         if ($form->isSubmitted() && $form->isValid()) {
             //enregistrement du vélo
             $entityManager->persist($velo->getProprietaire());
             $entityManager->persist($velo);
-            $entityManager->flush();
 
+            $entityManager->flush();
+echo("fff");
             // Redirection après enregistrement
             //return $this->redirectToRoute('velo_success');
         }
 
         return $this->render('velo/new.html.twig', [
+
             'form' => $form->createView(),
+
         ]);
     }
 
