@@ -36,7 +36,7 @@ class VeloController extends AbstractController
             $entityManager->persist($velo);
 
             $entityManager->flush();
-echo("fff");
+
             // Redirection après enregistrement
             //return $this->redirectToRoute('velo_success');
         }
