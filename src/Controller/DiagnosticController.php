@@ -342,5 +342,33 @@ class DiagnosticController extends AbstractController
             'diagnosticElements' => $categorizedElements,
         ]);
     }
+
+    #[Route('/diagnostics/velo/{id}', name: 'app_diagnostics_by_velo_id', methods: ['GET'])]
+    public function diagnosticsByVeloId(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer les diagnostics associés au vélo en fonction de son ID
+        $query = $entityManager->createQuery(
+            'SELECT d FROM App\Entity\Diagnostic d WHERE d.id_velo = :id'
+        )->setParameter('id', $id);
+
+        $diagnostics = $query->getResult();
+
+        // Construire la réponse avec les détails des diagnostics
+        $diagnosticsData = [];
+        foreach ($diagnostics as $diagnostic) {
+            $diagnosticsData[] = [
+                'id' => $diagnostic->getId(),
+                'id_velo' => $diagnostic->getIdVelo(),
+                'id_user' => $diagnostic->getIdUser(),
+                'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                'cout_reparation' => $diagnostic->getCoutReparation(),
+                'conclusion' => $diagnostic->getConclusion(),
+                // Ajoutez d'autres détails du diagnostic si nécessaire
+            ];
+        }
+
+        // Retourner les détails des diagnostics au format JSON
+        return new JsonResponse($diagnosticsData);
+    }
 }
 
