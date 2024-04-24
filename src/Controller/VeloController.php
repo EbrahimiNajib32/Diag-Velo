@@ -20,21 +20,18 @@ class VeloController extends AbstractController
     #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-
-
         $velo = new Velo();
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
-        ($form->isSubmitted());
-
         if ($form->isSubmitted() && $form->isValid()) {
-            //enregistrement du vélo
+            $velo->setDateDeReception(new \DateTime());
+
             $entityManager->persist($velo->getProprietaire());
             $entityManager->persist($velo);
             $entityManager->flush();
 
-            // Redirection après enregistrement
+
             return $this->redirectToRoute('app_accueil');
         }
 
@@ -42,6 +39,7 @@ class VeloController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request ): Response

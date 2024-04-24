@@ -69,14 +69,6 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Taille du Cadre'
             ])
-            ->add('date_de_reception', DateType::class, [
-                'widget' => 'single_text',
-                'required' => false,
-                'data' => new \DateTime(), // Set the default value to the current date
-                'constraints' => [
-                    new Date()  // Ensures the input is a valid date
-                ]
-            ])
             ->add('url_photo', TextType::class, [
                 'required' => false,
                 'label' => 'Photo'
@@ -104,7 +96,10 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Commentaire'
             ])
-            ->add('emplacement')
+            ->add('emplacement', TextType::class , [
+                'required' => false,
+                'label' => 'Emplacement'
+            ])
             ->add('proprietaire', ProprietaireType::class);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $velo = $event->getData();
@@ -130,7 +125,7 @@ class VeloInfoType extends AbstractType
     private function getBrandChoices()
     {
         $brands = [
-            'Autres', 'All-City', 'Alchemy', 'Argon 18', 'Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
+            'Autres', 'Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
             'Canyon', 'Cinelli', 'Cleary Bikes', 'Colnago', 'Commençal', 'Co-op Cycles (REI)', 'Dahon', 'De Rosa',
             'Diamondback', 'Dynacraft', 'Eddy Merckx', 'Electra', 'Evil Bike Co.', 'Fairdale', 'Felt', 'Focus',
             'Fuji', 'Ghost', 'GT', 'Holdsworth', 'Huffy', 'Ibis', 'Jamis', 'Kona', 'Lapierre', 'LeMond', 'Linus',
@@ -151,16 +146,26 @@ class VeloInfoType extends AbstractType
     {
         $builder->add('couleur', ChoiceType::class, [
             'choices' => [
-                'Rouge' => 'red',
-                'Bleu' => 'blue',
-                'Vert' => 'green',
-                'Jaune' => 'yellow',
-                'Orange' => 'orange',
-                'Violet' => 'violet',
-                'Noir' => 'black',
-                'Gris' => 'grey',
                 'Blanc' => 'white',
-                'Brun' => 'brown'
+                'Beige' => 'beige',
+                'Saumon' => 'darksalmon',
+                'Rose' => 'pink',
+                'Jaune' => 'yellow',
+                'Or' => 'gold',
+                'Orange' => 'orange',
+                'Rouge' => 'red',
+                'Kaki' => 'khaki',
+                'Vert fluo' => 'lime',
+                'Vert' => 'green',
+                'Olive' => 'olive',
+                'Bleu océan' => 'aqua',
+                'Bleu' => 'blue',
+                'Bleu foncé' => 'navy',
+                'Violet' => 'violet',
+                'Brun' => 'brown',
+                'Gris' => 'grey',
+                'Noir' => 'black',
+                'Argent' => 'silver'
             ],
             'expanded' => true,
             'multiple' => true,
