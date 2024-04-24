@@ -18,9 +18,7 @@ class Utilisateur
 
     #[ORM\Column]
     private ?int $role = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $informations_de_contact = null;
+    
 
     public function getId(): ?int
     {
