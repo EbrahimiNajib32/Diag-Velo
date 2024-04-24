@@ -53,16 +53,16 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {{ form_row(form.marque, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
                     {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.taille_roues, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
+                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
                     {{ form_row(form.date_de_vente, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.date_de_reception, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.type, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
                     {{ form_row(form.annee, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.url_photo, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     <div class="text-center border border-black rounded p-2">
@@ -73,7 +73,7 @@
                     </div>
                     {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 </div>
-                <button type="submit" class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
+                <button type="submit" class="mt-4 w-full bg-teal-500 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
                 {{ form_end(form) }}
             </div>
         </div>

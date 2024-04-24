@@ -35,7 +35,7 @@ class VeloController extends AbstractController
             $entityManager->flush();
 
             // Redirection après enregistrement
-            //return $this->redirectToRoute('velo_success');
+            return $this->redirectToRoute('app_accueil');
         }
 
         return $this->render('velo/new.html.twig', [

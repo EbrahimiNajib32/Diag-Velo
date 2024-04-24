@@ -49,30 +49,9 @@ class VeloInfoType extends AbstractType
                     '32 pouces (ISO 686)' => '32',
                     '36 pouces (914 mm)' => '36'
                 ],
-                'label' => 'Taille de roue', // Optional: add a label
+                'label' => 'Taille des roues',
             ])
-            ->add('taille_cadre', ChoiceType::class, [
-                'choices' => [
-                    '152 – 160cm: 68cm, 48cm, 14p, XS' => 'XS',
-                    '161 – 162cm: 73cm, 48cm, 14p, XS' => 'XS',
-                    '163 – 164cm: 74cm, 48cm, 14p, XS' => 'XS',
-                    '165 – 166cm: 75cm, 50cm, 14p – 16p, XS – S' => 'XS-S',
-                    '167 – 168cm: 76cm, 50cm, 16p, S' => 'S',
-                    '169 – 170cm: 77cm, 52cm, 16p, S' => 'S',
-                    '171 – 174cm: 79cm, 52cm, 16p – 18p, S – M' => 'S-M',
-                    '175 – 178cm: 81cm, 53cm, 18p, M' => 'M',
-                    '179 – 180cm: 82cm, 53cm, 18p, M' => 'M',
-                    '181 – 182cm: 84cm, 54cm, 18p, M' => 'M',
-                    '183 – 184cm: 86cm, 55cm, 18p – 21p, M - L' => 'M-L',
-                    '185 – 187cm: 87cm, 56cm, 21p, L' => 'L',
-                    '188 – 189cm: 90cm, 57cm, 21p, L' => 'L',
-                    '190 – 192cm: 91cm, 60cm, 21p – 22p, L - XL' => 'L-XL',
-                    '192 – 194cm: 92cm, 60cm, 22p, XL' => 'XL',
-                    '194 – 198cm: 93cm, 60cm+, 22p – 24p, XL -XXL' => 'XL-XXL',
-                    '198 – 200cm+: 94+cm, 60cm+, 24p, XXL' => 'XXL'
-                ],
-                'label' => 'Taille du cadre', // Optional: add a label
-            ])
+            ->add('taille_cadre')
             ->add('date_de_vente', null, [
                 'widget' => 'single_text'
             ])
@@ -130,7 +109,7 @@ class VeloInfoType extends AbstractType
             'VanMoof', 'Veloretti', 'Vitus', 'Wilier Triestina', 'Woom', 'Yeti Cycles', 'Zinn'
         ];
         asort($brands);
-        return array_combine($brands, $brands); 
+        return array_combine($brands, $brands);
     }
 
 
