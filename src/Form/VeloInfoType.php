@@ -5,6 +5,7 @@ use App\Entity\Proprietaire; // Make sure this is correct
 use App\Entity\Velo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
                                             use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Date;
 
 class VeloInfoType extends AbstractType
 {
@@ -22,14 +24,26 @@ class VeloInfoType extends AbstractType
             ->add('couleur', HiddenType::class, [
                 'mapped' => false,
             ])
-            ->add('ref_recyclerie')
+            ->add('ref_recyclerie', TextType::class , [
+                'required' => false,
+                'label' => 'Référence Recyclerie'
+            ])
             ->add('marque', ChoiceType::class, [
                 'choices' => $this->getBrandChoices(),
                 'label' => 'Marque'
             ])
-            ->add('numero_de_serie')
-            ->add('etat')
-            ->add('poids')
+            ->add('numero_de_serie', TextType::class , [
+                'required' => false,
+                'label' => 'Numéro de série'
+            ])
+            ->add('etat', TextType::class , [
+                'required' => false,
+                'label' => 'Etat'
+            ])
+            ->add('poids' , TextType::class , [
+                        'required' => false,
+                        'label' => 'Poids'
+                        ])
             ->add('taille_roues', ChoiceType::class, [
                 'choices' => [
                     '12 pouces (203 mm)' => '12',
@@ -51,11 +65,22 @@ class VeloInfoType extends AbstractType
                 ],
                 'label' => 'Taille des roues',
             ])
-            ->add('taille_cadre')
-            ->add('date_de_reception', null, [
-                'widget' => 'single_text'
+            ->add('taille_cadre', TextType::class, [
+                'required' => false,
+                'label' => 'Taille du Cadre'
             ])
-            ->add('url_photo')
+            ->add('date_de_reception', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+                'data' => new \DateTime(), // Set the default value to the current date
+                'constraints' => [
+                    new Date()  // Ensures the input is a valid date
+                ]
+            ])
+            ->add('url_photo', TextType::class, [
+                'required' => false,
+                'label' => 'Photo'
+            ])
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Autres' => 'Autres',
@@ -66,7 +91,19 @@ class VeloInfoType extends AbstractType
                 ],
                 'label' => 'Type de vélo',
             ])
-            ->add('commentaire')
+            ->add('public', ChoiceType::class , [
+                    'choices' => [
+                        'Homme' => 'Homme',
+                        'Femme' => 'Femme',
+                        'Unisex' => 'Unisex',
+                        'Enfant' => 'Enfant',
+                    ],
+                    'label' => 'Public',]
+            )
+            ->add('commentaire', TextType::class , [
+                'required' => false,
+                'label' => 'Commentaire'
+            ])
             ->add('emplacement')
             ->add('proprietaire', ProprietaireType::class);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
