@@ -50,16 +50,4 @@ class Utilisateur
 
         return $this;
     }
-
-    public function getInformationsDeContact(): ?string
-    {
-        return $this->informations_de_contact;
-    }
-
-    public function setInformationsDeContact(?string $informations_de_contact): static
-    {
-        $this->informations_de_contact = $informations_de_contact;
-
-        return $this;
-    }
 }
