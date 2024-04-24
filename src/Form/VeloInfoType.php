@@ -52,9 +52,6 @@ class VeloInfoType extends AbstractType
                 'label' => 'Taille des roues',
             ])
             ->add('taille_cadre')
-            ->add('date_de_vente', null, [
-                'widget' => 'single_text'
-            ])
             ->add('date_de_reception', null, [
                 'widget' => 'single_text'
             ])
@@ -69,7 +66,6 @@ class VeloInfoType extends AbstractType
                 ],
                 'label' => 'Type de vélo',
             ])
-            ->add('annee')
             ->add('commentaire')
             ->add('emplacement')
             ->add('proprietaire', ProprietaireType::class);
