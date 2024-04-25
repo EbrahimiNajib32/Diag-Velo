@@ -72,6 +72,8 @@ private ?\DateTimeInterface $date_destruction = null;
 private ?string $public = null;
 
 
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -280,4 +282,7 @@ private ?string $public = null;
 
         return $this;
     }
+
+
+
 }
