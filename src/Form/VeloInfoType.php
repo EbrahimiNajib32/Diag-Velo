@@ -30,7 +30,6 @@ class VeloInfoType extends AbstractType
                 'widget' => 'single_text'
             ])
             ->add('type')
-            ->add('annee')
             ->add('emplacement')
             ->add('commentaire')
 
