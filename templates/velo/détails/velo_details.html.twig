@@ -18,11 +18,12 @@
             <li>Date de Réception: {{ velo.getDateDeReception()|date('Y-m-d') }}</li>
             <li>Date de Vente: {{ velo.getDateDeVente()|date('Y-m-d') }}</li>
             <li>Type: {{ velo.type }}</li>
-            <li>Année: {{ velo.annee }}</li>
             <li>Emplacement: {{ velo.emplacement }}</li>
             <li>Commentaire: {{ velo.commentaire }}</li>
             <li>Propriétaire ID: {{ velo.getProprietaire().getId() }}</li>
             <li>Public: {{ velo.getPublic() }}</li>
+            <li>date de destruction: {{ velo.getDateDestruction() }}</li>
+            <li>origine du vélo: {{ velo.getOrigine() }}</li>
         </ul>
 
            <div class="details-container">
