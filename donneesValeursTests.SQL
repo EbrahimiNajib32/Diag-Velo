@@ -1,51 +1,24 @@
 
 -- Ajout du premier propriétaire
-INSERT INTO `proprietaire` (`id`, `nom_proprio`, `telephone`, `email`) VALUES ('1', 'recyclerie', '06858585', NULL);
+INSERT INTO `proprietaire` (`id`, `nom_proprio`, `telephone`, `email`) VALUES (NULL, 'recylcerie', '06', 'test');
 
--- Ajout de 2 vélos (devra être modifié)
-INSERT INTO `velo` (`id`, `numero_de_serie`, `marque`, `ref_recyclerie`, `couleur`, `poids`, `taille_roues`, `taille_cadre`, `etat`, `url_photo`, `date_de_reception`, `date_de_vente`, `type`, `annee`, `emplacement`, `commentaire`, `proprietaire_id`) VALUES ('1', '123', 'peugeot', '456', 'vert', '15', '26', '20', 'moyen', '', '2024-04-19 11:21:25.000000', NULL, 'VTT', '2000', 'Stock', 'test1', '1'), ('2', '456', 'auchan', '963', 'bleu', '18', '26', '22', 'bon', '', '2024-04-19 11:21:25.000000', NULL, 'VTC', '2000', 'Stock', 'test2', '1');
+-- Ajout de 2 vélos
+INSERT INTO `velo` (`id`, `proprietaire_id`, `numero_de_serie`, `marque`, `ref_recyclerie`, `couleur`, `poids`, `taille_roues`, `taille_cadre`, `etat`, `url_photo`, `date_de_reception`, `date_de_vente`, `type`, `emplacement`, `commentaire`, `date_destruction`, `public`) VALUES (NULL, '1', '123', 'peugeot', '456', 'vert', '12', '26', '20', '', NULL, '2024-04-25 09:08:55.000000', NULL, 'VTT', 'test', NULL, NULL, 'Femme'), (NULL, '1', NULL, 'auchan', '789', 'Bleu', '25', '24', '20', 'moyen', NULL, '2024-04-25 09:08:55.000000', NULL, 'Gravel', 'test2', 'a voir', NULL, 'Homme');
 
--- Ajout de 1 utilisateur (devra être modifié)
-INSERT INTO `utilisateur` (`id`, `nom`, `role`, `informations_de_contact`) VALUES ('1', 'geo trouvetout', '1', NULL);
+-- Ajout de 1 utilisateur 
+INSERT INTO `utilisateur` (`id`, `nom`, `role`) VALUES (NULL, 'GeotrouveTout', '1');
 
 
 -- Ajout de 1 diagnostique
 INSERT INTO `diagnostic` (`id`, `id_velo`, `id_user`, `date_diagnostic`, `cout_reparation`, `conclusion`) VALUES ('1', '1', '1', '2024-04-19 11:28:21.000000', NULL, 'a reparer');
 
+-- insertion 47 elements dans diagnostic 1
+INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `commentaire`, `id_etat`) VALUES (NULL, '1', '1', NULL, '1'), (NULL, '1', '2', NULL, '2'), (NULL, '1', '3', NULL, '3'), (NULL, '1', '4', 'tordue', '2'), (NULL, '1', '5', NULL, '1'), (NULL, '1', '6', NULL, '3'), (NULL, '1', '7', NULL, '3'), (NULL, '1', '8', NULL, '1'), (NULL, '1', '9', NULL, '3'), (NULL, '1', '10', NULL, '2'), (NULL, '1', '11', NULL, '2'), (NULL, '1', '12', NULL, '3'), (NULL, '1', '14', NULL, '2'), (NULL, '1', '15', NULL, '1'), (NULL, '1', '16', NULL, '3'), (NULL, '1', '17', NULL, '3'), (NULL, '1', '18', NULL, '4'), (NULL, '1', '19', NULL, '1'), (NULL, '1', '20', NULL, '2'), (NULL, '1', '21', NULL, '3'), (NULL, '1', '22', NULL, '3'), (NULL, '1', '23', NULL, '4'), (NULL, '1', '24', NULL, '2'), (NULL, '1', '25', NULL, '3'), (NULL, '1', '26', NULL, '3'), (NULL, '1', '27', NULL, '4'), (NULL, '1', '28', NULL, '2'), (NULL, '1', '29', NULL, '1'), (NULL, '1', '30', NULL, '3'), (NULL, '1', '31', NULL, '1'), (NULL, '1', '32', NULL, '2'), (NULL, '1', '33', NULL, '2'), (NULL, '1', '34', NULL, '1'), (NULL, '1', '35', NULL, '2'), (NULL, '1', '36', NULL, '1'), (NULL, '1', '37', NULL, '1'), (NULL, '1', '38', NULL, '3'), (NULL, '1', '39', NULL, '1'), (NULL, '1', '40', NULL, '1'), (NULL, '1', '41', NULL, '3'), (NULL, '1', '42', NULL, '3'), (NULL, '1', '43', NULL, '1'), (NULL, '1', '44', NULL, '3'), (NULL, '1', '45', NULL, '3'), (NULL, '1', '46', NULL, '3'), (NULL, '1', '47', NULL, '3'), (NULL, '1', '13', NULL, '1');
 
-
-
--- Remplir table de liaison daignostic_element(à deplacer dans fichier valeurs listes SQL)
---INSERT INTO `diagnostic_element` (`id_diagnostic`, `id_element`, `id_etat`)
---SELECT diag.id, elem.id, etat.id
---FROM `diagnostic` AS diag
---CROSS JOIN `element_control` AS elem
---CROSS JOIN `etat_control` AS etat
---WHERE diag.id BETWEEN 1 AND 47;
-
--- ajout 12 elements dans diagnostique 1
-INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `commentaire`, `id_etat`) VALUES (NULL, '1', '1', 'test', '1'), (NULL, '1', '2', 'ff', '1'), (NULL, '1', '3', NULL, '2'), (NULL, '1', '4', 'cassée', '3'), (NULL, '1', '5', 'de cartes', '1'), (NULL, '1', '6', 'peu le plus', '1'), (NULL, '1', '7', NULL, '3'), (NULL, '1', '8', NULL, '1'), (NULL, '1', '9', NULL, '1'), (NULL, '1', '10', 'la gadoue', '1'), (NULL, '1', '11', NULL, '2'), (NULL, '1', '12', 'a glace', '4');
-
---requete SQL pour afficher resultat diagnostique 1
-SELECT diagnostic.*, velo.*, diagnostic_element.*, element_control.element, etat_control.nom_etat
-FROM diagnostic
-INNER JOIN velo ON diagnostic.id_velo = velo.id
-INNER JOIN diagnostic_element ON diagnostic.id = diagnostic_element.id_diagnostic
-INNER JOIN element_control ON diagnostic_element.id_element = element_control.id
-INNER JOIN etat_control ON diagnostic_element.id_etat = etat_control.id
-WHERE diagnostic.id = [ID_DU_DIAGNOSTIC];
 
 -- insertion 2eme diagnostique
 INSERT INTO `diagnostic` (`id`, `id_velo`, `id_user`, `date_diagnostic`, `cout_reparation`, `conclusion`) VALUES (NULL, '2', '1', '2024-04-19 11:28:21', NULL, 'a reparer'); 
 
--- insertion 19 elements dans diagnostic 2
-INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `commentaire`, `id_etat`) VALUES (NULL, '12', '1', NULL, '1'), (NULL, '12', '2', 'cassée', '3'), (NULL, '12', '3', '', '1'), (NULL, '12', '4', 'et torches', '1'), (NULL, '12', '5', 'inversée', '2'), (NULL, '12', '6', 'usé', '3'), (NULL, '12', '7', 'sans', '4'), (NULL, '12', '8', 'batons', '1'), (NULL, '12', '9', '', '1'), (NULL, '12', '10', 'absent', '4'), (NULL, '12', '11', '', '1'), (NULL, '12', '12', 'freins à disque', '4'), (NULL, '12', '13', '', '3'), (NULL, '12', '14', 'détendu', '2'), (NULL, '12', '15', '', '1'), (NULL, '12', '16', 'de fromages', '1'), (NULL, '12', '17', '', '3'), (NULL, '12', '18', 'a graisser', '2'), (NULL, '12', '19', 'rouille', '2');
-
--- requete pour afficher tous les diagnostic
-SELECT diagnostic.*, velo.*, diagnostic_element.*, element_control.element, etat_control.nom_etat
-FROM diagnostic
-INNER JOIN velo ON diagnostic.id_velo = velo.id
-INNER JOIN diagnostic_element ON diagnostic.id = diagnostic_element.id_diagnostic
-INNER JOIN element_control ON diagnostic_element.id_element = element_control.id
-INNER JOIN etat_control ON diagnostic_element.id_etat = etat_control.id;
+-- insertion 12 lignes dans diagnostic 2
+INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `id_etat`, `commentaire`) VALUES (NULL, '2', '1', '1', NULL), (NULL, '2', '2', '4', NULL), (NULL, '2', '3', '2', 'attention'), (NULL, '2', '4', '1', NULL), (NULL, '2', '5', '3', 'trop de jeu'), (NULL, '2', '6', '1', NULL), (NULL, '2', '7', '3', 'crevée'), (NULL, '2', '8', '2', 'voilé'), (NULL, '2', '9', '1', NULL), (NULL, '2', '10', '4', NULL), (NULL, '2', '11', '3', 'absent'), (NULL, '2', '12', '1', NULL);
 

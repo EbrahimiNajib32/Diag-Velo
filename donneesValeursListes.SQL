@@ -1,5 +1,6 @@
 
--- ATTENTION il faut intégrer en 1er ce fichier dans la base avant toute manipulation
+-- ATTENTION il faut intégrer en 1er ce fichier dans la base avant toute manipulations
+
 INSERT INTO element_control (id,element)
 VALUES
     (1, 'cadre: aspect général'),
