@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Diagnostic{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 pt-8">
+        <div class="flex flex-col">
+            <div class="flex flex-col items-center">
+                <h1 class="block text-gray-700 font-bold mb-4 text-xl text-center">Diagnostic {{ diagnostic.id }}</h1>
+                <div class="w-full md:w-1/2 lg:w-1/3"> <!-- Contrôler la largeur du bouton selon la taille de l'écran -->
+                    <button onclick="window.print()" class="bg-teal-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded print:hidden w-full">
+                        Imprimer le diagnostic
+                    </button>
+                </div>
+            </div>
+            <div class="flex justify-between">
+
+                <div class="w-1/2 p-4 text-left">
+                    <p class="text-gray-700 text-base font-bold">Date du diagnostic: <span class="font-normal">{{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</span></p>
+                    <p class="text-gray-700 text-base font-bold">Coût de réparation: <span class="font-normal">{{ diagnostic.coutReparation }}</span></p>
+                    <p class="text-gray-700 text-base font-bold">Conclusion: <span class="font-normal">{{ diagnostic.conclusion }}</span></p>
+                </div>
+
+                <div class="w-1/2 p-4 text-right">
+                    <h2 class="text-lg font-bold mb-2">Informations du vélo:</h2>
+                    <p><span class="font-bold">Identifiant:</span> {{ bike.id }}</p>
+                    <p><span class="font-bold">Numéro de série:</span> {{ bike.numero_de_serie }}</p>
+                    <p><span class="font-bold">Ref Recyclérie:</span> {{ bike.ref_recyclerie}}</p>
+                    <p><span class="font-bold">Type:</span> {{ bike.type }}</p>
+                    <p><span class="font-bold">Marque:</span> {{ bike.marque }}</p>
+                    <p><span class="font-bold">Couleur:</span> {{ bike.couleur}}</p>
+                    <p><span class="font-bold">Taille roues:</span> {{ bike.taille_roues}} pouces</p>
+                    <p><span class="font-bold">Taille cadre:</span> {{ bike.taille_cadre}} cm</p>
+                </div>
+            </div>
+
+
+
+            <!-- Début de la grille pour deux colonnes -->
+            <div class="grid md:grid-cols-2 gap-4">
+                {% for category, categorizedElements in categorizedElements %}
+                    <!-- Section pour chaque catégorie du diagnostic -->
+                    <div class="mb-8">
+                        <h3 class="font-bold text-lg mb-2">{{ category }}</h3>
+                        <table class="min-w-full border-collapse border border-slate-500">
+                            <thead>
+                            <tr>
+                                <th class="border border-slate-600 px-4 py-2">Détail</th>
+                                <th class="border border-slate-600 px-4 py-2">État</th>
+                                <th class="border border-slate-600 px-4 py-2">Commentaire</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for detail in categorizedElements %}
+                                <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-white' }}">
+                                    <td class="border border-slate-700 px-4 py-2">{{ detail.detail }}</td>
+                                    <td class="border border-slate-700 px-4 py-2">{{ detail.etat }}</td>
+                                    <td class="border border-slate-700 px-4 py-2">
+                                        {% if detail.commentaire %}
+                                            {{ detail.commentaire }}
+                                        {% else %}
+                                            Aucun commentaire disponible.
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="border border-slate-700 px-4 py-2">Aucun élément de diagnostic trouvé pour cette catégorie.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-gray-700 text-base">Aucun élément de diagnostic trouvé.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

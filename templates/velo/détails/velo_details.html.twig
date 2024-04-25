@@ -7,6 +7,7 @@
         <h1>Détails du Vélo</h1>
         <ul class="details-list">
             <li>Marque: {{ velo.marque }}</li>
+            <li>numéro de série: {{ velo.getNumeroDeSerie() }}</li>
             <li>Référence recyclerie: {{ velo.getRefRecyclerie() }}</li>
             <li>Couleur: {{ velo.couleur }}</li>
             <li>Poids: {{ velo.poids }}</li>
@@ -53,7 +54,7 @@
         background-color: #38b2ac; /* Le code hexadécimal pour bg-teal-500 */
         color: #ffffff; /* Pour le texte en blanc */
         margin-bottom: 20px;
-        padding: 9px; /* Augmenté de 10px à 15px pour plus de largeur */
+        padding: 7px; /* Augmenté de 10px à 15px pour plus de largeur */
         border-radius: 3px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
@@ -72,7 +73,7 @@
     p {
         text-align: center;
         color: #285e61; /* Même couleur que le titre pour le texte du paragraphe */
-        margin-top: 20px; /* Ajouté pour donner plus d'espace après la liste si nécessaire */
+        margin-top: 10px; /* Ajouté pour donner plus d'espace après la liste si nécessaire */
     }
       .back-to-home {
             display: inline-block;
