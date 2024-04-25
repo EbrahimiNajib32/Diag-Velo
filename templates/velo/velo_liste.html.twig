@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <style>
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            height: 100vh;
+            z-index: 50;
+
+        }
+    </style>
     <div class="fixed top-0 left-0">
         <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="">
     </div>
@@ -21,6 +30,7 @@
                 <th class="px-2 py-2">Date de Réception<i class="ml-1 bi bi-arrow-down-up"></i></th>
                 <th class="px-2 py-2">Date de vente<i class="ml-1 bi bi-arrow-down-up"></i></th>
                 <th class="px-2 py-2">Date de destruction<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Voir diagnostics<i class="ml-1 bi bi-arrow-down-up"></i></th>
             </tr>
             </thead>
             <tbody>
@@ -35,13 +45,98 @@
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_de_reception|date('d/m/Y') }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_de_vente|date('d/m/Y') }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_destruction|date('d/m/Y') }}</td>
-
+                    <td class="px-4 py-2 border-r border-b">
+                        <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full " type="button">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <div class="pagination mx justify-center">
+        <div class="pagination justify-center">
             {{ knp_pagination_render(pagination) }}
         </div>
     </div>
+
+    {% for velo in pagination %}
+        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
+            <div class="relative max-w-5xl justify-center items-center mx-auto">
+                <div class="bg-white rounded-lg overflow-y-auto">
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b ">
+                        <h3 class="text-xl text-center font-semibold text-gray-900">
+                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçus le : {{ velo.date_de_reception|date('Y-m-d') }}
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    {% if diagnostics[velo.id] is defined %}
+                        {% for diagnostic in diagnostics[velo.id] %}
+                            <div class="bg-gray-100 rounded p-5  mb-4 mt-4 text-center">
+                                <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
+                                <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
+                                <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
+                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucune' }}</p>
+                                <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
+                                <a class="bg-teal-500 p-2 rounded" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId()}}">Voir diagnostic</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="p-5 rounded-lg mb-3 text-center">
+                        <p class="text-center m-5">Pas de diagnostics.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const openModalButtons = document.querySelectorAll('[data-modal-toggle]');
+            const closeModalButtons = document.querySelectorAll('[data-modal-hide]');
+            const modalBackdrops = document.querySelectorAll('.modal-backdrop');
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modalId = button.getAttribute('data-modal-toggle');
+                    const modal = document.getElementById(modalId);
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modalId = button.getAttribute('data-modal-hide');
+                    const modal = document.getElementById(modalId);
+                    modal.classList.add('hidden');
+                });
+            });
+
+            modalBackdrops.forEach(backdrop => {
+                backdrop.addEventListener('click', (event) => {
+                    // Check if the clicked element is the backdrop itself
+                    if (event.target === backdrop) {
+                        const modalId = backdrop.getAttribute('id');
+                        const modal = document.getElementById(modalId);
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+        });
+        document.addEventListener("click", (event) => {
+            const clickedElement = event.target;
+            const isBackdrop = clickedElement.classList.contains("modal-backdrop");
+            if (isBackdrop) {
+                const modalId = clickedElement.getAttribute("id");
+                const modal = document.getElementById(modalId);
+                modal.classList.add("hidden");
+            }
+        });
+
+    </script>
+
 {% endblock %}
+
+
