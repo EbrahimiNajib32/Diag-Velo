@@ -3,7 +3,10 @@
 namespace App\Form;
 use App\Entity\Proprietaire; // Make sure this is correct
 use App\Entity\Velo;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -17,6 +20,13 @@ use Symfony\Component\Validator\Constraints\Date;
 
 class VeloInfoType extends AbstractType
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
@@ -37,7 +47,7 @@ class VeloInfoType extends AbstractType
                 'label' => 'Numéro de série'
             ])
             ->add('etat', TextType::class , [
-                'required' => false,
+                'required' => true,
                 'label' => 'Etat'
             ])
             ->add('poids' , TextType::class , [
@@ -100,7 +110,78 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Emplacement'
             ])
-            ->add('proprietaire', ProprietaireType::class);
+            ->add('chosir_ou_ajouter', ChoiceType::class, [
+                'choices' => [
+                    'Existant' => false,
+                    'Nouveau' => true,
+                ],
+                'expanded' => true, // This ensures it renders as radio buttons
+                'mapped' => false,
+                'label' => 'Choisir ou Ajouter Proprietaire',
+            ])
+            ->add('proprietaire', EntityType::class, [
+                'class' => Proprietaire::class,
+                'choice_label' => function (Proprietaire $proprietaire) {
+                    return $proprietaire->getNomProprio() . ' - ' . $proprietaire->getEmail();
+                },
+                'required' => false,
+                'placeholder' => 'Choisir propriétaire...'
+            ])
+            ->add('nom_proprio', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['placeholder' => 'Name', 'style' => 'display: none;'] // Initially hidden
+            ])
+            ->add('email', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['placeholder' => 'Email', 'style' => 'display: none;'] // Initially hidden
+            ])
+            ->add('telephone', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['placeholder' => 'Telephone', 'style' => 'display: none;'] // Initially hidden
+            ]);
+
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                $velo = $form->getData();
+                $proprietaire = $velo->getProprietaire();
+
+                // Handling when there is no existing proprietaire (creating a new one)
+                if (!$proprietaire) {
+                    // Assuming you have separate fields for new proprietor details on your form
+                    $nomProprio = $form->get('nom_proprio')->getData();
+                    $email = $form->get('email')->getData();
+                    $telephone = $form->get('telephone')->getData();
+
+                    if (!empty($nomProprio) || !empty($email) || !empty($telephone)) {
+                        $newProprietaire = new Proprietaire();
+                        $newProprietaire->setNomProprio($nomProprio);
+                        $newProprietaire->setEmail($email);
+                        $newProprietaire->setTelephone($telephone);
+
+                        $this->entityManager->persist($newProprietaire);
+                        $this->entityManager->flush();
+
+                        // Now set the new proprietaire to the velo
+                        $velo->setProprietaire($newProprietaire);
+                    }
+                } else {
+                    // Check and update the existing proprietaire details if necessary
+                    if (!empty($proprietaire->getNomProprio()) || !empty($proprietaire->getEmail()) || !empty($proprietaire->getTelephone())) {
+                        // Assuming updates are necessary or you are validating existing data
+                        $proprietaire->setNomProprio($proprietaire->getNomProprio());
+                        $proprietaire->setEmail($proprietaire->getEmail());
+                        $proprietaire->setTelephone($proprietaire->getTelephone());
+
+                        $this->entityManager->flush(); // Save any changes
+                    }
+                }
+            }
+        );
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $velo = $event->getData();
             $form = $event->getForm();

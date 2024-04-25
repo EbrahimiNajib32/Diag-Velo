@@ -42,12 +42,25 @@
                 <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
                 {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
                 <div class="grid grid-cols-2 gap-4 ">
-                    <div class="text-center border border-black rounded p-2">
-                        <h4 class="border-b border-black font-bold" >Propriétaire</h4>
-                        {{ form_row(form.proprietaire.telephone, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                        {{ form_row(form.proprietaire.email, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                        {{ form_row(form.proprietaire.nom_proprio, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    <div class="border border-black rounded p-3 text-center">
+                        <div>
+                            {{ form_label(form.chosir_ou_ajouter) }}
+                            {{ form_widget(form.chosir_ou_ajouter) }}
+                        </div>
+                        <div class="form-group existing-proprietaire" style="display:none;">
+                            {{ form_label(form.proprietaire) }}
+                            {{ form_widget(form.proprietaire) }}
+                        </div>
+                        <div class="new-prop-field" style="display:none;">
+                            {{ form_label(form.nom_proprio) }}
+                            {{ form_widget(form.nom_proprio) }}
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email) }}
+                            {{ form_label(form.telephone) }}
+                            {{ form_widget(form.telephone) }}
+                        </div>
                     </div>
+
                     <div>
                         <h1 class="text-center">Couleurs</h1>
                         <div class="grid grid-cols-5 gap-1">
@@ -75,6 +88,7 @@
                 {{ form_end(form) }}
             </div>
         </div>
+        <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -95,6 +109,38 @@
                 });
             });
         });
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('input[type="radio"][name="velo_info[chosir_ou_ajouter]"]');
+            const existingProprietaireDiv = document.querySelector('.existing-proprietaire');
+            const newPropFieldsDiv = document.querySelector('.new-prop-field');
+            const newPropInputs = document.querySelectorAll('.new-prop-field input');
+
+            function toggleVisibility(showNewPropFields) {
+                if (showNewPropFields === '1') {
+                    existingProprietaireDiv.style.display = 'none';
+                    newPropFieldsDiv.style.display = 'block';
+                    newPropInputs.forEach(input => input.style.display = ''); // Remove inline display:none
+                } else {
+                    existingProprietaireDiv.style.display = 'block';
+                    newPropFieldsDiv.style.display = 'none';
+                    newPropInputs.forEach(input => input.style.display = 'none'); // Re-apply inline display:none
+                }
+            }
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    toggleVisibility(this.value);
+                });
+            });
+
+            // Set initial visibility based on pre-checked state of radios
+            const checkedRadio = Array.from(radios).find(radio => radio.checked);
+            if (checkedRadio) {
+                toggleVisibility(checkedRadio.value);
+            }
+        });
+
+
     </script>
 
 {% endblock %}
