@@ -50,6 +50,7 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $emplacement = null;
 
@@ -71,6 +72,8 @@ private ?\DateTimeInterface $date_destruction = null;
 private ?string $public = null;
 
 
+ #[ORM\Column(type: "string", length: 255, nullable: true)]
+   private ?string $origine = null;
 
 
     public function getId(): ?int
@@ -282,6 +285,15 @@ private ?string $public = null;
         return $this;
     }
 
+ public function getOrigine(): ?string
+        {
+            return $this->origine;
+        }
 
+        public function setOrigine(?string $origine): self
+        {
+            $this->origine = $origine;
+            return $this;
+        }
 
 }
