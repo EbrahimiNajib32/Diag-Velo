@@ -115,7 +115,7 @@ class VeloInfoType extends AbstractType
                     'Existant' => false,
                     'Nouveau' => true,
                 ],
-                'expanded' => true, // This ensures it renders as radio buttons
+                'expanded' => true,
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
             ])
@@ -130,17 +130,17 @@ class VeloInfoType extends AbstractType
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['placeholder' => 'Name', 'style' => 'display: none;'] // Initially hidden
+                'attr' => ['placeholder' => 'Nom ..', 'style' => 'display: none;']
             ])
             ->add('email', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['placeholder' => 'Email', 'style' => 'display: none;'] // Initially hidden
+                'attr' => ['placeholder' => 'Email ..', 'style' => 'display: none;']
             ])
             ->add('telephone', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['placeholder' => 'Telephone', 'style' => 'display: none;'] // Initially hidden
+                'attr' => ['placeholder' => 'Telephone ..', 'style' => 'display: none;']
             ]);
 
         $builder->addEventListener(
@@ -150,9 +150,8 @@ class VeloInfoType extends AbstractType
                 $velo = $form->getData();
                 $proprietaire = $velo->getProprietaire();
 
-                // Handling when there is no existing proprietaire (creating a new one)
                 if (!$proprietaire) {
-                    // Assuming you have separate fields for new proprietor details on your form
+
                     $nomProprio = $form->get('nom_proprio')->getData();
                     $email = $form->get('email')->getData();
                     $telephone = $form->get('telephone')->getData();
@@ -166,18 +165,18 @@ class VeloInfoType extends AbstractType
                         $this->entityManager->persist($newProprietaire);
                         $this->entityManager->flush();
 
-                        // Now set the new proprietaire to the velo
+
                         $velo->setProprietaire($newProprietaire);
                     }
                 } else {
-                    // Check and update the existing proprietaire details if necessary
+
                     if (!empty($proprietaire->getNomProprio()) || !empty($proprietaire->getEmail()) || !empty($proprietaire->getTelephone())) {
-                        // Assuming updates are necessary or you are validating existing data
+
                         $proprietaire->setNomProprio($proprietaire->getNomProprio());
                         $proprietaire->setEmail($proprietaire->getEmail());
                         $proprietaire->setTelephone($proprietaire->getTelephone());
 
-                        $this->entityManager->flush(); // Save any changes
+                        $this->entityManager->flush();
                     }
                 }
             }

@@ -7,7 +7,7 @@
         .color-choice {
             width: 40px;
             height: 40px;
-            border: 2px solid #000000; /* Default border color */
+            border: 2px solid #000000;
             border-radius: 4px;
             cursor: pointer;
             display: flex;
@@ -21,16 +21,16 @@
         }
 
         .color-choice input[type=checkbox] {
-            display: none; /* Hides the actual checkbox */
+            display: none;
         }
 
         .color-choice input[type=checkbox]:checked + span {
-            color: rgba(255, 255, 255, 0); /* Optional: makes the color name visible when checked */
+            color: rgba(255, 255, 255, 0);
         }
 
         .color-choice input[type=checkbox]:checked + label {
-            border-color: blue; /* Changes border to blue when selected */
-            box-shadow: 0 0 0 2px blue; /* Adds a blue halo effect */
+            border-color: blue;
+            box-shadow: 0 0 0 2px blue;
         }
 
     </style>
@@ -98,13 +98,13 @@
                 const checkbox = choice.querySelector('input[type=checkbox]');
 
                 choice.addEventListener('click', function() {
-                    checkbox.checked = !checkbox.checked; // Toggle checkbox
+                    checkbox.checked = !checkbox.checked;
                     if (checkbox.checked) {
-                        choice.style.borderColor = 'blue'; // Change border to blue
-                        choice.style.boxShadow = '0 0 0 2px blue'; // Blue halo effect
+                        choice.style.borderColor = 'blue';
+                        choice.style.boxShadow = '0 0 0 2px blue';
                     } else {
-                        choice.style.borderColor = '#000000'; // Revert to default
-                        choice.style.boxShadow = 'none'; // Remove halo
+                        choice.style.borderColor = '#000000';
+                        choice.style.boxShadow = 'none';
                     }
                 });
             });
@@ -119,11 +119,11 @@
                 if (showNewPropFields === '1') {
                     existingProprietaireDiv.style.display = 'none';
                     newPropFieldsDiv.style.display = 'block';
-                    newPropInputs.forEach(input => input.style.display = ''); // Remove inline display:none
+                    newPropInputs.forEach(input => input.style.display = '');
                 } else {
                     existingProprietaireDiv.style.display = 'block';
                     newPropFieldsDiv.style.display = 'none';
-                    newPropInputs.forEach(input => input.style.display = 'none'); // Re-apply inline display:none
+                    newPropInputs.forEach(input => input.style.display = 'none');
                 }
             }
 
@@ -133,14 +133,12 @@
                 });
             });
 
-            // Set initial visibility based on pre-checked state of radios
+
             const checkedRadio = Array.from(radios).find(radio => radio.checked);
             if (checkedRadio) {
                 toggleVisibility(checkedRadio.value);
             }
         });
-
-
     </script>
 
 {% endblock %}
