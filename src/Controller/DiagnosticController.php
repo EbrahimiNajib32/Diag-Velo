@@ -40,28 +40,53 @@ class DiagnosticController extends AbstractController
     }
 
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function diagnosticById(int $id, EntityManagerInterface $entityManager): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
         if (!$diagnostic) {
-            return new JsonResponse(['message' => 'Diagnostic not found'], Response::HTTP_NOT_FOUND);
+            $content = $this->renderView('error/404.html.twig', [
+                'message' => 'Diagnostic not found'
+            ]);
+            return new Response($content, Response::HTTP_NOT_FOUND);
         }
+
 
         $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
-        $elementData = [];
+        $categorizedElements = [];
         foreach ($elements as $element) {
             $etat = $element->getEtatControl();
             $veloElement = $element->getElementControl();
+            $fullElement = $veloElement->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            $detail = $parts[1] ?? '';
 
-            $elementData[] = [
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+
+            $categorizedElements[$category][] = [
                 'id' => $element->getId(),
                 'commentaire' => $element->getCommentaire(),
-                'element' => $veloElement->getElement(),
+                'detail' => $detail,
                 'etat' => $etat->getNomEtat(),
             ];
         }
+
+        // Fetch the bike details associated with the diagnostic
+        $bike = $diagnostic->getVelo();
+        $bikeDetails = [
+            'id' => $bike->getId(),
+            'numero_de_serie' => $bike->getNumeroDeSerie(),
+            'ref_recyclerie' => $bike->getRefRecyclerie(),
+            'marque' => $bike->getMarque(),
+            'type' => $bike->getType(),
+            'couleur' => $bike->getCouleur(),
+            'taille_roues' => $bike->getTailleRoues(),
+            'taille_cadre' => $bike->getTailleCadre(),
+        ];
 
         $diagnosticData = [
             'id' => $diagnostic->getId(),
@@ -70,11 +95,19 @@ class DiagnosticController extends AbstractController
             'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
             'cout_reparation' => $diagnostic->getCoutReparation(),
             'conclusion' => $diagnostic->getConclusion(),
-            'elements' => $elementData,
         ];
 
-        return new JsonResponse($diagnosticData);
+        return $this->render('diagnostic/show.html.twig', [
+            'diagnostic' => $diagnostic,
+            'bike' => $bikeDetails,
+            'categorizedElements' => $categorizedElements
+        ]);
     }
+
+
+
+
+
 //    #[Route('/diagnosticAvecElement', name: 'app_diagnostics_avec_elements', methods: ['GET'])]
 //    public function diagnosticAvecElement(EntityManagerInterface $entityManager): JsonResponse
 //    {
@@ -341,6 +374,34 @@ class DiagnosticController extends AbstractController
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $categorizedElements,
         ]);
+    }
+
+    #[Route('/diagnostics/velo/{id}', name: 'app_diagnostics_by_velo_id', methods: ['GET'])]
+    public function diagnosticsByVeloId(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer les diagnostics associés au vélo en fonction de son ID
+        $query = $entityManager->createQuery(
+            'SELECT d FROM App\Entity\Diagnostic d WHERE d.id_velo = :id'
+        )->setParameter('id', $id);
+
+        $diagnostics = $query->getResult();
+
+        // Construire la réponse avec les détails des diagnostics
+        $diagnosticsData = [];
+        foreach ($diagnostics as $diagnostic) {
+            $diagnosticsData[] = [
+                'id' => $diagnostic->getId(),
+                'id_velo' => $diagnostic->getIdVelo(),
+                'id_user' => $diagnostic->getIdUser(),
+                'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                'cout_reparation' => $diagnostic->getCoutReparation(),
+                'conclusion' => $diagnostic->getConclusion(),
+                // Ajoutez d'autres détails du diagnostic si nécessaire
+            ];
+        }
+
+        // Retourner les détails des diagnostics au format JSON
+        return new JsonResponse($diagnosticsData);
     }
 }
 

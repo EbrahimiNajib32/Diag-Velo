@@ -49,7 +49,6 @@ class Velo
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
-    
 
     #[ORM\Column(length: 255)]
     private ?string $emplacement = null;
@@ -64,6 +63,12 @@ class Velo
 #[ORM\ManyToOne(inversedBy: 'velos')]
 #[ORM\JoinColumn(nullable: false)]
 private ?Proprietaire $proprietaire = null;
+
+#[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+private ?\DateTimeInterface $date_destruction = null;
+
+#[ORM\Column(length: 255, nullable: true)]
+private ?string $public = null;
 
 
     public function getId(): ?int
@@ -247,6 +252,30 @@ private ?Proprietaire $proprietaire = null;
     public function setProprietaire(?Proprietaire $proprietaire): static
     {
         $this->proprietaire = $proprietaire;
+
+        return $this;
+    }
+
+    public function getDateDestruction(): ?\DateTimeInterface
+    {
+        return $this->date_destruction;
+    }
+
+    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
+    {
+        $this->date_destruction = $date_destruction;
+
+        return $this;
+    }
+
+    public function getPublic(): ?string
+    {
+        return $this->public;
+    }
+
+    public function setPublic(?string $public): static
+    {
+        $this->public = $public;
 
         return $this;
     }

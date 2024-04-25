@@ -18,9 +18,7 @@ class Utilisateur
 
     #[ORM\Column]
     private ?int $role = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $informations_de_contact = null;
+    
 
     public function getId(): ?int
     {
@@ -47,18 +45,6 @@ class Utilisateur
     public function setRole(int $role): static
     {
         $this->role = $role;
-
-        return $this;
-    }
-
-    public function getInformationsDeContact(): ?string
-    {
-        return $this->informations_de_contact;
-    }
-
-    public function setInformationsDeContact(?string $informations_de_contact): static
-    {
-        $this->informations_de_contact = $informations_de_contact;
 
         return $this;
     }

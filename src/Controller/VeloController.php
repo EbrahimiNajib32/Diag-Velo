@@ -29,6 +29,7 @@ class VeloController extends AbstractController
 
             $entityManager->persist($velo->getProprietaire());
             $entityManager->persist($velo);
+
             $entityManager->flush();
 
 
@@ -36,7 +37,9 @@ class VeloController extends AbstractController
         }
 
         return $this->render('velo/new.html.twig', [
+
             'form' => $form->createView(),
+
         ]);
     }
 
