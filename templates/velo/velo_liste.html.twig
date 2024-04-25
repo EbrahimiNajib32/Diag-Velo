@@ -13,20 +13,29 @@
             <thead class="bg-gray-200">
             <tr class=" text-black">
                 <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
                 <th class="px-2 py-2">Référence recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
                 <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Public<i class="ml-1 bi bi-arrow-down-up"></i></th>
                 <th class="px-2 py-2">Date de Réception<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Date de vente<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                <th class="px-2 py-2">Date de destruction<i class="ml-1 bi bi-arrow-down-up"></i></th>
             </tr>
             </thead>
             <tbody>
             {% for velo in pagination %}
                 <tr class="border">
                     <td class="px-4 py-2 border-r border-b">{{ velo.numero_de_serie }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.ref_recyclerie }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.type }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.public }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_de_reception|date('d/m/Y') }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.date_de_vente|date('d/m/Y') }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.date_destruction|date('d/m/Y') }}</td>
+
                 </tr>
             {% endfor %}
             </tbody>
