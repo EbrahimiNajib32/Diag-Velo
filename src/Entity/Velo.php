@@ -50,7 +50,6 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-
     #[ORM\Column(length: 255)]
     private ?string $emplacement = null;
 
