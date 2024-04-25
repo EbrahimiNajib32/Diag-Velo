@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Form;
-                                        use App\Entity\Proprietaire; // Make sure this is correct
+use App\Entity\Proprietaire; // Make sure this is correct
 use App\Entity\Velo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-                                            use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType; // Import needed for ChoiceType
 
 class VeloInfoType extends AbstractType
 {
@@ -32,12 +33,20 @@ class VeloInfoType extends AbstractType
             ->add('type')
             ->add('emplacement')
             ->add('commentaire')
+             ->add('public', ChoiceType::class, [
+                       'choices' => [
+                           'Enfant' => 'enfant',
+                           'Femme' => 'femme',
+                           'Homme' => 'homme',
+                           'Unisexe' => 'unisexe'
+                       ],
+                       'label' => 'Public cible'
+                   ])
 
 
-
-                                                                        ->add('proprietaire', ProprietaireType::class, [
+              ->add('proprietaire', ProprietaireType::class, [
                                                                                     // Les options nécessaires
-                                                                                ])
+                  ])
 
 
 
