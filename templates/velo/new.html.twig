@@ -82,6 +82,8 @@
                     {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
                     {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
                     {{ form_row(form.url_photo, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    <input type="file" id="fileInput" style="display: none;" accept="image/*" capture="environment">
+                    <button type="button" onclick="capturePhoto()" class="btn">Prendre une photo</button>
                     {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 </div>
@@ -140,6 +142,9 @@
                 toggleVisibility(checkedRadio.value);
             }
         });
+        function capturePhoto() {
+            document.getElementById('fileInput').click();
+        }
     </script>
 
 {% endblock %}

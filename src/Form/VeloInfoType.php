@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -17,6 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
                                             use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\File;
 
 class VeloInfoType extends AbstractType
 {
@@ -79,9 +81,20 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Taille du Cadre'
             ])
-            ->add('url_photo', TextType::class, [
+            ->add('url_photo',  FileType::class, [
+                'label' => 'Prendre Photo',
+                'mapped' => false, // Ensures the file is not automatically mapped to entity field
                 'required' => false,
-                'label' => 'Photo'
+                'attr' => ['accept' => 'image/*'], // Allows selecting image files
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/*',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image file',
+                    ])
+                ],
             ])
 
             ->add('origine', TextType::class, [
