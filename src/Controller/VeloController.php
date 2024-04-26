@@ -20,25 +20,20 @@ class VeloController extends AbstractController
     #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-
-
         $velo = new Velo();
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
-        //$request->request->all());
-       // $form->isSubmitted());
-       // $form->isValid());
-
         if ($form->isSubmitted() && $form->isValid()) {
-            //enregistrement du vélo
+            $velo->setDateDeReception(new \DateTime());
+
             $entityManager->persist($velo->getProprietaire());
             $entityManager->persist($velo);
 
             $entityManager->flush();
 
-            // Redirection après enregistrement
-            //return $this->redirectToRoute('velo_success');
+
+            return $this->redirectToRoute('app_accueil');
         }
 
         return $this->render('velo/new.html.twig', [
@@ -47,6 +42,7 @@ class VeloController extends AbstractController
 
         ]);
     }
+
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request ): Response
