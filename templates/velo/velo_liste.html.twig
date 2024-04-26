@@ -14,9 +14,20 @@
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">Propriétaire</th>
-                    <th scope="col" class="px-6 py-3">Numéro de série</th>
-                    <th scope="col" class="px-6 py-3">Référence recyclerie</th>
+                    <th scope="col" class="px-6 py-3">
+                        Propriétaire
+                        <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="display: flex; flex-direction: column; justify-content: center;">
+                        <span style="margin-bottom: 4px;">Numéro de série</span>
+                        <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sshadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <div style="display: flex; flex-direction: column; align-items: start;">
+                            <span>Référence recyclerie</span>
+                            <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sshadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                        </div>
+                    </th>
                     <th scope="col" class="px-6 py-3">Marque</th>
                     <th scope="col" class="px-6 py-3">Couleur</th>
                     <th scope="col" class="px-6 py-3">
@@ -94,5 +105,48 @@
                 element.style.backgroundColor = '#f9f9f9';
             }
         }
+
+        function filterByReference() {
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        function filterBySerial() {
+            var input = document.getElementById("searchSerial");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        function filterByOwner() {
+            var input = document.getElementById("searchOwner");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0]; // Assurez-vous que c'est la bonne colonne pour le propriétaire
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
     </script>
 {% endblock %}
