@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\{ ElementControl};
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Enum\ConclusionDiagnostic;
+
 
 class DiagnosticType extends AbstractType
 {
@@ -46,7 +48,17 @@ class DiagnosticType extends AbstractType
 
         $builder
             ->add('cout_reparation')
-            ->add('conclusion')
+
+            ->add('conclusion', ChoiceType::class, [ // Remplacer l'ancien champ "conclusion"
+                'choices' => [
+                    'R.A.S' => ConclusionDiagnostic::RAS,
+                    'À réparer' => ConclusionDiagnostic::A_REPARER,
+                    'Pour pièces' => ConclusionDiagnostic::POUR_PIECES,
+                ],
+                'expanded' => true, // Pour afficher des cases à cocher
+                'multiple' => false, // Pour ne permettre qu'une seule sélection
+            ])
+
             ->add('velo', EntityType::class, [
                 'class' => Velo::class,
                 'choice_label' => 'ref_recyclerie',
