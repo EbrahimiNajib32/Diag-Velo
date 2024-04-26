@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\VeloRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VeloRepository;
+
 
 #[ORM\Entity(repositoryClass: VeloRepository::class)]
 class Velo
@@ -204,7 +204,6 @@ private ?string $public = null;
     {
         return $this->date_de_vente;
     }
-
     public function setDateDeVente(\DateTimeInterface $date_de_vente): static
     {
         $this->date_de_vente = $date_de_vente;
