@@ -42,7 +42,7 @@ class Velo
     private ?string $url_photo = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_de_reception = null;
+    private ?\DateTimeInterface $date_de_enregistrement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_de_vente = null;
@@ -189,15 +189,14 @@ private ?string $public = null;
         return $this;
     }
 
-    public function getDateDeReception(): ?\DateTimeInterface
+    public function getDateDeEnregistrement(): ?\DateTimeInterface
     {
-        return $this->date_de_reception;
+        return $this->date_de_enregistrement;
     }
 
-    public function setDateDeReception(\DateTimeInterface $date_de_reception): static
+    public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): self
     {
-        $this->date_de_reception = $date_de_reception;
-
+        $this->date_de_enregistrement = $date_de_enregistrement;
         return $this;
     }
 
