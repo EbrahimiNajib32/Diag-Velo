@@ -52,14 +52,67 @@ class VeloController extends AbstractController
             ->leftJoin('v.proprietaire', 'p')
             ->getQuery();
 
+        // Pagination des résultats
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
             10 /*limit per page*/
         );
 
+        // Récupére les marques distinctes des vélos affichés dans le tableau
+        $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.marque')
+            ->getQuery();
+
+        $marques = $marqueQuery->getResult();
+
+        // Extraire uniquement les valeurs des marques
+        $marques_uniques = array_map(function ($marque) {
+            return $marque['marque'];
+        }, $marques);
+
+        // Requête pour obtenir les couleurs uniques
+        $couleurQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.couleur')
+            ->getQuery();
+
+        $couleurs = $couleurQuery->getResult();
+
+        // Extraction des valeurs des couleurs
+        $couleurs_uniques = array_column($couleurs, 'couleur');
+
+        // Requête pour obtenir les types uniques
+        $typeQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.type')
+            ->getQuery();
+
+        $types = $typeQuery->getResult();
+
+        // Extraction des valeurs des types
+                $types_uniques = array_map(function ($type) {
+                    return $type['type'];
+                }, $types);
+
+        // Requête pour obtenir les catégories de public uniques
+        $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.public')
+            ->getQuery();
+
+        $publics = $publicQuery->getResult();
+
+        // Extraction des valeurs des catégories de public
+        $publics_uniques = array_map(function ($public) {
+            return $public['public'];
+        }, $publics);
+
+
+        // Passe les données au modèle Twig
         return $this->render('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
+            'marques_uniques' => $marques_uniques,
+            'couleurs_uniques' => $couleurs_uniques,
+            'types_uniques' => $types_uniques,
+            'publics_uniques' => $publics_uniques,
         ]);
     }
 }
