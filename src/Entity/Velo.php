@@ -201,16 +201,26 @@ private ?string $public = null;
         return $this;
     }
 
+
     public function getDateDeVente(): ?\DateTimeInterface
     {
         return $this->date_de_vente;
     }
-    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
-    {
-        $this->date_de_vente = $date_de_vente;
 
+
+    public function setDateDeVente($date_de_vente): self
+    {
+        if (is_string($date_de_vente)) {
+            try {
+                $date_de_vente = new \DateTime($date_de_vente);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException("Date de vente invalide : " . $e->getMessage());
+            }
+        }
+        $this->date_de_vente = $date_de_vente;
         return $this;
     }
+
 
     public function getType(): ?string
     {
@@ -265,10 +275,13 @@ private ?string $public = null;
         return $this->date_destruction;
     }
 
-    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
+    public function setDateDestruction($date_destruction): self
     {
-        $this->date_destruction = $date_destruction;
-
+        if (is_string($date_destruction)) {
+            $this->date_destruction = new \DateTime($date_destruction);
+        } else {
+            $this->date_destruction = $date_destruction;
+        }
         return $this;
     }
 

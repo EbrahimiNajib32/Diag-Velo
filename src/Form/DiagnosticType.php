@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\{ ElementControl};
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use App\Enum\ConclusionDiagnostic;
+use App\ConclusionDiagnostic;
 
 
 class DiagnosticType extends AbstractType

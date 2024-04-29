@@ -1,95 +1,195 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails du Vélo{% endblock %}
-
 {% block body %}
     <div class="details-container">
-        <h1>Détails du Vélo</h1>
-        <ul class="details-list">
-            <li>Marque: {{ velo.marque }}</li>
-            <li>numéro de série: {{ velo.getNumeroDeSerie() }}</li>
-            <li>Référence recyclerie: {{ velo.getRefRecyclerie() }}</li>
-            <li>Couleur: {{ velo.couleur }}</li>
-            <li>Poids: {{ velo.poids }}</li>
-            <li>Taille des Roues: {{ velo.getTailleRoues() }}</li>
-            <li>Taille du Cadre: {{ velo.getTailleCadre() }}</li>
-            <li>État: {{ velo.etat }}</li>
-            <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-            <li>Date d'enregistrement: {{ velo.date_de_enregistrement|date('d/m/Y') }}</li>
-            <li>Date de Vente: {{ velo.getDateDeVente()|date('Y-m-d') }}</li>
-            <li>Type: {{ velo.type }}</li>
-            <li>Emplacement: {{ velo.emplacement }}</li>
-            <li>Commentaire: {{ velo.commentaire }}</li>
-            <li>Propriétaire ID: {{ velo.getProprietaire().getId() }}</li>
-            <li>Public: {{ velo.getPublic() }}</li>
-            <li>date de destruction: {{ velo.getDateDestruction() }}</li>
-            <li>origine du vélo: {{ velo.getOrigine() }}</li>
-        </ul>
-
-           <div class="details-container">
-                 <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
-           </div>
-
-        {% if not velo.getProprietaire() %}
-            <p>Ce vélo n'a pas de propriétaire actuellement.</p>
+        <div class="column-left"> <!-- Ajout de la classe column-left -->
+            <h1>Détails du Vélo</h1>
+            <ul class="details-list">
+                <li>Marque: <span id="marque">{{ velo.marque }}</span></li>
+                <li>Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
+                <li>Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
+                <li>Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
+                <li>Poids: <span id="poids">{{ velo.poids }}</span></li>
+                <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
+                <li>État: <span id="etat">{{ velo.etat }}</span></li>
+                <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                <li>Date de Réception: <span id="date_de_reception">{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
 
 
-        {% endif %}
+            </ul>
+        </div>
+        <div class="column-right"> <!-- Ajout de la classe column-right -->
+            <ul class="details-list">
+                <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
+                <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
+
+                <li>Date de Vente: <span id="date_de_vente">{{ velo.getDateDeVente()|date('Y-m-d') }}</span></li>
+                <li>Type: <span id="type">{{ velo.type }}</span></li>
+                <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li>Propriétaire ID: <span id="proprietaire_id">{{ velo.getProprietaire().getId() }}</span></li>
+                <li>Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                <li>Date de Destruction: <span id="date_destruction">{{ velo.getDateDestruction()|date('Y-m-d') }}</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="button-container">
+        <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
+        <button type="button" class="btn btn-primary edit-button">Modifier</button>
+        <button type="submit" class="btn btn-success save-button">Enregistrer</button>
     </div>
 {% endblock %}
 
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let editMode = false;
+            const editButton = document.querySelector('.edit-button');
+            const saveButton = document.querySelector('.btn-success');
+            const fields = document.querySelectorAll('.details-list span');
+
+            editButton.addEventListener('click', function() {
+                editMode = !editMode;
+                fields.forEach(field => {
+                    field.setAttribute('contenteditable', editMode ? 'true' : 'false');
+                });
+            });
+
+
+             //data contient les nouvelles valeurs modifiés
+
+            saveButton.addEventListener('click', function() {
+                if (editMode) {
+                    const data = {};
+                    fields.forEach(field => {
+                        if (field.getAttribute('contenteditable') === 'true') {
+                            let propName = field.id;
+                            // Convertissez l'ID de snake_case en camelCase
+                            propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+                            data[propName] = field.innerText;
+                        }
+                    });
+                    //trouve la route du controlleur pour envoyer les donner enregistrés avec post
+
+                    fetch(`/api/update-velo/{{ velo.id }}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': '{{ csrf_token('edit_velo') }}'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Something went wrong on the server!');
+                            }
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            console.log('Data saved successfully:', responseData);
+                            // Additional UI feedback can be added here
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+
+
 {% block stylesheets %}
-<style>
-    .details-container {
-        background-color: #f7fafc; /* C'est l'équivalent de bg-gray-100 dans Tailwind */
-        padding: 11px;
-        border-radius: 6px;
-        max-width: 900px; /* Augmenté de 800px à 900px */
-        margin: auto;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .details-list {
-        list-style: none;
-        padding: 0;
-    }
-    .details-list li {
-        background-color: #38b2ac; /* Le code hexadécimal pour bg-teal-500 */
-        color: #ffffff; /* Pour le texte en blanc */
-        margin-bottom: 20px;
-        padding: 7px; /* Augmenté de 10px à 15px pour plus de largeur */
-        border-radius: 3px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    h1 {
-        text-align: center;
-        color: #285e61; /* Une teinte plus foncée pour le titre si nécessaire */
-        margin-bottom: 2px;
-    }
-    a {
-        color: #ffffff; /* Pour que les liens soient en blanc comme le texte des éléments de liste */
-        text-decoration: none;
-    }
-    a:hover {
-        text-decoration: underline;
-    }
-    p {
-        text-align: center;
-        color: #285e61; /* Même couleur que le titre pour le texte du paragraphe */
-        margin-top: 10px; /* Ajouté pour donner plus d'espace après la liste si nécessaire */
-    }
-      .back-to-home {
-            display: inline-block;
-            background-color: #285e61; /* Couleur de fond pour le bouton */
-            color: #ffffff; /* Couleur de texte pour le bouton */
-            padding: 6px 13px; /* Espacement autour du texte */
-            border-radius: 3px; /* Bords arrondis pour le bouton */
-            text-decoration: none; /* Aucun soulignement pour le texte du bouton */
-            margin-bottom: 10px; /* Marge en dessous du bouton */
+    <style>
+        .details-container {
+            display: flex;
+            gap: 20px; /* Espace entre les colonnes */
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 1000px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            align-items: stretch; /* Les colonnes s'étirent pour avoir la même hauteur */
         }
-        .back-to-home:hover {
-            background-color: #2e7d32; /* Couleur de fond au survol */
+
+        .column-left, .column-right {
+            flex: 1; /* Chaque colonne prend la même quantité d'espace disponible */
+        }
+
+        .details-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .column-right {
+            margin-top: 83px; /* Ajoute une marge supérieure pour décaler la colonne de droite vers le bas */
+        }
+
+        .details-list li {
+            background-color: #eef7ee;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #d4e8d4;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centrer les éléments horizontalement */
+            align-items: flex-end; /* Aligner les éléments en bas de leur conteneur */
+            margin-top: 20px; /* Espacement entre les boutons et le contenu précédent */
+        }
+
+        .back-to-home, .edit-button, .save-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px; /* Espace avant les boutons */
+        }
+
+        .back-to-home:hover, .edit-button:hover, .save-button:hover {
+            background-color: #368B2F;
+        }
+
+        a {
+            color: #217346;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0f5132;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .details-container {
+                flex-direction: column; /* Sur les petits écrans, afficher les colonnes les unes en dessous des autres */
+            }
+
+            .column-left, .column-right {
+                width: 100%; /* Chaque colonne prend toute la largeur sur les petits écrans */
+            }
         }
 
 
-</style>
+         span[contenteditable="true"] {
+             background-color: #ffffe0; /* Jaune clair pour indiquer l'édition */
+             outline: 2px solid #4caf50; /* Bordure verte pour mieux voir les champs éditables */
+             padding: 3px; /* Un peu de padding pour que le texte ne touche pas les bords */
+             cursor: text; /* Change le curseur pour indiquer qu'on peut éditer */
+         }
+    </style>
+
+
+
+
+    </style>
 {% endblock %}
