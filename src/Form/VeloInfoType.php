@@ -83,6 +83,12 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Photo'
             ])
+
+            ->add('origine', TextType::class, [
+                  'required' => false,
+                   'label' => 'Origine du vélo'
+             ])
+
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Autres' => 'Autres',
@@ -137,6 +143,7 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'attr' => ['placeholder' => 'Email ..', 'style' => 'display: none;']
             ])
+
             ->add('telephone', TextType::class, [
                 'mapped' => false,
                 'required' => false,

@@ -153,51 +153,36 @@ class DiagnosticController extends AbstractController
 //        return new JsonResponse($filteredDiagnostics);
 //    }
 
-    #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-    public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
-    {
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $filteredDiagnostics = [];
+// route pour l'affichage uniquement des diagnostics en cours
+#[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
+public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
+{
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $filteredDiagnostics = [];
 
-        foreach ($diagnostics as $diagnostic) {
-            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
-
-            if (empty($elements)) {
-                continue;
-            }
-
-            $okCount = 0;
-
-            foreach ($elements as $element) {
-                if ($element->getEtatControl()->getNomEtat() === 'OK') {
-                    $okCount++;
-                }
-            }
-
-
-            if ($okCount < 35) {
-                $velo = $diagnostic->getVelo();
-                $filteredDiagnostics[] = [
-                    'diagnostic' => $diagnostic,
-                    'veloDetails' => [
-                        'id' => $velo->getId(),
-                        'couleur' => $velo->getCouleur(),
-                        'marque' => $velo->getMarque(),
-                        'refRecyclerie' => $velo->getRefRecyclerie(),
-                        'type' => $velo->getType(),
-                        'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
-                    ]
-                ];
-            }
+    foreach ($diagnostics as $diagnostic) {
+        // Remplacez la vérification du nombre d'éléments "OK" par l'utilisation du statut de l'entité Diagnostic
+        if ($diagnostic->getStatus() === 'en cours') {
+            $velo = $diagnostic->getVelo();
+            $filteredDiagnostics[] = [
+                'diagnostic' => $diagnostic,
+                'veloDetails' => [
+                    'id' => $velo->getId(),
+                    'couleur' => $velo->getCouleur(),
+                    'marque' => $velo->getMarque(),
+                    'refRecyclerie' => $velo->getRefRecyclerie(),
+                    'type' => $velo->getType(),
+                    'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
+                ]
+            ];
         }
-
-        // Render a Twig template, passing the filtered diagnostics
-        return $this->render('diagnostic_en_cour/index.html.twig', [
-            'filteredDiagnostics' => $filteredDiagnostics
-        ]);
     }
 
-
+    // Render a Twig template, passing the filtered diagnostics
+    return $this->render('diagnostic_en_cour/index.html.twig', [
+        'filteredDiagnostics' => $filteredDiagnostics
+    ]);
+}
 
     #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
     public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
