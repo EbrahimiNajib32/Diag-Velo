@@ -172,7 +172,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
                     'marque' => $velo->getMarque(),
                     'refRecyclerie' => $velo->getRefRecyclerie(),
                     'type' => $velo->getType(),
-                    'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
+                    'dateReception' => $velo->getDateDeEnregistrement() ? $velo->getDateDeEnregistrement()->format('Y-m-d') : null,
                 ]
             ];
         }
