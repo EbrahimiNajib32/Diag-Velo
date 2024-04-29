@@ -8,29 +8,25 @@
         <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
     </div>
     <div class="container mx-auto">
-        <h1 class="text-3xl font-bold text-center text-black mb-6">Liste des vélos</h1>
+        <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
 
-        <div class="relative overflow-x shadow-md sm:rounded-lg">
+        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3" >
-                        Propriétaire
-                        <div>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">Propriétaire</span>
                         <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">Numéro de série</span>
+                        <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
+                            <span style="margin-bottom: 4px;">Référence recyclerie</span>
+                            <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
                     </th>
                     <th scope="col" class="px-6 py-3" >
-                        <span style="margin-bottom: 4px;">Numéro de série</span>
-                        <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sshadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; flex-direction: column; align-items: start;">
-                            <span>Référence recyclerie</span>
-                            <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md sshadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                        </div>
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Marque
                         <div style="position: relative; display: inline-block;">
                             <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
@@ -180,4 +176,29 @@
         }
 
     </script>
+
+
+    <style>
+        h1{
+            margin-top: 7rem;
+        }
+        .py-3{
+            vertical-align: top;
+        }
+
+        .px-6 {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+
+        .tab_ctn{
+            width: 95%;
+            margin: auto;
+        }
+
+        .tab_ctn td:first-child, .tab_ctn th:first-child{
+            padding:0.5rem;
+        }
+
+    </style>
 {% endblock %}
