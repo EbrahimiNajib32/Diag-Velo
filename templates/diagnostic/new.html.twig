@@ -26,7 +26,7 @@
                             <div class="">
                                 <div class="form-group mb-3">
                                     <div class="font-bold">
-                                    {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
+                                        {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
                                     <div class="mt-2">
                                         {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'class': 'form-radio flex justify-around'}}) }}
@@ -46,7 +46,7 @@
         {% endfor %}
 
 
-        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
+        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
 
@@ -68,7 +68,30 @@
             currentSection.classList.toggle('hidden');
         }
 
+        function checkDiagnosticsFilled() {
+            const allSections = document.querySelectorAll('.category-section');
+            let diagnosticsFilled = false;
+
+            allSections.forEach(section => {
+                const radios = section.querySelectorAll('input[type=radio]');
+                if (Array.from(radios).some(radio => radio.checked)) {
+                    diagnosticsFilled = true;
+                }
+            });
+
+            return diagnosticsFilled;
+        }
+
         function updateCategoryBackground() {
+            const diagnosticsFilled = checkDiagnosticsFilled();
+            const submitButton = document.getElementById('submit-button');
+
+            if (diagnosticsFilled) {
+                submitButton.style.display = 'block';
+            } else {
+                submitButton.style.display = 'none';
+            }
+
             document.querySelectorAll('.category-header').forEach(header => {
                 const sections = header.nextElementSibling.querySelectorAll('.form-group');
                 const total = sections.length;
@@ -80,8 +103,6 @@
                         filled++;
                     }
                 });
-
-                console.log(`Total sections: ${total}, Filled sections: ${filled}`);
 
                 if (filled === 0) {
                     header.style.backgroundColor = '#ff0000'; // Red
