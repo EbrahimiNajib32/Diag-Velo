@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\VeloRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VeloRepository;
+
 
 #[ORM\Entity(repositoryClass: VeloRepository::class)]
 class Velo
@@ -42,7 +42,7 @@ class Velo
     private ?string $url_photo = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_de_reception = null;
+    private ?\DateTimeInterface $date_de_enregistrement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_de_vente = null;
@@ -189,11 +189,12 @@ private ?string $public = null;
         return $this;
     }
 
-    public function getDateDeReception(): ?\DateTimeInterface
+    public function getDateDeEnregistrement(): ?\DateTimeInterface
     {
-        return $this->date_de_reception;
+        return $this->date_de_enregistrement;
     }
 
+<<<<<<< HEAD
     public function setDateDeReception($date_de_reception): self
     {
         if (is_string($date_de_reception)) {
@@ -201,6 +202,11 @@ private ?string $public = null;
         } else {
             $this->date_de_reception = $date_de_reception;
         }
+=======
+    public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): self
+    {
+        $this->date_de_enregistrement = $date_de_enregistrement;
+>>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
         return $this;
     }
 
@@ -218,8 +224,12 @@ private ?string $public = null;
     {
         return $this->date_de_vente;
     }
+<<<<<<< HEAD
 
     public function setDateDeVente($date_de_vente): self
+=======
+    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
+>>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
     {
         try {
             if (is_string($date_de_vente)) {

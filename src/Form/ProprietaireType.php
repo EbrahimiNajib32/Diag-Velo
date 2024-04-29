@@ -15,6 +15,7 @@ class ProprietaireType extends AbstractType
             ->add('nom_proprio')
             ->add('telephone')
             ->add('email')
+            ->add('statut')
         ;
     }
 
