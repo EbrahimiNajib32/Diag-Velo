@@ -28,21 +28,40 @@ class VeloController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $velo->setDateDeReception(new \DateTime());
 
-            $entityManager->persist($velo->getProprietaire());
-            $entityManager->persist($velo);
+            $base64Image = $form->get('url_photo')->getData();
+            if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
+                $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                $data = base64_decode($data);
 
+                $imageName = uniqid() . '.' . $type[1];
+                $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+
+                // Save the image file
+                if (!file_exists($this->getParameter('images_directory'))) {
+                    mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                }
+                file_put_contents($filePath, $data);
+
+                $velo->setUrlPhoto($filePath);
+            }
+
+            // Persist the Velo and its Proprietaire
+            if ($velo->getProprietaire()) {
+                $entityManager->persist($velo->getProprietaire());
+            }
+            $entityManager->persist($velo);
             $entityManager->flush();
 
-
+            // Redirect after saving
             return $this->redirectToRoute('app_accueil');
         }
 
+        // Render the form if not submitted or if there are validation errors
         return $this->render('velo/new.html.twig', [
-
             'form' => $form->createView(),
-
         ]);
     }
+
 
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]

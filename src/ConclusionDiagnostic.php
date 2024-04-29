@@ -2,7 +2,7 @@
 
 // src/Enum/ConclusionDiagnostic.php
 
-namespace App\Enum;
+namespace App;
 
 class ConclusionDiagnostic
 {

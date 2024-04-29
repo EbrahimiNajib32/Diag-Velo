@@ -81,21 +81,13 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Taille du Cadre'
             ])
-            ->add('url_photo',  FileType::class, [
-                'label' => 'Prendre Photo',
-                'mapped' => false, // Ensures the file is not automatically mapped to entity field
+            ->add('url_photo', HiddenType::class, [
+                'label' => 'Photo',
+                'mapped' => false,
                 'required' => false,
-                'attr' => ['accept' => 'image/*'], // Allows selecting image files
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/*',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file',
-                    ])
-                ],
+                'attr' => ['id' => 'url_photo'],  // Ensure this attribute is set
             ])
+
 
             ->add('origine', TextType::class, [
                   'required' => false,
