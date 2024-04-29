@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -153,6 +154,16 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['placeholder' => 'Telephone ..', 'style' => 'display: none;']
+            ])
+
+            ->add('statut', ChoiceType::class, [
+                'choices' => [
+                    'Particulier' => 'Particulier',
+                    'Professionnel' => 'Professionnel',
+                ],
+                'mapped' => false,
+                'label' => 'Statut',
+                'required' => false
             ]);
 
         $builder->addEventListener(
@@ -167,12 +178,14 @@ class VeloInfoType extends AbstractType
                     $nomProprio = $form->get('nom_proprio')->getData();
                     $email = $form->get('email')->getData();
                     $telephone = $form->get('telephone')->getData();
+                    $statut = $form->get('statut')->getData();
 
-                    if (!empty($nomProprio) || !empty($email) || !empty($telephone)) {
+                    if (!empty($nomProprio) || !empty($email) || !empty($telephone) || !empty($statut)) {
                         $newProprietaire = new Proprietaire();
                         $newProprietaire->setNomProprio($nomProprio);
                         $newProprietaire->setEmail($email);
                         $newProprietaire->setTelephone($telephone);
+                        $newProprietaire->setStatut($statut);
 
                         $this->entityManager->persist($newProprietaire);
                         $this->entityManager->flush();
@@ -182,11 +195,12 @@ class VeloInfoType extends AbstractType
                     }
                 } else {
 
-                    if (!empty($proprietaire->getNomProprio()) || !empty($proprietaire->getEmail()) || !empty($proprietaire->getTelephone())) {
+                    if (!empty($proprietaire->getNomProprio()) || !empty($proprietaire->getEmail()) || !empty($proprietaire->getTelephone()) || !empty($proprietaire->getStatut())) {
 
                         $proprietaire->setNomProprio($proprietaire->getNomProprio());
                         $proprietaire->setEmail($proprietaire->getEmail());
                         $proprietaire->setTelephone($proprietaire->getTelephone());
+                        $proprietaire->setStatut($proprietaire->getStatut());
 
                         $this->entityManager->flush();
                     }

@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     {{ form_label(attribute(diagnosticForm, 'commentaire_' ~ element.id)) }}
-                                    {{ form_widget(attribute(diagnosticForm, 'commentaire_' ~ element.id), {'attr': {'class': 'form-control min-w-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded'}}) }}
+                                    {{ form_widget(attribute(diagnosticForm, 'commentaire_' ~ element.id), {'attr': {'class': 'form-control w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded'}}) }}
                                     {{ form_errors(attribute(diagnosticForm, 'commentaire_' ~ element.id)) }}
                                 </div>
                             </div>

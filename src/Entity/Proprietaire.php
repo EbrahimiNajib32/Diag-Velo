@@ -23,6 +23,9 @@ class Proprietaire
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $email = null;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $statut = null;
+
     #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Velo::class)]
     private Collection $velos;
 
@@ -69,6 +72,16 @@ class Proprietaire
         return $this;
     }
 
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
+        return $this;
+    }
     public function addVelo(Velo $velo): self
     {
         if (!$this->velos->contains($velo)) {
