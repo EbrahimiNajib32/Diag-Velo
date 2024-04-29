@@ -3,11 +3,8 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
 use App\Entity\Proprietaire;
-=======
 use App\Entity\Diagnostic;
->>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
 use App\Entity\Velo;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -87,7 +84,6 @@ class VeloController extends AbstractController
         ]);
     }
 
-<<<<<<< HEAD
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]
     public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, $id): JsonResponse
     {
@@ -157,6 +153,4 @@ class VeloController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-=======
->>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
 }
