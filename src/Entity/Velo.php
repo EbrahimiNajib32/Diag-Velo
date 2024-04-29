@@ -194,65 +194,32 @@ private ?string $public = null;
         return $this->date_de_enregistrement;
     }
 
-<<<<<<< HEAD
-    public function setDateDeReception($date_de_reception): self
-    {
-        if (is_string($date_de_reception)) {
-            $this->date_de_reception = new \DateTime($date_de_reception);
-        } else {
-            $this->date_de_reception = $date_de_reception;
-        }
-=======
     public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): self
     {
         $this->date_de_enregistrement = $date_de_enregistrement;
->>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
         return $this;
     }
 
-
-
-//    public function setDateDeReception($date_de_reception): static
-//    {
-//        //convertir le string en DateTimeInterface
-//        $this->date_de_reception = $date_de_reception;
-//
-//        return $this;
-//    }
 
     public function getDateDeVente(): ?\DateTimeInterface
     {
         return $this->date_de_vente;
     }
-<<<<<<< HEAD
+
 
     public function setDateDeVente($date_de_vente): self
-=======
-    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
->>>>>>> 3920992de1b82587c44e25a231b9280248bfffac
     {
-        try {
-            if (is_string($date_de_vente)) {
-                $this->date_de_vente = new \DateTime($date_de_vente);
-            } else {
-                $this->date_de_vente = $date_de_vente;
+        if (is_string($date_de_vente)) {
+            try {
+                $date_de_vente = new \DateTime($date_de_vente);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException("Date de vente invalide : " . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            // Vous pouvez gérer l'exception ici ou simplement la re-lancer
-            throw new \InvalidArgumentException("Date de vente invalide : " . $e->getMessage());
         }
+        $this->date_de_vente = $date_de_vente;
         return $this;
     }
 
-
-
-
-//    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
-//    {
-//        $this->date_de_vente = $date_de_vente;
-//
-//        return $this;
-//    }
 
     public function getType(): ?string
     {
@@ -316,15 +283,6 @@ private ?string $public = null;
         }
         return $this;
     }
-
-
-
-//    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
-//    {
-//        $this->date_destruction = $date_destruction;
-//
-//        return $this;
-//    }
 
     public function getPublic(): ?string
     {
