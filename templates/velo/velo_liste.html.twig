@@ -42,7 +42,7 @@
                     <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.type }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.public }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.date_de_reception|date('d/m/Y') }}</td>
+                    <td class="px-4 py-2 border-r border-b">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_de_vente|date('d/m/Y') }}</td>
                     <td class="px-4 py-2 border-r border-b">{{ velo.date_destruction|date('d/m/Y') }}</td>
                     <td class="px-4 py-2 border-r border-b">
@@ -68,7 +68,7 @@
                 <div class="bg-white rounded-lg overflow-y-auto">
                     <div class="flex items-center justify-between p-4 md:p-5 border-b ">
                         <h3 class="text-xl text-center font-semibold text-gray-900">
-                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçus le : {{ velo.date_de_reception|date('Y-m-d') }}
+                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçus le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
                         </h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
                             <i class="bi bi-x-lg"></i>
