@@ -194,9 +194,10 @@ private ?string $public = null;
         return $this->date_de_enregistrement;
     }
 
-    public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): self
+    public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): static
     {
         $this->date_de_enregistrement = $date_de_enregistrement;
+
         return $this;
     }
 
