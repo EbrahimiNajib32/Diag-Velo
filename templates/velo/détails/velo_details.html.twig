@@ -15,7 +15,7 @@
             <li>Taille du Cadre: {{ velo.getTailleCadre() }}</li>
             <li>État: {{ velo.etat }}</li>
             <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-            <li>Date de Réception: {{ velo.getDateDeReception()|date('Y-m-d') }}</li>
+            <li>Date d'enregistrement: {{ velo.date_de_enregistrement|date('d/m/Y') }}</li>
             <li>Date de Vente: {{ velo.getDateDeVente()|date('Y-m-d') }}</li>
             <li>Type: {{ velo.type }}</li>
             <li>Emplacement: {{ velo.emplacement }}</li>

@@ -10,7 +10,7 @@ CREATE TABLE Velo (
     taille_cadre INT,
     etat VARCHAR(50),
     url_photo VARCHAR(255),
-    date_de_reception DATE,
+    date_de_enregistrement DATE,
     date_de_vente DATE,
     type VARCHAR(50),
     annee_modele INT,
@@ -99,7 +99,7 @@ CREATE TABLE Diagnostic (
     FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
 );
 -- Ajout du premier vélo en bon état
-INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_reception, date_de_vente, type, annee_modele, emplacement, commentaire)
+INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_enregistrement, date_de_vente, type, annee_modele, emplacement, commentaire)
 VALUES (1, 'Ref001', 'NS001', 'Marque A', 'Rouge', 12.5, 26, 18, 'Bon état', 'url_photo1.jpg', '2024-04-15', NULL, 'VTT', 2020, 'Stock', 'Aucun commentaire');
 
 -- Ajout du diagnostic pour le premier vélo
@@ -107,7 +107,7 @@ INSERT INTO Diagnostic (id_suivi, id_velo, id_utilisateur, date, cout_de_reparat
 VALUES (1, 1, NULL, '2024-04-15', NULL, 'Bon état', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème');
 
 -- Ajout du deuxième vélo à réparer
-INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_reception, date_de_vente, type, annee_modele, emplacement, commentaire)
+INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_enregistrement, date_de_vente, type, annee_modele, emplacement, commentaire)
 VALUES (2, 'Ref002', 'NS002', 'Marque B', 'Bleu', 15.2, 28, 20, 'À réparer', 'url_photo2.jpg', '2024-04-15', NULL, 'VTT', 2018, 'Stock', 'Aucun commentaire');
 
 -- Ajout du diagnostic pour le deuxième vélo
@@ -115,7 +115,7 @@ INSERT INTO Diagnostic (id_suivi, id_velo, id_utilisateur, date, cout_de_reparat
 VALUES (2, 2, NULL, '2024-04-15', NULL, 'À réparer', 'Bon', 'Bon', 'Aucun problème', 'Mauvais', 'Mauvais', 'Mauvais', 'Problèmes mineurs', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Mauvais', 'Mauvais', 'Mauvais', 'Mauvais', 'Problèmes mineurs', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Bon', 'Aucun problème');
 
 -- Ajout du troisième vélo en mauvais état
-INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_reception, date_de_vente, type, annee_modele, emplacement, commentaire)
+INSERT INTO Velo (id_velo, ref_recyclerie, numero_de_serie, marque, couleur, poids, taille_roues, taille_cadre, etat, url_photo, date_de_enregistrement, date_de_vente, type, annee_modele, emplacement, commentaire)
 VALUES (3, 'Ref003', 'NS003', 'Marque C', 'Vert', 14.8, 24, 16, 'Mauvais état', 'url_photo3.jpg', '2024-04-15', NULL, 'VTT', 2015, 'Stock', 'Aucun commentaire');
 
 -- Ajout du diagnostic pour le troisième vélo
@@ -125,7 +125,7 @@ VALUES (3, 3, NULL, '2024-04-15', NULL, 'Mauvais état', 'Mauvais', 'Mauvais', '
 INSERT INTO Utilisateur (id_utilisateur, nom, role, informations_de_contact, certifications)
 VALUES (1, 'John Doe', 'Technicien', 'john.doe@example.com', 'Certification XYZ');
 
-INSERT INTO Velos (id_velo, ref_recyclerie, numéro_de_série, type, marque, année, couleur, poids, taille_roue, taille_cadre, photo, etat, date_reception, date_vente, date_destruction, emplacement, commentaires)
+INSERT INTO Velos (id_velo, ref_recyclerie, numéro_de_série, type, marque, année, couleur, poids, taille_roue, taille_cadre, photo, etat, date_de_enregistrement, date_vente, date_destruction, emplacement, commentaires)
 VALUES
     (1, '12345L', '241221', 'VTT', 'Bianchi', 2021, 'Bleu', 14, 27, 55, 'url_photo1', 'Neuf', '2024-04-01', NULL, NULL, 'Allée 3', 'Vélo neuf, aucun problème'),
     (2, '78901F', '412122', 'VTC', 'Trek', 2022, 'Rouge', 8, 25, 50, 'url_photo2', 'Occasion', '2024-03-21', NULL, NULL, 'Allée 1', 'Nécessite un contrôle'),
