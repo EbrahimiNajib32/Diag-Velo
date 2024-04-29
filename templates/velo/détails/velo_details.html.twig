@@ -57,14 +57,21 @@
                 });
             });
 
+
+             //data contient les nouvelles valeurs modifiés
+
             saveButton.addEventListener('click', function() {
                 if (editMode) {
                     const data = {};
                     fields.forEach(field => {
                         if (field.getAttribute('contenteditable') === 'true') {
-                            data[field.id] = field.innerText;
+                            let propName = field.id;
+                            // Convertissez l'ID de snake_case en camelCase
+                            propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+                            data[propName] = field.innerText;
                         }
                     });
+                    //trouve la route du controlleur pour envoyer les donner enregistrés avec post
 
                     fetch(`/api/update-velo/{{ velo.id }}`, {
                         method: 'POST',
@@ -171,6 +178,18 @@
                 width: 100%; /* Chaque colonne prend toute la largeur sur les petits écrans */
             }
         }
+
+
+         span[contenteditable="true"] {
+             background-color: #ffffe0; /* Jaune clair pour indiquer l'édition */
+             outline: 2px solid #4caf50; /* Bordure verte pour mieux voir les champs éditables */
+             padding: 3px; /* Un peu de padding pour que le texte ne touche pas les bords */
+             cursor: text; /* Change le curseur pour indiquer qu'on peut éditer */
+         }
+    </style>
+
+
+
 
     </style>
 {% endblock %}

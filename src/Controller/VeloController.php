@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Proprietaire;
 use App\Entity\Velo;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,8 +72,19 @@ class VeloController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
+
         foreach ($data as $key => $value) {
-            if (property_exists(Velo::class, $key)) {
+            // Check for the proprietaire update specifically
+            if ($key === 'proprietaireId') {
+                // Handle setting the proprietaire
+                $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($value);
+                if ($proprietaire) {
+                    $velo->setProprietaire($proprietaire);
+                } else {
+                    // If the new proprietaire is not found, return an error response
+                    return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
+                }
+            } else {
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
                     $velo->$setter($value);
@@ -120,11 +132,4 @@ class VeloController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
-
-
-
-
-
 }

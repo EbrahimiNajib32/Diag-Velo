@@ -194,24 +194,55 @@ private ?string $public = null;
         return $this->date_de_reception;
     }
 
-    public function setDateDeReception(\DateTimeInterface $date_de_reception): static
+    public function setDateDeReception($date_de_reception): self
     {
-        $this->date_de_reception = $date_de_reception;
-
+        if (is_string($date_de_reception)) {
+            $this->date_de_reception = new \DateTime($date_de_reception);
+        } else {
+            $this->date_de_reception = $date_de_reception;
+        }
         return $this;
     }
+
+
+
+//    public function setDateDeReception($date_de_reception): static
+//    {
+//        //convertir le string en DateTimeInterface
+//        $this->date_de_reception = $date_de_reception;
+//
+//        return $this;
+//    }
 
     public function getDateDeVente(): ?\DateTimeInterface
     {
         return $this->date_de_vente;
     }
 
-    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
+    public function setDateDeVente($date_de_vente): self
     {
-        $this->date_de_vente = $date_de_vente;
-
+        try {
+            if (is_string($date_de_vente)) {
+                $this->date_de_vente = new \DateTime($date_de_vente);
+            } else {
+                $this->date_de_vente = $date_de_vente;
+            }
+        } catch (\Exception $e) {
+            // Vous pouvez gérer l'exception ici ou simplement la re-lancer
+            throw new \InvalidArgumentException("Date de vente invalide : " . $e->getMessage());
+        }
         return $this;
     }
+
+
+
+
+//    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
+//    {
+//        $this->date_de_vente = $date_de_vente;
+//
+//        return $this;
+//    }
 
     public function getType(): ?string
     {
@@ -266,12 +297,24 @@ private ?string $public = null;
         return $this->date_destruction;
     }
 
-    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
+    public function setDateDestruction($date_destruction): self
     {
-        $this->date_destruction = $date_destruction;
-
+        if (is_string($date_destruction)) {
+            $this->date_destruction = new \DateTime($date_destruction);
+        } else {
+            $this->date_destruction = $date_destruction;
+        }
         return $this;
     }
+
+
+
+//    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
+//    {
+//        $this->date_destruction = $date_destruction;
+//
+//        return $this;
+//    }
 
     public function getPublic(): ?string
     {
