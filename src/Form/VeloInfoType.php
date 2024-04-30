@@ -92,11 +92,15 @@ class VeloInfoType extends AbstractType
 
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'Autres' => 'Autres',
-                    'VTC' => 'VTC',
+                    'BMX' => 'BMX',
+                    'Course' => 'Course',
                     'Gravel' => 'Gravel',
                     'Pliable' => 'Pliable',
+                    'VILLE' => 'VILLE',
+                    'VTC' => 'VTC',
                     'VTT' => 'VTT',
+                    'Autres' => 'Autres',
+
                 ],
                 'label' => 'Type de vélo',
             ])
