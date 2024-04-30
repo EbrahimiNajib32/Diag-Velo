@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -18,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
                                             use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\File;
 
 class VeloInfoType extends AbstractType
 {
@@ -80,10 +82,13 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Taille du Cadre'
             ])
-            ->add('url_photo', TextType::class, [
+            ->add('url_photo', HiddenType::class, [
+                'label' => 'Photo',
+                'mapped' => false,
                 'required' => false,
-                'label' => 'Photo'
+                'attr' => ['id' => 'url_photo'],  // Ensure this attribute is set
             ])
+
 
             ->add('origine', TextType::class, [
                   'required' => false,
