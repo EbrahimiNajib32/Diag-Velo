@@ -16,8 +16,17 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    
 }
+
+@media print {
+    .button-style {
+        display: none;
+    }
 
 .button-style:hover {
     background-color: #319795;
 }
+
+
+
