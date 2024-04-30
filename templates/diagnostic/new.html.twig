@@ -44,13 +44,21 @@
         {% endfor %}
 
         <!-- Ajouter la section Conclusion au-dessus du bouton de validation -->
+
         <div class="mb-6 text-center">
-            {{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border  rounded border-black portrait:h-10'}}) }}
+            {% set conclusionField = form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) %}
+            <div class="flex justify-between items-center" style="margin-top: 20px;">
+                <div class="flex items-center space-x-4">
+                    {{ conclusionField | raw }}
+                </div>
+            </div>
         </div>
+
 
         <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
+
 
     <script>
         function toggleSection(event) {
