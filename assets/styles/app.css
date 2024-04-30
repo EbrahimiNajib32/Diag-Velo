@@ -24,8 +24,9 @@ body {
         display: none;
     }
 
-.button-style:hover {
-    background-color: #319795;
+    .button-style:hover {
+        background-color: #319795;
+    }
 }
 
 
