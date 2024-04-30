@@ -5,14 +5,12 @@
         <h1 class="text-xl font-semibold text-gray-700 text-center portrait:text-3xl">Nouveau Diagnostic</h1>
         {{ form_start(diagnosticForm, {'attr': {'class': 'space-y-3 portrait:space-y-6'}}) }}
 
-
         <div class="grid grid-cols-3 md:grid-cols-3 gap-1 mb-6 border text-sm portrait:text-2xl">
             <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border  rounded border-black portrait:h-10'}}) }}</div>
             <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
             <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
 
         </div>
-
 
         {% for category, elements in diagnosticElements %}
             <div class="mb-2 text-center">
@@ -44,9 +42,13 @@
                 </div>
             </div>
         {% endfor %}
-        <div style="text-align: center;">
-        <button type="submit" class="w-full mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
+
+        <!-- Ajouter la section Conclusion au-dessus du bouton de validation -->
+        <div class="mb-6 text-center">
+            {{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border  rounded border-black portrait:h-10'}}) }}
         </div>
+
+        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
 
