@@ -14,7 +14,7 @@
                 <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
                 <li>État: <span id="etat">{{ velo.etat }}</span></li>
                 <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li>Date de Réception: <span id="date_de_reception">{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li>Date d'Enregistrement: <span id="date_de_reception">{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
 
 
             </ul>
@@ -23,14 +23,13 @@
             <ul class="details-list">
                 <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
                 <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-
                 <li>Date de Vente: <span id="date_de_vente">{{ velo.getDateDeVente()|date('Y-m-d') }}</span></li>
+                <li>Date de Destruction: <span id="date_destruction">{{ velo.getDateDestruction()|date('Y-m-d') }}</span></li>
                 <li>Type: <span id="type">{{ velo.type }}</span></li>
                 <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
                 <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
                 <li>Propriétaire ID: <span id="proprietaire_id">{{ velo.getProprietaire().getId() }}</span></li>
                 <li>Public: <span id="public">{{ velo.getPublic() }}</span></li>
-                <li>Date de Destruction: <span id="date_destruction">{{ velo.getDateDestruction()|date('Y-m-d') }}</span></li>
             </ul>
         </div>
     </div>
