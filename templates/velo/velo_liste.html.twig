@@ -1,15 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <style>
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            height: 100vh;
-            z-index: 50;
-
-        }
-    </style>
     <div class="fixed top-0 left-0">
         <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="">
     </div>
@@ -17,58 +8,121 @@
         <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
     </div>
     <div class="container mx-auto">
-        <h1 class="text-3xl font-bold text-center text-black mb-6">Liste des vélos</h1>
-        <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
-            <thead class="bg-gray-200">
-            <tr class=" text-black">
-                <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Référence recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Public<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Date d'enregistrement<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Date de vente<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Date de destruction<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Voir diagnostics<i class="ml-1 bi bi-arrow-down-up"></i></th>
-            </tr>
+
+    <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
+
+    <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3" style="width:12rem;">
+                    <span style="margin-bottom: 4px;">Propriétaire</span>
+                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                </th>
+                <th scope="col" class="px-6 py-3" style="width:12rem;">
+                    <span style="margin-bottom: 4px;">Numéro de série</span>
+                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                </th>
+                <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">Référence recyclerie</span>
+                        <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                </th>
+                <th scope="col" class="px-6 py-3" >
+                    Marque
+                    <div style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
+                        <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for marque in marques_uniques %}
+                                <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Couleur
+                    <div style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown('dropdownCouleur')" style="background: none; border: none; cursor: pointer;">▼</button>
+                        <div id="dropdownCouleur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('couleur', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for couleur in couleurs_uniques %}
+                                <a href="#" onclick="filterRows('couleur', '{{ couleur }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ couleur }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Type
+                    <div style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
+                        <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for type in types_uniques %}
+                                <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Public
+                    <div style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
+                        <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for public in publics_uniques %}
+                                <a href="#" onclick="filterRows('public', '{{ public }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ public }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+                <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
+                <th scope="col" class="px-6 py-3">Date de vente</th>
+                <th scope="col" class="px-6 py-3">Date de destruction</th>
+                <th scope="col" class="px-6 py-3">Diagnostics</th>
+
             </thead>
             <tbody>
             {% for velo in pagination %}
-                <tr class="border">
-                    <td class="px-4 py-2 border-r border-b">{{ velo.numero_de_serie }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.ref_recyclerie }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.marque }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.couleur }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.type }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.public }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
-                    <td class="px-4 py-2 border-r border-b">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                    <td class="px-6 py-4">{{ velo.nom_proprio }}</td>
+                    <td class="px-6 py-4">{{ velo.numero_de_serie }}</td>
+                    <td class="px-6 py-4">{{ velo.ref_recyclerie }}</td>
+                    <td class="px-6 py-4">{{ velo.marque }}</td>
+                    <td class="px-6 py-4">{{ velo.couleur }}</td>
+                    <td class="px-6 py-4">{{ velo.type }}</td>
+                    <td class="px-6 py-4">{{ velo.public }}</td>
+                    <td class="px-6 py-4">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                    <td class="px-6 py-4">
                         {% if velo.date_de_vente is not null %}
                             {{ velo.date_de_vente|date('d/m/Y') }}
                         {%  endif %}
                     </td>
-                    <td class="px-4 py-2 border-r border-b">
+                    <td class="px-6 py-4">
                         {% if velo.date_destruction is not null %}
                             {{ velo.date_destruction|date('d/m/Y') }}
                         {%  endif %}
                     </td>
-                    <td class="px-4 py-2 border-r border-b">
-                        <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full " type="button">
-                            <i class="bi bi-eye"></i>
+                    <td class="px-6 py-4">
+                        <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
+                            Voir
                         </button>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <div class="pagination mx-auto justify-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        </div>
         <div class="details-container text-center mt-4">
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
         </div>
-        <div class="pagination mx justify-center">
-            {{ knp_pagination_render(pagination) }}
-        </div>
     </div>
+
 
     {% for velo in pagination %}
         <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
@@ -76,7 +130,7 @@
                 <div class="bg-white rounded-lg overflow-y-auto">
                     <div class="flex items-center justify-between p-4 md:p-5 border-b ">
                         <h3 class="text-xl text-center font-semibold text-gray-900">
-                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçus le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
+                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçu le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
                         </h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
                             <i class="bi bi-x-lg"></i>
@@ -90,7 +144,7 @@
                                 <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
                                 <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucune' }}</p>
                                 <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
-                                <a class="bg-teal-500 p-2 rounded" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId()}}">Voir diagnostic</a>
+                                <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
                             </div>
                         {% endfor %}
                     {% else %}
@@ -103,7 +157,107 @@
         </div>
     {% endfor %}
 
+
+    <style>
+        h1{
+            margin-top: 7rem;
+        }
+        .py-3{
+            vertical-align: top;
+        }
+
+        .px-6 {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+
+        .tab_ctn{
+            width: 95%;
+            margin: auto;
+        }
+
+        .tab_ctn td:first-child, .tab_ctn th:first-child{
+            padding:0.5rem;
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            height: 100vh;
+            z-index: 50;
+
+        }
+
+    </style>
+
     <script>
+
+        function toggleDropdown(dropdownId) {
+            var dropdown = document.getElementById(dropdownId);
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        function filterRows(attribute, value) {
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const attrValue = row.getAttribute('data-' + attribute);
+                row.style.display = value === "" || attrValue === value ? "" : "none";
+            });
+            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+        }
+
+        function hover(element, isHovering) {
+            if (isHovering) {
+                element.style.backgroundColor = '#e0e0e0';
+            } else {
+                element.style.backgroundColor = '#f9f9f9';
+            }
+        }
+
+        function filterByReference() {
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        function filterBySerial() {
+            var input = document.getElementById("searchSerial");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        function filterByOwner() {
+            var input = document.getElementById("searchOwner");
+            var filter = input.value.toUpperCase();
+            var table = document.querySelector("table");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButtons = document.querySelectorAll('[data-modal-toggle]');
             const closeModalButtons = document.querySelectorAll('[data-modal-hide]');
@@ -149,5 +303,3 @@
     </script>
 
 {% endblock %}
-
-

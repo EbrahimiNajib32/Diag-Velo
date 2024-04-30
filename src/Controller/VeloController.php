@@ -30,37 +30,55 @@ class VeloController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $velo->setDateDeEnregistrement(new \DateTime());
 
-            $entityManager->persist($velo->getProprietaire());
-            $entityManager->persist($velo);
+            $base64Image = $form->get('url_photo')->getData();
+            if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
+                $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                $data = base64_decode($data);
 
+                $imageName = uniqid() . '.' . $type[1];
+                $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+
+                // Save the image file
+                if (!file_exists($this->getParameter('images_directory'))) {
+                    mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                }
+                file_put_contents($filePath, $data);
+
+                $velo->setUrlPhoto($filePath);
+            }
+
+            // Persist the Velo and its Proprietaire
+            if ($velo->getProprietaire()) {
+                $entityManager->persist($velo->getProprietaire());
+            }
+            $entityManager->persist($velo);
             $entityManager->flush();
 
-
+            // Redirect after saving
             return $this->redirectToRoute('app_accueil');
         }
 
+        // Render the form if not submitted or if there are validation errors
         return $this->render('velo/new.html.twig', [
-
             'form' => $form->createView(),
-
         ]);
     }
+
 
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request ): Response
     {
-        // Fetch bicycles with basic pagination
         $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-
-
-            ->select('v.id', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+            ->select('v.id', 'p.nom_proprio', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+            ->leftJoin('v.proprietaire', 'p')
             ->getQuery();
 
+        // Pagination des résultats
         $pagination = $paginator->paginate(
             $query, /* query NOT result */
-            $request->query->getInt('page', 1), /* page number */
-            10 /* limit per page */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
         );
 
         // If needed, fetch diagnostics separately for each bicycle
@@ -79,11 +97,64 @@ class VeloController extends AbstractController
             $diagnostics[$veloId] = $diagnosticData;
         }
 
+        // Récupére les marques distinctes des vélos affichés dans le tableau
+        $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.marque')
+            ->getQuery();
+
+        $marques = $marqueQuery->getResult();
+
+        // Extraire uniquement les valeurs des marques
+        $marques_uniques = array_map(function ($marque) {
+            return $marque['marque'];
+        }, $marques);
+
+        // Requête pour obtenir les couleurs uniques
+        $couleurQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.couleur')
+            ->getQuery();
+
+        $couleurs = $couleurQuery->getResult();
+
+        // Extraction des valeurs des couleurs
+        $couleurs_uniques = array_column($couleurs, 'couleur');
+
+        // Requête pour obtenir les types uniques
+        $typeQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.type')
+            ->getQuery();
+
+        $types = $typeQuery->getResult();
+
+        // Extraction des valeurs des types
+                $types_uniques = array_map(function ($type) {
+                    return $type['type'];
+                }, $types);
+
+        // Requête pour obtenir les catégories de public uniques
+        $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.public')
+            ->getQuery();
+
+        $publics = $publicQuery->getResult();
+
+        // Extraction des valeurs des catégories de public
+        $publics_uniques = array_map(function ($public) {
+            return $public['public'];
+        }, $publics);
+
+
+        // Passe les données au modèle Twig
         return $this->render('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
             'diagnostics' => $diagnostics,
+            'marques_uniques' => $marques_uniques,
+            'couleurs_uniques' => $couleurs_uniques,
+            'types_uniques' => $types_uniques,
+            'publics_uniques' => $publics_uniques,
         ]);
     }
+
 
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]
     public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, $id): JsonResponse
