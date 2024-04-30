@@ -31,10 +31,10 @@
             </div>
             <div class="flex justify-between">
                 <div class="w-1/2 p-4 text-left">
-                    <p class="text-gray-700 text-base font-bold">Date du diagnostic: <span class="font-normal">{{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</span></p>
-                    <p class="text-gray-700 text-base font-bold">Coût de réparation: <span class="font-normal">{{ diagnostic.coutReparation }}</span></p>
-                    <p class="text-gray-700 text-base font-bold">Statut: <span class="font-normal">{{ diagnostic.status }}</span></p>
-                    <p class="text-gray-700 text-base font-bold">Conclusion: <span class="font-normal">{{ diagnostic.conclusion }}</span></p>
+                    <p><span class="font-bold">Date du diagnostic:</span> {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
+                    <p><span class="font-bold">Coût de réparation:</span> {{ diagnostic.coutReparation }}</p>
+                    <p> <span class="font-bold">Statut: </span>{{ diagnostic.status }}</p>
+                    <p> <span class="font-bold">Conclusion: </span>{{ diagnostic.conclusion }}</p>
                 </div>
                 <div class="w-1/2 p-4 text-right">
                     <h2 class="text-lg font-bold mb-2">Informations du vélo:</h2>
@@ -118,7 +118,39 @@
         });
     }
 </script>
+<style>
+    @media print {
+        .flex.justify-between > div {
+            font-size: 0.8rem; /* Réduire la taille de la police */
+        }
 
+
+        .mb-8 { /* Supposant que .mb-8 est la classe appliquée aux blocs contenant les tableaux */
+            page-break-inside: avoid;
+        }
+
+        table {
+            page-break-inside: avoid;
+        }
+
+        .grid.md\:grid-cols-2 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Continuer avec trois colonnes */
+            gap: 2px;
+        }
+
+        .container, .w-full {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .px-4, .py-2 {
+            padding: 1px 2px; /* Réduire les paddings des cellules de tableau pour économiser de l'espace */
+        }
+    }
+
+</style>
 {% endblock %}
 
 
