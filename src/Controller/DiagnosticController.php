@@ -388,5 +388,29 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         // Retourner les détails des diagnostics au format JSON
         return new JsonResponse($diagnosticsData);
     }
+
+//    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]
+//    public function diagnosticsAReparer(EntityManagerInterface $entityManager): JsonResponse
+//    {
+//        // Récupérer les diagnostics avec la conclusion "À réparer"
+//        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findBy([
+//            'conclusion' => ConclusionDiagnostic::A_REPARER
+//        ]);
+//
+//        // Préparer les données à envoyer en réponse
+//        $diagnosticData = [];
+//        foreach ($diagnostics as $diagnostic) {
+//            $diagnosticData[] = [
+//                'conclusion' => $diagnostic->getConclusion(),
+//            ];
+//        }
+//
+//        // Retourner les données en format JSON
+//        return new JsonResponse($diagnosticData);
+//    }
+
+
+
+
 }
 
