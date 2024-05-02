@@ -81,7 +81,6 @@
                     <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
                     <th scope="col" class="px-6 py-3">Date de vente</th>
                     <th scope="col" class="px-6 py-3">Conclusion</th>
-
                     <th scope="col" class="px-6 py-3">Diagnostics</th>
 
 
@@ -95,7 +94,6 @@
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
-
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
@@ -107,12 +105,19 @@
                             {% set necessiteReparation = false %}
                             {% if diagnostics[velo.id] is defined %}
                                 {% set lastDiagnostic = diagnostics[velo.id]|last %}
-                                {% if lastDiagnostic.conclusion is defined and lastDiagnostic.conclusion == 'à réparer' %}
-                                    {% set necessiteReparation = true %}
+                                {% if lastDiagnostic.conclusion is defined %}
+                                    {% if lastDiagnostic.conclusion == 'à réparer' %}
+                                        {{ 'À réparer' }}
+                                    {% elseif lastDiagnostic.conclusion == 'pour pièces' %}
+                                        {{ 'Pour pièces' }}
+                                    {% elseif lastDiagnostic.conclusion == 'R.A.S' %}
+                                        {{ 'R.A.S' }}
+                                    {% else %}
+                                        {{ 'Non commencé' }}
+                                    {% endif %}
                                 {% endif %}
-                                {{ necessiteReparation ? 'À réparer' : 'R.A.S' }}
                             {% else %}
-                                Non commencé
+                                {{ 'Non commencé' }}
                             {% endif %}
                         </td>
 

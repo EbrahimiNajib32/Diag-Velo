@@ -1,5 +1,5 @@
 <?php
-// src/Controller/DiagosticController.php
+ //src/Controller/DiagosticController.php
 
 namespace App\Controller;
 
