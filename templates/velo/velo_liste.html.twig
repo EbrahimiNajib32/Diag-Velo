@@ -9,114 +9,130 @@
     </div>
     <div class="container mx-auto">
 
-    <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
+        <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
 
-    <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3" style="width:12rem;">
-                    <span style="margin-bottom: 4px;">Propriétaire</span>
-                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                </th>
-                <th scope="col" class="px-6 py-3" style="width:12rem;">
-                    <span style="margin-bottom: 4px;">Numéro de série</span>
-                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                </th>
-                <th scope="col" class="px-6 py-3" style="width:12rem;">
+        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">Propriétaire</span>
+                        <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">Numéro de série</span>
+                        <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
+                    </th>
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
                         <span style="margin-bottom: 4px;">Référence recyclerie</span>
                         <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                </th>
-                <th scope="col" class="px-6 py-3" >
-                    Marque
-                    <div style="position: relative; display: inline-block;">
-                        <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
-                        <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                            <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                            {% for marque in marques_uniques %}
-                                <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
-                            {% endfor %}
+                    </th>
+                    <th scope="col" class="px-6 py-3" >
+                        Marque
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for marque in marques_uniques %}
+                                    <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </th>
+                    </th>
 
-                <th scope="col" class="px-6 py-3">
-                    Couleur
-                    <div style="position: relative; display: inline-block;">
-                        <button onclick="toggleDropdown('dropdownCouleur')" style="background: none; border: none; cursor: pointer;">▼</button>
-                        <div id="dropdownCouleur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                            <a href="#" onclick="filterRows('couleur', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                            {% for couleur in couleurs_uniques %}
-                                <a href="#" onclick="filterRows('couleur', '{{ couleur }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ couleur }}</a>
-                            {% endfor %}
+                    <th scope="col" class="px-6 py-3">
+                        Couleur
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownCouleur')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownCouleur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('couleur', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for couleur in couleurs_uniques %}
+                                    <a href="#" onclick="filterRows('couleur', '{{ couleur }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ couleur }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </th>
+                    </th>
 
-                <th scope="col" class="px-6 py-3">
-                    Type
-                    <div style="position: relative; display: inline-block;">
-                        <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                        <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                            <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                            {% for type in types_uniques %}
-                                <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
-                            {% endfor %}
+                    <th scope="col" class="px-6 py-3">
+                        Type
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for type in types_uniques %}
+                                    <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Public
-                    <div style="position: relative; display: inline-block;">
-                        <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
-                        <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                            <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                            {% for public in publics_uniques %}
-                                <a href="#" onclick="filterRows('public', '{{ public }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ public }}</a>
-                            {% endfor %}
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Public
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for public in publics_uniques %}
+                                    <a href="#" onclick="filterRows('public', '{{ public }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ public }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
-                <th scope="col" class="px-6 py-3">Date de vente</th>
-                <th scope="col" class="px-6 py-3">Date de destruction</th>
-                <th scope="col" class="px-6 py-3">Diagnostics</th>
+                    </th>
 
-            </thead>
-            <tbody>
-            {% for velo in pagination %}
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
-                    <td class="px-6 py-4">{{ velo.nom_proprio }}</td>
-                    <td class="px-6 py-4">{{ velo.numero_de_serie }}</td>
-                    <td class="px-6 py-4">{{ velo.ref_recyclerie }}</td>
-                    <td class="px-6 py-4">{{ velo.marque }}</td>
-                    <td class="px-6 py-4">{{ velo.couleur }}</td>
-                    <td class="px-6 py-4">{{ velo.type }}</td>
-                    <td class="px-6 py-4">{{ velo.public }}</td>
-                    <td class="px-6 py-4">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
-                    <td class="px-6 py-4">
-                        {% if velo.date_de_vente is not null %}
-                            {{ velo.date_de_vente|date('d/m/Y') }}
-                        {%  endif %}
-                    </td>
-                    <td class="px-6 py-4">
-                        {% if velo.date_destruction is not null %}
-                            {{ velo.date_destruction|date('d/m/Y') }}
-                        {%  endif %}
-                    </td>
-                    <td class="px-6 py-4">
-                        <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
-                            Voir
-                        </button>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div class="pagination mx-auto justify-center">
-            {{ knp_pagination_render(pagination) }}
-        </div>
+                    <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
+                    <th scope="col" class="px-6 py-3">Date de vente</th>
+                    <th scope="col" class="px-6 py-3">Conclusion</th>
+
+                    <th scope="col" class="px-6 py-3">Diagnostics</th>
+
+
+                </thead>
+                <tbody>
+                {% for velo in pagination %}
+                    <tr class="bg-white border-b"
+                        data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.nom_proprio }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.numero_de_serie }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
+
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">
+                            {% if velo.date_de_vente is not null %}
+                                {{ velo.date_de_vente|date('d/m/Y') }}
+                            {%  endif %}
+                        <td class="px-6 py-4 border-r border-b border-gray-300">
+                            {% set necessiteReparation = false %}
+                            {% if diagnostics[velo.id] is defined %}
+                                {% set lastDiagnostic = diagnostics[velo.id]|last %}
+                                {% if lastDiagnostic.conclusion is defined and lastDiagnostic.conclusion == 'à réparer' %}
+                                    {% set necessiteReparation = true %}
+                                {% endif %}
+                                {{ necessiteReparation ? 'À réparer' : 'R.A.S' }}
+                            {% else %}
+                                Non commencé
+                            {% endif %}
+                        </td>
+
+                        <td class="px-6 py-4 border-r border-b border-gray-300">
+                            {% if velo.date_destruction is not null %}
+                                {{ velo.date_destruction|date('d/m/Y') }}
+                            {%  endif %}
+                        </td>
+                        <td class="px-6 py-4">
+                            <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
+                                Voir
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination mx-auto justify-center">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
         <div class="details-container text-center mt-4">
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
@@ -142,7 +158,7 @@
                                 <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
                                 <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
                                 <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
-                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucune' }}</p>
+                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'a reparer' }}</p>
                                 <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
                                 <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
                             </div>

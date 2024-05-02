@@ -225,4 +225,43 @@ class VeloController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/velo/reparations', name: 'velo_reparations', methods: ['GET'])]
+    public function diagnosticsAReparer(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response {
+        // Sous-requête pour récupérer la dernière date de diagnostic pour chaque vélo
+        $subquery = $entityManager->getRepository(Diagnostic::class)
+            ->createQueryBuilder('d_sub')
+            ->select('MAX(d_sub.dateDiagnostic) AS max_date')
+            ->groupBy('d_sub.velo')
+            ->getQuery();
+
+        // Requête principale pour récupérer les diagnostics correspondant aux dernières dates
+        $query = $entityManager->getRepository(Diagnostic::class)
+            ->createQueryBuilder('d')
+            ->innerJoin(
+                '(' . $subquery->getDQL() . ')',
+                'd_max',
+                Join::WITH,
+                'd.dateDiagnostic = d_max.max_date'
+            )
+            ->andWhere('d.conclusion = :conclusion')
+            ->setParameter('conclusion', 'à réparer')
+            ->getQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('velo/details.html.twig', [
+            'pagination' => $pagination
+        ]);
+    }
+
+
+
+
+
+
 }

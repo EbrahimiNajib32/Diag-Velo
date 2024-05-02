@@ -4,11 +4,26 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VeloRepository;
-
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Diagnostic; // Import de l'entité Diagnostic si ce n'est pas déjà fait
 #[ORM\Entity(repositoryClass: VeloRepository::class)]
 class Velo
 {
+
+    public function removeDiagnostic(Diagnostic $diagnostic): self
+    {
+        if ($this->diagnostics->removeElement($diagnostic)) {
+            // set the owning side to null (unless already changed)
+            if ($diagnostic->getVelo() === $this) {
+                $diagnostic->setVelo(null);
+            }
+        }
+
+        return $this;
+    }
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
