@@ -8,20 +8,34 @@
             <div class="flex flex-col items-center">
                 <h1 class="block text-gray-700 font-bold mb-4 text-xl text-center">Diagnostic {{ diagnostic.id }}</h1>
                 <div class="w-full md:w-1/2 lg:w-1/3"> <!-- Contrôler la largeur du bouton selon la taille de l'écran -->
-                    <button onclick="window.print()" class="bg-teal-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded print:hidden w-full">
-                        Imprimer le diagnostic total
-                    </button>
+                <!-- Conteneur des boutons d'impression -->
+                    <div class="flex justify-center mb-4">
+                        <!-- Bouton pour masquer les lignes avec état other et imprimer la page -->
+                        <button id="hide-ok-na" class="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded print:hidden mr-4" onclick="printWithoutOther()">
+                            Imprimer les lignes pas OK ou à réviser
+                        </button>
+
+                        <!-- Bouton d'impression pour toutes les lignes -->
+                        <button onclick="window.print()" class="bg-teal-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded print:hidden">
+                            Imprimer le diagnostic total
+                        </button>
+                    </div>
+
+
+                    <!-- Bouton pour aller à la page /velo/all -->
+                   
+                    <div class="details-container text-center mt-4">
+            <a href="{{ path('velo_info') }}" class="button-style">Retour à liste vélos</a>
+        </div>
                 </div>
             </div>
             <div class="flex justify-between">
-
                 <div class="w-1/2 p-4 text-left">
                     <p class="text-gray-700 text-base font-bold">Date du diagnostic: <span class="font-normal">{{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</span></p>
                     <p class="text-gray-700 text-base font-bold">Coût de réparation: <span class="font-normal">{{ diagnostic.coutReparation }}</span></p>
                     <p class="text-gray-700 text-base font-bold">Statut: <span class="font-normal">{{ diagnostic.status }}</span></p>
                     <p class="text-gray-700 text-base font-bold">Conclusion: <span class="font-normal">{{ diagnostic.conclusion }}</span></p>
                 </div>
-
                 <div class="w-1/2 p-4 text-right">
                     <h2 class="text-lg font-bold mb-2">Informations du vélo:</h2>
                     <p><span class="font-bold">Identifiant:</span> {{ bike.id }}</p>
@@ -34,45 +48,41 @@
                     <p><span class="font-bold">Taille cadre:</span> {{ bike.taille_cadre}} cm</p>
                 </div>
             </div>
-
-
-
             <!-- Début de la grille pour deux colonnes -->
             <div class="grid md:grid-cols-2 gap-4">
                 {% for category, categorizedElements in categorizedElements %}
                     <!-- Section pour chaque catégorie du diagnostic -->
                     <div class="mb-8">
                         <h3 class="font-bold text-lg mb-2">{{ category }}</h3>
+                        
                         <table class="min-w-full border-collapse border border-slate-500">
                             <thead>
-                            <tr>
-                                <th class="border border-slate-600 px-4 py-2">Détail</th>
-                                <th class="border border-slate-600 px-4 py-2">État</th>
-                                <th class="border border-slate-600 px-4 py-2">Commentaire</th>
-                            </tr>
+                                <tr>
+                                    <th class="border border-slate-600 px-4 py-2">Détail</th>
+                                    <th class="border border-slate-600 px-4 py-2">État</th>
+                                    <th class="border border-slate-600 px-4 py-2">Commentaire</th>
+                                </tr>
                             </thead>
                             <tbody>
-                        {% for detail in categorizedElements %}
-                            <tr class="{{ loop.index is odd ? 'bg-gray-100' : 'bg-white' }}">
-                               <td class="border border-slate-700 px-4 py-2 {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}font-bold italic{% endif %}">
-                                     {{ detail.detail }}
-                                </td>
-                                 <td class="border border-slate-700 px-4 py-2 {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}text-right{% endif %}">
-                                    {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}
-                                        <span style="font-weight: bold; font-style: italic;">{{ detail.etat }}</span>
-                                    {% else %}
-                                        {{ detail.etat }}
-                                    {% endif %}
-                                </td>
-                                <td class="border border-slate-700 px-4 py-2">{{ detail.commentaire }}
-                                    
-                                </td>
-                            </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="3" class="border border-slate-700 px-4 py-2">Aucun élément de diagnostic trouvé pour cette catégorie.</td>
-                                </tr>
-                            {% endfor %}
+                                {% for detail in categorizedElements %}
+                                     <tr class="{{ loop.index is odd ? 'bg-gray-100 ' : 'bg-white ' }}{% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}ok{% else %}other{% endif %}">
+                                        <td class="border border-slate-700 px-4 py-2 {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}font-bold italic{% endif %}">
+                                            {{ detail.detail }}
+                                        </td>
+                                        <td class="border border-slate-700 px-4 py-2 {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}text-right{% endif %}">
+                                            {% if detail.etat == 'Pas OK' or detail.etat == 'À reviser' %}
+                                                <span style="font-weight: bold; font-style: italic;">{{ detail.etat }}</span>
+                                            {% else %}
+                                                {{ detail.etat }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="border border-slate-700 px-4 py-2">{{ detail.commentaire }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" class="border border-slate-700 px-4 py-2">Aucun élément de diagnostic trouvé pour cette catégorie.</td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -82,4 +92,34 @@
             </div>
         </div>
     </div>
+
+   <script>
+    function printWithoutOther() {
+        // Sélectionner les lignes avec la classe .other
+        const otherRows = document.querySelectorAll('.other');
+
+        // Vérifier s'il y a des lignes avec la classe .other
+        if (otherRows.length === 0) {
+            alert("Aucune ligne avec l'état 'Other' trouvée.");
+            return;
+        }
+
+        // Cacher les lignes avec la classe .other
+        otherRows.forEach(row => {
+            row.style.display = 'none';
+        });
+
+        // Imprimer la page
+        window.print();
+
+        // Rétablir l'affichage des lignes après l'impression
+        otherRows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+</script>
+
 {% endblock %}
+
+
+
