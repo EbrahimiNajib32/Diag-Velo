@@ -44,14 +44,41 @@
         {% endfor %}
 
         <div class="mb-6 text-center">
-            <div class="flex justify-between items-center flex-wrap" style="margin-top: 20px;">
-                {{ form_row(diagnosticForm.conclusion_RAS, {'label': 'R.A.S', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
-                {{ form_row(diagnosticForm.conclusion_A_REPARER, {'label': 'À réparer', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
-                {{ form_row(diagnosticForm.conclusion_POUR_PIECES, {'label': 'Pour pièces', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-secondary">
+                    {{ form_widget(diagnosticForm.conclusion_RAS) }}
+                    R.A.S
+                </label>
+                <label class="btn btn-secondary">
+                    {{ form_widget(diagnosticForm.conclusion_A_REPARER) }}
+                    À réparer
+                </label>
+                <label class="btn btn-secondary">
+                    {{ form_widget(diagnosticForm.conclusion_POUR_PIECES) }}
+                    Pour pièces
+                </label>
             </div>
         </div>
 
+        <script>
+            // Récupérer tous les boutons de la même classe
+            var btns = document.querySelectorAll('.btn-group .btn');
 
+            // Ajouter un écouteur d'événement à chaque bouton
+            btns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    // Désélectionner tous les boutons
+                    btns.forEach(function(otherBtn) {
+                        otherBtn.classList.remove('active');
+                        otherBtn.querySelector('input').checked = false;
+                    });
+
+                    // Sélectionner le bouton cliqué
+                    btn.classList.add('active');
+                    btn.querySelector('input').checked = true;
+                });
+            });
+        </script>
 
 
 
