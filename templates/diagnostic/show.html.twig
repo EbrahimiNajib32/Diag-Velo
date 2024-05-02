@@ -25,18 +25,23 @@
                     <!-- Bouton pour aller à la page /velo/all -->
                    
                     <div class="details-container text-center mt-4">
-            <a href="{{ path('velo_info') }}" class="button-style">Retour à liste vélos</a>
-        </div>
+                        <a href="{{ path('velo_info') }}" class="button-style">Retour à liste vélos</a>
+                    </div>
                 </div>
             </div>
+
             <div class="flex justify-between">
-                <div class="w-1/2 p-4 text-left">
+                <div class="w-1/3 p-4 text-left">
                     <p><span class="font-bold">Date du diagnostic:</span> {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
                     <p><span class="font-bold">Coût de réparation:</span> {{ diagnostic.coutReparation }}</p>
                     <p> <span class="font-bold">Statut: </span>{{ diagnostic.status }}</p>
                     <p> <span class="font-bold">Conclusion: </span>{{ diagnostic.conclusion }}</p>
                 </div>
-                <div class="w-1/2 p-4 text-right">
+                <div class="w-1/3 p-4">
+                    <!-- Contenu vide pour centrer les autres éléments -->
+                </div>
+
+                <div class="w-1/3 p-4 text-right">
                     <h2 class="text-lg font-bold mb-2">Informations du vélo:</h2>
                     <p><span class="font-bold">Identifiant:</span> {{ bike.id }}</p>
                     <p><span class="font-bold">Numéro de série:</span> {{ bike.numero_de_serie }}</p>
@@ -49,7 +54,7 @@
                 </div>
             </div>
             <!-- Début de la grille pour deux colonnes -->
-            <div class="grid md:grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-2">
                 {% for category, categorizedElements in categorizedElements %}
                     <!-- Section pour chaque catégorie du diagnostic -->
                     <div class="mb-8">
@@ -58,9 +63,9 @@
                         <table class="min-w-full border-collapse border border-slate-500">
                             <thead>
                                 <tr>
-                                    <th class="border border-slate-600 px-4 py-2">Détail</th>
-                                    <th class="border border-slate-600 px-4 py-2">État</th>
-                                    <th class="border border-slate-600 px-4 py-2">Commentaire</th>
+                                    <th class="border border-slate-600 px-2 py-2 md:px-4 md:w-24">Détail</th>
+                                    <th class="border border-slate-600 px-2 py-2 md:px-4 md:w-24">État</th>
+                                    <th class="border border-slate-600 px-2 py-2 md:px-4 md:w-24">Commentaire</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -118,39 +123,46 @@
         });
     }
 </script>
-<style>
-    @media print {
-        .flex.justify-between > div {
-            font-size: 0.8rem; /* Réduire la taille de la police */
+
+    <style>
+        @media print {
+            body {
+                width: 100%;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            .grid {
+                grid-template-columns: repeat(3, 1fr); /* Trois colonnes */
+            }
+
+            .details-container, .button-style, .print-hidden {
+                display: none; /* Masque les éléments non nécessaires à l'impression */
+            }
+
+            .mb-4 {
+                margin-bottom: 0.25rem; /* Réduit la marge pour économiser de l'espace */
+            }
+
+            table {
+                page-break-inside: avoid; /* Évite les coupures de page au milieu des tableaux */
+            }
+
+            h1, h2, h3 {
+                page-break-after: avoid; /* Évite les coupures de page juste après les titres */
+            }
+
+            tr {
+                font-size: 10pt; /* Adapte la taille de police pour l'impression */
+            }
         }
 
+    </style>
 
-        .mb-8 { /* Supposant que .mb-8 est la classe appliquée aux blocs contenant les tableaux */
-            page-break-inside: avoid;
-        }
-
-        table {
-            page-break-inside: avoid;
-        }
-
-        .grid.md\:grid-cols-2 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Continuer avec trois colonnes */
-            gap: 2px;
-        }
-
-        .container, .w-full {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        .px-4, .py-2 {
-            padding: 1px 2px; /* Réduire les paddings des cellules de tableau pour économiser de l'espace */
-        }
-    }
-
-</style>
 {% endblock %}
 
 
