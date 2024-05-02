@@ -8,6 +8,7 @@ use App\Entity\Utilisateur;
 use App\Entity\Velo;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,17 +47,28 @@ class DiagnosticType extends AbstractType
             $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
         }
 
+        $builder ->add('cout_reparation');
         $builder
             ->add('cout_reparation')
 
-            ->add('conclusion', ChoiceType::class, [ // Remplacer l'ancien champ "conclusion"
-                'choices' => [
-                    'R.A.S' => ConclusionDiagnostic::RAS,
-                    'À réparer' => ConclusionDiagnostic::A_REPARER,
-                    'Pour pièces' => ConclusionDiagnostic::POUR_PIECES,
-                ],
-                'expanded' => true, // Pour afficher des cases à cocher
-                'multiple' => false, // Pour ne permettre qu'une seule sélection
+
+            ->add('conclusion_RAS', CheckboxType::class, [
+                'label' => 'R.A.S',
+                'required' => false,
+                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
+                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
+            ])
+            ->add('conclusion_A_REPARER', CheckboxType::class, [
+                'label' => 'À réparer',
+                'required' => false,
+                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
+                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
+            ])
+            ->add('conclusion_POUR_PIECES', CheckboxType::class, [
+                'label' => 'Pour pièces',
+                'required' => false,
+                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
+                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
             ])
 
             ->add('velo', EntityType::class, [

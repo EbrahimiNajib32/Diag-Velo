@@ -43,16 +43,16 @@
             </div>
         {% endfor %}
 
-        <!-- Ajouter la section Conclusion au-dessus du bouton de validation -->
-
         <div class="mb-6 text-center">
-            {% set conclusionField = form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) %}
-            <div class="flex justify-between items-center" style="margin-top: 20px;">
-                <div class="flex items-center space-x-4">
-                    {{ conclusionField | raw }}
-                </div>
+            <div class="flex justify-between items-center flex-wrap" style="margin-top: 20px;">
+                {{ form_row(diagnosticForm.conclusion_RAS, {'label': 'R.A.S', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
+                {{ form_row(diagnosticForm.conclusion_A_REPARER, {'label': 'À réparer', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
+                {{ form_row(diagnosticForm.conclusion_POUR_PIECES, {'label': 'Pour pièces', 'attr': {'class': 'form-checkbox mr-4'}}) | raw }}
             </div>
         </div>
+
+
+
 
 
         <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
