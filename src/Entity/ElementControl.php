@@ -24,9 +24,16 @@ class ElementControl
     #[ORM\ManyToMany(targetEntity: DiagnosticType::class, mappedBy: 'id')]
     private Collection $diagnosticTypes;
 
+    /**
+     * @var Collection<int, DiagnosticTypeElementcontrol>
+     */
+    #[ORM\OneToMany(targetEntity: DiagnosticTypeElementcontrol::class, mappedBy: 'idElementcontrol', orphanRemoval: true)]
+    private Collection $diagnosticTypeElementcontrols;
+
     public function __construct()
     {
         $this->diagnosticTypes = new ArrayCollection();
+        $this->diagnosticTypeElementcontrols = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +76,36 @@ class ElementControl
     {
         if ($this->diagnosticTypes->removeElement($diagnosticType)) {
             $diagnosticType->removeId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiagnosticTypeElementcontrol>
+     */
+    public function getDiagnosticTypeElementcontrols(): Collection
+    {
+        return $this->diagnosticTypeElementcontrols;
+    }
+
+    public function addDiagnosticTypeElementcontrol(DiagnosticTypeElementcontrol $diagnosticTypeElementcontrol): static
+    {
+        if (!$this->diagnosticTypeElementcontrols->contains($diagnosticTypeElementcontrol)) {
+            $this->diagnosticTypeElementcontrols->add($diagnosticTypeElementcontrol);
+            $diagnosticTypeElementcontrol->setIdElementcontrol($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiagnosticTypeElementcontrol(DiagnosticTypeElementcontrol $diagnosticTypeElementcontrol): static
+    {
+        if ($this->diagnosticTypeElementcontrols->removeElement($diagnosticTypeElementcontrol)) {
+            // set the owning side to null (unless already changed)
+            if ($diagnosticTypeElementcontrol->getIdElementcontrol() === $this) {
+                $diagnosticTypeElementcontrol->setIdElementcontrol(null);
+            }
         }
 
         return $this;

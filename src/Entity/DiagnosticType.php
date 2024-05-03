@@ -25,9 +25,16 @@ class DiagnosticType
     #[ORM\Column]
     private ?bool $actif = null;
 
+    /**
+     * @var Collection<int, DiagnosticTypeElementcontrol>
+     */
+    #[ORM\OneToMany(targetEntity: DiagnosticTypeElementcontrol::class, mappedBy: 'idDianosticType', orphanRemoval: true)]
+    private Collection $diagnosticTypeElementcontrols;
+
     public function __construct()
     {
         $this->id = new ArrayCollection();
+        $this->diagnosticTypeElementcontrols = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,6 +90,36 @@ class DiagnosticType
     public function setActif(bool $actif): static
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiagnosticTypeElementcontrol>
+     */
+    public function getDiagnosticTypeElementcontrols(): Collection
+    {
+        return $this->diagnosticTypeElementcontrols;
+    }
+
+    public function addDiagnosticTypeElementcontrol(DiagnosticTypeElementcontrol $diagnosticTypeElementcontrol): static
+    {
+        if (!$this->diagnosticTypeElementcontrols->contains($diagnosticTypeElementcontrol)) {
+            $this->diagnosticTypeElementcontrols->add($diagnosticTypeElementcontrol);
+            $diagnosticTypeElementcontrol->setIdDianosticType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiagnosticTypeElementcontrol(DiagnosticTypeElementcontrol $diagnosticTypeElementcontrol): static
+    {
+        if ($this->diagnosticTypeElementcontrols->removeElement($diagnosticTypeElementcontrol)) {
+            // set the owning side to null (unless already changed)
+            if ($diagnosticTypeElementcontrol->getIdDianosticType() === $this) {
+                $diagnosticTypeElementcontrol->setIdDianosticType(null);
+            }
+        }
 
         return $this;
     }
