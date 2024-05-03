@@ -37,6 +37,7 @@ security:
     access_control:
         - { path: ^/dashboard$, roles: ROLE_ADMIN }
         - { path: ^/dashboard/utilisateur/new$, roles: ROLE_ADMIN }
+        - { path: ^/dashboard/element/control$, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
