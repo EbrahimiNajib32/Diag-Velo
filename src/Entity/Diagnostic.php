@@ -129,6 +129,10 @@ class Diagnostic
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'id')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?DiagnosticType $diagnosticType = null;
+
     public function __construct()
     {
         $this->diagnosticElements = new ArrayCollection();
@@ -194,6 +198,18 @@ class Diagnostic
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDiagnosticType(): ?DiagnosticType
+    {
+        return $this->diagnosticType;
+    }
+
+    public function setDiagnosticType(?DiagnosticType $diagnosticType): static
+    {
+        $this->diagnosticType = $diagnosticType;
 
         return $this;
     }
