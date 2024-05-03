@@ -1,20 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ElementControlController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="container mx-auto px-4">
+        <div class="text-center my-8">
+            <h1 class="text-4xl font-bold text-gray-800">Liste des Elements de Controles</h1>
+            <a href="" class="bg-teal-500 text-white py-2 px-4 rounded hover:bg-teal-600">
+                Ajouter un Element de controle
+            </a>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/vassal/Documents/Projets/Projet UHA 3/projet_velos_uha/velo/src/Controller/ElementControlController.php</code></li>
-        <li>Your template at <code>/home/vassal/Documents/Projets/Projet UHA 3/projet_velos_uha/velo/templates/element_control/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="grid grid-cols-4 gap-6">
+            {% for category, elements in categorizedElements %}
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h2 class="text-2xl font-semibold text-gray-700">{{ category }}</h2>
+                    <ul class="list-disc list-inside">
+                        {% for element in elements %}
+                            <li class="text-gray-600">{{ element.getElement() }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+
+
