@@ -46,6 +46,37 @@ class UtilisateurController extends AbstractController
             'utilisateurs' => $utilisateurs,
         ]);
     }
+
+    #[Route('/dashboard/utilisateur/edit/{id}', name: 'utilisateur_edit')]
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, Utilisateur $utilisateur): Response
+    {
+        // Store the original password to compare later
+        $originalPassword = $utilisateur->getPassword();
+
+        $form = $this->createForm(UtilisateurType::class, $utilisateur);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Check if password was changed
+            $newPassword = $form->get('password')->getData();
+
+            if (!empty($newPassword)) {
+                $hashedPassword = $passwordHasher->hashPassword($utilisateur, $newPassword);
+                $utilisateur->setPassword($hashedPassword);
+            }else {
+                $utilisateur->setPassword($originalPassword);
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'User updated successfully!');
+            return $this->redirectToRoute('utilisateur_liste');
+        }
+
+        return $this->render('utilisateur/edit.html.twig', [
+            'userForm' => $form->createView(),
+        ]);
+    }
+
 }
 
 
