@@ -23,8 +23,9 @@
             <ul class="details-list">
                 <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
                 <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-                <li>Date de Vente: {% if velo.getDateDeVente() %}<span id="date_de_vente">{{ velo.getDateDeVente()|date('Y-m-d') }}</span>{% endif %}</li>
-                <li>Date de Destruction: {% if velo.getDateDestruction() %}<span id="date_destruction">{{ velo.getDateDestruction()|date('Y-m-d') }}</span>{% endif %}</li>
+                <li>Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                <li>Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
+
                 <li>Type: <span id="type">{{ velo.type }}</span></li>
                 <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
                 <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
