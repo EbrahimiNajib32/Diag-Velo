@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Proprietaire;
 use App\Entity\Diagnostic;
@@ -258,10 +259,4 @@ class VeloController extends AbstractController
             'pagination' => $pagination
         ]);
     }
-
-
-
-
-
-
 }
