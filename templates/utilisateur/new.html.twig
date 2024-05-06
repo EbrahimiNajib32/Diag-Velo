@@ -34,6 +34,11 @@
                     </span>
                 </div>
                 {{ form_errors(userForm.password) }}
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-error" style="color: red;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
 
             <button type="submit" class="btn bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">Soumettre</button>

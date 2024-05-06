@@ -21,14 +21,24 @@ class UtilisateurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $password = $utilisateur->getPassword();
+
+            // Ensure a password is provided for new users
+            if (empty($password)) {
+                $this->addFlash('error', 'Un mot de passe est requis pour créer un nouvel utilisateur.');
+                return $this->render('utilisateur/new.html.twig', [
+                    'userForm' => $form->createView(),
+                ]);
+            }
+
             // Hash the password
-            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $utilisateur->getPassword());
+            $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
             $utilisateur->setPassword($hashedPassword);
 
             $entityManager->persist($utilisateur);
             $entityManager->flush();
 
-            $this->addFlash('success', 'New user added successfully!');
+            $this->addFlash('success', 'Nouveau utilisateur ajouté!');
             return $this->redirectToRoute('app_dashboard');
         }
 
@@ -36,6 +46,7 @@ class UtilisateurController extends AbstractController
             'userForm' => $form->createView(),
         ]);
     }
+
 
     #[Route('/dashboard/utilisateurs', name: 'utilisateur_liste')]
     public function index(EntityManagerInterface $entityManager): Response
