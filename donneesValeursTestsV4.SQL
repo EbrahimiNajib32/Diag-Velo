@@ -20,3 +20,13 @@ INSERT INTO `diagnostic` (`id`, `id_velo`, `id_user`, `date_diagnostic`, `cout_r
 
 -- Ajout information dans diagnostic sécurité
 INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `id_etat`, `commentaire`) VALUES (NULL, '1', '40', '1', NULL), (NULL, '1', '41', '3', NULL), (NULL, '1', '42', '1', NULL), (NULL, '1', '43', '4', NULL), (NULL, '1', '44', '1', NULL), (NULL, '1', '45', '1', NULL), (NULL, '1', '46', '2', NULL);
+
+--Ajout Elements dans type de diagnostic Global
+INSERT INTO `diagnostic_type_elementcontrol` (`id`, `id_dianostic_type_id`, `id_elementcontrol_id`) VALUES (NULL, '1', '1'), (NULL, '1', '2'), (NULL, '1', '3'), (NULL, '1', '4'), (NULL, '1', '5'), (NULL, '1', '6'), (NULL, '1', '7'), (NULL, '1', '8'), (NULL, '1', '9'), (NULL, '1', '10'), (NULL, '1', '11'), (NULL, '1', '12'), (NULL, '1', '13'), (NULL, '1', '14'), (NULL, '1', '15'), (NULL, '1', '16'), (NULL, '1', '17'), (NULL, '1', '18'), (NULL, '1', '19'), (NULL, '1', '20'), (NULL, '1', '21'), (NULL, '1', '22');
+
+-- Ajout d'un diagnostic de type global
+INSERT INTO `diagnostic` (`id`, `id_velo`, `id_user`, `date_diagnostic`, `cout_reparation`, `conclusion`, `status`, `diagnostic_type_id`) VALUES (NULL, '1', '1', '2024-05-06 13:35:46.000000', NULL, NULL, NULL, '1');
+
+-- Ajout informations dans diagnostic global
+INSERT INTO `diagnostic_element` (`id`, `id_diagnostic`, `id_element`, `id_etat`, `commentaire`) VALUES (NULL, '2', '1', '1', NULL), (NULL, '2', '2', '1', NULL), (NULL, '2', '3', '2', NULL), (NULL, '2', '4', '1', NULL), (NULL, '2', '5', '1', NULL), (NULL, '2', '6', '1', NULL), (NULL, '2', '7', '2', NULL), (NULL, '2', '8', '1', NULL), (NULL, '2', '9', '3', NULL), (NULL, '2', '10', '4', NULL), (NULL, '2', '11', '1', NULL), (NULL, '2', '12', '1', NULL), (NULL, '2', '13', '1', NULL), (NULL, '2', '14', '1', NULL), (NULL, '2', '15', '1', NULL), (NULL, '2', '16', '1', NULL), (NULL, '2', '17', '1', NULL), (NULL, '2', '18', '1', NULL), (NULL, '2', '19', '1', NULL), (NULL, '2', '20', '1', NULL), (NULL, '2', '21', '1', NULL), (NULL, '2', '22', '1', NULL);
+
