@@ -39,7 +39,7 @@ class ElementControlController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/new/element/control', name: 'app_dashboard_new_element_control', methods: ['GET', 'POST'])]
+    #[Route('/new/element/control', name: 'app_dashboard_new_element_control', methods: ['GET', 'POST'])]
     public function addElementControl(Request $request, EntityManagerInterface $entityManager): Response
     {
         $element = new ElementControl();
