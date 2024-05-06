@@ -3,25 +3,32 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <div class="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div class="container max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="fixed top-0 left-0">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+        <div class="fixed top-0 right-0">
+            <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+
+        <div class="container max-w-lg mx-auto p-8 bg-white shadow-lg rounded-lg">
             <h1 class="text-2xl font-bold text-center text-gray-800 mb-8">Admin Dashboard</h1>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-6 bg-blue-500 text-white rounded-lg shadow-md">
+            <div class="grid grid-cols-1 gap-4">
+                <a href="{{ path('utilisateur_liste') }}" class="p-6 bg-teal-500 hover:bg-teal-400 text-white rounded-lg shadow-md">
                     <h2 class="text-lg font-semibold">Utilisateurs.</h2>
                     <p class="text-sm">Ajouter , supprimer , modifier des utilisateurs.</p>
-                    <a href="{{ path('utilisateur_new') }}" class="mt-4 inline-block bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded">
-                        Ajouter un nouvel utilisateur
-                    </a>
-                </div>
-                <!-- More panels can be added here for other functionalities -->
-                <div class="p-6 bg-green-500 text-white rounded-lg shadow-md">
+                </a>
+                <a href="{{ path('app_dashboard_element_control') }}" class="p-6 bg-teal-500 hover:bg-teal-400 text-white rounded-lg shadow-md">
                     <h2 class="text-lg font-semibold">Elements de Controles</h2>
-                    <p class="text-sm">Ajouter des élements de controles.</p>
-                    <a href="/dashboard/element/control" class="mt-4 inline-block bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded">
-                        Liste des elements de controles
-                    </a>
-                </div>
+                    <p class="text-sm">Ajouter , modifier des élements de controles.</p>
+                </a>
+                <a href="" class="p-6 bg-teal-500 hover:bg-teal-400 text-white rounded-lg shadow-md">
+                    <h2 class="text-lg font-semibold">Types de diagnostics</h2>
+                    <p class="text-sm">Ajouter , modifier , désactiver/activer des types de diagnostics.</p>
+                </a>
+            </div>
+            <div class="mt-6 flex justify-center">
+                <a href="{{ path('app_accueil') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl mr-1"></i>Retour a l'accueil</a>
             </div>
         </div>
     </div>

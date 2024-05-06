@@ -5,14 +5,14 @@
         <div class="text-center my-8">
             <h1 class="text-4xl font-bold text-gray-800">Liste des Elements de Controles</h1>
             <a href="" class="bg-teal-500 text-white py-2 px-4 rounded hover:bg-teal-600">
-                Ajouter un Element de controle
+                <i class="bi bi-plus-circle-fill text-xl"></i> Ajouter un Element de controle
             </a>
         </div>
 
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid grid-cols-4 gap-3">
             {% for category, elements in categorizedElements %}
                 <div class="bg-white rounded-lg shadow-md p-4">
-                    <h2 class="text-2xl font-semibold text-gray-700">{{ category }}</h2>
+                    <h2 class="text-xl font-semibold text-gray-700">{{ category }}</h2>
                     <ul class="list-disc list-inside">
                         {% for element in elements %}
                             <li class="text-gray-600">{{ element.getElement() }}</li>
@@ -20,6 +20,9 @@
                     </ul>
                 </div>
             {% endfor %}
+            <div class="ml-10 justify-center content-center">
+                <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"  ><i class="bi bi-box-arrow-left text-xl"></i> Retour au dashboard</a>
+            </div>
         </div>
     </div>
 {% endblock %}

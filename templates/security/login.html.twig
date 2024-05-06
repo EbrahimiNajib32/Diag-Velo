@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
     </div>
     <div class="fixed top-0 right-0">
         <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo">
@@ -49,6 +49,9 @@
 
             </div>
         </div>
+    </div>
+    <div class="mt-6 flex justify-center">
+        <a href="{{ path('app_accueil') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i>Retour à l'accueil</a>
     </div>
 
 {% endblock %}
