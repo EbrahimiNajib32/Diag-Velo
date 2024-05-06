@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Form\ElementControlCreateType;
+use App\Form\ElementControlCreatType;
 
 
 
@@ -43,7 +43,7 @@ class ElementControlController extends AbstractController
     public function addElementControl(Request $request, EntityManagerInterface $entityManager): Response
     {
         $element = new ElementControl();
-        $form = $this->createForm(ElementControlCreateType::class, $element);
+        $form = $this->createForm(ElementControlCreatType::class, $element);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
