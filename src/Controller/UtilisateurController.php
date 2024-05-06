@@ -36,6 +36,16 @@ class UtilisateurController extends AbstractController
             'userForm' => $form->createView(),
         ]);
     }
+
+    #[Route('/dashboard/utilisateurs', name: 'utilisateur_liste')]
+    public function index(EntityManagerInterface $entityManager): Response
+    {
+        $utilisateurs = $entityManager->getRepository(Utilisateur::class)->findAll();
+
+        return $this->render('utilisateur/liste.html.twig', [
+            'utilisateurs' => $utilisateurs,
+        ]);
+    }
 }
 
 
