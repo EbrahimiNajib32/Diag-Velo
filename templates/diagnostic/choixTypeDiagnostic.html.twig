@@ -1,0 +1,16 @@
+{# templates/type_diagnostic/index.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des types de diagnostic</title>
+</head>
+<body>
+    <h1>Liste des types de diagnostic</h1>
+    <ul>
+        {% for typeDiagnostic in typesDiagnostic %}
+            <li>{{ typeDiagnostic.nomType }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

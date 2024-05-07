@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ElementControlRepository;
+use App\Repository\DiagnosticTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ElementControlRepository::class)]
-class ElementControl
+#[ORM\Entity(repositoryClass: DiagnosticTypeRepository::class)]
+class DiagnosticType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,23 +17,23 @@ class ElementControl
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $element = null;
+    private ?string $nomType = null;
 
-    /**
-     * @var Collection<int, DiagnosticType>
-     */
-    #[ORM\ManyToMany(targetEntity: DiagnosticType::class, mappedBy: 'id')]
-    private Collection $diagnosticTypes;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateCreationType = null;
+
+    #[ORM\Column]
+    private ?bool $actif = null;
 
     /**
      * @var Collection<int, DiagnosticTypeElementcontrol>
      */
-    #[ORM\OneToMany(targetEntity: DiagnosticTypeElementcontrol::class, mappedBy: 'idElementcontrol', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: DiagnosticTypeElementcontrol::class, mappedBy: 'idDianosticType', orphanRemoval: true)]
     private Collection $diagnosticTypeElementcontrols;
 
     public function __construct()
     {
-        $this->diagnosticTypes = new ArrayCollection();
+        $this->id = new ArrayCollection();
         $this->diagnosticTypeElementcontrols = new ArrayCollection();
     }
 
@@ -41,42 +42,54 @@ class ElementControl
         return $this->id;
     }
 
-
-    public function getElement(): ?string
+    public function addId(ElementControl $id): static
     {
-        return $this->element;
-    }
-
-    public function setElement(string $element): static
-    {
-        $this->element = $element;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, DiagnosticType>
-     */
-    public function getDiagnosticTypes(): Collection
-    {
-        return $this->diagnosticTypes;
-    }
-
-    public function addDiagnosticType(DiagnosticType $diagnosticType): static
-    {
-        if (!$this->diagnosticTypes->contains($diagnosticType)) {
-            $this->diagnosticTypes->add($diagnosticType);
-            $diagnosticType->addId($this);
+        if (!$this->id->contains($id)) {
+            $this->id->add($id);
         }
 
         return $this;
     }
 
-    public function removeDiagnosticType(DiagnosticType $diagnosticType): static
+    public function removeId(ElementControl $id): static
     {
-        if ($this->diagnosticTypes->removeElement($diagnosticType)) {
-            $diagnosticType->removeId($this);
-        }
+        $this->id->removeElement($id);
+
+        return $this;
+    }
+
+    public function getNomType(): ?string
+    {
+        return $this->nomType;
+    }
+
+    public function setNomType(string $nomType): static
+    {
+        $this->nomType = $nomType;
+
+        return $this;
+    }
+
+    public function getDateCreationType(): ?\DateTimeInterface
+    {
+        return $this->dateCreationType;
+    }
+
+    public function setDateCreationType(\DateTimeInterface $dateCreationType): static
+    {
+        $this->dateCreationType = $dateCreationType;
+
+        return $this;
+    }
+
+    public function isActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(bool $actif): static
+    {
+        $this->actif = $actif;
 
         return $this;
     }
@@ -93,7 +106,7 @@ class ElementControl
     {
         if (!$this->diagnosticTypeElementcontrols->contains($diagnosticTypeElementcontrol)) {
             $this->diagnosticTypeElementcontrols->add($diagnosticTypeElementcontrol);
-            $diagnosticTypeElementcontrol->setIdElementcontrol($this);
+            $diagnosticTypeElementcontrol->setIdDianosticType($this);
         }
 
         return $this;
@@ -103,8 +116,8 @@ class ElementControl
     {
         if ($this->diagnosticTypeElementcontrols->removeElement($diagnosticTypeElementcontrol)) {
             // set the owning side to null (unless already changed)
-            if ($diagnosticTypeElementcontrol->getIdElementcontrol() === $this) {
-                $diagnosticTypeElementcontrol->setIdElementcontrol(null);
+            if ($diagnosticTypeElementcontrol->getIdDianosticType() === $this) {
+                $diagnosticTypeElementcontrol->setIdDianosticType(null);
             }
         }
 
