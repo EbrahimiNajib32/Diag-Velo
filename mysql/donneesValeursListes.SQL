@@ -57,3 +57,5 @@ VALUES
     (2, 'À reviser'),
     (3, 'Pas OK'),
     (4, 'N/A');
+
+INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`) VALUES (NULL, 'admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa');
