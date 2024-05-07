@@ -41,7 +41,6 @@ class DiagnosticType extends AbstractType
         $diagnostic = $options['diagnostic'];
         $diagnosticElements = $options['diagnosticElements'];
 
-        // Build a map of element IDs to their current states
         $elementStates = [];
         foreach ($diagnosticElements as $diagElement) {
             $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
@@ -51,24 +50,16 @@ class DiagnosticType extends AbstractType
         $builder
             ->add('cout_reparation')
 
-
-            ->add('conclusion_RAS', CheckboxType::class, [
-                'label' => 'R.A.S',
-                'required' => false,
-                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
-                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
-            ])
-            ->add('conclusion_A_REPARER', CheckboxType::class, [
-                'label' => 'À réparer',
-                'required' => false,
-                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
-                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
-            ])
-            ->add('conclusion_POUR_PIECES', CheckboxType::class, [
-                'label' => 'Pour pièces',
-                'required' => false,
-                'mapped' => false, // Ne pas mapper ce champ à une propriété de l'entité
-                'attr' => ['class' => 'form-checkbox mr-4'], // Ajouter la classe Tailwind pour les cases à cocher
+            ->add('conclusion', ChoiceType::class, [
+                'label' => 'Conclusion',
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => [
+                    'R.A.S' => 'R.A.S',
+                    'À réparer' => 'À réparer',
+                    'Pour pièces' => 'pour pièces',
+                ],
+                'attr' => ['class' => 'form-checkbox mr-4'],
             ])
 
             ->add('velo', EntityType::class, [
