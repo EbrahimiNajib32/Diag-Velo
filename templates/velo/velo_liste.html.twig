@@ -104,20 +104,21 @@
                             {%  endif %}
                         <td class="px-6 py-4 border-r border-b border-gray-300">
                             {% set necessiteReparation = false %}
-                            {% if diagnostics[velo.id] is defined and diagnostics[velo.id]|length > 0 %}
+                            {% if diagnostics[velo.id] is defined %}
                                 {% set lastDiagnostic = diagnostics[velo.id]|last %}
                                 {% if lastDiagnostic.conclusion is defined %}
-                                    {% if lastDiagnostic.conclusion == 'À réparer' %}
+                                    {% if lastDiagnostic.conclusion == 'à réparer' %}
                                         {{ 'À réparer' }}
                                     {% elseif lastDiagnostic.conclusion == 'pour pièces' %}
                                         {{ 'Pour pièces' }}
                                     {% elseif lastDiagnostic.conclusion == 'R.A.S' %}
                                         {{ 'R.A.S' }}
-                                    {% else %}
+                                    {% elseif lastDiagnostic.conclusion == "" %}
                                         {{ 'Non commencé' }}
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
+                            {{ lastDiagnostic.conclusion }}
                         </td>
 
                         <td class="px-6 py-4 border-r border-b border-gray-300">
@@ -145,9 +146,9 @@
 
 
     {% for velo in pagination %}
-        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden fixed z-50 items-center justify-center md:inset-0 modal-backdrop overflow-y-auto">
+        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
             <div class="relative max-w-5xl justify-center items-center mx-auto">
-                <div class="bg-white rounded-lg overflow-y-auto m-10">
+                <div class="bg-white rounded-lg overflow-y-auto">
                     <div class="flex items-center justify-between p-4 md:p-5 border-b ">
                         <h3 class="text-xl text-center font-semibold text-gray-900">
                             Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçu le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
@@ -162,7 +163,7 @@
                                 <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
                                 <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
                                 <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
-                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucune conclusion' }}</p>
+                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
                                 <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
                                 <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
                             </div>
