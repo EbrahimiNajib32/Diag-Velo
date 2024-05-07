@@ -259,10 +259,4 @@ class VeloController extends AbstractController
             'pagination' => $pagination
         ]);
     }
-
-
-
-
-
-
 }
