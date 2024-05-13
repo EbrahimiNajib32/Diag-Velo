@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Liste des Utilisateurs
-            <a href="{{  path('utilisateur_new')  }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            <a href="{{ path('utilisateur_new') }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 <i class="bi bi-plus-circle-fill text-lg mr-1"></i>
                 Ajouter un utilisateur
             </a>
@@ -14,6 +14,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
+                    <th scope="col" class="py-3 px-6">Status</th>
                     <th scope="col" class="py-3 px-6">ID</th>
                     <th scope="col" class="py-3 px-6">Nom</th>
                     <th scope="col" class="py-3 px-6">Rôle(s)</th>
@@ -22,12 +23,27 @@
                 </thead>
                 <tbody>
                 {% for utilisateur in utilisateurs %}
-                    <tr class="bg-white border-b">
+                    <tr class="{{ utilisateur.isActive ? 'bg-white' : 'bg-gray-300' }} border-b">
+                        <td class="py-4 px-6">
+                            <button onclick="toggleUserStatus({{ utilisateur.id }}, this)">
+                                {% if utilisateur.isActive %}
+                                    <svg class="w-6 h-6 text-green-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                {% else %}
+                                    <svg class="w-6 h-6 text-red-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                {% endif %}
+                            </button>
+                        </td>
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
                         <td class="py-4 px-6">
-                            <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
+                            {% if utilisateur.isActive %}
+                                <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -38,4 +54,41 @@
             <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au dashboard</a>
         </div>
     </div>
+
+    <script>
+        function toggleUserStatus(userId, element) {
+            const isActive = element.querySelector('svg').classList.contains('text-green-500');
+
+            if (isActive) {
+                const confirmationMessage = "Êtes-vous sûr de vouloir désactiver cet utilisateur ?";
+
+                if (!confirm(confirmationMessage)) {
+                    return;
+                }
+
+                const url = '/dashboard/utilisateur/disable/' + userId;
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur de réseau ou de serveur');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert('Erreur lors du changement de statut');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la communication avec le serveur:', error);
+                        alert('Erreur lors de la communication avec le serveur: ' + error.message);
+                    });
+            }
+        }
+    </script>
+
+
+
 {% endblock %}
