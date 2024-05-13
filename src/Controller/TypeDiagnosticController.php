@@ -13,8 +13,10 @@ class TypeDiagnosticController extends AbstractController
 {
     #[Route('/type/diagnostic', name: 'app_type_diagnostic')]
 public function index(EntityManagerInterface $entityManager): Response
+// Récupérer uniquement les types de diagnostic actifs
 {
-    $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findAll();
+    $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findBy(['actif' => true]);
+
 
     return $this->render('diagnostic/choixTypeDiagnostic.html.twig', [
         'typesDiagnostic' => $typesDiagnostic,
