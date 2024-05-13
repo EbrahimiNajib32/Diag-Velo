@@ -57,7 +57,6 @@
                 });
             });
 
-
              //data contient les nouvelles valeurs modifiés
 
             saveButton.addEventListener('click', function() {
@@ -69,8 +68,14 @@
                             // Convertissez l'ID de snake_case en camelCase
                             propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
                             data[propName] = field.innerText;
+
                         }
                     });
+
+                    data.dateDeVente = document.getElementById('date_de_vente').value;
+                    data.dateDestruction = document.getElementById('date_destruction').value;
+
+
                     //trouve la route du controlleur pour envoyer les donner enregistrés avec post
 
                     fetch(`/api/update-velo/{{ velo.id }}`, {
