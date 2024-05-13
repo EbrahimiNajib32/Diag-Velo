@@ -141,7 +141,8 @@ class VeloInfoType extends AbstractType
                     return $proprietaire->getNomProprio() . ' - ' . $proprietaire->getEmail();
                 },
                 'required' => false,
-                'placeholder' => 'Choisir propriétaire...'
+                'placeholder' => 'Choisir propriétaire...',
+                'autocomplete' => true,
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
