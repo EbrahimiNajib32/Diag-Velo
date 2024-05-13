@@ -12,8 +12,9 @@ use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
 use App\Entity\ElementControl;
-use App\Form\DiagnosticType;
+use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
+use App\Form\TypeDiagnosticType;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DiagnosticController extends AbstractController
@@ -210,6 +211,40 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
         return new JsonResponse($filteredDiagnostics);
     }
+
+    // creation d'un diagnostique suivant un type de diagnostique
+
+    #[Route('/diagnostic/elements/{id}', name: 'app_diagnostic_elements_by_type',methods: ['GET', 'POST']) ]
+    public function diagnosticElementsByType(int $id, EntityManagerInterface $entityManager): Response
+    {
+    // Récupérer le type de diagnostic en fonction de l'ID du type
+    $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
+    if (!$typeDiagnostic) {
+        // Gérer le cas où le type de diagnostic n'est pas trouvé
+    }
+
+    // Récupérer les éléments de diagnostic associés à ce type de diagnostic
+    $elementsDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
+
+     // Récupérer le contenu du champ 'element' de l'entité 'ElementControl'
+     $elementContents = [];
+     foreach ($elementsDiagnostic as $elementDiagnostic) {
+         $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+         $elementControl = $entityManager->getRepository(ElementControl::class)->find($elementControlId);
+         if ($elementControl) {
+             // Ajouter le contenu du champ 'element' au tableau
+             $elementContents[] = $elementControl->getElement();
+         }
+        }
+    
+    return $this->render('diagnostic/newDiaByType.html.twig', [
+        'typeDiagnostic' => $typeDiagnostic,
+        'elementsDiagnostic' => $elementsDiagnostic,
+        'elementContents' => $elementContents,
+    ]);
+    }
+
+    // creation d'un diagnostique Version mono diagnostic
     #[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -222,7 +257,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
             $entityManager->persist($diagnostic);
             $entityManager->flush();
-
+//getrepository à modifier
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
             foreach ($elements as $element) {
                 $etatKey = 'etat_' . $element->getId();
@@ -264,7 +299,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
             return $this->redirectToRoute('app_accueil');
         }
-
+//getrepository à modifier
         $elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $categorizedElements = [];
         foreach ($elements as $element) {
@@ -282,6 +317,8 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             'diagnosticElements' => $categorizedElements,
         ]);
     }
+
+    // reprise d'un diagnostique version mono diagnostic
     #[Route('/diagnostic/reprendre/{id}', name: 'reprendre_diagnostic', methods: ['GET', 'POST'])]
     public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -387,25 +424,9 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         // Retourner les détails des diagnostics au format JSON
         return new JsonResponse($diagnosticsData);
     }
-// creation d'un diagnostique suivant un type de diagnostique
 
-    #[Route('/diagnostic/elements/{id}', name: 'app_diagnostic_elements_by_type', methods: ['GET'])]
-public function diagnosticElementsByType(int $id, EntityManagerInterface $entityManager): Response
-{
-    // Récupérer le type de diagnostic en fonction de l'ID
-    $typeDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->find($id);
-    if (!$typeDiagnostic) {
-        // Gérer le cas où le type de diagnostic n'est pas trouvé
-    }
-dd($typeDiagnostic);
-    // Récupérer les éléments de diagnostic associés à ce type de diagnostic
-    $elementsDiagnostic = $typeDiagnostic->getIdElementcontrol();
 
-    return $this->render('diagnostic/elements_by_type.html.twig', [
-        'typeDiagnostic' => $typeDiagnostic,
-        'elementsDiagnostic' => $elementsDiagnostic,
-    ]);
-}
+
 
 
 //    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]

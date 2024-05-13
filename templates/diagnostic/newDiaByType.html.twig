@@ -5,10 +5,14 @@
 {% endblock %}
 
 {% block body %}
+
+
     <h1>Éléments de diagnostic pour {{ typeDiagnostic.nomType }}</h1>
     <ul>
         {% for element in elementsDiagnostic %}
-            <li>{{ element.nom }}</li>
+            <li>ID de DiagnosticTypeElementcontrol : {{ element.id }}</li>
+            <li>ID de l'élément de contrôle : {{ element.idElementcontrol.id }}</li>
+            <li>Contenu de l'élément : {{ element.idElementcontrol.element }}</li>
         {% endfor %}
     </ul>
 {% endblock %}
