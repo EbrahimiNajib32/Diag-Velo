@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Éléments de diagnostic pour {{ typeDiagnostic.nomType }}
+{% endblock %}
+
+{% block body %}
+    <h1>Éléments de diagnostic pour {{ typeDiagnostic.nomType }}</h1>
+    <ul>
+        {% for element in elementsDiagnostic %}
+            <li>{{ element.nom }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

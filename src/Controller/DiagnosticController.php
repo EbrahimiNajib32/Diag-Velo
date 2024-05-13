@@ -13,8 +13,7 @@ use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
 use App\Entity\ElementControl;
 use App\Form\DiagnosticType;
-
-
+use App\Entity\DiagnosticTypeElementcontrol;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DiagnosticController extends AbstractController
@@ -388,6 +387,26 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         // Retourner les détails des diagnostics au format JSON
         return new JsonResponse($diagnosticsData);
     }
+// creation d'un diagnostique suivant un type de diagnostique
+
+    #[Route('/diagnostic/elements/{id}', name: 'app_diagnostic_elements_by_type', methods: ['GET'])]
+public function diagnosticElementsByType(int $id, EntityManagerInterface $entityManager): Response
+{
+    // Récupérer le type de diagnostic en fonction de l'ID
+    $typeDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->find($id);
+    if (!$typeDiagnostic) {
+        // Gérer le cas où le type de diagnostic n'est pas trouvé
+    }
+dd($typeDiagnostic);
+    // Récupérer les éléments de diagnostic associés à ce type de diagnostic
+    $elementsDiagnostic = $typeDiagnostic->getIdElementcontrol();
+
+    return $this->render('diagnostic/elements_by_type.html.twig', [
+        'typeDiagnostic' => $typeDiagnostic,
+        'elementsDiagnostic' => $elementsDiagnostic,
+    ]);
+}
+
 
 //    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]
 //    public function diagnosticsAReparer(EntityManagerInterface $entityManager): JsonResponse
