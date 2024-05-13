@@ -23,6 +23,9 @@ class Utilisateur implements UserInterface , PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    #[ORM\Column]
+    private ?bool $isActive = null;
     
 
     public function getId(): ?int
@@ -96,5 +99,17 @@ class Utilisateur implements UserInterface , PasswordAuthenticatedUserInterface
     public function getSalt(): ?string
     {
         return null;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 }
