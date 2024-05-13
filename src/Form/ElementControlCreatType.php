@@ -18,15 +18,17 @@ class ElementControlCreatType extends AbstractType
         $builder
             ->add('element', TextType::class, [
                 'label' => 'Élément',
-                'attr' => ['placeholder' => 'Entrez le nom de l\'élément']
+                'attr' => [
+                    'placeholder' => 'Catégorie:Élément',
+                    'class' => 'form-control',
+                    'id' => 'element-input' // Assurez-vous que l'ID est correct
+                ]
             ])
-            ->add('save', SubmitType::class, ['label' => 'Créer Élément']);
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => ElementControl::class,
-        ]);
+            ->add('save', SubmitType::class, [
+                'label' => 'Créer Élément',
+                'attr' => [
+                    'class' => 'btn bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600' // Ajoutez les classes CSS ici
+                ]
+            ]);
     }
 }
