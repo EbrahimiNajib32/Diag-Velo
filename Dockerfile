@@ -28,6 +28,12 @@ RUN npm install -g npm
 COPY . /var/www/
 COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
+# Set ServerName to avoid Apache warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Ensure Apache listens on all interfaces
+RUN echo "Listen 0.0.0.0:80" >> /etc/apache2/ports.conf
+
 # Setting the working directory for following commands
 WORKDIR /var/www/
 
