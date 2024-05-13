@@ -1,5 +1,5 @@
 <?php
-// src/Controller/DiagosticController.php
+ //src/Controller/DiagosticController.php
 
 namespace App\Controller;
 
@@ -153,51 +153,36 @@ class DiagnosticController extends AbstractController
 //        return new JsonResponse($filteredDiagnostics);
 //    }
 
-    #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-    public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
-    {
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $filteredDiagnostics = [];
+// route pour l'affichage uniquement des diagnostics en cours
+#[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
+public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
+{
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $filteredDiagnostics = [];
 
-        foreach ($diagnostics as $diagnostic) {
-            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
-
-            if (empty($elements)) {
-                continue;
-            }
-
-            $okCount = 0;
-
-            foreach ($elements as $element) {
-                if ($element->getEtatControl()->getNomEtat() === 'OK') {
-                    $okCount++;
-                }
-            }
-
-
-            if ($okCount < 35) {
-                $velo = $diagnostic->getVelo();
-                $filteredDiagnostics[] = [
-                    'diagnostic' => $diagnostic,
-                    'veloDetails' => [
-                        'id' => $velo->getId(),
-                        'couleur' => $velo->getCouleur(),
-                        'marque' => $velo->getMarque(),
-                        'refRecyclerie' => $velo->getRefRecyclerie(),
-                        'type' => $velo->getType(),
-                        'dateReception' => $velo->getDateDeReception() ? $velo->getDateDeReception()->format('Y-m-d') : null,
-                    ]
-                ];
-            }
+    foreach ($diagnostics as $diagnostic) {
+        // Remplacez la vérification du nombre d'éléments "OK" par l'utilisation du statut de l'entité Diagnostic
+        if ($diagnostic->getStatus() === 'en cours') {
+            $velo = $diagnostic->getVelo();
+            $filteredDiagnostics[] = [
+                'diagnostic' => $diagnostic,
+                'veloDetails' => [
+                    'id' => $velo->getId(),
+                    'couleur' => $velo->getCouleur(),
+                    'marque' => $velo->getMarque(),
+                    'refRecyclerie' => $velo->getRefRecyclerie(),
+                    'type' => $velo->getType(),
+                    'dateDeEnregistrement' => $velo->getDateDeEnregistrement() ? $velo->getDateDeEnregistrement()->format('Y-m-d') : null,
+                ]
+            ];
         }
-
-        // Render a Twig template, passing the filtered diagnostics
-        return $this->render('diagnostic_en_cour/index.html.twig', [
-            'filteredDiagnostics' => $filteredDiagnostics
-        ]);
     }
 
-
+    // Render a Twig template, passing the filtered diagnostics
+    return $this->render('diagnostic_en_cour/index.html.twig', [
+        'filteredDiagnostics' => $filteredDiagnostics
+    ]);
+}
 
     #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
     public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
@@ -375,5 +360,57 @@ class DiagnosticController extends AbstractController
             'diagnosticElements' => $categorizedElements,
         ]);
     }
+
+    #[Route('/diagnostics/velo/{id}', name: 'app_diagnostics_by_velo_id', methods: ['GET'])]
+    public function diagnosticsByVeloId(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Récupérer les diagnostics associés au vélo en fonction de son ID
+        $query = $entityManager->createQuery(
+            'SELECT d FROM App\Entity\Diagnostic d WHERE d.id_velo = :id'
+        )->setParameter('id', $id);
+
+        $diagnostics = $query->getResult();
+
+        // Construire la réponse avec les détails des diagnostics
+        $diagnosticsData = [];
+        foreach ($diagnostics as $diagnostic) {
+            $diagnosticsData[] = [
+                'id' => $diagnostic->getId(),
+                'id_velo' => $diagnostic->getIdVelo(),
+                'id_user' => $diagnostic->getIdUser(),
+                'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                'cout_reparation' => $diagnostic->getCoutReparation(),
+                'conclusion' => $diagnostic->getConclusion(),
+                // Ajoutez d'autres détails du diagnostic si nécessaire
+            ];
+        }
+
+        // Retourner les détails des diagnostics au format JSON
+        return new JsonResponse($diagnosticsData);
+    }
+
+//    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]
+//    public function diagnosticsAReparer(EntityManagerInterface $entityManager): JsonResponse
+//    {
+//        // Récupérer les diagnostics avec la conclusion "À réparer"
+//        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findBy([
+//            'conclusion' => ConclusionDiagnostic::A_REPARER
+//        ]);
+//
+//        // Préparer les données à envoyer en réponse
+//        $diagnosticData = [];
+//        foreach ($diagnostics as $diagnostic) {
+//            $diagnosticData[] = [
+//                'conclusion' => $diagnostic->getConclusion(),
+//            ];
+//        }
+//
+//        // Retourner les données en format JSON
+//        return new JsonResponse($diagnosticData);
+//    }
+
+
+
+
 }
 

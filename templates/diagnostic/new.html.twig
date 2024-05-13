@@ -1,18 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center ">
+    <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center">
         <h1 class="text-xl font-semibold text-gray-700 text-center portrait:text-3xl">Nouveau Diagnostic</h1>
         {{ form_start(diagnosticForm, {'attr': {'class': 'space-y-3 portrait:space-y-6'}}) }}
 
-
         <div class="grid grid-cols-3 md:grid-cols-3 gap-1 mb-6 border text-sm portrait:text-2xl">
-            <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border  rounded border-black portrait:h-10'}}) }}</div>
+            <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) }}</div>
             <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
             <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
-
         </div>
-
 
         {% for category, elements in diagnosticElements %}
             <div class="mb-2 text-center">
@@ -26,7 +23,7 @@
                             <div class="">
                                 <div class="form-group mb-3">
                                     <div class="font-bold">
-                                    {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
+                                        {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
                                     <div class="mt-2">
                                         {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'class': 'form-radio flex justify-around'}}) }}
@@ -35,7 +32,7 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     {{ form_label(attribute(diagnosticForm, 'commentaire_' ~ element.id)) }}
-                                    {{ form_widget(attribute(diagnosticForm, 'commentaire_' ~ element.id), {'attr': {'class': 'form-control min-w-lg border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded'}}) }}
+                                    {{ form_widget(attribute(diagnosticForm, 'commentaire_' ~ element.id), {'attr': {'class': 'form-control w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded'}}) }}
                                     {{ form_errors(attribute(diagnosticForm, 'commentaire_' ~ element.id)) }}
                                 </div>
                             </div>
@@ -44,13 +41,35 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="mb-6 text-center">
+            {{ form_row(diagnosticForm.conclusion, {'label_attr': {'class': 'text-sm portrait:text-2xl'}, 'attr': {'class': 'space-x-4'}}) }}
+        </div>
 
-        <div class="col-span-1 md:col-span-2">{{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control border rounded border-black mb-2 bg-white'}}) }}</div>
-        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
+        <button type="submit" class="w-full mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
+    </div>
+    <div class="details-container text-center mt-4">
+        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enreigistrer les modifications</a>
     </div>
 
     <script>
+        var btns = document.querySelectorAll('.btn-group .btn');
+
+        // Ajouter un écouteur d'événement à chaque bouton
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                // Désélectionner tous les boutons
+                btns.forEach(function(otherBtn) {
+                    otherBtn.classList.remove('active');
+                    otherBtn.querySelector('input').checked = false;
+                });
+
+                // Sélectionner le bouton cliqué
+                btn.classList.add('active');
+                btn.querySelector('input').checked = true;
+            });
+        });
+
         function toggleSection(event) {
             const currentHeader = event.currentTarget;
             const currentSection = currentHeader.nextElementSibling;
@@ -68,7 +87,30 @@
             currentSection.classList.toggle('hidden');
         }
 
+        function checkDiagnosticsFilled() {
+            const allSections = document.querySelectorAll('.category-section');
+            let diagnosticsFilled = false;
+
+            allSections.forEach(section => {
+                const radios = section.querySelectorAll('input[type=radio]');
+                if (Array.from(radios).some(radio => radio.checked)) {
+                    diagnosticsFilled = true;
+                }
+            });
+
+            return diagnosticsFilled;
+        }
+
         function updateCategoryBackground() {
+            const diagnosticsFilled = checkDiagnosticsFilled();
+            const submitButton = document.getElementById('submit-button');
+
+            if (diagnosticsFilled) {
+                submitButton.style.display = 'block';
+            } else {
+                submitButton.style.display = 'none';
+            }
+
             document.querySelectorAll('.category-header').forEach(header => {
                 const sections = header.nextElementSibling.querySelectorAll('.form-group');
                 const total = sections.length;
@@ -80,8 +122,6 @@
                         filled++;
                     }
                 });
-
-                console.log(`Total sections: ${total}, Filled sections: ${filled}`);
 
                 if (filled === 0) {
                     header.style.backgroundColor = '#ff0000'; // Red

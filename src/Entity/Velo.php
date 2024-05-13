@@ -1,14 +1,29 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\VeloRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\VeloRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Diagnostic; // Import de l'entité Diagnostic si ce n'est pas déjà fait
 #[ORM\Entity(repositoryClass: VeloRepository::class)]
 class Velo
 {
+
+    public function removeDiagnostic(Diagnostic $diagnostic): self
+    {
+        if ($this->diagnostics->removeElement($diagnostic)) {
+            // set the owning side to null (unless already changed)
+            if ($diagnostic->getVelo() === $this) {
+                $diagnostic->setVelo(null);
+            }
+        }
+
+        return $this;
+    }
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -42,7 +57,7 @@ class Velo
     private ?string $url_photo = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_de_reception = null;
+    private ?\DateTimeInterface $date_de_enregistrement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_de_vente = null;
@@ -70,6 +85,10 @@ private ?\DateTimeInterface $date_destruction = null;
 
 #[ORM\Column(length: 255, nullable: true)]
 private ?string $public = null;
+
+
+ #[ORM\Column(type: "string", length: 255, nullable: true)]
+   private ?string $origine = null;
 
 
     public function getId(): ?int
@@ -185,29 +204,38 @@ private ?string $public = null;
         return $this;
     }
 
-    public function getDateDeReception(): ?\DateTimeInterface
+    public function getDateDeEnregistrement(): ?\DateTimeInterface
     {
-        return $this->date_de_reception;
+        return $this->date_de_enregistrement;
     }
 
-    public function setDateDeReception(\DateTimeInterface $date_de_reception): static
+    public function setDateDeEnregistrement(\DateTimeInterface $date_de_enregistrement): static
     {
-        $this->date_de_reception = $date_de_reception;
+        $this->date_de_enregistrement = $date_de_enregistrement;
 
         return $this;
     }
+
 
     public function getDateDeVente(): ?\DateTimeInterface
     {
         return $this->date_de_vente;
     }
 
-    public function setDateDeVente(\DateTimeInterface $date_de_vente): static
-    {
-        $this->date_de_vente = $date_de_vente;
 
+    public function setDateDeVente($date_de_vente): self
+    {
+        if (is_string($date_de_vente)) {
+            try {
+                $date_de_vente = new \DateTime($date_de_vente);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException("Date de vente invalide : " . $e->getMessage());
+            }
+        }
+        $this->date_de_vente = $date_de_vente;
         return $this;
     }
+
 
     public function getType(): ?string
     {
@@ -262,10 +290,13 @@ private ?string $public = null;
         return $this->date_destruction;
     }
 
-    public function setDateDestruction(?\DateTimeInterface $date_destruction): static
+    public function setDateDestruction($date_destruction): self
     {
-        $this->date_destruction = $date_destruction;
-
+        if (is_string($date_destruction)) {
+            $this->date_destruction = new \DateTime($date_destruction);
+        } else {
+            $this->date_destruction = $date_destruction;
+        }
         return $this;
     }
 
@@ -280,4 +311,16 @@ private ?string $public = null;
 
         return $this;
     }
+
+ public function getOrigine(): ?string
+        {
+            return $this->origine;
+        }
+
+        public function setOrigine(?string $origine): self
+        {
+            $this->origine = $origine;
+            return $this;
+        }
+
 }

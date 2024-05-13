@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="fixed top-0 left-0">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+    </div>
+    <div class="fixed top-0 right-0">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo">
+    </div>
+    <div class="flex justify-center content-center ">
+        <div class="text-center max-w-lg">
+            <form method="post" class="grid grid-cols-1">
+                <div>
+                    <h1 class="text-4xl font-bold mb-4">Se Connecter</h1>
+                </div>
+
+                <label for="username" class="text-xl">Nom</label>
+                <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control border-4 border-black-600 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-500 transition-colors duration-200 focus:ring-2 focus:ring-teal-500 mb-4" autocomplete="username" required autofocus>
+
+                <label for="password" class="text-xl">Mot de passe</label>
+                <input type="password" name="_password" id="password" class="form-control border-4 border-black-600 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-500 transition-colors duration-200 focus:ring-2 focus:ring-teal-500 mb-4" autocomplete="current-password" required>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Se souvenir
+                    </label>
+                </div>
+
+                <button class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 portrait:text-4xl" type="submit">
+                    Connection
+                </button>
+            </form>
+            <div class="justify-center content-center grid grid-cols-1 max-w-lg text-center mt-5">
+                {% if app.user %}
+                    <div class="mb-3">
+                        Je suis connecté en tant que {{ app.user.userIdentifier }} avec le role
+                        {% if is_granted('ROLE_ADMIN') %}
+                            Administrateur
+                        {% elseif is_granted('ROLE_USER') %}
+                            Utilisateur
+                        {% endif %}
+                    </div>
+                    <a href="{{ path('app_logout') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 portrait:text-4xl">Déconnecter</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 flex justify-center">
+        <a href="{{ path('app_accueil') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i>Retour à l'accueil</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if userForm.vars.value.id %}Edit Utilisateur{% else %}Create New Utilisateur{% endif %}
+{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="container max-w-lg text-center border bg-white shadow rounded-lg p-6">
+            {{ form_start(userForm) }}
+            <div class="mb-6">
+                <h1 class="text-xl font-semibold my-4">{% if userForm.vars.value.id %}Modifier un utilisateur{% else %}Créer un utilisateur{% endif %}</h1>
+            </div>
+            <div class="mb-4">
+                {{ form_label(userForm.nom) }}
+                {{ form_widget(userForm.nom, {'attr': {'class': 'form-control border border-gray-300 p-2 rounded'}}) }}
+                {{ form_errors(userForm.nom) }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(userForm.role) }}
+                {{ form_widget(userForm.role, {'attr': {'class': 'form-control p-2 rounded border border-gray-300'}}) }}
+                {{ form_errors(userForm.role) }}
+            </div>
+
+            <div class="mb-4">
+                <div class="relative">
+                    {{ form_label(userForm.password) }}
+                    {{ form_widget(userForm.password, {'attr': {'class': 'form-control p-2 rounded border border-gray-300'}}) }}
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                        <button type="button" class="toggle-password" style="background: none; border: none;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </span>
+                </div>
+                {{ form_errors(userForm.password) }}
+            </div>
+
+            <button type="submit" class="btn bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                {% if userForm.vars.value.id %}Mettre à jour{% else %}Soumettre{% endif %}
+            </button>
+            {{ form_end(userForm) }}
+        </div>
+    </div>
+    <script>
+        document.querySelector('.toggle-password').addEventListener('click', function (e) {
+            e.preventDefault();
+            let passwordInput = document.querySelector('#{{ userForm.password.vars.id }}');
+            let icon = this.querySelector('.fas');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
+{% endblock %}

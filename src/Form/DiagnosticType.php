@@ -8,6 +8,7 @@ use App\Entity\Utilisateur;
 use App\Entity\Velo;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\{ ElementControl};
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\ConclusionDiagnostic;
+
 
 class DiagnosticType extends AbstractType
 {
@@ -38,15 +41,27 @@ class DiagnosticType extends AbstractType
         $diagnostic = $options['diagnostic'];
         $diagnosticElements = $options['diagnosticElements'];
 
-        // Build a map of element IDs to their current states
         $elementStates = [];
         foreach ($diagnosticElements as $diagElement) {
             $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
         }
 
+        $builder ->add('cout_reparation');
         $builder
             ->add('cout_reparation')
-            ->add('conclusion')
+
+            ->add('conclusion', ChoiceType::class, [
+                'label' => 'Conclusion',
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => [
+                    'R.A.S' => 'R.A.S',
+                    'À réparer' => 'À réparer',
+                    'Pour pièces' => 'pour pièces',
+                ],
+                'attr' => ['class' => 'form-checkbox mr-4'],
+            ])
+
             ->add('velo', EntityType::class, [
                 'class' => Velo::class,
                 'choice_label' => 'ref_recyclerie',

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Utilisateur{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="container max-w-lg text-center border bg-white shadow rounded-lg">
+            {{ form_start(userForm) }}
+            <div class="mb-4">
+                <h1 class="text-xl font-semibold">Créer un utilisateur</h1>
+            </div>
+            <div class="mb-3">
+                <div>
+                    {{ form_label(userForm.nom) }}
+                </div>
+                {{ form_widget(userForm.nom, {'attr': {'class': 'form-control border p-2 rounded'}}) }}
+                {{ form_errors(userForm.nom) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(userForm.role) }}
+                {{ form_widget(userForm.role, {'attr': {'class': 'form-control p-2 rounded'}}) }}
+                {{ form_errors(userForm.role) }}
+            </div>
+
+            <div class="mb-3">
+                <div class="relative">
+                    <div>
+                        {{ form_label(userForm.password) }}
+                    </div>
+                    {{ form_widget(userForm.password, {'attr': {'class': 'form-control p-2 rounded'}}) }}
+                    <span class="absolute inset-y-0 right-0 flex items-center px-2">
+                        <button type="button" class="toggle-password text-sm p-1 ">Montrer</button>
+                    </span>
+                </div>
+                {{ form_errors(userForm.password) }}
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-error" style="color: red;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">Soumettre</button>
+
+            {{ form_end(userForm) }}
+            <div class="mt-10 flex justify-center">
+                <a href="{{ path('utilisateur_liste') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour liste utilisateurs</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelector('.toggle-password').addEventListener('click', function (e) {
+            e.preventDefault();
+            let passwordInput = document.querySelector('#{{ userForm.password.vars.id }}');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.textContent = 'Cacher';
+            } else {
+                passwordInput.type = 'password';
+                this.textContent = 'Montrer';
+            }
+        });
+    </script>
+{% endblock %}
+
