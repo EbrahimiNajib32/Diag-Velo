@@ -1,16 +1,33 @@
 {# templates/type_diagnostic/index.html.twig #}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des types de diagnostic</title>
-</head>
-<body>
-    <h1>Liste des types de diagnostic</h1>
-    <ul>
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des types de diagnostic{% endblock %}
+
+{% block body %}
+    <div class="fixed top-0 left-0">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+    </div>
+    <div class="fixed top-0 right-0">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+    </div>
+    <div class="max-w-lg mx-auto text-center py-20">
+        <h1 class="text-4xl font-bold mb-4">Liste des types de diagnostic</h1>
+    </div>
+       {# création dynamique du tableau avec les noms des diagnostics actif #}
+     <div class="max-w-lg mx-auto text-center portrait:max-w-2xl">
+        <ul>
         {% for typeDiagnostic in typesDiagnostic %}
-            <li>{{ typeDiagnostic.nomType }}</li>
+            <li>
+                <a href="{{ path('app_type_diagnostic', {'id': typeDiagnostic.id}) }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>{{ typeDiagnostic.nomType }}</a>
+            </li>
         {% endfor %}
     </ul>
-</body>
-</html>
+    </div>
+      {# bouton retour à l'accueil #}
+     <div class="details-container text-center mt-4">
+            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
+        </div>
+{% endblock %}
+
