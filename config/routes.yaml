@@ -6,3 +6,8 @@ controllers:
 errors:
     path: /error
     controller: App\Controller\ErrorController::showErrorPage
+
+app_diagnostic_elements_by_type:
+    path: '/diagnostic/elements/{id}'
+    controller: 'App\Controller\DiagnosticController::diagnosticElementsByType'
+
