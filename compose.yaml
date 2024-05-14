@@ -27,7 +27,7 @@ services:
     volumes:
       - .:/var/www/
     ports:
-      - "${APP_PORT_EXTERNAL}:${FRONT_PORT}"
+      - "${APP_PORT_EXTERNAL}:80"
     command: >
       bash -c "
       /usr/local/bin/wait-for-it.sh db:3306 --timeout=30 -- echo 'db is up' &&
