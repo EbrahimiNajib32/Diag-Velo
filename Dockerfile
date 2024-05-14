@@ -32,7 +32,7 @@ COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Ensure Apache listens on all interfaces
-RUN echo "Listen 0.0.0.0:80" >> /etc/apache2/ports.conf
+RUN echo "Listen 0.0.0.0:${FRONT_PORT}" >> /etc/apache2/ports.conf
 
 # Setting the working directory for following commands
 WORKDIR /var/www/
@@ -41,6 +41,5 @@ WORKDIR /var/www/
 RUN composer install --no-plugins --no-scripts && \
     composer update --no-plugins --no-scripts
 
-
-# Exposing port 80 for the Apache server
-EXPOSE 80
+# Exposing port for the Apache server
+EXPOSE ${APP_PORT}
