@@ -142,7 +142,6 @@ class VeloInfoType extends AbstractType
                 },
                 'required' => false,
                 'placeholder' => 'Choisir propriétaire...',
-                'autocomplete' => true,
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
