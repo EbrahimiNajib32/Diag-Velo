@@ -2,20 +2,22 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Proprietaire;
 
+
 class AutoCompleteController extends AbstractController
 {
     #[Route('/autocomplete', name: 'autocomplete')]
-    public function autocompleteProprietaires(Request $request): JsonResponse
+    public function autocompleteProprietaires(Request $request , EntityManagerInterface $entityManager): JsonResponse
     {
         $term = $request->query->get('term');
 
-        $proprietaireRepository = $this->getDoctrine()->getRepository(Proprietaire::class);
+        $proprietaireRepository = $entityManager->getRepository(Proprietaire::class);
         $proprietaires = $proprietaireRepository->findMatchingProprietaires($term);
 
         $formattedProprietaires = [];
@@ -31,4 +33,3 @@ class AutoCompleteController extends AbstractController
     }
 }
 
-?>
