@@ -19,7 +19,7 @@
         <ul>
         {% for typeDiagnostic in typesDiagnostic %}
             <li>
-                <a href="{{ path('app_type_diagnostic', {'id': typeDiagnostic.id}) }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <a href="{{ path('app_diagnostic_elements_by_type', {'id': typeDiagnostic.id}) }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
                 <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>{{ typeDiagnostic.nomType }}</a>
             </li>
         {% endfor %}
