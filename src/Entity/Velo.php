@@ -32,6 +32,10 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $numero_de_serie = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $bicycode = null;
+
+
     #[ORM\Column(length: 255)]
     private ?string $marque = null;
 
@@ -119,6 +123,22 @@ private ?string $public = null;
 
         return $this;
     }
+
+
+    public function getBicycode(): ?string
+    {
+        return $this->bicycode;
+    }
+
+    public function setBicycode(?string $bicycode): self
+    {
+        $this->bicycode = $bicycode;
+        return $this;
+    }
+
+
+
+
 
     public function getRefRecyclerie(): ?int
     {
