@@ -3,262 +3,272 @@
 {% block title %}Saisir un vélo{% endblock %}
 
 {% block body %}
-    <style>
+<style>
+    .color-choice {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #000000;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    }
+
+    .color-choice:hover {
+        transform: scale(1.1);
+    }
+
+    .color-choice input[type=checkbox] {
+        display: none;
+    }
+
+    .color-choice input[type=checkbox]:checked + span {
+        color: rgba(255, 255, 255, 0);
+    }
+
+    .color-choice input[type=checkbox]:checked + label {
+        border-color: blue;
+        box-shadow: 0 0 0 2px blue;
+    }
+    @media (max-width: 768px) {
         .color-choice {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #000000;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            width: 30px;
+            height: 30px;
         }
 
-        .color-choice:hover {
-            transform: scale(1.1);
-        }
-
-        .color-choice input[type=checkbox] {
-            display: none;
-        }
-
-        .color-choice input[type=checkbox]:checked + span {
-            color: rgba(255, 255, 255, 0);
-        }
-
-        .color-choice input[type=checkbox]:checked + label {
-            border-color: blue;
-            box-shadow: 0 0 0 2px blue;
-        }
         .cameraIcon {
-            font-size: 30px;
-            background: none;
-            cursor: pointer;
-        }
-        .cameraIcon:hover i {
-            color: #555;
-            transform: scale(1.3);
-            transition: transform 0.3s, color 0.3s;
-        }
-        .button-red {
-            color: #FF0000; /* Red color */
+            font-size: 24px;
         }
 
-        .button-black {
-            color: #000000; /* Black color */
+        #videoElement,
+        #capturedImage {
+            width: 100%;
+            height: auto;
         }
+    }
+    .button-red {
+        color: #FF0000; /* Red color */
+    }
+
+    .button-black {
+        color: #000000; /* Black color */
+    }
 
 
 
-    </style>
+</style>
 
 
-    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
-        <div class="max-w-xl w-full mx-auto">
-            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
-                <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
-                {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-                <div class="grid grid-cols-2 gap-4 ">
-                    <div class="border border-black rounded p-3 text-center">
-                        <div>
-                            {{ form_label(form.chosir_ou_ajouter) }}
-                            {{ form_widget(form.chosir_ou_ajouter) }}
-                        </div>
-                        <div class="form-group existing-proprietaire" style="display:none;">
-                            {{ form_label(form.proprietaire) }}
-                            {{ form_widget(form.proprietaire) }}
-                        </div>
-                        <div class="new-prop-field" style="display:none;">
-                            {{ form_label(form.nom_proprio) }}
-                            {{ form_widget(form.nom_proprio) }}
-                            {{ form_label(form.email) }}
-                            {{ form_widget(form.email) }}
-                            {{ form_label(form.telephone) }}
-                            {{ form_widget(form.telephone) }}
-                            {{ form_widget(form.statut) }}
-                        </div>
-
-                        <div>
-                            <label>
-
-                            </label>
-                        </div>
+<div class="min-h-screen bg-gray-100 flex flex-col justify-center">
+    <div class="max-w-xl w-full mx-auto">
+        <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
+            <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
+            {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+            <div class="grid grid-cols-2 gap-4 ">
+                <div class="border border-black rounded p-3 text-center">
+                    <div>
+                        {{ form_label(form.chosir_ou_ajouter) }}
+                        {{ form_widget(form.chosir_ou_ajouter) }}
+                    </div>
+                    <div class="form-group existing-proprietaire" style="display:none;">
+                        {{ form_label(form.proprietaire) }}
+                        {{ form_widget(form.proprietaire) }}
+                    </div>
+                    <div class="new-prop-field" style="display:none;">
+                        {{ form_label(form.nom_proprio) }}
+                        {{ form_widget(form.nom_proprio) }}
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_label(form.telephone) }}
+                        {{ form_widget(form.telephone) }}
+                        {{ form_widget(form.statut) }}
                     </div>
 
                     <div>
-                        <h1 class="text-center">Couleurs</h1>
-                        <div class="grid grid-cols-5 gap-1">
-                            {% for color in form.couleur %}
-                                <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
-                                    {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
-                                </label>
-                            {% endfor %}
+                        <label>
+
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h1 class="text-center">Couleurs</h1>
+                    <div class="grid grid-cols-5 gap-1">
+                        {% for color in form.couleur %}
+                            <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
+                                {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+                {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+                {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
+                {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+                {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
+                {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
+                {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                <div class="border border-black rounded pr-2 pl-2 h-72 flex items-center justify-center">
+                    <div class="text-center">
+                        <button id="cameraIcon" type="button" class="cameraIcon">
+                            <i class="bi bi-camera"></i>
+                        </button>
+                        <h3>Prendre photo</h3>
+                        <div id="videoCaptureDiv" style="display: none;">
+                            <video id="videoElement" width="640" height="480" autoplay></video>
+                            <img alt="feed video input caméra" id="capturedImage" src="" style="display: none; width: 640px; height: 180px;" />
+                            <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon"></button>
+                            <h3 id="captureText">Capturer</h3>
+                            <canvas id="canvasElement" style="display: none;"></canvas>
+                            {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
                         </div>
                     </div>
-                    {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                    {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                    {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                    {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    <div class="border border-black rounded pr-2 pl-2 h-72 flex items-center justify-center">
-                        <div class="text-center">
-                            <button id="cameraIcon" type="button" class="cameraIcon">
-                                <i class="bi bi-camera"></i>
-                            </button>
-                            <h3>Prendre photo</h3>
-                            <div id="videoCaptureDiv" style="display: none;">
-                                <video id="videoElement" width="640" height="480" autoplay></video>
-                                <img alt="feed video input caméra" id="capturedImage" src="" style="display: none; width: 640px; height: 180px;" />
-                                <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon"></button>
-                                <h3 id="captureText">Capturer</h3>
-                                <canvas id="canvasElement" style="display: none;"></canvas>
-                                {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-center">
+                </div>
+                <div class="flex items-center justify-center">
                     <button type="submit" class="w-full bg-teal-500 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
                     {{ form_end(form) }}
-                    </div>
                 </div>
-                </div>
+            </div>
+        </div>
 
-         <div class="details-container text-center mt-4">
+        <div class="details-container text-center mt-4">
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enreigistrer les modifications</a>
         </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const colorChoices = document.querySelectorAll('.color-choice');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const colorChoices = document.querySelectorAll('.color-choice');
 
-            colorChoices.forEach(choice => {
-                const checkbox = choice.querySelector('input[type=checkbox]');
+                colorChoices.forEach(choice => {
+                    const checkbox = choice.querySelector('input[type=checkbox]');
 
-                choice.addEventListener('click', function() {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        choice.style.borderColor = 'blue';
-                        choice.style.boxShadow = '0 0 0 2px blue';
+                    const toggleCheckbox = function(event) {
+                        event.preventDefault(); // Prevent default behavior
+                        checkbox.checked = !checkbox.checked;
+                        if (checkbox.checked) {
+                            choice.style.borderColor = 'blue';
+                            choice.style.boxShadow = '0 0 0 2px blue';
+                        } else {
+                            choice.style.borderColor = '#000000';
+                            choice.style.boxShadow = 'none';
+                        }
+                    };
+
+                    choice.addEventListener('click', toggleCheckbox);
+                    choice.addEventListener('touchstart', toggleCheckbox);
+                });
+
+                const radios = document.querySelectorAll('input[type="radio"][name="velo_info[chosir_ou_ajouter]"]');
+                const existingProprietaireDiv = document.querySelector('.existing-proprietaire');
+                const newPropFieldsDiv = document.querySelector('.new-prop-field');
+                const newPropInputs = document.querySelectorAll('.new-prop-field input');
+
+                function toggleVisibility(showNewPropFields) {
+                    if (showNewPropFields === '1') {
+                        existingProprietaireDiv.style.display = 'none';
+                        newPropFieldsDiv.style.display = 'block';
+                        newPropInputs.forEach(input => input.style.display = 'block');
                     } else {
-                        choice.style.borderColor = '#000000';
-                        choice.style.boxShadow = 'none';
+                        existingProprietaireDiv.style.display = 'block';
+                        newPropFieldsDiv.style.display = 'none';
+                        newPropInputs.forEach(input => input.style.display = 'none');
                     }
-                });
-            });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const radios = document.querySelectorAll('input[type="radio"][name="velo_info[chosir_ou_ajouter]"]');
-            const existingProprietaireDiv = document.querySelector('.existing-proprietaire');
-            const newPropFieldsDiv = document.querySelector('.new-prop-field');
-            const newPropInputs = document.querySelectorAll('.new-prop-field input');
-
-            function toggleVisibility(showNewPropFields) {
-                if (showNewPropFields === '1') {
-                    existingProprietaireDiv.style.display   ';
-                    newPropInputs.forEach(input => input.style.display = '');
-                } else {
-                    existingProprietaireDiv.style.display = 'block';
-                    newPropFieldsDiv.style.display = 'none';
-                    newPropInputs.forEach(input => input.style.display = 'none');
                 }
-            }
 
-            radios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    toggleVisibility(this.value);
-                });
-            });
-
-            const checkedRadio = Array.from(radios).find(radio => radio.checked);
-            if (checkedRadio) {
-                toggleVisibility(checkedRadio.value);
-            }
-        });
-        function capturePhoto() {
-            document.getElementById('fileInput').click();
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('videoElement');
-            const canvas = document.getElementById('canvasElement');
-            const captureButton = document.getElementById('captureButton');
-            const photoInput = document.querySelector('input#velo_info_url_photo');
-            const capturedImage = document.getElementById('capturedImage');
-            const captureText = document.getElementById('captureText');
-            let isVideoPaused = false;
-
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        video.srcObject = stream;
-                        video.play();
-                    })
-                    .catch(function(error) {
-                        console.error('Access to camera was denied:', error);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        toggleVisibility(this.value);
                     });
-            }
+                });
 
-            captureButton.addEventListener('click', function() {
-                if (!isVideoPaused) {
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const context = canvas.getContext('2d');
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    let imageDataUrl = canvas.toDataURL('image/png');
-
-                    photoInput.value = imageDataUrl;
-                    capturedImage.src = imageDataUrl;
-                    capturedImage.style.display = 'block';
-                    video.pause();
-                    video.style.display = 'none';
-
-                    // Update button colors and text
-                    captureButton.classList.remove('button-black');
-                    captureButton.classList.add('button-red');
-                    captureText.textContent = 'Reprendre';
-
-                    isVideoPaused = true;
-                } else {
-                    // Restart the video feed
-                    video.style.display = 'block';
-                    capturedImage.style.display = 'none';
-                    video.play();
-
-                    // Update button colors and text
-                    captureButton.classList.remove('button-red');
-                    captureButton.classList.add('button-black');
-                    captureText.textContent = 'Capturer';
-
-                    isVideoPaused = false;
+                const checkedRadio = Array.from(radios).find(radio => radio.checked);
+                if (checkedRadio) {
+                    toggleVisibility(checkedRadio.value);
                 }
+
+                const video = document.getElementById('videoElement');
+                const canvas = document.getElementById('canvasElement');
+                const captureButton = document.getElementById('captureButton');
+                const photoInput = document.querySelector('input#velo_info_url_photo');
+                const capturedImage = document.getElementById('capturedImage');
+                const captureText = document.getElementById('captureText');
+                let isVideoPaused = false;
+
+                const startCamera = function() {
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        navigator.mediaDevices.getUserMedia({ video: true })
+                            .then(function(stream) {
+                                video.srcObject = stream;
+                                video.play();
+                            })
+                            .catch(function(error) {
+                                console.error('Access to camera was denied:', error);
+                                alert('Camera access was denied. Please allow camera access and try again.');
+                            });
+                    } else {
+                        alert('Your browser does not support camera access.');
+                    }
+                };
+
+                const toggleCapture = function(event) {
+                    event.preventDefault(); // Prevent default behavior
+                    if (!isVideoPaused) {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const context = canvas.getContext('2d');
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        let imageDataUrl = canvas.toDataURL('image/png');
+
+                        photoInput.value = imageDataUrl;
+                        capturedImage.src = imageDataUrl;
+                        capturedImage.style.display = 'block';
+                        video.pause();
+                        video.style.display = 'none';
+
+                        captureButton.classList.remove('button-black');
+                        captureButton.classList.add('button-red');
+                        captureText.textContent = 'Reprendre';
+                        isVideoPaused = true;
+                    } else {
+                        video.style.display = 'block';
+                        capturedImage.style.display = 'none';
+                        video.play();
+
+                        captureButton.classList.remove('button-red');
+                        captureButton.classList.add('button-black');
+                        captureText.textContent = 'Capturer';
+                        isVideoPaused = false;
+                    }
+                };
+
+                captureButton.addEventListener('click', toggleCapture);
+                captureButton.addEventListener('touchstart', toggleCapture);
+
+                const cameraIcon = document.getElementById('cameraIcon');
+                const videoCaptureDiv = document.getElementById('videoCaptureDiv');
+
+                const toggleVideoCaptureDiv = function(event) {
+                    event.preventDefault(); // Prevent default behavior
+                    if (videoCaptureDiv.style.display === 'none') {
+                        videoCaptureDiv.style.display = 'block';
+                        cameraIcon.style.display = 'none';
+                        startCamera(); // Start the camera when the div is shown
+                    } else {
+                        videoCaptureDiv.style.display = 'none';
+                        cameraIcon.style.display = 'block';
+                    }
+                };
+
+                cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
+                cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
             });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            const cameraIcon = document.getElementById('cameraIcon');
-            const videoCaptureDiv = document.getElementById('videoCaptureDiv');
 
-            cameraIcon.addEventListener('click', function() {
-                cameraIcon.style.display = 'block';
-                this.style.display = 'none';  // A retirer pour ouvrir et fermer le prompt de prendre une photo
-            });
+        </script>
 
-            cameraIcon.addEventListener('click', function() {
-                if (videoCaptureDiv.style.display === 'none') {
-                    videoCaptureDiv.style.display = 'block';
-                } else {
-                    videoCaptureDiv.style.display = 'none';
-                }
-            });
-        });
-
-    </script>
-
-{% endblock %}
-
+        {% endblock %}
