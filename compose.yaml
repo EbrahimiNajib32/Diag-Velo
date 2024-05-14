@@ -17,7 +17,7 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: db
-      PMA_PORT: ${PMA_PORT}
+      PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "${PMA_PORT_EXTERNAL}:80"
