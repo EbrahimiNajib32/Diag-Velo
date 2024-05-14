@@ -32,7 +32,7 @@ COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Ensure Apache listens on all interfaces
-RUN echo "Listen 0.0.0.0:81" >> /etc/apache2/ports.conf
+#RUN echo "Listen 0.0.0.0:81" >> /etc/apache2/ports.conf   # useless shall not be used
 
 # Setting the working directory for following commands
 WORKDIR /var/www/
