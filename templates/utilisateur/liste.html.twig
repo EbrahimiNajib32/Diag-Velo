@@ -22,29 +22,38 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for utilisateur in utilisateurs %}
-                    <tr class="{{ utilisateur.isActive ? 'bg-white' : 'bg-gray-300' }} border-b">
+                {# Boucle pour afficher les utilisateurs actifs #}
+                {% for utilisateur in utilisateurs|filter(user => user.isActive) %}
+                    <tr class="bg-white border-b">
                         <td class="py-4 px-6">
-                            <button onclick="toggleUserStatus({{ utilisateur.id }}, this)">
-                                {% if utilisateur.isActive %}
-                                    <svg class="w-6 h-6 text-green-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                {% else %}
-                                    <svg class="w-6 h-6 text-red-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                {% endif %}
-                            </button>
+                            <label class="inline-flex items-center me-5 cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked onclick="toggleUserStatus({{ utilisateur.id }}, this)">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Actif</span>
+                            </label>
                         </td>
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
                         <td class="py-4 px-6">
-                            {% if utilisateur.isActive %}
-                                <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
-                            {% endif %}
+                            <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
                         </td>
+                    </tr>
+                {% endfor %}
+                {# Boucle pour afficher les utilisateurs inactifs #}
+                {% for utilisateur in utilisateurs|filter(user => not user.isActive) %}
+                    <tr class="bg-gray-300 border-b">
+                        <td class="py-4 px-6">
+                            <label class="inline-flex items-center me-5 cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" onclick="toggleUserStatus({{ utilisateur.id }}, this)">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Inactif</span>
+                            </label>
+                        </td>
+                        <td class="py-4 px-6">{{ utilisateur.id }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.nom }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -57,15 +66,18 @@
 
     <script>
         function toggleUserStatus(userId, element) {
-            const isActive = element.querySelector('svg').classList.contains('text-green-500');
+            const isActive = element.checked;
 
-            if (isActive) {
+            // Comme la réactivation n'est pas autorisée, nous vérifions uniquement si l'utilisateur est actuellement actif pour procéder à la désactivation.
+            if (!isActive) {
                 const confirmationMessage = "Êtes-vous sûr de vouloir désactiver cet utilisateur ?";
 
                 if (!confirm(confirmationMessage)) {
+                    element.checked = true; // Réinitialise le toggle si l'utilisateur ne confirme pas
                     return;
                 }
 
+                // Procéde à la désactivation
                 const url = '/dashboard/utilisateur/disable/' + userId;
                 fetch(url)
                     .then(response => {
@@ -76,19 +88,22 @@
                     })
                     .then(data => {
                         if (data.success) {
-                            window.location.reload();
+                            window.location.reload(); // Recharge la page pour refléter le nouveau statut
                         } else {
                             alert('Erreur lors du changement de statut');
+                            element.checked = true; // Réinitialise le toggle en cas d'erreur
                         }
                     })
                     .catch(error => {
                         console.error('Erreur lors de la communication avec le serveur:', error);
                         alert('Erreur lors de la communication avec le serveur: ' + error.message);
+                        element.checked = true; // Réinitialise le toggle en cas d'erreur réseau/serveur
                     });
+            } else {
+                // Empêche la réactivation
+                element.checked = false;
+                alert("Réactivation non autorisée");
             }
         }
     </script>
-
-
-
 {% endblock %}
