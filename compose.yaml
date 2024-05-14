@@ -17,7 +17,6 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: db
-      PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "${PMA_PORT_EXTERNAL}:80"
@@ -27,7 +26,8 @@ services:
     volumes:
       - .:/var/www/
     ports:
-      - "${APP_PORT_EXTERNAL}:${FRONT_PORT}"
+      - "${APP_PORT_EXTERNAL}:80"
+    user: root
     command: >
       bash -c "
       /usr/local/bin/wait-for-it.sh db:3306 --timeout=30 -- echo 'db is up' &&
