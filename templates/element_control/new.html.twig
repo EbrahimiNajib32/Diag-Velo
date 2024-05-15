@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Nouvel Élément de Contrôle{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="container max-w-lg text-center border bg-white shadow rounded-lg p-4">
+            <h1 class="text-xl font-semibold mb-4">Ajouter un Nouvel Élément de Contrôle</h1>
+            <p class="text-sm text-gray-600 mb-2">
+                Entrez la catégorie et l'élément séparés par un deux-points (:).
+            </p>
+
+            {{ form_start(form, {'attr': {'class': 'my-form-class'}}) }}
+            <div class="mb-3">
+                {{ form_row(form.element, {
+                    'attr': {'class': 'form-control my-input-class', 'placeholder': 'Catégorie:Élément'}
+                }) }}
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    <script>
+        function validateInput() {
+            const input = document.querySelector('.my-input-class');
+            const value = input.value;
+            if (!value.includes(':')) {
+                alert('Veuillez entrer la catégorie et l\'élément séparés par un deux-points (:).');
+                return false;
+            }
+            return true;
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', function(event) {
+            if (!validateInput()) {
+                event.preventDefault(); // Empêche la soumission du formulaire si la validation échoue
+            }
+        });
+    </script>
+{% endblock %}

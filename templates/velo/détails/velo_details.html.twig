@@ -14,7 +14,7 @@
                 <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
                 <li>État: <span id="etat">{{ velo.etat }}</span></li>
                 <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li>Date d'Enregistrement: <span id="date_de_reception">{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li>Date d'Enregistrement:{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
 
 
             </ul>
@@ -63,16 +63,21 @@
             saveButton.addEventListener('click', function() {
                 if (editMode) {
                     const data = {};
+                    // Collect data from contenteditable fields
                     fields.forEach(field => {
                         if (field.getAttribute('contenteditable') === 'true') {
                             let propName = field.id;
-                            // Convertissez l'ID de snake_case en camelCase
+                            // Convert snake_case ID to camelCase
                             propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
                             data[propName] = field.innerText;
                         }
                     });
-                    //trouve la route du controlleur pour envoyer les donner enregistrés avec post
 
+                    // Collect data from date input fields
+                    data.dateDeVente = document.getElementById('date_de_vente').value;
+                    data.dateDestruction = document.getElementById('date_destruction').value;
+
+                    // Send data to server
                     fetch(`/api/update-velo/{{ velo.id }}`, {
                         method: 'POST',
                         headers: {
@@ -89,13 +94,15 @@
                         })
                         .then(responseData => {
                             console.log('Data saved successfully:', responseData);
-                            // Additional UI feedback can be added here
+                            // Optionally, provide user feedback here
                         })
                         .catch(error => {
                             console.error('Error:', error);
+                            // Optionally, provide user feedback here
                         });
                 }
             });
+
         });
 
     </script>
