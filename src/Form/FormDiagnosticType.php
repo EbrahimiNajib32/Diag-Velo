@@ -25,6 +25,7 @@ class FormDiagnosticType extends AbstractType
 {
     private $entityManager;
 
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -44,11 +45,23 @@ class FormDiagnosticType extends AbstractType
         $diagnostic = $options['diagnostic'];
         $diagnosticElements = $options['diagnosticElements'];
         $idTypeDiag = $options["idTypeDiag"];
-        
+        //TEST
+        // Utiliser l'ID pour récupérer l'objet DiagnosticType correspondant
+        $typeDiagnostic = $this->entityManager->getRepository(DiagnosticType::class)->find($idTypeDiag);
+    
+        // Assurez-vous que le type de diagnostic est récupéré avec succès
+         if (!$typeDiagnostic) {
+        // Gérer le cas où le type de diagnostic n'est pas trouvé
+    }
+        // FIN TEST
+
+
         $elementStates = [];
         foreach ($diagnosticElements as $diagElement) {
             $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
         }
+
+       
 
         $builder ->add('cout_reparation');
         $builder
@@ -80,7 +93,8 @@ class FormDiagnosticType extends AbstractType
             $elementComments[$diagElement->getElementControl()->getId()] = $diagElement->getCommentaire();
         }
 
-        //$elements = $this->entityManager->getRepository(ElementControl::class)->findAll();
+
+        
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $this->entityManager->getRepository(DiagnosticType::class)->find($idTypeDiag);
         //var_dump($typeDiagnostic);
