@@ -91,11 +91,20 @@ class UtilisateurController extends AbstractController
     #[Route('/dashboard/utilisateur/disable/{id}', name: 'utilisateur_disable')]
     public function disable(EntityManagerInterface $entityManager, Utilisateur $utilisateur): Response
     {
+        // Récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+
+        // Vérifie si l'utilisateur connecté est le même que celui qu'on tente de désactiver
+        if ($userConnected->getId() === $utilisateur->getId()) {
+            return $this->json(['error' => 'Vous ne pouvez pas vous désactiver vous-même.'], Response::HTTP_FORBIDDEN);
+        }
+
         $utilisateur->setActive(false);
         $entityManager->flush();
 
         return $this->json(['success' => 'Utilisateur désactivé avec succès.']);
     }
+
 
 
 }
