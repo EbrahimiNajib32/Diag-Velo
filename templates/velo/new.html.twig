@@ -38,10 +38,6 @@
             height: 30px;
         }
 
-        .cameraIcon {
-            font-size: 24px;
-        }
-
         #videoElement,
         #capturedImage {
             width: 100%;
@@ -115,16 +111,16 @@
                 {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
                 {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                <div class="border border-black rounded pr-2 pl-2 h-72 flex items-center justify-center">
+                <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center">
                     <div class="text-center">
-                        <button id="cameraIcon" type="button" class="cameraIcon">
+                        <button id="cameraIcon" type="button" class="cameraIcon text-4xl">
                             <i class="bi bi-camera"></i>
                         </button>
                         <h3>Prendre photo</h3>
                         <div id="videoCaptureDiv" style="display: none;">
-                            <video id="videoElement" width="640" height="480" autoplay></video>
-                            <img alt="feed video input caméra" id="capturedImage" src="" style="display: none; width: 640px; height: 180px;" />
-                            <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon"></button>
+                            <video id="videoElement" autoplay></video>
+                            <img alt="feed video input caméra" id="capturedImage" src="" style="display: none;" />
+                            <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon text-4xl"></button>
                             <h3 id="captureText">Capturer</h3>
                             <canvas id="canvasElement" style="display: none;"></canvas>
                             {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
@@ -202,14 +198,35 @@
 
                 const startCamera = function() {
                     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        navigator.mediaDevices.getUserMedia({ video: true })
+                        // Try to get the rear camera first
+                        const constraints = {
+                            video: {
+                                facingMode: { exact: 'environment' }
+                            }
+                        };
+
+                        navigator.mediaDevices.getUserMedia(constraints)
                             .then(function(stream) {
                                 video.srcObject = stream;
                                 video.play();
                             })
                             .catch(function(error) {
-                                console.error('Access to camera was denied:', error);
-                                alert('Camera access was denied. Please allow camera access and try again.');
+                                console.error('Error accessing rear camera:', error);
+
+                                // Fallback to the front camera
+                                const fallbackConstraints = {
+                                    video: true // Default to the front camera
+                                };
+
+                                navigator.mediaDevices.getUserMedia(fallbackConstraints)
+                                    .then(function(stream) {
+                                        video.srcObject = stream;
+                                        video.play();
+                                    })
+                                    .catch(function(fallbackError) {
+                                        console.error('Error accessing camera:', fallbackError);
+                                        alert('Camera access was denied. Please allow camera access and try again.');
+                                    });
                             });
                     } else {
                         alert('Your browser does not support camera access.');
@@ -253,8 +270,7 @@
                 const cameraIcon = document.getElementById('cameraIcon');
                 const videoCaptureDiv = document.getElementById('videoCaptureDiv');
 
-                const toggleVideoCaptureDiv = function(event) {
-                    event.preventDefault(); // Prevent default behavior
+                const toggleVideoCaptureDiv = function() {
                     if (videoCaptureDiv.style.display === 'none') {
                         videoCaptureDiv.style.display = 'block';
                         cameraIcon.style.display = 'none';
@@ -268,7 +284,6 @@
                 cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
                 cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
             });
-
         </script>
 
         {% endblock %}
