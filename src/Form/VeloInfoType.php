@@ -41,6 +41,13 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Référence Recyclerie'
             ])
+
+           ->add('bicycode', TextType::class, [
+               'required' => false,
+                'label' => 'Bicycode'
+           ])
+
+
             ->add('marque', ChoiceType::class, [
                 'choices' => $this->getBrandChoices(),
                 'label' => 'Marque'
