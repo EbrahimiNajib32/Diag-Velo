@@ -142,13 +142,11 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
             ])
-            ->add('proprietaire', EntityType::class, [
-                'class' => Proprietaire::class,
-                'choice_label' => function (Proprietaire $proprietaire) {
-                    return $proprietaire->getNomProprio() . ' - ' . $proprietaire->getEmail();
-                },
+            ->add('proprietaire', TextType::class, [
                 'required' => false,
-                'placeholder' => 'Choisir propriétaire...',
+                'attr' => [
+                    'placeholder' => 'Rechercher un propriétaire...',
+                ],
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
