@@ -26,16 +26,27 @@ class TypeDiagnosticController extends AbstractController
     }
 
     #[Route('/dashboard/typediagnostic', name: 'app_type_diagnostic_liste')]
-    public function listeComplete(EntityManagerInterface $entityManager): Response
+    public function listeComplete(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findAll();
+        // Récupérer le paramètre 'status' de la requête, qui peut être null
+        $status = $request->query->get('status');
+
+        // Filtrer les diagnostics en fonction du statut si spécifié, sinon récupérer tous
+        if ($status !== null && $status !== '') {
+            $isActive = filter_var($status, FILTER_VALIDATE_BOOLEAN);
+            $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findBy(['actif' => $isActive]);
+        } else {
+            $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findAll();
+        }
 
         return $this->render('type_diagnostic/liste.html.twig', [
             'typesDiagnostic' => $typesDiagnostic,
         ]);
     }
 
-    // Route pour changer le statut
+
+
+// Route pour changer le statut
 
     #[Route('/dashboard/typediagnostic/toggle/{id}', name: 'toggle_diagnostic_status', methods: ['POST'])]
     public function toggleStatus(int $id, EntityManagerInterface $entityManager): JsonResponse

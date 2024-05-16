@@ -5,6 +5,19 @@
 {% block body %}
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Types des diagnostics</h1>
+
+
+        <!-- Form for filtering -->
+        <form action="{{ path('app_type_diagnostic_liste') }}" method="get" class="mb-4">
+            <label for="status" class="block text-sm font-medium text-gray-700">Filtrer par statut:</label>
+            <select id="status" name="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" onchange="this.form.submit()">
+                <option value="">Tous</option>
+                <option value="1" {{ app.request.query.get('status') == '1' ? 'selected' : '' }}>Actif</option>
+                <option value="0" {{ app.request.query.get('status') == '0' ? 'selected' : '' }}>Inactif</option>
+            </select>
+        </form>
+
+        <!-- Table -->
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
