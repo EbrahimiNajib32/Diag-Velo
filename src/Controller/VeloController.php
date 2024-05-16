@@ -172,7 +172,7 @@ class VeloController extends AbstractController
             if ($key === 'proprietaireId') {
                 // Handle setting the proprietaire
                 $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($value);
-                if ($proprietaire) {
+                if ($proprietaire ) {
                     $velo->setProprietaire($proprietaire);
                 } else {
                     // If the new proprietaire is not found, return an error response

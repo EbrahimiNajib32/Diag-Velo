@@ -65,10 +65,15 @@
                         <div>
                             {{ form_label(form.chosir_ou_ajouter) }}
                             {{ form_widget(form.chosir_ou_ajouter) }}
+
                         </div>
                         <div class="form-group existing-proprietaire" style="display:none;">
                             {{ form_label(form.proprietaire) }}
-                            {{ form_widget(form.proprietaire) }}
+                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire', 'autocomplete' : 'on', 'class': 'ui-autocomplete-input' }}) }}
+                            <input type="hidden" id="proprietaire_id" name="proprietaire_id" />
+                            <div id="ui-front"></div> {# Add ui-front div here #}
+                        </div>
+
                         </div>
                         <div class="new-prop-field" style="display:none;">
                             {{ form_label(form.nom_proprio) }}
@@ -136,6 +141,9 @@
          <div class="details-container text-center mt-4">
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enreigistrer les modifications</a>
         </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const colorChoices = document.querySelectorAll('.color-choice');
@@ -259,6 +267,32 @@
                 }
             });
         });
+        $(document).ready(function() {
+            // Initialize the autocomplete widget
+            $('#velo_info_proprietaire').autocomplete({
+                source: function(request, response) {
+                    // Fetch autocomplete data from the server
+                    $.ajax({
+                        url: '{{ path('autocomplete') }}',
+                        dataType: 'json',
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            let resArray = [];
+                            for ( let i = 0; i < data.length; i++) {
+                                resArray[i] = data[i].nom_proprio;
+                            }
+                            response(resArray);
+                        }
+                    });
+                },
+                minLength: 2,
+
+            })
+
+        });
+
 
     </script>
 
