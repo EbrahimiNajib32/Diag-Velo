@@ -38,10 +38,8 @@
             const categoryInput = document.querySelector('input[name="element_control[category]"]');
             if (selectedCategory) {
                 categoryInput.value = selectedCategory;
-                categoryInput.readOnly = true; // Make the input read-only instead of disabling it
             } else {
                 categoryInput.value = '';
-                categoryInput.readOnly = false;
             }
         });
 

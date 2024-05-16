@@ -19,10 +19,10 @@ class ElementControlType extends AbstractType
         $builder
             ->add('existingCategory', ChoiceType::class, [
                 'mapped' => false,
+                'label' => 'Catégories existantes',
                 'choices' => array_combine($categories, $categories),
-                'placeholder' => 'Choisir une catégorie existante',
                 'required' => false,
-                'attr' => ['class' => 'form-control my-input-class']
+                'attr' => ['class' => 'form-control my-input-class border border-gray-400 p-1 mb-2  rounded bg-white']
             ])
             ->add('category', null, [
                 'mapped' => false,
