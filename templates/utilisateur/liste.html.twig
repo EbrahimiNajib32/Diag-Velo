@@ -10,6 +10,23 @@
                 Ajouter un utilisateur
             </a>
         </h1>
+
+        <!-- Formulaire de filtrage -->
+        <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
+            <div class="flex space-x-4">
+                <input type="text" name="nom" placeholder="Nom" class="px-4 py-2 border rounded" value="{{ app.request.query.get('nom') }}">
+                <select name="statut" class="px-4 py-2 border rounded">
+                    <option value="">Tous les statuts</option>
+                    <option value="1" {{ app.request.query.get('statut') == '1' ? 'selected' : '' }}>Actif</option>
+                    <option value="0" {{ app.request.query.get('statut') == '0' ? 'selected' : '' }}>Inactif</option>
+                </select>
+                <input type="text" name="role" placeholder="Rôle" class="px-4 py-2 border rounded" value="{{ app.request.query.get('role') }}">
+                <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded">Filtrer</button>
+            </div>
+        </form>
+
+
+
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -200,6 +217,28 @@
             document.getElementById('message-modal').classList.add('hidden');
         }
 
+    </script>
+
+
+    <script>
+        function toggleUserStatus(userId, checkbox) {
+            const status = checkbox.checked ? 'activer' : 'desactiver';
+            const confirmationModal = document.getElementById('popup-modal');
+            const confirmBtn = document.getElementById('confirmDeactivateBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            confirmationModal.classList.remove('hidden');
+
+            confirmBtn.onclick = function() {
+                confirmationModal.classList.add('hidden');
+                window.location.href = `/dashboard/utilisateur/${status}/${userId}`;
+            };
+
+            cancelBtn.onclick = function() {
+                confirmationModal.classList.add('hidden');
+                checkbox.checked = !checkbox.checked;
+            };
+        }
     </script>
 
 
