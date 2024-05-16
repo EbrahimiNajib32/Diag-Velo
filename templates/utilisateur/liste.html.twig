@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Liste des Utilisateurs
-            <a href="{{  path('utilisateur_new')  }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            <a href="{{ path('utilisateur_new') }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                 <i class="bi bi-plus-circle-fill text-lg mr-1"></i>
                 Ajouter un utilisateur
             </a>
@@ -14,6 +14,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
+                    <th scope="col" class="py-3 px-6">Status</th>
                     <th scope="col" class="py-3 px-6">ID</th>
                     <th scope="col" class="py-3 px-6">Nom</th>
                     <th scope="col" class="py-3 px-6">Rôle(s)</th>
@@ -21,14 +22,38 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for utilisateur in utilisateurs %}
+                {# Boucle pour afficher les utilisateurs actifs #}
+                {% for utilisateur in utilisateurs|filter(user => user.isActive) %}
                     <tr class="bg-white border-b">
+                        <td class="py-4 px-6">
+                            <label class="inline-flex items-center me-5 cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked onclick="toggleUserStatus({{ utilisateur.id }}, this)">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Actif</span>
+                            </label>
+                        </td>
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
                         <td class="py-4 px-6">
                             <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
                         </td>
+                    </tr>
+                {% endfor %}
+                {# Boucle pour afficher les utilisateurs inactifs #}
+                {% for utilisateur in utilisateurs|filter(user => not user.isActive) %}
+                    <tr class="bg-gray-300 border-b">
+                        <td class="py-4 px-6">
+                            <label class="inline-flex items-center me-5 cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" onclick="toggleUserStatus({{ utilisateur.id }}, this)">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Inactif</span>
+                            </label>
+                        </td>
+                        <td class="py-4 px-6">{{ utilisateur.id }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.nom }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -38,4 +63,47 @@
             <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au dashboard</a>
         </div>
     </div>
+
+    <script>
+        function toggleUserStatus(userId, element) {
+            const isActive = element.checked;
+
+            // Comme la réactivation n'est pas autorisée, nous vérifions uniquement si l'utilisateur est actuellement actif pour procéder à la désactivation.
+            if (!isActive) {
+                const confirmationMessage = "Êtes-vous sûr de vouloir désactiver cet utilisateur ?";
+
+                if (!confirm(confirmationMessage)) {
+                    element.checked = true; // Réinitialise le toggle si l'utilisateur ne confirme pas
+                    return;
+                }
+
+                // Procéde à la désactivation
+                const url = '/dashboard/utilisateur/disable/' + userId;
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur de réseau ou de serveur');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload(); // Recharge la page pour refléter le nouveau statut
+                        } else {
+                            alert('Erreur lors du changement de statut');
+                            element.checked = true; // Réinitialise le toggle en cas d'erreur
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la communication avec le serveur:', error);
+                        alert('Erreur lors de la communication avec le serveur: ' + error.message);
+                        element.checked = true; // Réinitialise le toggle en cas d'erreur réseau/serveur
+                    });
+            } else {
+                // Empêche la réactivation
+                element.checked = false;
+                alert("Réactivation non autorisée");
+            }
+        }
+    </script>
 {% endblock %}

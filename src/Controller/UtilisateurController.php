@@ -88,6 +88,16 @@ class UtilisateurController extends AbstractController
         ]);
     }
 
+    #[Route('/dashboard/utilisateur/disable/{id}', name: 'utilisateur_disable')]
+    public function disable(EntityManagerInterface $entityManager, Utilisateur $utilisateur): Response
+    {
+        $utilisateur->setActive(false);
+        $entityManager->flush();
+
+        return $this->json(['success' => 'Utilisateur désactivé avec succès.']);
+    }
+
+
 }
 
 

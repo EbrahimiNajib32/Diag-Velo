@@ -18,6 +18,8 @@ use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use Doctrine\ORM\EntityManagerInterface;
 
+
+
 class DiagnosticController extends AbstractController
 {
     #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
@@ -106,54 +108,6 @@ class DiagnosticController extends AbstractController
     }
 
 
-
-
-
-//    #[Route('/diagnosticAvecElement', name: 'app_diagnostics_avec_elements', methods: ['GET'])]
-//    public function diagnosticAvecElement(EntityManagerInterface $entityManager): JsonResponse
-//    {
-//
-//        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-//
-//        $filteredDiagnostics = [];
-//
-//
-//        foreach ($diagnostics as $diagnostic) {
-//            $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
-//
-//            if (!empty($elements)) {
-//                $elementData = [];
-//                foreach ($elements as $element) {
-//                    $etat = $element->getEtatControl();
-//                    $veloElement = $element->getElementControl();
-//
-//                    $elementData[] = [
-//                        'id' => $element->getId(),
-//                        'commentaire' => $element->getCommentaire(),
-//                        'element' => $veloElement->getElement(),
-//                        'etat' => $etat->getNomEtat(),
-//                    ];
-//                }
-//
-//                $filteredDiagnostics[] = [
-//                    'id' => $diagnostic->getId(),
-//                    'id_velo' => $diagnostic->getVelo()->getId(),
-//                    'id_user' => $diagnostic->getIdUser(),
-//                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-//                    'cout_reparation' => $diagnostic->getCoutReparation(),
-//                    'conclusion' => $diagnostic->getConclusion(),
-//                    'elements' => $elementData,
-//                ];
-//            }
-//        }
-//
-//        if (empty($filteredDiagnostics)) {
-//            return new JsonResponse(['message' => 'No diagnostics with elements found'], Response::HTTP_NOT_FOUND);
-//        }
-//
-//        return new JsonResponse($filteredDiagnostics);
-//    }
-
 // route pour l'affichage uniquement des diagnostics en cours
 #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
 public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
@@ -219,19 +173,34 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     public function diagnosticElementsByType(Request $request,int $id, EntityManagerInterface $entityManager): Response
     {
     
+         
+        // Récupérer le type de diagnostic en fonction de l'ID du type
+        $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
+        //var_dump($typeDiagnostic);
+        if (!$typeDiagnostic) {
+            // Gérer le cas où le type de diagnostic n'est pas trouvé
+        }
+
         // ajout partie pour creation form pour affichage comme version1
         $diagnostic = new Diagnostic();
+       
+
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, ['idTypeDiag' => $id]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
+             // Attribuer le type de diagnostic au nouveau diagnostic
+            $diagnostic->setDiagnosticType($typeDiagnostic);
 
             $entityManager->persist($diagnostic);
+            //dd($diagnostic);
             $entityManager->flush();
             //getrepository à modifier
             $elements = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-            foreach ($elements as $element) {
+            foreach ($elements as $elementsDiagnostic) {
+                //$elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+                $element = $elementsDiagnostic->getIdElementcontrol();
                 $etatKey = 'etat_' . $element->getId();
                 $commentKey = 'commentaire_' . $element->getId();
 
@@ -276,7 +245,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
-        //var_dump($typeDiagnostic);
+       
         if (!$typeDiagnostic) {
             // Gérer le cas où le type de diagnostic n'est pas trouvé
         }
@@ -295,9 +264,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             }
         }
         
-
-        //getrepository à modifier
-        //$elements = $entityManager->getRepository(ElementControl::class)->findBy(['id'=> $elementControlId]);
+        
         $categorizedElements = [];
         foreach ($elementContents as $element) {
             $fullElement = $element->getElement();
@@ -308,7 +275,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             }
             $categorizedElements[$category][] = $element;
         }
-        //dd($typeDiagnostic);
+        
 
         return $this->render('diagnostic/newDiaByType.html.twig', [
             'typeDiagnostic' => $typeDiagnostic,
@@ -319,7 +286,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     }
    
 
-    //#####################################################################################""""//
+    //#####################################################################################//
     // creation d'un diagnostique Version mono diagnostic
     #[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -333,7 +300,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
             $entityManager->persist($diagnostic);
             $entityManager->flush();
-//getrepository à modifier
+
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
             foreach ($elements as $element) {
                 $etatKey = 'etat_' . $element->getId();
@@ -375,7 +342,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
             return $this->redirectToRoute('app_accueil');
         }
-//getrepository à modifier
+
         $elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $categorizedElements = [];
         foreach ($elements as $element) {
@@ -504,7 +471,15 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     }
 
 
+    #[Route('/diagnostics/recapitulatif', name: 'diagnostics_recapitulatif', methods: ['GET'])]
+    public function recapitulatif(EntityManagerInterface $entityManager): Response
+    {
+        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
 
+        return $this->render('diagnostic/recapitulatif.html.twig', [
+            'diagnostics' => $diagnostics,
+        ]);
+    }
 
 
 //    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]
@@ -531,4 +506,5 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
 
 }
+
 
