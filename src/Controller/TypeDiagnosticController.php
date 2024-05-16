@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\DiagnosticType;
 use App\Repository\DiagnosticTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -30,6 +32,28 @@ class TypeDiagnosticController extends AbstractController
 
         return $this->render('type_diagnostic/liste.html.twig', [
             'typesDiagnostic' => $typesDiagnostic,
+        ]);
+    }
+
+    // Route pour changer le statut
+
+    #[Route('/dashboard/typediagnostic/toggle/{id}', name: 'toggle_diagnostic_status', methods: ['POST'])]
+    public function toggleStatus(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $diagnosticType = $entityManager->getRepository(DiagnosticType::class)->find($id);
+
+        if (!$diagnosticType) {
+            return new JsonResponse(['message' => 'Aucun type de diagnostic trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Toggle le statut
+        $diagnosticType->setActif(!$diagnosticType->isActif());
+        $entityManager->flush();
+
+        // Return the new status
+        return new JsonResponse([
+            'message' => 'Statut modifié avec succès',
+            'newStatus' => $diagnosticType->isActif() ? 'Active' : 'Inactive'
         ]);
     }
 }
