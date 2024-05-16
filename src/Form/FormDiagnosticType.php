@@ -36,7 +36,8 @@ class FormDiagnosticType extends AbstractType
             'data_class' => Diagnostic::class,
             'diagnostic' => null,
             'diagnosticElements' => [],
-            'idTypeDiag' => 0
+            'idTypeDiag' => 0,
+            //'diagnostic_type_id' => null // Ajouter l'option diagnostic_type_id ici
         ]);
     }
 
