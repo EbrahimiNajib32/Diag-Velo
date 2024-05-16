@@ -44,9 +44,7 @@ class TypeDiagnosticController extends AbstractController
         ]);
     }
 
-
-
-// Route pour changer le statut
+    // Route pour changer le statut
 
     #[Route('/dashboard/typediagnostic/toggle/{id}', name: 'toggle_diagnostic_status', methods: ['POST'])]
     public function toggleStatus(int $id, EntityManagerInterface $entityManager): JsonResponse
