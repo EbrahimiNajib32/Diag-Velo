@@ -181,19 +181,21 @@ private ?string $public = null;
         return $this->taille_roues;
     }
 
-    public function setTailleRoues(string $taille_roues): static
+
+    public function setTailleRoues(?string $taille_roues): self
     {
         $this->taille_roues = $taille_roues;
-
         return $this;
     }
+
+
 
     public function getTailleCadre(): ?string
     {
         return $this->taille_cadre;
     }
 
-    public function setTailleCadre(string $taille_cadre): static
+    public function setTailleCadre(?string $taille_cadre): self
     {
         $this->taille_cadre = $taille_cadre;
 
