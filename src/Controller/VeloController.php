@@ -168,20 +168,22 @@ class VeloController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         foreach ($data as $key => $value) {
-            // Check for the proprietaire update specifically
             if ($key === 'proprietaireId') {
-                // Handle setting the proprietaire
                 $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($value);
-                if ($proprietaire ) {
+                if ($proprietaire) {
                     $velo->setProprietaire($proprietaire);
                 } else {
-                    // If the new proprietaire is not found, return an error response
                     return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
                 }
             } else {
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
-                    $velo->$setter($value);
+                    if (in_array($key, ['refRecyclerie', 'poids', 'tailleRoues', 'tailleCadre'])) {
+                        $valueToSet = ($value === null || $value === '') ? null : (in_array($key, ['tailleRoues', 'tailleCadre']) ? (string)$value : (int)$value);
+                        $velo->$setter($valueToSet);
+                    } else {
+                        $velo->$setter($value);
+                    }
                 }
             }
         }
@@ -202,30 +204,8 @@ class VeloController extends AbstractController
             return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
-    #[Route('/velo/edit/{ref_recyclerie}', name: 'velo_edit')]
-    public function editVelo(EntityManagerInterface $entityManager, Request $request, $ref_recyclerie): Response
-    {
-        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $ref_recyclerie]);
 
-        if (!$velo) {
-            $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
-          ;
-        }
 
-        $form = $this->createForm(VeloInfoType::class, $velo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Les informations du vélo ont été mises à jour avec succès.');
-        }
-
-        return $this->render('velo/details.html.twig', [
-            'velo' => $velo,
-            'form' => $form->createView(),
-        ]);
-    }
 
     #[Route('/velo/reparations', name: 'velo_reparations', methods: ['GET'])]
     public function diagnosticsAReparer(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response {
