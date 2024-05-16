@@ -184,9 +184,9 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         // ajout partie pour creation form pour affichage comme version1
         $diagnostic = new Diagnostic();
        
-
+ 
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, ['idTypeDiag' => $id]);
-
+        dd($form);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
@@ -289,19 +289,21 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     #[Route('/diagnostic/reprendreMulti/{id}', name: 'reprendre_Multidiagnostic', methods: ['GET', 'POST'])]
     public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
+        //recupération de l'id du daignostic dans l'URL
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
         if (!$diagnostic) {
             $this->addFlash('error', 'Diagnostic not found.');
             return $this->redirectToRoute('app_error');
         }
-              
-        /*fonctionne1/2
+         //récupération des éléments du diagnostic en fonction de son id     
+        /*Possibilité 1
+         //fonctionne1/2
         $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
         // recupération et initialization des éléments du diagnostique
         $diagnosticElements = $diagnostic->getDiagnosticElements();
         $diagnosticElements = $diagnosticElements->toArray();*/
           
-        /*TEST debut*/
+        /*TEST debut possibilité 2
                 // Récupération du type de diagnostic associé
             $typeDiagnostic = $diagnostic->getDiagnosticType();
 
@@ -314,23 +316,51 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
                 $elementsControle[] = $typeElementControl->getIdElementcontrol();
             }
            
-            //TEST fin
+            //TEST fin*/
 
-        dd($diagnostic);
+            //possibilité 3
+            // Récupération du type de diagnostic associé
+    $typeDiagnostic = $diagnostic->getDiagnosticType();
+
+    // Récupération des éléments de contrôle liés à ce type de diagnostic
+    $diagnosticTypeElementControls = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
+
+    // Maintenant, vous pouvez récupérer les éléments de contrôle à partir de ces objets DiagnosticTypeElementcontrol
+    $elementsControle = [];
+    foreach ($diagnosticTypeElementControls as $typeElementControl) {
+        $elementsControle[] = $typeElementControl->getIdElementcontrol();
+    }
+
+   // Récupération des éléments du diagnostic en fonction de son ID
+$diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
+// Récupération des états des éléments de contrôle
+$etatsElementsControle = [];
+foreach ($diagnosticElements as $diagnosticElement) {
+    $elementControl = $diagnosticElement->getElementControl();
+    $etatControl = $diagnosticElement->getEtatControl(); // Récupérer l'état du DiagnosticElement
+    if ($elementControl && $etatControl) {
+        $etatsElementsControle[$elementControl->getId()] = $etatControl;
+    }
+}
+
+
+
+        //dd($diagnostic);
         
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, [
             'diagnostic' => $diagnostic,
-            'diagnosticElements' => $elementsControle,
+//'diagnosticElements' => $diagnosticElements,
             //'elementId' => $element->getId(),
            // 'diagnostic_type_id' => $diagnostic->getDiagnosticType() // récupérer diagnostic type ID 
-        ]); //dd($form);
+        ]); dd($form);
        
         $form->handleRequest($request);
-        dd($form);
+       dd($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
            
-            foreach ($elementsControle as $element ) {
+            foreach ($diagnosticElements as $element ) {
                 $etatField = 'etat_' . $element->getIdElement();
                 $commentField = 'commentaire_' . $element->getIdElement();
 
