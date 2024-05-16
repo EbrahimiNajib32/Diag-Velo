@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Types de diagnostics{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto mt-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Types des diagnostics</h1>
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="py-3 px-6">Status</th>
+                    <th scope="col" class="py-3 px-6">ID</th>
+                    <th scope="col" class="py-3 px-6">Nom</th>
+                    <th scope="col" class="py-3 px-6">Date de création</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for diagnostic in typesDiagnostic %}
+                    <tr class="bg-white border-b {{ diagnostic.isActif ? 'bg-white' : 'bg-gray-300' }}">
+                        <td class="py-4 px-6">
+                            <label class="inline-flex items-center me-5 cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" {{ diagnostic.isActif ? 'checked' : '' }} onclick="toggleUserStatus()">
+                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ diagnostic.isActif ? 'Actif' : 'Inactif' }}</span>
+                            </label>
+                        </td>
+                        <td class="py-4 px-6">{{ diagnostic.getId }}</td>
+                        <td class="py-4 px-6">{{ diagnostic.getNomType }}</td>
+                        <td class="py-4 px-6">{{ diagnostic.getDateCreationType|date('Y-m-d') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-6 flex justify-center">
+            <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au dashboard</a>
+        </div>
+    </div>
+{% endblock %}
