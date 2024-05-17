@@ -64,14 +64,14 @@ class UtilisateurController extends AbstractController
                 ->setParameter('nom', '%' . $nom . '%');
         }
 
-        if ($statut !== null) {
+        if ($statut !== null && $statut !== '') {
             $queryBuilder->andWhere('u.isActive = :statut')
                 ->setParameter('statut', $statut);
         }
 
-        if ($role) {
-            $queryBuilder->andWhere('u.roles LIKE :role')
-                ->setParameter('role', '%' . $role . '%');
+        if ($role !== null && $role !== '') {
+            $queryBuilder->andWhere('u.role = :role')
+                ->setParameter('role', $role);
         }
 
         $utilisateurs = $queryBuilder->getQuery()->getResult();

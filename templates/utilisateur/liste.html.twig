@@ -20,12 +20,14 @@
                     <option value="1" {{ app.request.query.get('statut') == '1' ? 'selected' : '' }}>Actif</option>
                     <option value="0" {{ app.request.query.get('statut') == '0' ? 'selected' : '' }}>Inactif</option>
                 </select>
-                <input type="text" name="role" placeholder="Rôle" class="px-4 py-2 border rounded" value="{{ app.request.query.get('role') }}">
+                <select name="role" class="px-4 py-2 border rounded">
+                    <option value="">Tous les rôles</option>
+                    <option value="1" {{ app.request.query.get('role') == '1' ? 'selected' : '' }}>Utilisateur</option>
+                    <option value="0" {{ app.request.query.get('role') == '0' ? 'selected' : '' }}>Admin</option>
+                </select>
                 <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded">Filtrer</button>
             </div>
         </form>
-
-
 
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
@@ -138,9 +140,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
     <script>
