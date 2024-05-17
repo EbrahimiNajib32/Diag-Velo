@@ -219,29 +219,4 @@
 
     </script>
 
-
-    <script>
-        function toggleUserStatus(userId, checkbox) {
-            const status = checkbox.checked ? 'activer' : 'desactiver';
-            const confirmationModal = document.getElementById('popup-modal');
-            const confirmBtn = document.getElementById('confirmDeactivateBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-
-            confirmationModal.classList.remove('hidden');
-
-            confirmBtn.onclick = function() {
-                confirmationModal.classList.add('hidden');
-                window.location.href = `/dashboard/utilisateur/${status}/${userId}`;
-            };
-
-            cancelBtn.onclick = function() {
-                confirmationModal.classList.add('hidden');
-                checkbox.checked = !checkbox.checked;
-            };
-        }
-    </script>
-
-
-
-
 {% endblock %}
