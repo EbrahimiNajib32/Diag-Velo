@@ -10,7 +10,7 @@
         <!-- Form for filtering -->
         <form action="{{ path('app_type_diagnostic_liste') }}" method="get" class="mb-4">
             <label for="status" class="block text-sm font-medium text-gray-700">Filtrer par statut:</label>
-            <select id="status" name="status" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" onchange="this.form.submit()">
+            <select id="status" name="status" class="mt-1 block w-1/5 pl-5 pr-16 py-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" onchange="this.form.submit()">
                 <option value="">Tous</option>
                 <option value="1" {{ app.request.query.get('status') == '1' ? 'selected' : '' }}>Actif</option>
                 <option value="0" {{ app.request.query.get('status') == '0' ? 'selected' : '' }}>Inactif</option>
