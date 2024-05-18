@@ -11,3 +11,7 @@ app_diagnostic_elements_by_type:
     path: '/diagnostic/elements/{id}'
     controller: 'App\Controller\DiagnosticController::diagnosticElementsByType'
 
+autocomplete:
+    path: '/autocomplete'
+    controller: 'App\Controller\AutoCompleteController::autocompleteProprietaires'
+    methods: [GET]

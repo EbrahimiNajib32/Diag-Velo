@@ -18,6 +18,8 @@ use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use Doctrine\ORM\EntityManagerInterface;
 
+
+
 class DiagnosticController extends AbstractController
 {
     #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
@@ -469,7 +471,15 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     }
 
 
+    #[Route('/diagnostics/recapitulatif', name: 'diagnostics_recapitulatif', methods: ['GET'])]
+    public function recapitulatif(EntityManagerInterface $entityManager): Response
+    {
+        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
 
+        return $this->render('diagnostic/recapitulatif.html.twig', [
+            'diagnostics' => $diagnostics,
+        ]);
+    }
 
 
 //    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]

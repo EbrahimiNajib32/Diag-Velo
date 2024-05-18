@@ -48,6 +48,10 @@
                 Consulter des vélos
             </a>
 
+            <a href="{{ path('diagnostics_recapitulatif') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                <i class="bi bi-clipboard-data text-3xl mr-4 portrait:text-6xl"></i>
+                Récapitulatif des Diagnostics
+            </a>
 
         </div>
         {% if app.user %}

@@ -14,7 +14,7 @@ class SearchVeloType extends AbstractType
     {
         $builder->add('ref_recyclerie', TextType::class, [
             'label' => 'Numéro de recyclerie pour recherche',
-            'required' => true, // Rend le champ obligatoire
+            'required' => false, // Rend le champ obligatoire
             'mapped' => false, // Ce champ n'est pas directement lié à une propriété de l'entité
             'constraints' => [
                 new NotBlank([

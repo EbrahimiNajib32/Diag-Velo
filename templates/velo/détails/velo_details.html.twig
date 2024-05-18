@@ -15,7 +15,7 @@
                 <li>État: <span id="etat">{{ velo.etat }}</span></li>
                 <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
                 <li>Date d'Enregistrement:{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-
+                <li>bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
 
             </ul>
         </div>
@@ -49,35 +49,38 @@
             const editButton = document.querySelector('.edit-button');
             const saveButton = document.querySelector('.btn-success');
             const fields = document.querySelectorAll('.details-list span');
+            const optionalFields = ['taille_cadre', 'taille_roues', 'ref_recyclerie', 'poids']; // Champs qui peuvent être vides
 
-            editButton.addEventListener('click', function() {
+            // Fonction pour activer/désactiver le mode édition
+            function toggleEditMode() {
                 editMode = !editMode;
                 fields.forEach(field => {
                     field.setAttribute('contenteditable', editMode ? 'true' : 'false');
                 });
-            });
+            }
 
+            // Activer le mode édition au clic du bouton d'édition
+            editButton.addEventListener('click', toggleEditMode);
 
-             //data contient les nouvelles valeurs modifiés
-
+            // Enregistrer les modifications
             saveButton.addEventListener('click', function() {
                 if (editMode) {
                     const data = {};
-                    // Collect data from contenteditable fields
+
+                    // Collecter les données des champs éditables
                     fields.forEach(field => {
                         if (field.getAttribute('contenteditable') === 'true') {
                             let propName = field.id;
-                            // Convert snake_case ID to camelCase
+                            // Convertir snake_case en camelCase
                             propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
-                            data[propName] = field.innerText;
+                            let value = field.innerText.trim();
+
+                            // Assigne la valeur, même vide, si c'est un champ optionnel
+                            data[propName] = value;
                         }
                     });
 
-                    // Collect data from date input fields
-                    data.dateDeVente = document.getElementById('date_de_vente').value;
-                    data.dateDestruction = document.getElementById('date_destruction').value;
-
-                    // Send data to server
+                    // Envoyer les données au serveur
                     fetch(`/api/update-velo/{{ velo.id }}`, {
                         method: 'POST',
                         headers: {
@@ -94,18 +97,18 @@
                         })
                         .then(responseData => {
                             console.log('Data saved successfully:', responseData);
-                            // Optionally, provide user feedback here
+
+                            toggleEditMode(); // Désactiver le mode édition après l'enregistrement
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            // Optionally, provide user feedback here
+                            alert('Une erreur est survenue lors de l\'enregistrement des données.');
                         });
                 }
             });
-
         });
-
     </script>
+
 {% endblock %}
 
 
@@ -196,7 +199,4 @@
     </style>
 
 
-
-
-    </style>
 {% endblock %}
