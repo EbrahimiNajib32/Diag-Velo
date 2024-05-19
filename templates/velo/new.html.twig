@@ -57,9 +57,9 @@
 </style>
 
 
-    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
-        <div class="max-w-xl w-full mx-auto">
-            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg">
+    <div class="bg-gray-100 flex flex-col min-h-screen justify-center">
+        <div class="w-full">
+            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
                 <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
                 {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
                 <div class="grid grid-cols-2 gap-4 ">
@@ -73,34 +73,29 @@
                             {{ form_label(form.proprietaire) }}
                             {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire', 'autocomplete' : 'on', 'class': 'ui-autocomplete-input' }}) }}
                             <input type="hidden" id="proprietaire_id" name="proprietaire_id" />
-                            <div id="ui-front"></div> {# Add ui-front div here #}
+                            <div id="ui-front"></div>
                         </div>
 
-                        </div>
                         <div class="new-prop-field" style="display:none;">
                             {{ form_label(form.nom_proprio) }}
-                            {{ form_widget(form.nom_proprio) }}
+                            <div class="w-full">
+                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
                             {{ form_label(form.email) }}
-                            {{ form_widget(form.email) }}
+                            <div class="w-full">
+                                {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
                             {{ form_label(form.telephone) }}
-                            {{ form_widget(form.telephone) }}
-                            {{ form_widget(form.statut) }}
+                            <div class="w-full">
+                                {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
+                            <div class="w-full">
+                                Statut
+                                {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
                         </div>
 
-                        <div>
-                            <label>
-
-                            </label>
-                        </div>
                     </div>
-
-                    <div>
-                        <label>
-
-                        </label>
-                    </div>
-                </div>
-
                 <div>
                     <h1 class="text-center">Couleurs</h1>
                     <div class="grid grid-cols-5 gap-1">
@@ -145,18 +140,16 @@
                     {{ form_end(form) }}
                 </div>
             </div>
-        </div>
 
+        </div>
+    <div class="details-container text-center mt-4">
+        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
+    </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const colorChoices = document.querySelectorAll('.color-choice');
 
-        <div class="details-container text-center mt-4">
-            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
-        </div>
-        <script>
+
             document.addEventListener('DOMContentLoaded', function() {
                 const colorChoices = document.querySelectorAll('.color-choice');
 
@@ -303,46 +296,6 @@
                 cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
                 cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
             });
-        </script>
-
-            cameraIcon.addEventListener('click', function() {
-                cameraIcon.style.display = 'block';
-                this.style.display = 'none';  // A retirer pour ouvrir et fermer le prompt de prendre une photo
-            });
-
-            cameraIcon.addEventListener('click', function() {
-                if (videoCaptureDiv.style.display === 'none') {
-                    videoCaptureDiv.style.display = 'block';
-                } else {
-                    videoCaptureDiv.style.display = 'none';
-                }
-            });
-        });
-        $(document).ready(function() {
-            // Initialize the autocomplete widget
-            $('#velo_info_proprietaire').autocomplete({
-                source: function(request, response) {
-                    // Fetch autocomplete data from the server
-                    $.ajax({
-                        url: '{{ path('autocomplete') }}',
-                        dataType: 'json',
-                        data: {
-                            term: request.term
-                        },
-                        success: function(data) {
-                            let resArray = [];
-                            for ( let i = 0; i < data.length; i++) {
-                                resArray[i] = data[i].nom_proprio;
-                            }
-                            response(resArray);
-                        }
-                    });
-                },
-                minLength: 2,
-
-            })
-
-        });
 
 
     </script>
