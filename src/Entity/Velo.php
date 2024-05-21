@@ -35,16 +35,16 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $marque = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $ref_recyclerie = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ref_recyclerie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $couleur = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $poids = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $poids = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(length: 255)]
     private ?string $taille_roues = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
@@ -120,12 +120,12 @@ private ?string $public = null;
         return $this;
     }
 
-    public function getRefRecyclerie(): ?int
+    public function getRefRecyclerie(): ?string
     {
         return $this->ref_recyclerie;
     }
 
-    public function setRefRecyclerie(?int $ref_recyclerie): static
+    public function setRefRecyclerie(?string $ref_recyclerie): static
     {
         $this->ref_recyclerie = $ref_recyclerie;
 
@@ -144,12 +144,13 @@ private ?string $public = null;
         return $this;
     }
 
-    public function getPoids(): ?int
+
+    public function getPoids(): ?string
     {
         return $this->poids;
     }
 
-    public function setPoids(?int $poids): static
+    public function setPoids(?string $poids): static
     {
         $this->poids = $poids;
 
