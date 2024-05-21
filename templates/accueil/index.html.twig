@@ -18,7 +18,7 @@
     <form action="{{ path('velo_details', {'ref_recyclerie': app.request.query.get('ref_recyclerie', '') }) }}" method="GET" class="max-w-lg mx-auto">
         <div class="flex justify-center items-center">
             <div class="relative mr-2">
-                <input type="text" name="ref_recyclerie" placeholder="Numéro de recyclérie" class="border-4 border-black-600 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-500 transition-colors duration-200 focus:ring-2 focus:ring-teal-500" value="{{ app.request.query.get('ref_recyclerie', '') }}">
+                <input type="text" name="ref_recyclerie" placeholder="Numéro de recyclerie" class="border-4 border-black-600 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-500 transition-colors duration-200 focus:ring-2 focus:ring-teal-500" value="{{ app.request.query.get('ref_recyclerie', '') }}">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
                     <i class="bi bi-search text-gray-400 text-3xl portrait:text-6xl"></i>
                 </div>
@@ -68,7 +68,7 @@
                 <i class="bi bi-box-arrow-left text-2xl"></i> Déconnecter
             </a>
             <a href="{{ path('app_dashboard') }}" class="bg-teal-500 m-3 hover:bg-green-400 text-white rounded-lg text-xl shadow p-3 portrait:text-4xl">
-                <i class="bi bi-speedometer text-2xl"></i> Dashboard
+                <i class="bi bi-speedometer text-2xl"></i> Tableau de bord
             </a>
         {% else %}
         <div class="mt-3">

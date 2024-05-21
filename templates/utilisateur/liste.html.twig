@@ -10,6 +10,25 @@
                 Ajouter un utilisateur
             </a>
         </h1>
+
+        <!-- Formulaire de filtrage -->
+        <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
+            <div class="flex space-x-4">
+                <input type="text" name="nom" placeholder="Nom" class="px-4 py-2 border rounded" value="{{ app.request.query.get('nom') }}">
+                <select name="statut" class="px-4 py-2 border rounded">
+                    <option value="">Tous les statuts</option>
+                    <option value="1" {{ app.request.query.get('statut') == '1' ? 'selected' : '' }}>Actif</option>
+                    <option value="0" {{ app.request.query.get('statut') == '0' ? 'selected' : '' }}>Inactif</option>
+                </select>
+                <select name="role" class="px-4 py-2 border rounded">
+                    <option value="">Tous les rôles</option>
+                    <option value="1" {{ app.request.query.get('role') == '1' ? 'selected' : '' }}>Utilisateur</option>
+                    <option value="0" {{ app.request.query.get('role') == '0' ? 'selected' : '' }}>Admin</option>
+                </select>
+                <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded">Filtrer</button>
+            </div>
+        </form>
+
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -60,7 +79,7 @@
             </table>
         </div>
         <div class="mt-6 flex justify-center">
-            <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au dashboard</a>
+            <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au tableau de bord</a>
         </div>
     </div>
 
@@ -121,9 +140,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
     <script>
@@ -201,8 +217,5 @@
         }
 
     </script>
-
-
-
 
 {% endblock %}
