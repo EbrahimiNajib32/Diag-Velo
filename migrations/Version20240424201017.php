@@ -33,6 +33,60 @@ final class Version20240424201017 extends AbstractMigration
         $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE100669FDDF749 FOREIGN KEY (id_element) REFERENCES element_control (id)');
         $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE10066DEEAEB60 FOREIGN KEY (id_etat) REFERENCES etat_control (id)');
         $this->addSql('ALTER TABLE velo ADD CONSTRAINT FK_354971F576C50E4A FOREIGN KEY (proprietaire_id) REFERENCES proprietaire (id)');
+        $this->addSql("
+CREATE TRIGGER `insert_diagnostic_element_trigger` 
+AFTER INSERT ON `diagnostic_element`
+FOR EACH ROW 
+BEGIN
+    DECLARE type_element_control_count INT;
+    DECLARE diagnostic_control_count INT;
+
+    SELECT COUNT(*) INTO type_element_control_count
+    FROM diagnostic_type_elementcontrol dtec
+    WHERE dtec.id_dianostic_type_id = (
+        SELECT diagnostic_type_id
+        FROM diagnostic
+        WHERE id = NEW.id_diagnostic
+    );
+
+    SELECT COUNT(*) INTO diagnostic_control_count
+    FROM diagnostic_element
+    WHERE id_diagnostic = NEW.id_diagnostic;
+
+    IF diagnostic_control_count = type_element_control_count THEN
+        UPDATE diagnostic SET status = 'terminé' WHERE id = NEW.id_diagnostic;
+    ELSE
+        UPDATE diagnostic SET status = 'en cours' WHERE id = NEW.id_diagnostic;
+    END IF;
+END;
+
+CREATE TRIGGER `update_diagnostic_element_trigger`
+AFTER UPDATE ON `diagnostic_element`
+FOR EACH ROW
+BEGIN
+    DECLARE type_element_control_count INT;
+    DECLARE diagnostic_control_count INT;
+    
+    SELECT COUNT(*) INTO type_element_control_count
+    FROM diagnostic_type_elementcontrol dtec
+    WHERE dtec.id_dianostic_type_id = (
+        SELECT diagnostic_type_id
+        FROM diagnostic
+        WHERE id = OLD.id_diagnostic
+    );
+    
+    SELECT COUNT(*) INTO diagnostic_control_count
+    FROM diagnostic_element
+    WHERE id_diagnostic = OLD.id_diagnostic;
+
+    IF diagnostic_control_count = type_element_control_count THEN
+        UPDATE diagnostic SET status = 'terminé' WHERE id = OLD.id_diagnostic;
+    ELSE
+        UPDATE diagnostic SET status = 'en cours' WHERE id = OLD.id_diagnostic;
+    END IF;
+END;
+
+            ");
     }
 
     public function down(Schema $schema): void
