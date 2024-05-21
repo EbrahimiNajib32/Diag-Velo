@@ -6,6 +6,9 @@
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Types des diagnostics</h1>
 
+        <div>
+            <a href="{{ path('app_create_diagnostic_type') }}" class="button-style w-full hover:bg-green-400"><i class="bi bi-plus-circle mr-2"></i>Ajouter un type de diagnostic</a>
+        </div>
 
         <!-- Form for filtering -->
         <form action="{{ path('app_type_diagnostic_liste') }}" method="get" class="mb-4">
@@ -16,6 +19,8 @@
                 <option value="0" {{ app.request.query.get('status') == '0' ? 'selected' : '' }}>Inactif</option>
             </select>
         </form>
+
+
 
         <!-- Table -->
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
