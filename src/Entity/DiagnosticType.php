@@ -41,6 +41,7 @@ class DiagnosticType
         return $this->id;
     }
 
+
     public function getNomType(): ?string
     {
         return $this->nomType;

@@ -184,9 +184,9 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         // ajout partie pour creation form pour affichage comme version1
         $diagnostic = new Diagnostic();
        
-
+ 
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, ['idTypeDiag' => $id]);
-
+       
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
@@ -252,7 +252,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
         // Récupérer les éléments de diagnostic associés à ce type de diagnostic
         $elementsDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-
+       
         // Récupérer le contenu du champ 'element' de l'entité 'ElementControl'
         $elementContents = [];
         foreach ($elementsDiagnostic as $elementDiagnostic) {
@@ -264,7 +264,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             }
         }
         
-        
+        // categorization des éléments pour mise en page
         $categorizedElements = [];
         foreach ($elementContents as $element) {
             $fullElement = $element->getElement();
@@ -283,6 +283,114 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             'diagnosticElements' => $categorizedElements,
         ]);
 
+    }
+                        //******************************************//
+    // reprise d'un diagnostique version multi diagnostic
+    #[Route('/diagnostic/reprendreMulti/{id}', name: 'reprendre_Multidiagnostic', methods: ['GET', 'POST'])]
+    public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        //recupération de l'id du daignostic dans l'URL
+        $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
+        if (!$diagnostic) {
+            $this->addFlash('error', 'Diagnostic not found.');
+            return $this->redirectToRoute('app_error');
+        }
+
+        
+        // Récupération des états des éléments de contrôle
+        /*$etatsElementsControle = [];
+        
+        foreach ($diagnosticElements as $diagnosticElement) {
+            $elementControl = $diagnosticElement->getElementControl();
+            $etatControl = $diagnosticElement->getEtatControl(); // Récupérer l'état du DiagnosticElement
+            if ($elementControl && $etatControl) {
+                $etatsElementsControle[$elementControl->getId()] = $etatControl;
+            }
+        }*/
+                
+        // categorization des éléments pour mise en page
+        //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $diagnosticElementsDisplayed = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $diagnostic->getDiagnosticType()]);
+
+        $categorizedElements = [];
+        foreach ($diagnosticElementsDisplayed as $elementDiagnostic) {
+            $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+            $element = $entityManager->getRepository(ElementControl::class)->find($elementControlId);
+            $fullElement = $element->getElement();
+            $parts = explode(':', $fullElement);
+            $category = $parts[0];
+            if (!array_key_exists($category, $categorizedElements)) {
+                $categorizedElements[$category] = [];
+            }
+            $categorizedElements[$category][] = $element;
+        }
+        //dd($categorizedElements);
+
+
+       // dd($etatsElementsControle);
+        // Récupération des éléments du diagnostic en fonction de son ID
+        $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
+        $form = $this->createForm(FormDiagnosticType::class, $diagnostic, [
+            'idTypeDiag' => $diagnostic->getDiagnosticType(),
+            'diagnostic' => $diagnostic,
+            'diagnosticElements' => $diagnosticElements,
+        ]); 
+       
+        $form->handleRequest($request);
+//dd($form);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
+
+            foreach ($diagnosticElementsDisplayed as $elementDiagnostic ) {
+                $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+                $element = $entityManager->getRepository(ElementControl::class)->find($elementControlId);
+
+                $etatField = 'etat_' . $element->getId();
+                $commentField = 'commentaire_' . $element->getId();
+
+                $etatValue = $form->has($etatField) ? $form->get($etatField)->getData() : null;
+                $commentValue = $form->has($commentField) ? $form->get($commentField)->getData() : null;
+
+                $diagElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
+                    'diagnostic' => $diagnostic,
+                    'elementcontrol' => $element
+                ]);
+
+                if (!$diagElement) {
+                    $diagElement = new DiagnosticElement();
+                    $diagElement->setDiagnostic($diagnostic);
+                    $diagElement->setElementControl($element);
+                }
+
+                if ($etatValue !== null) {
+                    $etatControl = $entityManager->getRepository(EtatControl::class)->find($etatValue);
+                    if ($etatControl) {
+                        $diagElement->setEtatControl($etatControl);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+
+                $diagElement->setCommentaire($commentValue);
+                $entityManager->persist($diagElement);
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Diagnostic updated successfully.');
+            return $this->redirectToRoute('app_diagnostic_en_cours');
+        }
+
+
+        return $this->render('diagnostic/reprendreMultiDia.html.twig', [
+            'diagnosticForm' => $form->createView(),
+            'diagnostic' => $diagnostic,
+            'diagnosticElements' => $categorizedElements,
+            //'etatsElementsControle' => $etatsElementsControle, // Ajout de la variable au rendu du template
+        ]);
     }
    
 
@@ -303,8 +411,8 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
             foreach ($elements as $element) {
-                $etatKey = 'etat_' . $element->getId();
-                $commentKey = 'commentaire_' . $element->getId();
+                $etatKey = 'etat' . $element->getId();
+                $commentKey = 'commentaire' . $element->getId();
 
                 if ($form->has($etatKey) && $form->has($commentKey)) {
                     $etatId = $form->get($etatKey)->getData();
@@ -380,7 +488,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         ]);
 
         $form->handleRequest($request);
-
+        //dd($diagnosticElements);
         if ($form->isSubmitted() && $form->isValid()) {
             $elements = $entityManager->getRepository(ElementControl::class)->findAll();
 
