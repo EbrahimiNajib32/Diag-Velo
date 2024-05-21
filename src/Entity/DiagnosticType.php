@@ -33,29 +33,7 @@ class DiagnosticType
 
     public function __construct()
     {
-        $this->id = new ArrayCollection();
         $this->diagnosticTypeElementcontrols = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function addId(ElementControl $id): static
-    {
-        if (!$this->id->contains($id)) {
-            $this->id->add($id);
-        }
-
-        return $this;
-    }
-
-    public function removeId(ElementControl $id): static
-    {
-        $this->id->removeElement($id);
-
-        return $this;
     }
 
     public function getNomType(): ?string
