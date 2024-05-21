@@ -186,7 +186,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
        
  
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, ['idTypeDiag' => $id]);
-        dd($form);
+       
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
@@ -252,7 +252,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
         // Récupérer les éléments de diagnostic associés à ce type de diagnostic
         $elementsDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-
+       
         // Récupérer le contenu du champ 'element' de l'entité 'ElementControl'
         $elementContents = [];
         foreach ($elementsDiagnostic as $elementDiagnostic) {
@@ -296,11 +296,9 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             return $this->redirectToRoute('app_error');
         }
 
-        // Récupération des éléments du diagnostic en fonction de son ID
-        $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
-
+        
         // Récupération des états des éléments de contrôle
-        $etatsElementsControle = [];
+        /*$etatsElementsControle = [];
         
         foreach ($diagnosticElements as $diagnosticElement) {
             $elementControl = $diagnosticElement->getElementControl();
@@ -308,15 +306,16 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
             if ($elementControl && $etatControl) {
                 $etatsElementsControle[$elementControl->getId()] = $etatControl;
             }
-        }
-        
-        
-
+        }*/
+                
         // categorization des éléments pour mise en page
         //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $diagnosticElementsDisplayed = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $diagnostic->getDiagnosticType()]);
+
         $categorizedElements = [];
-            foreach ($diagnosticElements as $diagnosticElement) {
-            $element = $diagnosticElement->getElementControl();
+        foreach ($diagnosticElementsDisplayed as $elementDiagnostic) {
+            $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+            $element = $entityManager->getRepository(ElementControl::class)->find($elementControlId);
             $fullElement = $element->getElement();
             $parts = explode(':', $fullElement);
             $category = $parts[0];
@@ -329,7 +328,9 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
 
        // dd($etatsElementsControle);
-        
+        // Récupération des éléments du diagnostic en fonction de son ID
+        $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
+
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, [
             'idTypeDiag' => $diagnostic->getDiagnosticType(),
             'diagnostic' => $diagnostic,
@@ -337,19 +338,20 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
         ]); 
        
         $form->handleRequest($request);
-
+//dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
 
-            foreach ($diagnosticElements as $element ) {
-                $etatField = 'etat_' . $element->getIdElement();
-                $commentField = 'commentaire_' . $element->getIdElement();
+            foreach ($diagnosticElementsDisplayed as $elementDiagnostic ) {
+                $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
+                $element = $entityManager->getRepository(ElementControl::class)->find($elementControlId);
+
+                $etatField = 'etat_' . $element->getId();
+                $commentField = 'commentaire_' . $element->getId();
 
                 $etatValue = $form->has($etatField) ? $form->get($etatField)->getData() : null;
                 $commentValue = $form->has($commentField) ? $form->get($commentField)->getData() : null;
-
-
 
                 $diagElement = $entityManager->getRepository(DiagnosticElement::class)->findOneBy([
                     'diagnostic' => $diagnostic,
@@ -360,7 +362,6 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
                     $diagElement = new DiagnosticElement();
                     $diagElement->setDiagnostic($diagnostic);
                     $diagElement->setElementControl($element);
-
                 }
 
                 if ($etatValue !== null) {

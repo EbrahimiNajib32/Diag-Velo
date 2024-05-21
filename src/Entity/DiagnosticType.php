@@ -36,6 +36,12 @@ class DiagnosticType
         $this->diagnosticTypeElementcontrols = new ArrayCollection();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
     public function getNomType(): ?string
     {
         return $this->nomType;
