@@ -56,8 +56,20 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Numéro de série'
             ])
-            ->add('etat', TextType::class , [
+//            ->add('etat', TextType::class , [
+//                'required' => true,
+//                'label' => 'Etat'
+//            ])
+            ->add('etat', ChoiceType::class, [
                 'required' => true,
+                'choices' => [
+                    '12 pouces (203 mm)' => '12',
+                    '14 pouces (254 mm)' => '14',
+                    '16 pouces (305 mm)' => '16',
+                    '18 pouces (355 mm)' => '18',
+                    '20 pouces (406 mm)' => '20',
+                    '22 pouces (457 mm)' => '22',
+                ],
                 'label' => 'Etat'
             ])
 
