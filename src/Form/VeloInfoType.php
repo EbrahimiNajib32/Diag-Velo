@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-                                            use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -172,7 +172,7 @@ class VeloInfoType extends AbstractType
                 ],
                 'mapped' => false,
                 'label' => 'Statut',
-                'required' => false
+                'required' => true            
             ]);
 
         $builder->addEventListener(
