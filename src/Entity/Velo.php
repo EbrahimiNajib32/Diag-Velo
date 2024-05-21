@@ -92,7 +92,10 @@ private ?string $public = null;
 
 
  #[ORM\Column(type: "string", length: 255, nullable: true)]
-   private ?string $origine = null;
+            private ?string $origine = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $model = null;
 
 
     public function getId(): ?int
@@ -333,13 +336,25 @@ private ?string $public = null;
     }
 
  public function getOrigine(): ?string
-        {
-            return $this->origine;
-        }
+                 {
+                     return $this->origine;
+                 }
 
         public function setOrigine(?string $origine): self
         {
             $this->origine = $origine;
+            return $this;
+        }
+
+        public function getModel(): ?string
+        {
+            return $this->model;
+        }
+
+        public function setModel(?string $model): static
+        {
+            $this->model = $model;
+
             return $this;
         }
 

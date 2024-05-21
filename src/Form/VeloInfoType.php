@@ -60,6 +60,12 @@ class VeloInfoType extends AbstractType
                 'required' => true,
                 'label' => 'Etat'
             ])
+
+            ->add('model', TextType::class, [  // Ajout du champ modèle
+                'required' => false,
+                'label' => 'Modèle'
+            ])
+
             ->add('poids' , TextType::class , [
                         'required' => false,
                         'label' => 'Poids'
