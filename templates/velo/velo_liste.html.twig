@@ -12,6 +12,7 @@
         <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
 
         <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+            {% if pagination|length > 0 %}
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -137,6 +138,11 @@
             <div class="pagination mx-auto justify-center">
                 {{ knp_pagination_render(pagination) }}
             </div>
+            {% else %}
+                <div class="text-center py-8">
+                    <p class="text-gray-500 text-lg">Aucun vélo trouvé.</p>
+                </div>
+            {% endif %}
         </div>
         <div class="details-container text-center mt-4">
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
