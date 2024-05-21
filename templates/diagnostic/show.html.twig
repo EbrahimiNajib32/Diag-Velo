@@ -33,6 +33,7 @@
             <div class="flex justify-between">
                 <div class="w-1/3 p-4 text-left">
                     <p><span class="font-bold">Date du diagnostic:</span> {{ diagnostic.dateDiagnostic|date('Y-m-d H:i:s') }}</p>
+                          <p><span class="font-bold">Type de diagnostic:</span> {{ nomType }}</p> <!-- Ajout type de diagnostic -->
                     <p><span class="font-bold">Coût de réparation:</span> {{ diagnostic.coutReparation }}</p>
                     <p> <span class="font-bold">Statut: </span>{{ diagnostic.status }}</p>
                     <p> <span class="font-bold">Conclusion: </span>{{ diagnostic.conclusion }}</p>

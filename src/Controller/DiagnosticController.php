@@ -77,6 +77,14 @@ class DiagnosticController extends AbstractController
                 'etat' => $etat->getNomEtat(),
             ];
         }
+        
+            // Récupérer le nom du type de diagnostic
+            $diagnosticType = $diagnostic->getDiagnosticType();
+            $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
+    
+           
+        
+
 
         // Fetch the bike details associated with the diagnostic
         $bike = $diagnostic->getVelo();
@@ -103,7 +111,8 @@ class DiagnosticController extends AbstractController
         return $this->render('diagnostic/show.html.twig', [
             'diagnostic' => $diagnostic,
             'bike' => $bikeDetails,
-            'categorizedElements' => $categorizedElements
+            'categorizedElements' => $categorizedElements,
+            'nomType' => $nomType,
         ]);
     }
 
