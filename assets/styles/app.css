@@ -29,5 +29,12 @@ body {
     }
 }
 
+.border-left-black {
+    border-left: 2px solid black;
+}
+
+.border-right-black {
+    border-right: 2px solid black;
+}
 
 

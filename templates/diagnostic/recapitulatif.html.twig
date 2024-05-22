@@ -55,25 +55,52 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3">Date Diagnostic</th>
-                    <th scope="col" class="px-6 py-3">Conclusion</th>
-                    <th scope="col" class="px-6 py-3">Type</th>
-                    <th scope="col" class="px-6 py-3">Status</th>
-                    <th scope="col" class="px-6 py-3">Vélo</th>
-                    <th scope="col" class="px-6 py-3">Utilisateur</th>
-                    <th scope="col" class="px-6 py-3">Type Vélo</th>
+            <th colspan="6" class="px-6 py-3 text-center">Informations sur le Diagnostic</th>
+            <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
+            <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
+        </tr>
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center"> fait par</th>
+                    <th scope="col" class="px-6 py-3 text-center">ID </th>
+                    <th scope="col" class="px-6 py-3 text-center">Date </th>
+                    <th scope="col" class="px-6 py-3 text-center">Type</th>
+                    <th scope="col" class="px-6 py-3 text-center">Conclusion</th>
+                    <th scope="col" class="px-6 py-3 text-center ">Status </th>
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
+                    <th scope="col" class="px-6 py-3 text-center">N° de série</th>
+                    <th scope="col" class="px-6 py-3 text-center">Bicycode</th>
+                    <th scope="col" class="px-6 py-3">Ref Recyclerie</th>
+                    <th scope="col" class="px-6 py-3 text-center">Type </th>
+                    <th scope="col" class="px-6 py-3 text-center">Marque </th>
+                    <th scope="col" class="px-6 py-3 border-right-black text-center">Public </th>
+                    <th scope="col" class="px-6 py-3 text-center">Nom </th>
+                    <th scope="col" class="px-6 py-3 text-center">Type  </th>
                 </tr>
                 </thead>
                 <tbody>
+                 {% set rowNumber = 0 %}
                 {% for diagnostic in diagnostics %}
-                    <tr class="bg-white border-b">
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
+                    {% set rowNumber = rowNumber + 1 %}
+                    {% if rowNumber is even %}
+                        <tr class="bg-gray-850 border-b">
+                    {% else %}
+                        <tr class="bg-white border-b">
+                    {% endif %}
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.NomProprio : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
