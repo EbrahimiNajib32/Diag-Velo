@@ -56,8 +56,17 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Numéro de série'
             ])
-            ->add('etat', TextType::class , [
+
+            ->add('etat', ChoiceType::class, [
                 'required' => true,
+                'choices' => [
+                    'comme neuf' => 'comme neuf',
+                    'correct' => 'correct',
+                    'moyen' => 'moyen',
+                    'mauvais' => 'mauvais',
+                    'très mauvais' => 'très mauvais',
+
+                ],
                 'label' => 'Etat'
             ])
 
