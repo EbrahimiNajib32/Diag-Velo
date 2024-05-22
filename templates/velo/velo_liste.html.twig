@@ -17,6 +17,10 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3" style="width:12rem;">
+                        <span style="margin-bottom: 4px;">ID</span>
+                    </th>
+
+                    <th scope="col" class="px-6 py-3" style="width:12rem;">
                         <span style="margin-bottom: 4px;">Propriétaire</span>
                         <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
                     </th>
@@ -91,6 +95,7 @@
                 {% for velo in pagination %}
                     <tr class="bg-white border-b"
                         data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.nom_proprio }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.numero_de_serie }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
