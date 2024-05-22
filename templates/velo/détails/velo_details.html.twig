@@ -1,10 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails du Vélo{% endblock %}
+
+
+
 {% block body %}
-    <div class="details-container">
-        <div class="column-left"> <!-- Ajout de la classe column-left -->
-            <h1>Détails du Vélo</h1>
+
+
+
+
+    <div class="fixed top-0 left-0 logo-container">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="logo-size1">
+    </div>
+    <div class="fixed top-0 right-0 logo-container">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="logo-size">
+    </div>
+
+
+    <div class="max-w-lg mx-auto text-center py-20">
+
+    </div>
+
+    <div class="details-container mx-auto max-w-2xl">
+        <div class="column-left">
+            <h1 class="text-4xl font-bold mb-4">Détails du Vélo</h1>
             <ul class="details-list">
                 <li>Marque: <span id="marque">{{ velo.marque }}</span></li>
                 <li>Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
@@ -14,18 +33,16 @@
                 <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
                 <li>État: <span id="etat">{{ velo.etat }}</span></li>
                 <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li>Date d'Enregistrement:{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-                <li>bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
-
+                <li>Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li>Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
             </ul>
         </div>
-        <div class="column-right"> <!-- Ajout de la classe column-right -->
+        <div class="column-right">
             <ul class="details-list">
                 <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
                 <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
                 <li>Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
                 <li>Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
-
                 <li>Type: <span id="type">{{ velo.type }}</span></li>
                 <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
                 <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
@@ -34,24 +51,28 @@
             </ul>
         </div>
     </div>
-    <div class="button-container">
-        <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
-        <button type="button" class="btn btn-primary edit-button">Modifier</button>
-        <button type="submit" class="btn btn-success save-button">Enregistrer</button>
+    <div class="cont-boutons max-w-lg mx-auto text-center mt-6">
+        <a href="{{ path('app_accueil') }}" class="btn-green">
+            Retour à l'accueil
+        </a>
+        <button type="button" class="btn-green edit-button">
+            Modifier
+        </button>
+        <button type="submit" class="btn-green save-button">
+            Enregistrer
+        </button>
     </div>
 {% endblock %}
-
 
 {% block javascripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let editMode = false;
             const editButton = document.querySelector('.edit-button');
-            const saveButton = document.querySelector('.btn-success');
+            const saveButton = document.querySelector('.save-button');
             const fields = document.querySelectorAll('.details-list span');
-            const optionalFields = ['taille_cadre', 'taille_roues', 'ref_recyclerie', 'poids']; // Champs qui peuvent être vides
+            const optionalFields = ['taille_cadre', 'taille_roues', 'ref_recyclerie', 'poids'];
 
-            // Fonction pour activer/désactiver le mode édition
             function toggleEditMode() {
                 editMode = !editMode;
                 fields.forEach(field => {
@@ -59,28 +80,21 @@
                 });
             }
 
-            // Activer le mode édition au clic du bouton d'édition
             editButton.addEventListener('click', toggleEditMode);
 
-            // Enregistrer les modifications
             saveButton.addEventListener('click', function() {
                 if (editMode) {
                     const data = {};
 
-                    // Collecter les données des champs éditables
                     fields.forEach(field => {
                         if (field.getAttribute('contenteditable') === 'true') {
                             let propName = field.id;
-                            // Convertir snake_case en camelCase
                             propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
                             let value = field.innerText.trim();
-
-                            // Assigne la valeur, même vide, si c'est un champ optionnel
                             data[propName] = value;
                         }
                     });
 
-                    // Envoyer les données au serveur
                     fetch(`/api/update-velo/{{ velo.id }}`, {
                         method: 'POST',
                         headers: {
@@ -97,8 +111,7 @@
                         })
                         .then(responseData => {
                             console.log('Data saved successfully:', responseData);
-
-                            toggleEditMode(); // Désactiver le mode édition après l'enregistrement
+                            toggleEditMode();
                         })
                         .catch(error => {
                             console.error('Error:', error);
@@ -108,35 +121,64 @@
             });
         });
     </script>
-
 {% endblock %}
-
 
 {% block stylesheets %}
     <style>
         .details-container {
             display: flex;
-            gap: 20px; /* Espace entre les colonnes */
-            background-color: #f7fafc;
-            padding: 20px;
+            gap: 25px;
+            background-color: rgb(20 184 166);
+            padding: 30px;
             border-radius: 8px;
             max-width: 1000px;
             margin: 20px auto;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            align-items: stretch; /* Les colonnes s'étirent pour avoir la même hauteur */
+            align-items: stretch;
+            margin-top:10em;
         }
 
         .column-left, .column-right {
-            flex: 1; /* Chaque colonne prend la même quantité d'espace disponible */
+            flex: 1;
         }
+
+
+        .logo-size1 {
+            width: 170px; /* ajuster la taille selon les besoins */
+            height: auto; /* maintenir le ratio d'aspect */
+        }
+        .logo-size {
+            width: 300px; /* Ajuster la taille selon les besoins */
+            height: auto; /* Maintenir le ratio d'aspect */
+        }
+
+        .fixed {
+            position: fixed;
+        }
+
+        .top-0 {
+            top: 0;
+        }
+
+        .left-0 {
+            left: 0;
+        }
+
+        .right-0 {
+            right: 0;
+        }
+
+
+
 
         .details-list {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
+
         .column-right {
-            margin-top: 83px; /* Ajoute une marge supérieure pour décaler la colonne de droite vers le bas */
+            margin-top: 91px;
         }
 
         .details-list li {
@@ -147,56 +189,48 @@
             border: 1px solid #d4e8d4;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center; /* Centrer les éléments horizontalement */
-            align-items: flex-end; /* Aligner les éléments en bas de leur conteneur */
-            margin-top: 20px; /* Espacement entre les boutons et le contenu précédent */
+        .text-4xl {
+            font-size: 2.25rem;
         }
-
-        .back-to-home, .edit-button, .save-button {
-            background-color: #4CAF50;
+        .cont-boutons {
+            text-align: center;
+        }
+        .btn-green {
+            display: inline-block;
+            background-color: rgb(20 184 166);
+            border: 0;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 25px;
             text-decoration: none;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 20px; /* Espace avant les boutons */
+            transition: background-color 200ms;
+            font-family: sans-serif;
+            font-size: 1rem;
+            margin: 0 8px;
+
         }
 
-        .back-to-home:hover, .edit-button:hover, .save-button:hover {
-            background-color: #368B2F;
-        }
-
-        a {
-            color: #217346;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #0f5132;
-            text-decoration: underline;
+        .btn-green:hover {
+            background-color: rgb(74 222 128);
         }
 
         @media (max-width: 768px) {
             .details-container {
-                flex-direction: column; /* Sur les petits écrans, afficher les colonnes les unes en dessous des autres */
+                flex-direction: column;
             }
 
             .column-left, .column-right {
-                width: 100%; /* Chaque colonne prend toute la largeur sur les petits écrans */
+                width: 100%;
             }
         }
 
-
-         span[contenteditable="true"] {
-             background-color: #ffffe0; /* Jaune clair pour indiquer l'édition */
-             outline: 2px solid #4caf50; /* Bordure verte pour mieux voir les champs éditables */
-             padding: 3px; /* Un peu de padding pour que le texte ne touche pas les bords */
-             cursor: text; /* Change le curseur pour indiquer qu'on peut éditer */
-         }
+        span[contenteditable="true"] {
+            background-color: #ffffe0;
+            outline: 2px solid #4caf50;
+            padding: 3px;
+            cursor: text;
+        }
     </style>
-
-
 {% endblock %}

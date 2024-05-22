@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\DiagnosticType;
+use App\Entity\DiagnosticTypeElementcontrol;
+use App\Entity\ElementControl;
+use App\Form\TypeDiagnosticType;
 use App\Repository\DiagnosticTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -67,4 +70,52 @@ class TypeDiagnosticController extends AbstractController
             'newStatus' => $diagnosticType->isActif() ? 'Active' : 'Inactive'
         ]);
     }
+    #[Route('/dashboard/typediagnostic/new/diagnostic/type', name: 'app_create_diagnostic_type')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $diagnosticType = new DiagnosticType();
+
+        $form = $this->createForm(TypeDiagnosticType::class, $diagnosticType);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $diagnosticType->setDateCreationType(new \DateTime());
+            $diagnosticType->setActif(true);
+            $selectedElements = $request->request->all('elements');
+
+            if (is_array($selectedElements)) {
+                foreach ($selectedElements as $elementId) {
+                    $element = $entityManager->getRepository(ElementControl::class)->find($elementId);
+                    if ($element) {
+                        $diagnosticTypeElementControl = new DiagnosticTypeElementControl();
+                        $diagnosticTypeElementControl->setIdDianosticType($diagnosticType);
+                        $diagnosticTypeElementControl->setIdElementcontrol($element);
+                        $entityManager->persist($diagnosticTypeElementControl);
+                    }
+                }
+            }
+
+            $entityManager->persist($diagnosticType);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_type_diagnostic');
+        }
+
+        $elements = $entityManager->getRepository(ElementControl::class)->findAll();
+        $elementsByCategory = [];
+
+        foreach ($elements as $element) {
+            $category = explode(':', $element->getElement())[0];
+            if (!isset($elementsByCategory[$category])) {
+                $elementsByCategory[$category] = [];
+            }
+            $elementsByCategory[$category][] = $element;
+        }
+
+        return $this->render('type_diagnostic/newTypeDiagnostic.html.twig', [
+            'form' => $form->createView(),
+            'elementsByCategory' => $elementsByCategory,
+        ]);
+    }
+
 }

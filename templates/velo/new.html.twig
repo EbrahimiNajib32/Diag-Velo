@@ -119,6 +119,8 @@
                 {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                 {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+
                 <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center">
                     <div class="text-center">
                         <button id="cameraIcon" type="button" class="cameraIcon text-4xl">
@@ -295,6 +297,31 @@
 
                 cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
                 cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
+            });
+            $(document).ready(function() {
+                // Initialize the autocomplete widget
+                $('#velo_info_proprietaire').autocomplete({
+                    source: function(request, response) {
+                        // Fetch autocomplete data from the server
+                        $.ajax({
+                            url: '{{ path('autocomplete') }}',
+                            dataType: 'json',
+                            data: {
+                                term: request.term
+                            },
+                            success: function(data) {
+                                let resArray = [];
+                                for ( let i = 0; i < data.length; i++) {
+                                    resArray[i] = data[i].nom_proprio;
+                                }
+                                response(resArray);
+                            }
+                        });
+                    },
+                    minLength: 2,
+
+                })
+
             });
 
 

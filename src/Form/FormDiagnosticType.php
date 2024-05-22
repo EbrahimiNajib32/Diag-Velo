@@ -36,7 +36,8 @@ class FormDiagnosticType extends AbstractType
             'data_class' => Diagnostic::class,
             'diagnostic' => null,
             'diagnosticElements' => [],
-            'idTypeDiag' => 0
+            'idTypeDiag' => 0,
+            //'diagnostic_type_id' => null // Ajouter l'option diagnostic_type_id ici
         ]);
     }
 
@@ -104,7 +105,7 @@ class FormDiagnosticType extends AbstractType
 
         // Récupérer les éléments de diagnostic associés à ce type de diagnostic
         $elementsDiagnostic = $this->entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-        
+
         foreach ($elementsDiagnostic as $elementDiagnostic) {
 
             $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();

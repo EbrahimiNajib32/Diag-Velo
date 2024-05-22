@@ -57,6 +57,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
+                    <th scope="col" class="px-2 py-3">ID</th>
                     <th scope="col" class="px-2 py-3">Propriétaire</th>
                     <th scope="col" class="px-2 py-3">Numéro de série</th>
                     <th scope="col" class="px-2 py-3">Référence recyclerie</th>
@@ -74,6 +75,7 @@
                 <tbody>
                 {% for velo in pagination %}
                     <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.nom_proprio }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.numero_de_serie }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
@@ -150,6 +152,7 @@
                             <div class="bg-gray-100 rounded p-5  mb-4 mt-4 text-center">
                                 <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
                                 <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
+                                 <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
                                 <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
                                 <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
                                 <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
