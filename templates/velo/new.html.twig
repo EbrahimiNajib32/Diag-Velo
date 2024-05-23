@@ -16,6 +16,10 @@
         transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
     }
 
+    .radio-label {
+        margin-right: 10px; /* Adjust the space between label and radio button */
+    }
+
     .color-choice:hover {
         transform: scale(1.1);
     }
@@ -61,7 +65,7 @@
             <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
                 <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
                 {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-                <div class="grid grid-cols-2 gap-6 ">
+                <div class="grid grid-cols-2 gap-4 ">
                     <div class="border border-black rounded p-3 text-center space-y-4">
                         <div class="mb-4">
                             {{ form_label(form.chosir_ou_ajouter) }}
