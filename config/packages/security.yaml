@@ -43,8 +43,12 @@ security:
         # Admin routes
         - { path: ^/dashboard$, roles: ROLE_ADMIN }
         - { path: ^/dashboard/utilisateur/new$, roles: ROLE_ADMIN }
+        - { path: ^/dashboard/utilisateurs$, roles: ROLE_ADMIN }
+        - { path: ^dashboard/utilisateur/edit/*$, roles: ROLE_ADMIN }
         - { path: ^/dashboard/element/control$, roles: ROLE_ADMIN }
-
+        - { path: ^/new/element/control$, roles: ROLE_ADMIN }
+        - { path: ^/dashboard/typediagnostic$, roles: ROLE_ADMIN }
+        - { path: ^/dashboard/typediagnostic/new/diagnostic/type$, roles: ROLE_ADMIN }
         # User routes
         - { path: ^/*$, roles: ROLE_USER } # Cela permet aux utilisateurs d'accéder à tout autre chemin non spécifiquement mentionné ci-dessus.
 
