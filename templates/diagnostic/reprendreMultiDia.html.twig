@@ -49,7 +49,9 @@
         <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
-
+    <div class="details-container text-center mt-4">
+        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
+    </div>
     <script>
         function toggleSection(event) {
             const currentHeader = event.currentTarget;
