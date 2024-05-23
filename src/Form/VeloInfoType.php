@@ -10,8 +10,11 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -19,6 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\File;
 
 class VeloInfoType extends AbstractType
@@ -100,7 +104,7 @@ class VeloInfoType extends AbstractType
                 ],
                 'label' => 'Taille des roues',
             ])
-            ->add('taille_cadre', TextType::class, [
+            ->add('taille_cadre', IntegerType::class, [
                 'required' => false,
                 'label' => 'Taille du Cadre'
             ])
@@ -157,27 +161,44 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
             ])
-            ->add('proprietaire', TextType::class, [
+            ->add('autocomplete_proprietaire', TextType::class, [
                 'required' => false,
+                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher un propriétaire...',
+                    'class' => 'ui-autocomplete-input',
                 ],
+            ])
+            ->add('proprietaire', EntityType::class, [
+                'class' => Proprietaire::class,
+                'choice_label' => 'nomProprio',
+                'required' => false,
+                'placeholder' => 'Sélectionner un propriétaire',
+                'attr' => ['style' => 'display:none;'], // Hide this field, as it's set through autocomplete
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['placeholder' => 'Nom ..', 'style' => 'display: none;']
             ])
-            ->add('email', TextType::class, [
+            ->add('email', EmailType::class, [
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['placeholder' => 'Email ..', 'style' => 'display: none;']
+                'attr' => ['placeholder' => 'Email ..', 'style' => 'display: none;'],
+                'constraints' => [
+                    new Email(),
+                ],
+
             ])
 
-            ->add('telephone', TextType::class, [
+            ->add('telephone', TelType::class, [ //Type spéciale pour téléphone ouvre un pavé numérique a la place d'un clavier complet
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['placeholder' => 'Telephone ..', 'style' => 'display: none;']
+                'attr' => [
+                    'placeholder' => 'Telephone ..',
+                    'style' => 'display: none;',
+                    'maxlength' => 15,
+                ],
             ])
 
             ->add('statut', ChoiceType::class, [
