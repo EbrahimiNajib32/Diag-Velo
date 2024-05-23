@@ -160,7 +160,11 @@ class VeloInfoType extends AbstractType
                 'expanded' => true,
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['class' => 'choice-option']; // Add a class to each option
+                }
             ])
+
             ->add('autocomplete_proprietaire', TextType::class, [
                 'required' => false,
                 'mapped' => false,
