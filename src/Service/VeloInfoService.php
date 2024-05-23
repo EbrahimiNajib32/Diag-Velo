@@ -66,16 +66,16 @@ class VeloInfoService
         }, $result);
     }
 
-  /*  public function getDatesDiagnostic(): array
+   public function getDatesDiagnostic(): array
     {
         $query = $this->entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
-            ->select('DISTINCT d.DateDiagnostic')
+            ->select('DISTINCT d.date_diagnostic')
             ->getQuery();
     
         $result = $query->getResult();
     
-        return array_column($result, 'DateDiagnostic');
-    }*/
+        return array_column($result, 'date_diagnostic');
+    }
     
     public function getConclusionsDiagnostic(): array
     {
@@ -102,12 +102,12 @@ class VeloInfoService
     public function getNomsProprio(): array
     {
         $query = $this->entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
-            ->select('DISTINCT p.nomProprio')
+            ->select('DISTINCT p.nom_proprio')
             ->getQuery();
     
         $result = $query->getResult();
     
-        return array_column($result, 'nomProprio');
+        return array_column($result, 'nom_proprio');
     }
     
     public function getStatutsProprio(): array

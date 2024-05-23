@@ -27,13 +27,8 @@ class FiltreController extends AbstractController
         $couleurs = $this->veloInfoService->getCouleurs();
         $types = $this->veloInfoService->getTypes();
         $publics = $this->veloInfoService->getPublics();
-
-        // Récupérer les informations sur le diagnostic
-        //$datesDiagnostic = $this->veloInfoService->getDatesDiagnostic();
         $conclusionsDiagnostic = $this->veloInfoService->getConclusionsDiagnostic();
         $statusDiagnostic = $this->veloInfoService->getStatusDiagnostic();
-
-        // Récupérer les informations sur le propriétaire
         $nomsProprio = $this->veloInfoService->getNomsProprio();
         $statutsProprio = $this->veloInfoService->getStatutsProprio();
 
@@ -43,7 +38,6 @@ class FiltreController extends AbstractController
             'couleurs' => $couleurs,
             'types' => $types,
             'publics' => $publics,
-           // 'datesDiagnostic' => $datesDiagnostic,
             'conclusionsDiagnostic' => $conclusionsDiagnostic,
             'statusDiagnostic' => $statusDiagnostic,
             'nomsProprio' => $nomsProprio,
