@@ -10,106 +10,88 @@
     <div class="container mx-auto">
 
         <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
+        {% if pagination|length > 0 %}
+        <!-- Formulaire de filtrage -->
+        <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
+            <div class="flex flex-col space-y-4">
+                <!-- Input elements -->
+                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:w-auto sm:flex-none">
+                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+                    <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+                </div>
 
-        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
-            {% if pagination|length > 0 %}
+
+                <!-- Select elements -->
+                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0">
+                    <select name="marque" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('marque', this.value)" style="cursor: pointer;">
+                        <option value="" selected>Marques</option>
+                        {% for marque in marques_uniques %}
+                            <option value="{{ marque }}">{{ marque }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="couleur" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('couleur', this.value)" style="cursor: pointer;">
+                        <option value="" selected>Couleurs</option>
+                        {% for couleur in couleurs_uniques %}
+                            <option value="{{ couleur }}">{{ couleur }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="type" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('type', this.value)" style="cursor: pointer;">
+                        <option value="" selected>Types</option>
+                        {% for type in types_uniques %}
+                            <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="public" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('public', this.value)" style="cursor: pointer;">
+                        <option value="" selected>Publics</option>
+                        {% for public in publics_uniques %}
+                            <option value="{{ public }}">{{ public }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+
+
+
+
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3" style="width:12rem;">
-                        <span style="margin-bottom: 4px;">ID</span>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3" style="width:12rem;">
-                        <span style="margin-bottom: 4px;">Propriétaire</span>
-                        <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width:12rem;">
-                        <span style="margin-bottom: 4px;">Numéro de série</span>
-                        <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                    </th>
-                    <th scope="col" class="px-6 py-3" style="width:12rem;">
-                        <span style="margin-bottom: 4px;">Référence recyclerie</span>
-                        <input type="text" id="searchInput" onkeyup="filterByReference()" placeholder="Recherche..." class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 sm:text-sm">
-                    </th>
-                    <th scope="col" class="px-6 py-3" >
-                        Marque
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for marque in marques_uniques %}
-                                    <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        Couleur
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownCouleur')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownCouleur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('couleur', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for couleur in couleurs_uniques %}
-                                    <a href="#" onclick="filterRows('couleur', '{{ couleur }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ couleur }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        Type
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for type in types_uniques %}
-                                    <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Public
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for public in publics_uniques %}
-                                    <a href="#" onclick="filterRows('public', '{{ public }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ public }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
-                    <th scope="col" class="px-6 py-3">Date de vente</th>
-                    <th scope="col" class="px-6 py-3">Conclusion</th>
-                    <th scope="col" class="px-6 py-3">Date de destruction</th>
-                    <th scope="col" class="px-6 py-3">Diagnostics</th>
-
-
+                    <th scope="col" class="px-2 py-3">ID</th>
+                    <th scope="col" class="px-2 py-3">Propriétaire</th>
+                    <th scope="col" class="px-2 py-3">Numéro de série</th>
+                    <th scope="col" class="px-2 py-3">Référence recyclerie</th>
+                    <th scope="col" class="px-2 py-3">Marque</th>
+                    <th scope="col" class="px-2 py-3">Couleur</th>
+                    <th scope="col" class="px-2 py-3">Type</th>
+                    <th scope="col" class="px-2 py-3">Public</th>
+                    <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
+                    <th scope="col" class="px-2 py-3">Date de vente</th>
+                    <th scope="col" class="px-2 py-3">Conclusion</th>
+                    <th scope="col" class="px-2 py-3">Date de destruction</th>
+                    <th scope="col" class="px-2 py-3">Diagnostics</th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for velo in pagination %}
-                    <tr class="bg-white border-b"
-                        data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                    <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.nom_proprio }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.numero_de_serie }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">
                             {% if velo.date_de_vente is not null %}
                                 {{ velo.date_de_vente|date('d/m/Y') }}
-                            {%  endif %}
-                        <td class="px-6 py-4 border-r border-b border-gray-300">
-                            {% set necessiteReparation = false %}
+                            {% endif %}
+                        </td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300">
                             {% if diagnostics[velo.id] is defined %}
                                 {% set lastDiagnostic = diagnostics[velo.id]|last %}
                                 {% if lastDiagnostic.conclusion is defined %}
@@ -125,13 +107,12 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-
-                        <td class="px-6 py-4 border-r border-b border-gray-300">
+                        <td class="px-2 py-4 border-r border-b border-gray-300">
                             {% if velo.date_destruction is not null %}
                                 {{ velo.date_destruction|date('d/m/Y') }}
-                            {%  endif %}
+                            {% endif %}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-2 py-4">
                             <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
                                 Voir
                             </button>
@@ -140,6 +121,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+
             <div class="pagination mx-auto justify-center">
                 {{ knp_pagination_render(pagination) }}
             </div>
@@ -203,11 +185,6 @@
             padding-right: 0.3rem;
         }
 
-        .tab_ctn{
-            width: 95%;
-            margin: auto;
-        }
-
         .tab_ctn td:first-child, .tab_ctn th:first-child{
             padding:0.5rem;
         }
@@ -217,77 +194,58 @@
             backdrop-filter: blur(5px);
             height: 100vh;
             z-index: 50;
-
         }
 
     </style>
 
     <script>
-
-        function toggleDropdown(dropdownId) {
-            var dropdown = document.getElementById(dropdownId);
-            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-        }
-
         function filterRows(attribute, value) {
             const rows = document.querySelectorAll("tbody tr");
             rows.forEach(row => {
                 const attrValue = row.getAttribute('data-' + attribute);
                 row.style.display = value === "" || attrValue === value ? "" : "none";
             });
-            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                dropdown.style.display = 'none';
-            });
-        }
-
-        function hover(element, isHovering) {
-            if (isHovering) {
-                element.style.backgroundColor = '#e0e0e0';
-            } else {
-                element.style.backgroundColor = '#f9f9f9';
-            }
         }
 
         function filterByReference() {
-            var input = document.getElementById("searchInput");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[2];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchReference");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-reference]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
         function filterBySerial() {
-            var input = document.getElementById("searchSerial");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchSerial");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-serial]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    console.log(`Checking row: ${txtValue} with filter: ${filter}`);
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
+
         function filterByOwner() {
-            var input = document.getElementById("searchOwner");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchOwner");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-owner]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", () => {
