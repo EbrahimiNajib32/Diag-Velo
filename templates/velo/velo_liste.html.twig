@@ -13,35 +13,36 @@
         {% if pagination|length > 0 %}
         <!-- Formulaire de filtrage -->
         <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
-            <div class="flex flex-wrap">
+            <div class="flex flex-col space-y-4">
                 <!-- Input elements -->
-                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:w-auto sm:flex-none sm:space-x-4 mb-2 sm:mb-0">
-                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto">
-                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto">
-                    <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto">
+                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:w-auto sm:flex-none">
+                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+                    <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
                 </div>
 
+
                 <!-- Select elements -->
-                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:space-x-4">
-                    <select name="marque" class="px-4 py-2 border rounded w-full sm:w-auto" onchange="filterRows('marque', this.value)" style="cursor: pointer;">
+                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0">
+                    <select name="marque" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('marque', this.value)" style="cursor: pointer;">
                         <option value="" selected>Marques</option>
                         {% for marque in marques_uniques %}
                             <option value="{{ marque }}">{{ marque }}</option>
                         {% endfor %}
                     </select>
-                    <select name="couleur" class="px-4 py-2 border rounded w-full sm:w-auto" onchange="filterRows('couleur', this.value)" style="cursor: pointer;">
+                    <select name="couleur" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('couleur', this.value)" style="cursor: pointer;">
                         <option value="" selected>Couleurs</option>
                         {% for couleur in couleurs_uniques %}
                             <option value="{{ couleur }}">{{ couleur }}</option>
                         {% endfor %}
                     </select>
-                    <select name="type" class="px-4 py-2 border rounded w-full sm:w-auto" onchange="filterRows('type', this.value)" style="cursor: pointer;">
+                    <select name="type" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('type', this.value)" style="cursor: pointer;">
                         <option value="" selected>Types</option>
                         {% for type in types_uniques %}
                             <option value="{{ type }}">{{ type }}</option>
                         {% endfor %}
                     </select>
-                    <select name="public" class="px-4 py-2 border rounded w-full sm:w-auto" onchange="filterRows('public', this.value)" style="cursor: pointer;">
+                    <select name="public" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('public', this.value)" style="cursor: pointer;">
                         <option value="" selected>Publics</option>
                         {% for public in publics_uniques %}
                             <option value="{{ public }}">{{ public }}</option>
@@ -50,6 +51,7 @@
                 </div>
             </div>
         </form>
+
 
 
 
