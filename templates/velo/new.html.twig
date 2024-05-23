@@ -70,7 +70,17 @@
             <div class="border border-black rounded p-3 text-center">
                 <div>
                     {{ form_label(form.chosir_ou_ajouter) }}
-                    {{ form_widget(form.chosir_ou_ajouter) }}
+
+                    <div class="choice-container flex-col-2 justify-around flex ">
+                        <div class="existing-choice">
+                            {{ form_widget(form.chosir_ou_ajouter[0]) }}
+                            {{ form_label(form.chosir_ou_ajouter[0]) }}
+                        </div>
+                            <div class="new-choice">
+                                {{ form_widget(form.chosir_ou_ajouter[1]) }}
+                                {{ form_label(form.chosir_ou_ajouter[1]) }}
+                            </div>
+                        </div>
                 </div>
                 <div class="form-group existing-proprietaire" style="display:none;">
                     {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
