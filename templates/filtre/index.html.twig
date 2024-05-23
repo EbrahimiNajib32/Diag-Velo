@@ -41,7 +41,7 @@
     <h1>Informations sur les diagnostics</h1>
     <ul>
         {% for diagnostic in date_diagnostic %}
-            <li>Date: {{ diagnostic }}</li>
+            <li>Date: {{ diagnostic|date('Y-m-d H:i:s') }}</li> {# formatage de la date #}
         {% endfor %}
         {% for conclusion in conclusions %}
             <li>Conclusion: {{ conclusion }}</li>
