@@ -62,43 +62,52 @@
 </style>
 
 
-    <div class="bg-gray-100 flex flex-col min-h-screen justify-center">
-        <div class="w-full">
-            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
-                <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
-                {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-                <div class="grid grid-cols-2 gap-4 ">
-                    <div class="border border-black rounded p-3 text-center">
-                        <div>
-                            {{ form_label(form.chosir_ou_ajouter) }}
-                            {{ form_widget(form.chosir_ou_ajouter) }}
-                        </div>
-                        <div class="form-group existing-proprietaire" style="display:none;">
-                            {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
-                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
-                        </div>
-
-                        <div class="new-prop-field" style="display:none;">
-                            {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
-                            <div class="w-full">
-                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
+<div class="bg-gray-100 flex flex-col min-h-screen justify-center">
+    <div class="w-full">
+        <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
+            <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
+            {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+            <div class="grid grid-cols-2 gap-4 ">
+                <div class="border border-black rounded p-3 text-center">
+                    <div>
+                        {{ form_label(form.chosir_ou_ajouter) }}
+                        <div class="choice-container flex-col-2 justify-around flex ">
+                            <div class="existing-choice">
+                                {{ form_widget(form.chosir_ou_ajouter[0]) }}
+                                {{ form_label(form.chosir_ou_ajouter[0]) }}
                             </div>
-                            {{ form_label(form.email, 'E-m@il', {'label_attr': {'class': 'required-field'}}) }}
-                            <div class="w-full">
-                                {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                            {{ form_label(form.telephone, 'Numéro de téléphone', {'label_attr': {'class': 'required-field'}}) }}
-                            <div class="w-full">
-                                {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                            <div class="w-full">
-                                {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
-                                {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
+                            <div class="new-choice">
+                                {{ form_widget(form.chosir_ou_ajouter[1]) }}
+                                {{ form_label(form.chosir_ou_ajouter[1]) }}
                             </div>
                         </div>
-
                     </div>
+                    <div class="form-group existing-proprietaire" style="display:none;">
+                        {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
+                        {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
+                        {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
+                    </div>
+
+                    <div class="new-prop-field" style="display:none;">
+                        {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
+                        <div class="w-full">
+                            {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
+                        </div>
+                        {{ form_label(form.email, 'E-m@il', {'label_attr': {'class': 'required-field'}}) }}
+                        <div class="w-full">
+                            {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
+                        </div>
+                        {{ form_label(form.telephone, 'Numéro de téléphone', {'label_attr': {'class': 'required-field'}}) }}
+                        <div class="w-full">
+                            {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
+                        </div>
+                        <div class="w-full">
+                            {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
+                            {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
+                        </div>
+                    </div>
+
+                </div>
                 <div>
                     <h1 class="text-center">Couleurs</h1>
                     <div class="grid grid-cols-5 gap-1">
@@ -109,20 +118,20 @@
                         {% endfor %}
                     </div>
                 </div>
-                    {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                    {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                    {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                    {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                    {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                    {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+                {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+                {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
 
                 <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center">
                     <div class="text-center">
@@ -147,12 +156,12 @@
             </div>
 
         </div>
-    <div class="details-container text-center mt-4">
-        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
-    </div>
+        <div class="details-container text-center mt-4">
+            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
+        </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script>
+        <script>
 
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -329,6 +338,6 @@
                 });
             });
 
-    </script>
+        </script>
 
-{% endblock %}
+        {% endblock %}
