@@ -161,11 +161,20 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
             ])
-            ->add('proprietaire', TextType::class, [
+            ->add('autocomplete_proprietaire', TextType::class, [
                 'required' => false,
+                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher un propriétaire...',
+                    'class' => 'ui-autocomplete-input',
                 ],
+            ])
+            ->add('proprietaire', EntityType::class, [
+                'class' => Proprietaire::class,
+                'choice_label' => 'nomProprio',
+                'required' => false,
+                'placeholder' => 'Sélectionner un propriétaire',
+                'attr' => ['style' => 'display:none;'], // Hide this field, as it's set through autocomplete
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
