@@ -39,27 +39,24 @@ class VeloController extends AbstractController
                 $imageName = uniqid() . '.' . $type[1];
                 $filePath = $this->getParameter('images_directory') . '/' . $imageName;
 
-                // Save the image file
                 if (!file_exists($this->getParameter('images_directory'))) {
                     mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
                 }
                 file_put_contents($filePath, $data);
 
-                $velo->setUrlPhoto($filePath);
+                $webPath = '/images/velo/' . $imageName;
+                $velo->setUrlPhoto($webPath);
             }
 
-            // Persist the Velo and its Proprietaire
             if ($velo->getProprietaire()) {
                 $entityManager->persist($velo->getProprietaire());
             }
             $entityManager->persist($velo);
             $entityManager->flush();
 
-            // Redirect after saving
             return $this->redirectToRoute('app_accueil');
         }
 
-        // Render the form if not submitted or if there are validation errors
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -179,10 +176,23 @@ class VeloController extends AbstractController
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
                     if (in_array($key, ['refRecyclerie', 'poids', 'tailleRoues', 'tailleCadre'])) {
-                        $valueToSet = ($value === null || $value === '') ? null : (in_array($key, ['tailleRoues', 'tailleCadre']) ? (string)$value : (int)$value);
+                        if ($value === null || $value === '') {
+                            $valueToSet = null;
+                        } else {
+                            switch ($key) {
+                                case 'poids':
+                                    $valueToSet = (string)$value;  // Treat 'poids' as string
+                                    break;
+                                case 'tailleRoues':
+                                case 'tailleCadre':
+                                    $valueToSet = (int)$value;
+                                    break;
+                                default:
+                                    $valueToSet = (string)$value;
+                                    break;
+                            }
+                        }
                         $velo->$setter($valueToSet);
-                    } else {
-                        $velo->$setter($value);
                     }
                 }
             }

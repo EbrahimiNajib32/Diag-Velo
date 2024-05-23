@@ -25,6 +25,7 @@ class AutoCompleteController extends AbstractController
         foreach ($proprietaires as $proprietaire) {
             $formattedProprietaires[] = [
                 'nom_proprio' => $proprietaire->getNomProprio(),
+                'id_proprio' => $proprietaire->getId(),
             ];
         }
 
