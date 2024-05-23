@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\VeloInfoService;
 
 
 
@@ -126,11 +127,13 @@ class VeloController extends AbstractController
             ->getQuery();
 
         $types = $typeQuery->getResult();
+        
 
         // Extraction des valeurs des types
                 $types_uniques = array_map(function ($type) {
                     return $type['type'];
                 }, $types);
+           //dd($types_uniques);
 
         // Requête pour obtenir les catégories de public uniques
         $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
@@ -144,9 +147,10 @@ class VeloController extends AbstractController
             return $public['public'];
         }, $publics);
 
-
+// Passe les données au modèle Twig pour la première vue
         // Passe les données au modèle Twig
-        return $this->render('velo/velo_liste.html.twig', [
+
+        $firstView = $this->renderView('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
             'diagnostics' => $diagnostics,
             'marques_uniques' => $marques_uniques,
@@ -154,6 +158,18 @@ class VeloController extends AbstractController
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
         ]);
+
+        // Passe les données au modèle Twig pour la deuxième vue
+    $secondView = $this->renderView('diagnostic/recapitulatif.html.twig', [
+        'pagination' => $pagination,
+       // 'diagnostics' => $diagnostics,
+        'marques_uniques' => $marques_uniques,
+        //'couleurs_uniques' => $couleurs_uniques,
+        'types_uniques' => $types_uniques,
+        'publics_uniques' => $publics_uniques,
+    ]);
+    // retourner les deux vues dans une seule réponse
+    return new Response($firstView . $secondView);
     }
 
 
@@ -239,4 +255,6 @@ class VeloController extends AbstractController
             'pagination' => $pagination
         ]);
     }
+
+       
 }
