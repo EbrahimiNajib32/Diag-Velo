@@ -51,6 +51,11 @@
     .button-black {
         color: #000000; /* Black color */
     }
+    .required-field::after {
+        content: '*';
+        color: red;
+        margin-left: 2px;
+    }
 
 
 
@@ -67,30 +72,28 @@
                         <div>
                             {{ form_label(form.chosir_ou_ajouter) }}
                             {{ form_widget(form.chosir_ou_ajouter) }}
-
                         </div>
                         <div class="form-group existing-proprietaire" style="display:none;">
-                            {{ form_label(form.proprietaire) }}
-                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire', 'autocomplete' : 'on', 'class': 'ui-autocomplete-input' }}) }}
-                            <input type="hidden" id="proprietaire_id" name="proprietaire_id" />
-                            <div id="ui-front"></div>
+                            {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
+                            {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
+                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
                         </div>
 
                         <div class="new-prop-field" style="display:none;">
-                            {{ form_label(form.nom_proprio) }}
+                            {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
                             <div class="w-full">
                                 {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
-                            {{ form_label(form.email) }}
+                            {{ form_label(form.email, 'E-m@il', {'label_attr': {'class': 'required-field'}}) }}
                             <div class="w-full">
                                 {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
-                            {{ form_label(form.telephone) }}
+                            {{ form_label(form.telephone, 'Numéro de téléphone', {'label_attr': {'class': 'required-field'}}) }}
                             <div class="w-full">
                                 {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
                             <div class="w-full">
-                                Statut
+                                {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
                                 {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
                         </div>
@@ -106,19 +109,19 @@
                         {% endfor %}
                     </div>
                 </div>
-                {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
-                {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+                    {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+                    {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
 
                 <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center">
@@ -299,10 +302,8 @@
                 cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
             });
             $(document).ready(function() {
-                // Initialize the autocomplete widget
-                $('#velo_info_proprietaire').autocomplete({
+                $('#velo_info_autocomplete_proprietaire').autocomplete({
                     source: function(request, response) {
-                        // Fetch autocomplete data from the server
                         $.ajax({
                             url: '{{ path('autocomplete') }}',
                             dataType: 'json',
@@ -310,20 +311,23 @@
                                 term: request.term
                             },
                             success: function(data) {
-                                let resArray = [];
-                                for ( let i = 0; i < data.length; i++) {
-                                    resArray[i] = data[i].nom_proprio;
-                                }
-                                response(resArray);
+                                response($.map(data, function(item) {
+                                    return {
+                                        label: item.nom_proprio,
+                                        value: item.id_proprio
+                                    };
+                                }));
                             }
                         });
                     },
                     minLength: 2,
-
-                })
-
+                    select: function(event, ui) {
+                        $('#velo_info_proprietaire').val(ui.item.value);
+                        $('#velo_info_autocomplete_proprietaire').val(ui.item.label);
+                        return false;
+                    }
+                });
             });
-
 
     </script>
 
