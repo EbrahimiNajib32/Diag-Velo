@@ -16,9 +16,9 @@
             <div class="flex flex-wrap">
                 <!-- Input elements -->
                 <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:w-auto sm:flex-none sm:space-x-4 mb-2 sm:mb-0">
-                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" name="nom" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto" value="{{ app.request.query.get('nom') }}">
-                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" name="nom" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto" value="{{ app.request.query.get('nom') }}">
-                    <input type="text" id="searchInput" onkeyup="filterByReference()" name="nom" placeholder="Référence recyclérie" class="px-4 py-2 border rounded w-full sm:w-auto" value="{{ app.request.query.get('nom') }}">
+                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto">
+                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto">
+                    <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto">
                 </div>
 
                 <!-- Select elements -->
@@ -76,9 +76,9 @@
                 {% for velo in pagination %}
                     <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.nom_proprio }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.numero_de_serie }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.ref_recyclerie }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
+                        <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
                         <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
@@ -203,51 +203,47 @@
                 const attrValue = row.getAttribute('data-' + attribute);
                 row.style.display = value === "" || attrValue === value ? "" : "none";
             });
-            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                dropdown.style.display = 'none';
-            });
         }
 
         function filterByReference() {
-            var input = document.getElementById("searchInput");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[2];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchReference");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-reference]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
         function filterBySerial() {
-            var input = document.getElementById("searchSerial");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchSerial");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-serial]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    console.log(`Checking row: ${txtValue} with filter: ${filter}`);
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
+
         function filterByOwner() {
-            var input = document.getElementById("searchOwner");
-            var filter = input.value.toUpperCase();
-            var table = document.querySelector("table");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) {
-                var td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    var txtValue = td.textContent || td.innerText;
-                    tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const input = document.getElementById("searchOwner");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                const cell = row.querySelector("[data-owner]");
+                if (cell) {
+                    const txtValue = cell.textContent || cell.innerText;
+                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
                 }
-            }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", () => {
