@@ -16,32 +16,41 @@
         }
     </style>
     <h1 class="text-center text-lg font-semibold">Modifier le vélo {{ velo.getRefRecyclerie() }}</h1>
-    <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 border shadow-lg border-black rounded p-4 max-w-5xl mt-5">
+    <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
         <div class="">
-            <h1 class="text-center">Détails du Vélo</h1>
+            <h2 class="text-center font-bold">Détails du Vélo</h2>
             <ul class="details-list">
-                <li class="bg-white rounded mr-2 mb-2">Marque: <span id="marque">{{ velo.marque }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Poids: <span id="poids">{{ velo.poids }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">État: <span id="etat">{{ velo.etat }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
-                <li class="bg-white rounded mr-2 mb-2">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
-                <li class="bg-white rounded mr-2 mb-2">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Type: <span id="type">{{ velo.type }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Public: <span id="public">{{ velo.getPublic() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
             </ul>
         </div>
         <div class="">
-            <ul class="details-list ">
+            <ul class="">
+                <div class="details-list bg-white rounded p-2">
+                    <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
                 <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
+                <li class="text-xl font-bold">Propriétaire du Vélo</li>
+                <li class="">Nom et Prénom : {{ velo.getProprietaire.getNomProprio() }}</li>
+                <li class="">Téléphone : {{ velo.getProprietaire.getTelephone() }}</li>
+                <li class="">E mail : {{ velo.getProprietaire.getEmail() }}</li>
+                    </div>
+                <div class="details-list">
+                <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
+                </div>
             </ul>
         </div>
     </div>
