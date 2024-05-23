@@ -75,7 +75,7 @@ class FiltreController extends AbstractController
 
     // Passer toutes les informations à la vue
     //return $this->render('filtre/index.html.twig', [
-        return $this->render('diagnostic/recapitulatif.html.twig', [
+         return $this->render('diagnostic/recapitulatif.html.twig', [
         'marques' => $marques_uniques,
         'couleurs' => $couleurs_uniques,
         'types' => $types_uniques,

@@ -16,6 +16,7 @@ use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
 use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
+use App\Entity\Velo;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -589,13 +590,42 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 
 
     #[Route('/diagnostics/recapitulatif', name: 'diagnostics_recapitulatif', methods: ['GET'])]
-    public function recapitulatif(EntityManagerInterface $entityManager): Response
-    {
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+public function recapitulatif(EntityManagerInterface $entityManager): Response
+{
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $types_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.type')
+        ->getQuery()
+        ->getResult();
 
-        return $this->render('diagnostic/recapitulatif.html.twig', [
-            'diagnostics' => $diagnostics,
-        ]);
+    // Extract the 'type' values from the result
+    $types_uniques = array_column($types_uniques, 'type');
+
+   /* $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $conclusions_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.conclusion')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'conclusion' values from the result
+    $conclusions_uniques = array_column($conclusions_uniques, 'conclusion');
+
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $statuss_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.status')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'status' values from the result
+    $statuss_uniques = array_column($statuss_uniques, 'status');*/
+
+    return $this->render('diagnostic/recapitulatif.html.twig', [
+        'diagnostics' => $diagnostics,
+        'types_uniques' => $types_uniques,
+        /*'conclusions_uniques' => $conclusions_uniques,
+        'status_uniques' => $statuss_uniques,*/
+    ]);
     }
 
 
