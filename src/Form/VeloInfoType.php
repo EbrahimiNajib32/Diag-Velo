@@ -51,11 +51,11 @@ class VeloInfoType extends AbstractType
                 'label' => 'Bicycode'
            ])
 
-
-            ->add('marque', ChoiceType::class, [
-                'choices' => $this->getBrandChoices(),
+            ->add('marque', TextType::class, [
                 'label' => 'Marque'
             ])
+
+
             ->add('numero_de_serie', TextType::class , [
                 'required' => false,
                 'label' => 'Numéro de série'
