@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use App\Service\VeloInfoService;
 
 
 
@@ -40,27 +39,24 @@ class VeloController extends AbstractController
                 $imageName = uniqid() . '.' . $type[1];
                 $filePath = $this->getParameter('images_directory') . '/' . $imageName;
 
-                // Save the image file
                 if (!file_exists($this->getParameter('images_directory'))) {
                     mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
                 }
                 file_put_contents($filePath, $data);
 
-                $velo->setUrlPhoto($filePath);
+                $webPath = '/images/velo/' . $imageName;
+                $velo->setUrlPhoto($webPath);
             }
 
-            // Persist the Velo and its Proprietaire
             if ($velo->getProprietaire()) {
                 $entityManager->persist($velo->getProprietaire());
             }
             $entityManager->persist($velo);
             $entityManager->flush();
 
-            // Redirect after saving
             return $this->redirectToRoute('app_accueil');
         }
 
-        // Render the form if not submitted or if there are validation errors
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -127,13 +123,11 @@ class VeloController extends AbstractController
             ->getQuery();
 
         $types = $typeQuery->getResult();
-        
 
         // Extraction des valeurs des types
                 $types_uniques = array_map(function ($type) {
                     return $type['type'];
                 }, $types);
-           //dd($types_uniques);
 
         // Requête pour obtenir les catégories de public uniques
         $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
@@ -147,10 +141,9 @@ class VeloController extends AbstractController
             return $public['public'];
         }, $publics);
 
-// Passe les données au modèle Twig pour la première vue
-        // Passe les données au modèle Twig
 
-        $firstView = $this->renderView('velo/velo_liste.html.twig', [
+        // Passe les données au modèle Twig
+        return $this->render('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
             'diagnostics' => $diagnostics,
             'marques_uniques' => $marques_uniques,
@@ -158,18 +151,6 @@ class VeloController extends AbstractController
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
         ]);
-
-        // Passe les données au modèle Twig pour la deuxième vue
-    $secondView = $this->renderView('diagnostic/recapitulatif.html.twig', [
-        'pagination' => $pagination,
-       // 'diagnostics' => $diagnostics,
-        'marques_uniques' => $marques_uniques,
-        //'couleurs_uniques' => $couleurs_uniques,
-        'types_uniques' => $types_uniques,
-        'publics_uniques' => $publics_uniques,
-    ]);
-    // retourner les deux vues dans une seule réponse
-    return new Response($firstView . $secondView);
     }
 
 
@@ -195,10 +176,23 @@ class VeloController extends AbstractController
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
                     if (in_array($key, ['refRecyclerie', 'poids', 'tailleRoues', 'tailleCadre'])) {
-                        $valueToSet = ($value === null || $value === '') ? null : (in_array($key, ['tailleRoues', 'tailleCadre']) ? (string)$value : (int)$value);
+                        if ($value === null || $value === '') {
+                            $valueToSet = null;
+                        } else {
+                            switch ($key) {
+                                case 'poids':
+                                    $valueToSet = (string)$value;  // Treat 'poids' as string
+                                    break;
+                                case 'tailleRoues':
+                                case 'tailleCadre':
+                                    $valueToSet = (int)$value;
+                                    break;
+                                default:
+                                    $valueToSet = (string)$value;
+                                    break;
+                            }
+                        }
                         $velo->$setter($valueToSet);
-                    } else {
-                        $velo->$setter($value);
                     }
                 }
             }
@@ -255,6 +249,4 @@ class VeloController extends AbstractController
             'pagination' => $pagination
         ]);
     }
-
-       
 }

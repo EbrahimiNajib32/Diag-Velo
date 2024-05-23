@@ -15,3 +15,8 @@ autocomplete:
     path: '/autocomplete'
     controller: 'App\Controller\AutoCompleteController::autocompleteProprietaires'
     methods: [GET]
+
+
+filtre_index:
+    path: /filtre
+    controller: App\Controller\FiltreController::index

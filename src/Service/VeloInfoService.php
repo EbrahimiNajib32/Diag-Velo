@@ -3,6 +3,8 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Velo;
+use App\Entity\Diagnostic;
+use App\Entity\Proprietaire;
 
 
 class VeloInfoService
@@ -62,5 +64,60 @@ class VeloInfoService
         return array_map(function ($public) {
             return $public['public'];
         }, $result);
+    }
+
+  /*  public function getDatesDiagnostic(): array
+    {
+        $query = $this->entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+            ->select('DISTINCT d.DateDiagnostic')
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        return array_column($result, 'DateDiagnostic');
+    }*/
+    
+    public function getConclusionsDiagnostic(): array
+    {
+        $query = $this->entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+            ->select('DISTINCT d.conclusion')
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        return array_column($result, 'conclusion');
+    }
+    
+    public function getStatusDiagnostic(): array
+    {
+        $query = $this->entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+            ->select('DISTINCT d.status')
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        return array_column($result, 'status');
+    }
+
+    public function getNomsProprio(): array
+    {
+        $query = $this->entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.nomProprio')
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        return array_column($result, 'nomProprio');
+    }
+    
+    public function getStatutsProprio(): array
+    {
+        $query = $this->entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.statut')
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        return array_column($result, 'statut');
     }
 }
