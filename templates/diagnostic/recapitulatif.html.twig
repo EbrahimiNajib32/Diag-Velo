@@ -60,9 +60,31 @@
             <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
         </tr>
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-center"> fait par</th>
+                    <th scope="col" class="px-6 py-3">
+                        fait par
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for nom in noms_uniques %}
+                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
                     <th scope="col" class="px-6 py-3 text-center">ID </th>
-                    <th scope="col" class="px-6 py-3 text-center">Date </th>
+                    <th scope="col" class="px-6 py-3">
+                        Date
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for date in dates_uniques %}
+                                    <a href="#" onclick="filterRows('date', '{{ date|date('d-m-Y') }}')"  style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ date|date('d-m-Y') }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
                    <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
@@ -175,9 +197,11 @@
                {% for diagnostic in diagnostics %}
     {% set rowNumber = rowNumber + 1 %}
     <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}" 
+        data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
         data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
         data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
         data-conclusion="{{ diagnostic.conclusion }}"
+        data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
         data-status="{{ diagnostic.status }}"
         data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
         data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"

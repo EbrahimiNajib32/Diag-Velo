@@ -15,6 +15,7 @@ use App\Entity\ElementControl;
 use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
 use App\Entity\Proprietaire;
+use App\Entity\Utilisateur;
 use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use App\Entity\Velo;
@@ -594,6 +595,24 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 public function recapitulatif(EntityManagerInterface $entityManager): Response
 {
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $noms_uniques = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u')
+        ->select('DISTINCT u.nom')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $noms_uniques = array_column($noms_uniques, 'nom');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+        ->select('DISTINCT d.date_diagnostic')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $dates_uniques = array_column($dates_uniques, 'date_diagnostic');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
     $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
         ->select('DISTINCT dt.nomType')
         ->getQuery()
@@ -683,6 +702,9 @@ public function recapitulatif(EntityManagerInterface $entityManager): Response
         'publics_uniques' => $publics_uniques,
         'nomsp_uniques' => $nomsp_uniques,
         'statutp_uniques' => $statutp_uniques,
+        'dates_uniques' =>$dates_uniques,
+        'noms_uniques' =>$noms_uniques
+
         
     ]);
     }
