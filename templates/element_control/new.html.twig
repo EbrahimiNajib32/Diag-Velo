@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Nouvel Élément de Contrôle{% endblock %}
+
+{% block body %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="container max-w-xl text-center border bg-white shadow rounded-lg p-6">
+            <h1 class="text-xl font-semibold mb-4">Ajouter un Nouvel Élément de Contrôle</h1>
+            <p class="text-sm text-gray-600 mb-2">
+                Entrez la catégorie et le nom de l'élément.
+            </p>
+
+            {{ form_start(form, {'attr': {'class': 'my-form-class'}}) }}
+            <div class="mb-3">
+                <div>
+                    {{ form_row(form.existingCategory) }}
+                </div>
+                <div class="flex space-x-2">
+                    <div class="flex-1">
+                        {{ form_row(form.category) }}
+                    </div>
+                    <div class="flex-1">
+                        {{ form_row(form.elementName) }}
+                    </div>
+                </div>
+            </div>
+            <button id="submit-btn" class="button-style"><i class="bi bi-plus-square text-xl mr-2"></i> Ajouter l'élément</button>
+            {{ form_end(form) }}
+            <div class="details-container text-center mt-4">
+                <a href="{{ path('app_dashboard_element_control') }}" class="button-style"><i class="bi bi-box-arrow-left text-xl mr-2"></i>Retour à la liste des éléments</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('select[name="element_control[existingCategory]"]').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const categoryInput = document.querySelector('input[name="element_control[category]"]');
+            if (selectedCategory) {
+                categoryInput.value = selectedCategory;
+            } else {
+                categoryInput.value = '';
+            }
+        });
+
+        function validateInput() {
+            const categoryInput = document.querySelector('input[name="element_control[category]"]');
+            const elementInput = document.querySelector('input[name="element_control[elementName]"]');
+            if (categoryInput.value.trim() === '' || elementInput.value.trim() === '') {
+                alert('Veuillez remplir les deux champs.');
+                return false;
+            }
+            return true;
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', function(event) {
+            if (!validateInput()) {
+                event.preventDefault(); // Empêche la soumission du formulaire si la validation échoue
+            }
+        });
+    </script>
+{% endblock %}

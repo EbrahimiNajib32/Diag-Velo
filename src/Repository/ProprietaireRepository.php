@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Proprietaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @extends ServiceEntityRepository<Proprietaire>
@@ -19,6 +20,15 @@ class ProprietaireRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Proprietaire::class);
+    }
+
+    public function findMatchingProprietaires(string $term): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.nom_proprio LIKE :term')
+            ->setParameter('term', '%'.$term.'%')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

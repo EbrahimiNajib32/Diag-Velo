@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center ">
+        <h1 class="text-xl font-semibold text-gray-700 text-center portrait:text-3xl">Reprendre Diagnostic </h1>
+        {{ form_start(diagnosticForm, {'attr': {'class': 'space-y-3 portrait:space-y-6'}}) }}
+
+        <div class="grid grid-cols-3 md:grid-cols-3 gap-1 mb-6 border text-sm portrait:text-2xl">
+            <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) }}</div>
+            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border'}}) }}</div>
+        </div>
+
+        {% for category, elements in diagnosticElements %}
+            <div class="mb-2 text-center">
+                <h2 onclick="toggleSection(event)" class="flex justify-between items-center text-lg font-semibold cursor-pointer rounded-xl text-white portrait:text-3xl category-header" aria-expanded="false">
+                    <div class="flex-1 text-center">{{ category }}</div>
+                    <i class="bi bi-chevron-down mr-1"></i>
+                </h2>
+                <div class="mt-2 bg-gray-100 p-2 rounded shadow hidden transition-all ease-in-out duration-300 portrait:text-2xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 category-section">
+                   {% for element in elements %}
+                   
+                            <div class="card bg-white rounded-lg shadow-lg overflow-hidden mb-2">
+                                <div class="p-4">
+                                    <div class="form-group mb-3">
+                                        <div class="font-bold">
+                                        
+                                           {{ form_label(diagnosticForm['etat_' ~ element.id]) }} 
+                                        </div>
+                                        <div class="mt-2">
+                                           {{ form_widget(diagnosticForm['etat_' ~ element.id], {'attr': {'class': 'form-radio flex justify-around'}}) }}
+                                           {{ form_errors(diagnosticForm['etat_' ~ element.id]) }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        {{ form_label(diagnosticForm['commentaire_' ~ element.id]) }}
+                                        {{ form_widget(diagnosticForm['commentaire_' ~ element.id], {'attr': {'class': 'form-control w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded'}}) }}
+                                        {{ form_errors(diagnosticForm['commentaire_' ~ element.id]) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+
+                </div>
+            </div>
+        {% endfor %}
+{#        <div>{{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 p-2 border rounded border-black portrait:h-10'}}) }}</div>#}
+        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
+        {{ form_end(diagnosticForm) }}
+    </div>
+    <div class="details-container text-center mt-4">
+        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
+    </div>
+    <script>
+        function toggleSection(event) {
+            const currentHeader = event.currentTarget;
+            const currentSection = currentHeader.nextElementSibling;
+            const allSections = document.querySelectorAll('.category-section');
+
+            allSections.forEach(section => {
+                if (section !== currentSection && !section.classList.contains('hidden')) {
+                    section.classList.add('hidden');
+                    section.previousElementSibling.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            const expanded = currentHeader.getAttribute('aria-expanded') === 'true';
+            currentHeader.setAttribute('aria-expanded', !expanded);
+            currentSection.classList.toggle('hidden');
+        }
+
+        function updateCategoryBackground() {
+            document.querySelectorAll('.category-header').forEach(header => {
+                const sections = header.nextElementSibling.querySelectorAll('.form-group');
+                const total = sections.length;
+                let filled = 0;
+
+                sections.forEach(section => {
+                    const radios = section.querySelectorAll('input[type=radio]');
+                    if (Array.from(radios).some(radio => radio.checked)) {
+                        filled++;
+                    }
+                });
+
+                console.log(`Total sections: ${total}, Filled sections: ${filled}`);
+
+                if (filled === 0) {
+                    header.style.backgroundColor = '#ff0000';
+                } else if (filled < total/2) {
+                    header.style.backgroundColor = '#fbb100';
+                } else if (filled === total/2) {
+                    header.style.backgroundColor = '#00ff48';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCategoryBackground();
+            document.querySelectorAll('input[type=radio]').forEach(radio => {
+                radio.addEventListener('change', updateCategoryBackground);
+            });
+        });
+    </script>
+{% endblock %}

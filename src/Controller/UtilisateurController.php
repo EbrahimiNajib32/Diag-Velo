@@ -49,9 +49,32 @@ class UtilisateurController extends AbstractController
 
 
     #[Route('/dashboard/utilisateurs', name: 'utilisateur_liste')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $utilisateurs = $entityManager->getRepository(Utilisateur::class)->findAll();
+        // Récupérer les critères de filtrage depuis la requête
+        $nom = $request->query->get('nom');
+        $statut = $request->query->get('statut');
+        $role = $request->query->get('role');
+
+        $queryBuilder = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u');
+
+        // Appliquer les filtres si les valeurs sont définies
+        if ($nom) {
+            $queryBuilder->andWhere('u.nom LIKE :nom')
+                ->setParameter('nom', '%' . $nom . '%');
+        }
+
+        if ($statut !== null && $statut !== '') {
+            $queryBuilder->andWhere('u.isActive = :statut')
+                ->setParameter('statut', $statut);
+        }
+
+        if ($role !== null && $role !== '') {
+            $queryBuilder->andWhere('u.role = :role')
+                ->setParameter('role', $role);
+        }
+
+        $utilisateurs = $queryBuilder->getQuery()->getResult();
 
         return $this->render('utilisateur/liste.html.twig', [
             'utilisateurs' => $utilisateurs,
@@ -87,6 +110,25 @@ class UtilisateurController extends AbstractController
             'userForm' => $form->createView(),
         ]);
     }
+
+    #[Route('/dashboard/utilisateur/disable/{id}', name: 'utilisateur_disable')]
+    public function disable(EntityManagerInterface $entityManager, Utilisateur $utilisateur): Response
+    {
+        // Récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+
+        // Vérifie si l'utilisateur connecté est le même que celui qu'on tente de désactiver
+        if ($userConnected->getId() === $utilisateur->getId()) {
+            return $this->json(['error' => 'Vous ne pouvez pas vous désactiver vous-même.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $utilisateur->setActive(false);
+        $entityManager->flush();
+
+        return $this->json(['success' => 'Utilisateur désactivé avec succès.']);
+    }
+
+
 
 }
 

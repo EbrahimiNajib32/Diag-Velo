@@ -1,77 +1,102 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails du Vélo{% endblock %}
+
+
+
 {% block body %}
-    <div class="details-container">
-        <div class="column-left"> <!-- Ajout de la classe column-left -->
-            <h1>Détails du Vélo</h1>
+    <style>
+        span[contenteditable="true"] {
+            background-color: #ffffe0;
+            outline: 2px solid #4caf50;
+            border-radius: 5px;
+            padding: 3px;
+            cursor: text;
+            margin-left: 3px;
+        }
+    </style>
+    <h1 class="text-center text-lg font-semibold">Modifier le vélo {{ velo.getRefRecyclerie() }}</h1>
+    <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
+        <div class="">
+            <h2 class="text-center font-bold">Détails du Vélo</h2>
             <ul class="details-list">
-                <li>Marque: <span id="marque">{{ velo.marque }}</span></li>
-                <li>Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
-                <li>Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
-                <li>Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
-                <li>Poids: <span id="poids">{{ velo.poids }}</span></li>
-                <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
-                <li>État: <span id="etat">{{ velo.etat }}</span></li>
-                <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li>Date d'Enregistrement: <span id="date_de_reception">{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-
-
+                <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
             </ul>
         </div>
-        <div class="column-right"> <!-- Ajout de la classe column-right -->
-            <ul class="details-list">
-                <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
-                <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-                <li>Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
-                <li>Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
-
-                <li>Type: <span id="type">{{ velo.type }}</span></li>
-                <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
-                <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
-                <li>Propriétaire ID: <span id="proprietaire_id">{{ velo.getProprietaire().getId() }}</span></li>
-                <li>Public: <span id="public">{{ velo.getPublic() }}</span></li>
+        <div class="">
+            <ul class="">
+                <div class="details-list bg-white rounded p-2">
+                    <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
+                <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
+                <li class="text-xl font-bold">Propriétaire du Vélo</li>
+                <li class="">Nom et Prénom : {{ velo.getProprietaire.getNomProprio() }}</li>
+                <li class="">Téléphone : {{ velo.getProprietaire.getTelephone() }}</li>
+                <li class="">E mail : {{ velo.getProprietaire.getEmail() }}</li>
+                    </div>
+                <div class="details-list">
+                <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
+                </div>
             </ul>
         </div>
     </div>
-    <div class="button-container">
-        <a href="{{ path('app_accueil') }}" class="back-to-home">Retour à l'accueil</a>
-        <button type="button" class="btn btn-primary edit-button">Modifier</button>
-        <button type="submit" class="btn btn-success save-button">Enregistrer</button>
+    <div class="flex flex-col-3 gap-2 mx-auto justify-center  items-center  mt-10">
+        <a href="{{ path('app_accueil') }}" class="button-style">
+            <i class="bi bi-box-arrow-left mr-1 text-xl"></i> Retour à l'accueil
+        </a>
+        <button type="button" class="button-style edit-button">
+            <i class="bi bi-pen mr-1 text-xl"></i>Modifier
+        </button>
+        <button type="submit" class="button-style save-button">
+            <i class="bi bi-box-arrow-down mr-1 text-xl"></i>Enregistrer
+        </button>
     </div>
 {% endblock %}
-
 
 {% block javascripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let editMode = false;
             const editButton = document.querySelector('.edit-button');
-            const saveButton = document.querySelector('.btn-success');
+            const saveButton = document.querySelector('.save-button');
             const fields = document.querySelectorAll('.details-list span');
+            const optionalFields = ['taille_cadre', 'taille_roues', 'ref_recyclerie', 'poids'];
 
-            editButton.addEventListener('click', function() {
+            function toggleEditMode() {
                 editMode = !editMode;
                 fields.forEach(field => {
                     field.setAttribute('contenteditable', editMode ? 'true' : 'false');
                 });
-            });
+            }
 
-
-             //data contient les nouvelles valeurs modifiés
+            editButton.addEventListener('click', toggleEditMode);
 
             saveButton.addEventListener('click', function() {
                 if (editMode) {
                     const data = {};
+
                     fields.forEach(field => {
                         if (field.getAttribute('contenteditable') === 'true') {
                             let propName = field.id;
-                            // Convertissez l'ID de snake_case en camelCase
                             propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
-                            data[propName] = field.innerText;
+                            let value = field.innerText.trim();
+                            data[propName] = value;
                         }
                     });
-                    //trouve la route du controlleur pour envoyer les donner enregistrés avec post
 
                     fetch(`/api/update-velo/{{ velo.id }}`, {
                         method: 'POST',
@@ -89,107 +114,14 @@
                         })
                         .then(responseData => {
                             console.log('Data saved successfully:', responseData);
-                            // Additional UI feedback can be added here
+                            toggleEditMode();
                         })
                         .catch(error => {
                             console.error('Error:', error);
+                            alert('Une erreur est survenue lors de l\'enregistrement des données.');
                         });
                 }
             });
         });
-
     </script>
-{% endblock %}
-
-
-{% block stylesheets %}
-    <style>
-        .details-container {
-            display: flex;
-            gap: 20px; /* Espace entre les colonnes */
-            background-color: #f7fafc;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 1000px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            align-items: stretch; /* Les colonnes s'étirent pour avoir la même hauteur */
-        }
-
-        .column-left, .column-right {
-            flex: 1; /* Chaque colonne prend la même quantité d'espace disponible */
-        }
-
-        .details-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        .column-right {
-            margin-top: 83px; /* Ajoute une marge supérieure pour décaler la colonne de droite vers le bas */
-        }
-
-        .details-list li {
-            background-color: #eef7ee;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #d4e8d4;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center; /* Centrer les éléments horizontalement */
-            align-items: flex-end; /* Aligner les éléments en bas de leur conteneur */
-            margin-top: 20px; /* Espacement entre les boutons et le contenu précédent */
-        }
-
-        .back-to-home, .edit-button, .save-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 20px; /* Espace avant les boutons */
-        }
-
-        .back-to-home:hover, .edit-button:hover, .save-button:hover {
-            background-color: #368B2F;
-        }
-
-        a {
-            color: #217346;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #0f5132;
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .details-container {
-                flex-direction: column; /* Sur les petits écrans, afficher les colonnes les unes en dessous des autres */
-            }
-
-            .column-left, .column-right {
-                width: 100%; /* Chaque colonne prend toute la largeur sur les petits écrans */
-            }
-        }
-
-
-         span[contenteditable="true"] {
-             background-color: #ffffe0; /* Jaune clair pour indiquer l'édition */
-             outline: 2px solid #4caf50; /* Bordure verte pour mieux voir les champs éditables */
-             padding: 3px; /* Un peu de padding pour que le texte ne touche pas les bords */
-             cursor: text; /* Change le curseur pour indiquer qu'on peut éditer */
-         }
-    </style>
-
-
-
-
-    </style>
 {% endblock %}

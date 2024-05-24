@@ -1,0 +1,144 @@
+{# templates/diagnostics/recapitulatif.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Récapitulatif des Diagnostics{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #333;
+        }
+        .table-responsive {
+            margin: 0 auto;
+            max-width: 90%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="fixed top-0 left-0">
+        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+    </div>
+    <div class="fixed top-0 right-0">
+        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+    </div>
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold text-center text-black mb-8">Récapitulatif des Diagnostics</h1>
+        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+            {% if diagnostics is not empty %}
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+            <th colspan="6" class="px-6 py-3 text-center">Informations sur le Diagnostic</th>
+            <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
+            <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
+        </tr>
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center"> fait par</th>
+                    <th scope="col" class="px-6 py-3 text-center">ID </th>
+                    <th scope="col" class="px-6 py-3 text-center">Date </th>
+                    <th scope="col" class="px-6 py-3 text-center">Type</th>
+                    <th scope="col" class="px-6 py-3 text-center">Conclusion</th>
+                    <th scope="col" class="px-6 py-3 text-center ">Status </th>
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
+                    <th scope="col" class="px-6 py-3 text-center">N° de série</th>
+                    <th scope="col" class="px-6 py-3 text-center">Bicycode</th>
+                    <th scope="col" class="px-6 py-3">Ref Recyclerie</th>
+                    <th scope="col" class="px-6 py-3 text-center">Type </th>
+                    <th scope="col" class="px-6 py-3 text-center">Marque </th>
+                    <th scope="col" class="px-6 py-3 border-right-black text-center">Public </th>
+                    <th scope="col" class="px-6 py-3 text-center">Nom </th>
+                    <th scope="col" class="px-6 py-3 text-center">Type  </th>
+                </tr>
+                </thead>
+                <tbody>
+                 {% set rowNumber = 0 %}
+                {% for diagnostic in diagnostics %}
+                    {% set rowNumber = rowNumber + 1 %}
+                    {% if rowNumber is even %}
+                        <tr class="bg-gray-850 border-b">
+                    {% else %}
+                        <tr class="bg-white border-b">
+                    {% endif %}
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.NomProprio : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <div class="text-center py-8">
+                    <p class="text-gray-500 text-lg">Aucun diagnostic trouvé.</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="details-container text-center mt-4">
+            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <style>
+        h1 {
+            margin-top: 7rem;
+        }
+        .py-3 {
+            vertical-align: top;
+        }
+        .px-6 {
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+        .tab_ctn {
+            width: 95%;
+            margin: auto;
+        }
+        .tab_ctn td:first-child, .tab_ctn th:first-child {
+            padding: 0.5rem;
+        }
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            height: 100vh;
+            z-index: 50;
+        }
+    </style>
+{% endblock %}

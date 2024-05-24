@@ -32,6 +32,10 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $numero_de_serie = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $bicycode = null;
+
+
     #[ORM\Column(length: 255)]
     private ?string $marque = null;
 
@@ -88,7 +92,10 @@ private ?string $public = null;
 
 
  #[ORM\Column(type: "string", length: 255, nullable: true)]
-   private ?string $origine = null;
+            private ?string $origine = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $model = null;
 
 
     public function getId(): ?int
@@ -120,6 +127,22 @@ private ?string $public = null;
         return $this;
     }
 
+
+    public function getBicycode(): ?string
+    {
+        return $this->bicycode;
+    }
+
+    public function setBicycode(?string $bicycode): self
+    {
+        $this->bicycode = $bicycode;
+        return $this;
+    }
+
+
+
+
+
     public function getRefRecyclerie(): ?string
     {
         return $this->ref_recyclerie;
@@ -144,7 +167,6 @@ private ?string $public = null;
         return $this;
     }
 
-
     public function getPoids(): ?string
     {
         return $this->poids;
@@ -157,6 +179,7 @@ private ?string $public = null;
         return $this;
     }
 
+
     public function getTailleRoues(): ?string
     {
         return $this->taille_roues;
@@ -168,13 +191,12 @@ private ?string $public = null;
 
         return $this;
     }
-
     public function getTailleCadre(): ?string
     {
         return $this->taille_cadre;
     }
 
-    public function setTailleCadre(string $taille_cadre): static
+    public function setTailleCadre(?string $taille_cadre): self
     {
         $this->taille_cadre = $taille_cadre;
 
@@ -314,13 +336,25 @@ private ?string $public = null;
     }
 
  public function getOrigine(): ?string
-        {
-            return $this->origine;
-        }
+                 {
+                     return $this->origine;
+                 }
 
         public function setOrigine(?string $origine): self
         {
             $this->origine = $origine;
+            return $this;
+        }
+
+        public function getModel(): ?string
+        {
+            return $this->model;
+        }
+
+        public function setModel(?string $model): static
+        {
+            $this->model = $model;
+
             return $this;
         }
 

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Velo;
 use App\Entity\Utilisateur;
+use App\Entity\DiagnosticType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -129,6 +130,18 @@ class Diagnostic
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+
+
+
+
+
+
+
+
+    #[ORM\ManyToOne(inversedBy: 'id')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?DiagnosticType $diagnosticType = null;
+
     public function __construct()
     {
         $this->diagnosticElements = new ArrayCollection();
@@ -137,6 +150,18 @@ class Diagnostic
     public function getDiagnosticElements(): Collection
     {
         return $this->diagnosticElements;
+    }
+
+     public function getDiagnosticType(): ?DiagnosticType
+    {
+        return $this->diagnosticType;
+    }
+
+    public function setDiagnosticType(?DiagnosticType $diagnosticType): static
+    {
+        $this->diagnosticType = $diagnosticType;
+
+        return $this;
     }
 
 
@@ -197,4 +222,6 @@ class Diagnostic
 
         return $this;
     }
+
+   
     }

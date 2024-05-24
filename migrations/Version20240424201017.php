@@ -26,7 +26,7 @@ final class Version20240424201017 extends AbstractMigration
         $this->addSql('CREATE TABLE etat_control (id INT AUTO_INCREMENT NOT NULL, nom_etat VARCHAR(20) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE proprietaire (id INT AUTO_INCREMENT NOT NULL, nom_proprio VARCHAR(255) NOT NULL, telephone INT NOT NULL, email VARCHAR(500) DEFAULT NULL, statut VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE utilisateur (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE velo (id INT AUTO_INCREMENT NOT NULL, proprietaire_id INT NOT NULL, numero_de_serie VARCHAR(255) DEFAULT NULL, marque VARCHAR(255) NOT NULL, ref_recyclerie VARCHAR(255) DEFAULT NULL, couleur VARCHAR(255) DEFAULT NULL, poids VARCHAR(255) DEFAULT NULL, taille_roues VARCHAR(255) DEFAULT NULL, taille_cadre NUMERIC(10, 0) DEFAULT NULL, etat VARCHAR(255) NOT NULL, url_photo VARCHAR(255) DEFAULT NULL, date_de_enregistrement DATETIME NOT NULL, date_de_vente DATETIME DEFAULT NULL, type VARCHAR(255) NOT NULL, emplacement VARCHAR(255) DEFAULT NULL, commentaire LONGTEXT DEFAULT NULL, date_destruction DATE DEFAULT NULL, public VARCHAR(255) DEFAULT NULL, origine VARCHAR(255) DEFAULT NULL, INDEX IDX_354971F576C50E4A (proprietaire_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE velo (bicycode VARCHAR(255) DEFAULT NULL,id INT AUTO_INCREMENT NOT NULL, proprietaire_id INT NOT NULL, numero_de_serie VARCHAR(255) DEFAULT NULL, marque VARCHAR(255) NOT NULL, ref_recyclerie VARCHAR(255) DEFAULT NULL, couleur VARCHAR(255) DEFAULT NULL, poids VARCHAR(255) DEFAULT NULL, taille_roues VARCHAR(255) DEFAULT NULL, taille_cadre NUMERIC(10, 0) DEFAULT NULL, etat VARCHAR(255) NOT NULL, url_photo VARCHAR(255) DEFAULT NULL, date_de_enregistrement DATETIME NOT NULL, date_de_vente DATETIME DEFAULT NULL, type VARCHAR(255) NOT NULL, emplacement VARCHAR(255) DEFAULT NULL, commentaire LONGTEXT DEFAULT NULL, date_destruction DATE DEFAULT NULL, public VARCHAR(255) DEFAULT NULL, origine VARCHAR(255) DEFAULT NULL, INDEX IDX_354971F576C50E4A (proprietaire_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE diagnostic ADD CONSTRAINT FK_FA7C8889BE696DF7 FOREIGN KEY (id_velo) REFERENCES velo (id)');
         $this->addSql('ALTER TABLE diagnostic ADD CONSTRAINT FK_FA7C88896B3CA4B FOREIGN KEY (id_user) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE100665FF6085E FOREIGN KEY (id_diagnostic) REFERENCES diagnostic (id)');
@@ -34,35 +34,58 @@ final class Version20240424201017 extends AbstractMigration
         $this->addSql('ALTER TABLE diagnostic_element ADD CONSTRAINT FK_BCE10066DEEAEB60 FOREIGN KEY (id_etat) REFERENCES etat_control (id)');
         $this->addSql('ALTER TABLE velo ADD CONSTRAINT FK_354971F576C50E4A FOREIGN KEY (proprietaire_id) REFERENCES proprietaire (id)');
         $this->addSql("
-CREATE TRIGGER insert_diagnostic_element_trigger
-AFTER INSERT ON diagnostic_element
-FOR EACH ROW
+CREATE TRIGGER `insert_diagnostic_element_trigger` 
+AFTER INSERT ON `diagnostic_element`
+FOR EACH ROW 
 BEGIN
-    DECLARE element_control_count INT;
+    DECLARE type_element_control_count INT;
+    DECLARE diagnostic_control_count INT;
 
-    SELECT COUNT(*) INTO element_control_count FROM element_control;
-    
-    IF (SELECT COUNT(*) FROM diagnostic_element WHERE id_diagnostic = NEW.id_diagnostic) = element_control_count THEN
+    SELECT COUNT(*) INTO type_element_control_count
+    FROM diagnostic_type_elementcontrol dtec
+    WHERE dtec.id_dianostic_type_id = (
+        SELECT diagnostic_type_id
+        FROM diagnostic
+        WHERE id = NEW.id_diagnostic
+    );
+
+    SELECT COUNT(*) INTO diagnostic_control_count
+    FROM diagnostic_element
+    WHERE id_diagnostic = NEW.id_diagnostic;
+
+    IF diagnostic_control_count = type_element_control_count THEN
         UPDATE diagnostic SET status = 'terminé' WHERE id = NEW.id_diagnostic;
     ELSE
         UPDATE diagnostic SET status = 'en cours' WHERE id = NEW.id_diagnostic;
     END IF;
 END;
 
-CREATE TRIGGER update_diagnostic_element_trigger
-AFTER UPDATE ON diagnostic_element
+CREATE TRIGGER `update_diagnostic_element_trigger`
+AFTER UPDATE ON `diagnostic_element`
 FOR EACH ROW
 BEGIN
-    DECLARE element_control_count INT;
+    DECLARE type_element_control_count INT;
+    DECLARE diagnostic_control_count INT;
     
-    SELECT COUNT(*) INTO element_control_count FROM element_control;
+    SELECT COUNT(*) INTO type_element_control_count
+    FROM diagnostic_type_elementcontrol dtec
+    WHERE dtec.id_dianostic_type_id = (
+        SELECT diagnostic_type_id
+        FROM diagnostic
+        WHERE id = OLD.id_diagnostic
+    );
+    
+    SELECT COUNT(*) INTO diagnostic_control_count
+    FROM diagnostic_element
+    WHERE id_diagnostic = OLD.id_diagnostic;
 
-    IF (SELECT COUNT(*) FROM diagnostic_element WHERE id_diagnostic = OLD.id_diagnostic) = element_control_count THEN
+    IF diagnostic_control_count = type_element_control_count THEN
         UPDATE diagnostic SET status = 'terminé' WHERE id = OLD.id_diagnostic;
     ELSE
         UPDATE diagnostic SET status = 'en cours' WHERE id = OLD.id_diagnostic;
     END IF;
 END;
+
             ");
     }
 
