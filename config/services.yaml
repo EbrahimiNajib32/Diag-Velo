@@ -18,3 +18,8 @@ services:
     App\EventListener\CheckUserIsActiveListener:
         tags:
             - { name: kernel.event_listener, event: security.authentication.success }
+
+
+    App\Service\VeloInfoService:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
