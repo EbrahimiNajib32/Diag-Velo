@@ -5,61 +5,64 @@
 
 
 {% block body %}
-
-
-
-
-    <div class="fixed top-0 left-0 logo-container">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="logo-size1">
-    </div>
-    <div class="fixed top-0 right-0 logo-container">
-        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="logo-size">
-    </div>
-
-
-    <div class="max-w-lg mx-auto text-center py-20">
-
-    </div>
-
-    <div class="details-container mx-auto max-w-2xl">
-        <div class="column-left">
-            <h1 class="text-4xl font-bold mb-4">Détails du Vélo</h1>
+    <style>
+        span[contenteditable="true"] {
+            background-color: #ffffe0;
+            outline: 2px solid #4caf50;
+            border-radius: 5px;
+            padding: 3px;
+            cursor: text;
+            margin-left: 3px;
+        }
+    </style>
+    <h1 class="text-center text-lg font-semibold">Modifier le vélo {{ velo.getRefRecyclerie() }}</h1>
+    <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
+        <div class="">
+            <h2 class="text-center font-bold">Détails du Vélo</h2>
             <ul class="details-list">
-                <li>Marque: <span id="marque">{{ velo.marque }}</span></li>
-                <li>Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
-                <li>Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
-                <li>Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
-                <li>Poids: <span id="poids">{{ velo.poids }}</span></li>
-                <li>Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
-                <li>État: <span id="etat">{{ velo.etat }}</span></li>
-                <li>Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                <li>Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-                <li>Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
             </ul>
         </div>
-        <div class="column-right">
-            <ul class="details-list">
-                <li>Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
-                <li>URL Photo: <a href="{{ velo.getUrlPhoto() }}" target="_blank">Voir la photo</a></li>
-                <li>Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
-                <li>Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
-                <li>Type: <span id="type">{{ velo.type }}</span></li>
-                <li>Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
-                <li>Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
-                <li>Propriétaire ID: <span id="proprietaire_id">{{ velo.getProprietaire().getId() }}</span></li>
-                <li>Public: <span id="public">{{ velo.getPublic() }}</span></li>
+        <div class="">
+            <ul class="">
+                <div class="details-list bg-white rounded p-2">
+                    <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
+                <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
+                <li class="text-xl font-bold">Propriétaire du Vélo</li>
+                <li class="">Nom et Prénom : {{ velo.getProprietaire.getNomProprio() }}</li>
+                <li class="">Téléphone : {{ velo.getProprietaire.getTelephone() }}</li>
+                <li class="">E mail : {{ velo.getProprietaire.getEmail() }}</li>
+                    </div>
+                <div class="details-list">
+                <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
+                </div>
             </ul>
         </div>
     </div>
-    <div class="cont-boutons max-w-lg mx-auto text-center mt-6">
-        <a href="{{ path('app_accueil') }}" class="btn-green">
-            Retour à l'accueil
+    <div class="flex flex-col-3 gap-2 mx-auto justify-center  items-center  mt-10">
+        <a href="{{ path('app_accueil') }}" class="button-style">
+            <i class="bi bi-box-arrow-left mr-1 text-xl"></i> Retour à l'accueil
         </a>
-        <button type="button" class="btn-green edit-button">
-            Modifier
+        <button type="button" class="button-style edit-button">
+            <i class="bi bi-pen mr-1 text-xl"></i>Modifier
         </button>
-        <button type="submit" class="btn-green save-button">
-            Enregistrer
+        <button type="submit" class="button-style save-button">
+            <i class="bi bi-box-arrow-down mr-1 text-xl"></i>Enregistrer
         </button>
     </div>
 {% endblock %}
@@ -121,116 +124,4 @@
             });
         });
     </script>
-{% endblock %}
-
-{% block stylesheets %}
-    <style>
-        .details-container {
-            display: flex;
-            gap: 25px;
-            background-color: rgb(20 184 166);
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 1000px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            align-items: stretch;
-            margin-top:10em;
-        }
-
-        .column-left, .column-right {
-            flex: 1;
-        }
-
-
-        .logo-size1 {
-            width: 170px; /* ajuster la taille selon les besoins */
-            height: auto; /* maintenir le ratio d'aspect */
-        }
-        .logo-size {
-            width: 300px; /* Ajuster la taille selon les besoins */
-            height: auto; /* Maintenir le ratio d'aspect */
-        }
-
-        .fixed {
-            position: fixed;
-        }
-
-        .top-0 {
-            top: 0;
-        }
-
-        .left-0 {
-            left: 0;
-        }
-
-        .right-0 {
-            right: 0;
-        }
-
-
-
-
-        .details-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .column-right {
-            margin-top: 91px;
-        }
-
-        .details-list li {
-            background-color: #eef7ee;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #d4e8d4;
-        }
-
-        .text-4xl {
-            font-size: 2.25rem;
-        }
-        .cont-boutons {
-            text-align: center;
-        }
-        .btn-green {
-            display: inline-block;
-            background-color: rgb(20 184 166);
-            border: 0;
-            color: white;
-            padding: 15px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 200ms;
-            font-family: sans-serif;
-            font-size: 1rem;
-            margin: 0 8px;
-
-        }
-
-        .btn-green:hover {
-            background-color: rgb(74 222 128);
-        }
-
-        @media (max-width: 768px) {
-            .details-container {
-                flex-direction: column;
-            }
-
-            .column-left, .column-right {
-                width: 100%;
-            }
-        }
-
-        span[contenteditable="true"] {
-            background-color: #ffffe0;
-            outline: 2px solid #4caf50;
-            padding: 3px;
-            cursor: text;
-        }
-    </style>
 {% endblock %}

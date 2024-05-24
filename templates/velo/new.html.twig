@@ -51,105 +51,117 @@
     .button-black {
         color: #000000; /* Black color */
     }
+    .required-field::after {
+        content: '*';
+        color: red;
+        margin-left: 2px;
+    }
 
 
 
 </style>
 
-
     <div class="bg-gray-100 flex flex-col min-h-screen justify-center">
-        <div class="w-full">
-            <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
-                <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
-                {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-                <div class="grid grid-cols-2 gap-4 ">
-                    <div class="border border-black rounded p-3 text-center">
-                        <div>
-                            {{ form_label(form.chosir_ou_ajouter) }}
-                            {{ form_widget(form.chosir_ou_ajouter) }}
-
-                        </div>
-                        <div class="form-group existing-proprietaire" style="display:none;">
-                            {{ form_label(form.proprietaire) }}
-                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire', 'autocomplete' : 'on', 'class': 'ui-autocomplete-input' }}) }}
-                            <input type="hidden" id="proprietaire_id" name="proprietaire_id" />
-                            <div id="ui-front"></div>
-                        </div>
-
-                        <div class="new-prop-field" style="display:none;">
-                            {{ form_label(form.nom_proprio) }}
-                            <div class="w-full">
-                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                            {{ form_label(form.email) }}
-                            <div class="w-full">
-                                {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                            {{ form_label(form.telephone) }}
-                            <div class="w-full">
-                                {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                            <div class="w-full">
-                                Statut
-                                {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
-                            </div>
-                        </div>
-
-                    </div>
+    <div class="w-full">
+    <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
+        <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+        <div class="grid grid-cols-2 gap-4 ">
+            <div class="border border-black rounded p-3 text-center">
                 <div>
-                    <h1 class="text-center">Couleurs</h1>
-                    <div class="grid grid-cols-5 gap-1">
-                        {% for color in form.couleur %}
-                            <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
-                                {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
-                            </label>
-                        {% endfor %}
-                    </div>
-                </div>
-                {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                {{ form_row(form.marque, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}}) }}
-                {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}}) }}
-                {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                    {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_label(form.chosir_ou_ajouter) }}
 
-                <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center">
-                    <div class="text-center">
-                        <button id="cameraIcon" type="button" class="cameraIcon text-4xl">
-                            <i class="bi bi-camera"></i>
-                        </button>
-                        <h3>Prendre photo</h3>
-                        <div id="videoCaptureDiv" style="display: none;">
-                            <video id="videoElement" autoplay></video>
-                            <img alt="feed video input caméra" id="capturedImage" src="" style="display: none;" />
-                            <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon text-4xl"></button>
-                            <h3 id="captureText">Capturer</h3>
-                            <canvas id="canvasElement" style="display: none;"></canvas>
-                            {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
+                    <div class="choice-container flex-col-2 justify-around flex ">
+                        <div class="existing-choice">
+                            {{ form_widget(form.chosir_ou_ajouter[0]) }}
+                            {{ form_label(form.chosir_ou_ajouter[0]) }}
                         </div>
+                            <div class="new-choice">
+                                {{ form_widget(form.chosir_ou_ajouter[1]) }}
+                                {{ form_label(form.chosir_ou_ajouter[1]) }}
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group existing-proprietaire" style="display:none;">
+                    {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
+                    {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
+                </div>
+
+                <div class="new-prop-field" style="display:none;">
+                    {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
+                    <div class="w-full">
+                        {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
+                    </div>
+                    {{ form_label(form.email, 'E-m@il', {'label_attr': {'class': 'required-field'}}) }}
+                    <div class="w-full">
+                        {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
+                    </div>
+                    {{ form_label(form.telephone, 'Numéro de téléphone', {'label_attr': {'class': 'required-field'}}) }}
+                    <div class="w-full">
+                        {{ form_widget(form.telephone, {'attr': {'class': 'w-full text-center'}}) }}
+                    </div>
+                    <div class="w-full">
+                        {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
+                        {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
                     </div>
                 </div>
-                <div class="flex items-center justify-center">
-                    <button type="submit" class="w-full bg-teal-500 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
-                    {{ form_end(form) }}
+
+            </div>
+            <div>
+                <h1 class="text-center">Couleurs</h1>
+                <div class="grid grid-cols-5 gap-1">
+                    {% for color in form.couleur %}
+                        <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
+                            {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
+                        </label>
+                    {% endfor %}
                 </div>
             </div>
+            {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+            {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+            {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
 
+            <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center mb-10">
+                <div class="text-center">
+                    <button id="cameraIcon" type="button" class="cameraIcon text-4xl mt-10">
+                        <i class="bi bi-camera"></i>
+                    </button>
+                    <h3>Prendre photo</h3>
+                    <div id="videoCaptureDiv" style="display: none;">
+                        <video id="videoElement" autoplay></video>
+                        <img alt="feed video input caméra" id="capturedImage" src="" style="display: none;" />
+                        <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon text-4xl"></button>
+                        <h3 id="captureText">Capturer</h3>
+                        <canvas id="canvasElement" style="display: none;"></canvas>
+                        {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="flex items-center justify-center">
+            <button type="submit" class="w-full bg-teal-500 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
     <div class="details-container text-center mt-4">
         <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
     </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script>
+        <script>
 
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -299,10 +311,8 @@
                 cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
             });
             $(document).ready(function() {
-                // Initialize the autocomplete widget
-                $('#velo_info_proprietaire').autocomplete({
+                $('#velo_info_autocomplete_proprietaire').autocomplete({
                     source: function(request, response) {
-                        // Fetch autocomplete data from the server
                         $.ajax({
                             url: '{{ path('autocomplete') }}',
                             dataType: 'json',
@@ -310,21 +320,41 @@
                                 term: request.term
                             },
                             success: function(data) {
-                                let resArray = [];
-                                for ( let i = 0; i < data.length; i++) {
-                                    resArray[i] = data[i].nom_proprio;
-                                }
-                                response(resArray);
+                                response($.map(data, function(item) {
+                                    return {
+                                        label: item.nom_proprio,
+                                        value: item.id_proprio
+                                    };
+                                }));
                             }
                         });
                     },
                     minLength: 2,
-
-                })
-
+                    select: function(event, ui) {
+                        $('#velo_info_proprietaire').val(ui.item.value);
+                        $('#velo_info_autocomplete_proprietaire').val(ui.item.label);
+                        return false;
+                    }
+                });
+            });
+            $(document).ready(function() {
+                $('.autocomplete-marque').autocomplete({
+                    source: [ 'Autres', 'Nakamura' , 'Decathlon' , 'Brompton' , 'Dilecta' , 'Colnago France' , 'Caminade' , 'Montreal' , 'Skyde' ,
+                        'Time Bicycles' , 'Zéfal' , 'Helium Cycles' , 'Automoto' , 'Bergamont' , 'Mavic' , 'Cyfac' , 'B`Twin' ,
+                        'Gitane' , 'MBK' , 'Look Cycle' , 'Lapierre' , 'Time Sport','Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
+                        'Canyon', 'Cinelli', 'Cleary Bikes', 'Colnago', 'Commençal', 'Co-op Cycles (REI)', 'Dahon', 'De Rosa',
+                        'Diamondback', 'Dynacraft', 'Eddy Merckx', 'Electra', 'Evil Bike Co.', 'Fairdale', 'Felt', 'Focus',
+                        'Fuji', 'Ghost', 'GT', 'Holdsworth', 'Huffy', 'Ibis', 'Jamis', 'Kona', 'Lapierre', 'LeMond', 'Linus',
+                        'Look', 'Marin', 'Masi', 'Mercier', 'Mikado', 'Mongoose', 'Mondraker', 'Norco', 'Orange Bikes', 'Orient Bikes',
+                        'Orbea', 'Pashley Cycles', 'Peugeot', 'Pinarello', 'Pivot', 'Planet X', 'Polygon', 'Public Bikes', 'Quintana Roo',
+                        'Rabeneick', 'Raleigh', 'Ridley', 'Ritte', 'Rocky Mountain', 'Salsa', 'Saracen', 'Schwinn', 'Sekine', 'Serotta',
+                        'Simcoe', 'Sole Bicycles', 'Sommer', 'Soma', 'Spot Brand', 'Staiger', 'State Bicycle Co.', 'Storck', 'Strider',
+                        'Stromer', 'Surly', 'Tern', 'Throne Cycles', 'Tokyobike', 'Torpado', 'Transition', 'Union', 'Van Nicholas',
+                        'VanMoof', 'Veloretti', 'Vitus', 'Wilier Triestina', 'Woom', 'Yeti Cycles', 'Zinn' ],
+                    minLength: 2
+                });
             });
 
+        </script>
 
-    </script>
-
-{% endblock %}
+        {% endblock %}

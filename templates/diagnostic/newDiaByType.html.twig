@@ -12,8 +12,7 @@
 
         <div class="grid grid-cols-3 md:grid-cols-3 gap-1 mb-6 border text-sm portrait:text-2xl">
             <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) }}</div>
-            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
-            <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
+            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border'}}) }}</div>
         </div>
 
         {% for category, elements in diagnosticElements %}
@@ -53,7 +52,9 @@
         <button type="submit" class="w-full mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
-
+    <div class="details-container text-center mt-4">
+        <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
+    </div>
 
     <script>
         var btns = document.querySelectorAll('.btn-group .btn');
