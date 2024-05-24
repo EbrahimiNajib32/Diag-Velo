@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-    </div>
-    <div class="fixed top-0 right-0">
-        <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+    <div class="flex-col-2 flex justify-between">
+        <div class="">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+        <div class="">
+            <img src="{{ asset('images/LCDRRblanc.png') }}" alt="LCDRLR Logo" class="">
+        </div>
     </div>
     <div class="container mx-auto">
 
-        <h1 class="text-3xl font-bold text-center text-black mb-8">Liste des vélos</h1>
+        <h1 class="text-3xl font-bold text-center text-black">Liste des vélos</h1>
         {% if pagination|length > 0 %}
         <!-- Formulaire de filtrage -->
         <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
@@ -173,9 +175,6 @@
 
 
     <style>
-        h1{
-            margin-top: 7rem;
-        }
         .py-3{
             vertical-align: top;
         }

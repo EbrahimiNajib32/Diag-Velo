@@ -55,7 +55,7 @@
         </div>
         {% if app.user %}
             <div class="mb-3">
-                Je suis connecté en tant que {{ app.user.userIdentifier }} avec le rôle
+                Bienvenue {{ app.user.userIdentifier }} ! Votre rôle est :
                 {% if is_granted('ROLE_ADMIN') %}
                     Administrateur
                 {% elseif is_granted('ROLE_USER') %}

@@ -6,10 +6,13 @@ use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\Utilisateur;
 use App\Entity\Velo;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,11 +27,13 @@ use App\Entity\DiagnosticType;
 class FormDiagnosticType extends AbstractType
 {
     private $entityManager;
+    private $security;
 
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager ,Security $security)
     {
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -46,6 +51,7 @@ class FormDiagnosticType extends AbstractType
         $diagnostic = $options['diagnostic'];
         $diagnosticElements = $options['diagnosticElements'];
         $idTypeDiag = $options["idTypeDiag"];
+        $currentUser = $this->security->getUser();
         //TEST
         // Utiliser l'ID pour récupérer l'objet DiagnosticType correspondant
         $typeDiagnostic = $this->entityManager->getRepository(DiagnosticType::class)->find($idTypeDiag);
@@ -82,11 +88,32 @@ class FormDiagnosticType extends AbstractType
 
             ->add('velo', EntityType::class, [
                 'class' => Velo::class,
-                'choice_label' => 'ref_recyclerie',
+                'choice_label' => function ($velo) {
+                    return sprintf(
+                        '%s - %s - %s - %s ',
+                        $velo->getDateDeEnregistrement()->format('Y-m-d'),
+                        $velo->getRefRecyclerie(),
+                        $velo->getProprietaire()->getNomProprio(),
+                        $velo->getMarque()
+                    );
+                },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('v')
+                        ->orderBy('v.date_de_enregistrement', 'DESC');
+                },
             ])
             ->add('utilisateur', EntityType::class, [
                 'class' => Utilisateur::class,
                 'choice_label' => 'Nom',
+                'query_builder' => function (EntityRepository $er) use ($currentUser) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.id = :userId')
+                        ->setParameter('userId', $currentUser->getId());
+                },
+                'data' => $currentUser,
+                'attr' => ['style' => 'display:none;'],
+                'required' => true,
+                'label' => false, // Make the label disappear
             ]);
 
         foreach ($diagnosticElements as $diagElement) {
