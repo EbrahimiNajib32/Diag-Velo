@@ -44,7 +44,7 @@ class FiltreController extends AbstractController
     }, $couleurs);
 
     // Extraire uniquement les valeurs des types
-    $types_uniques = array_map(function ($type) {
+    $types_uniquesz = array_map(function ($type) {
         return $type['type'];
     }, $types);
 
@@ -78,7 +78,7 @@ class FiltreController extends AbstractController
          return $this->render('diagnostic/recapitulatif.html.twig', [
         'marques' => $marques_uniques,
         'couleurs' => $couleurs_uniques,
-        'types' => $types_uniques,
+        'types' => $types_uniquesz,
         'publics' => $publics_uniques,
         'date_diagnostic' => $datesDiagnostic,
         'conclusions' => $conclusions_uniques,

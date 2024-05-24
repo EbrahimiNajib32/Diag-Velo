@@ -14,6 +14,7 @@ use App\Entity\EtatControl;
 use App\Entity\ElementControl;
 use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
+use App\Entity\Proprietaire;
 use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use App\Entity\Velo;
@@ -593,16 +594,16 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
 public function recapitulatif(EntityManagerInterface $entityManager): Response
 {
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $types_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.type')
+    $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
+        ->select('DISTINCT dt.nomType')
         ->getQuery()
         ->getResult();
 
     // Extract the 'type' values from the result
-    $types_uniques = array_column($types_uniques, 'type');
+    $types_uniquesd = array_column($types_uniquesd, 'nomType');
 
-   /* $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $conclusions_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $conclusions_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
         ->select('DISTINCT v.conclusion')
         ->getQuery()
         ->getResult();
@@ -612,19 +613,77 @@ public function recapitulatif(EntityManagerInterface $entityManager): Response
 
 
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $statuss_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+    $statusd_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
         ->select('DISTINCT v.status')
         ->getQuery()
         ->getResult();
 
     // Extract the 'status' values from the result
-    $statuss_uniques = array_column($statuss_uniques, 'status');*/
+    $statusd_uniques = array_column($statusd_uniques, 'status');
+    
+    
+    
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.type')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $types_uniquesv = array_column($types_uniquesv, 'type');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $marques_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.marque')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $marques_uniques = array_column($marques_uniques, 'marque');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $publics_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.public')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $publics_uniques = array_column($publics_uniques, 'public');
+
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $nomsp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+        ->select('DISTINCT p.nom_proprio')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $nomsp_uniques = array_column( $nomsp_uniques, 'nom_proprio');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $statutp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+        ->select('DISTINCT p.statut')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $statutp_uniques = array_column(  $statutp_uniques, 'statut');
+
+
+   
+   
 
     return $this->render('diagnostic/recapitulatif.html.twig', [
         'diagnostics' => $diagnostics,
-        'types_uniques' => $types_uniques,
-        /*'conclusions_uniques' => $conclusions_uniques,
-        'status_uniques' => $statuss_uniques,*/
+        'types_uniquesv' => $types_uniquesv,
+        'types_uniquesd' => $types_uniquesd,
+        'conclusions_uniques' => $conclusions_uniques,
+        'statusd_uniques' => $statusd_uniques,
+        'marques_uniques' => $marques_uniques,
+        'publics_uniques' => $publics_uniques,
+        'nomsp_uniques' => $nomsp_uniques,
+        'statutp_uniques' => $statutp_uniques,
+        
     ]);
     }
 

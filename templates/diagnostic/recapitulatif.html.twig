@@ -66,26 +66,108 @@
                    <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownTypeD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for type in types_uniques %}
+                                {% for type in types_uniquesd %}
                                     <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
                                 {% endfor %}
                             </div>
                         </div>
                     </th>
-                    <th scope="col" class="px-6 py-3 text-center">Conclusion</th>
-                    <th scope="col" class="px-6 py-3 text-center ">Status </th>
+                     <th scope="col" class="px-6 py-3">
+                        Conclusion
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownConclusion" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('conclusion', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for conclusion in conclusions_uniques %}
+                                    <a href="#" onclick="filterRows('conclusion', '{{ conclusion }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ conclusion }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                    {#<th scope="col" class="px-6 py-3 text-center">Conclusion</th>#}
+                     <th scope="col" class="px-6 py-3">
+                        Status
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownStatusD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('status', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for status in statusd_uniques %}
+                                    <a href="#" onclick="filterRows('status', '{{ status }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ status }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                   {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
                     <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
                     <th scope="col" class="px-6 py-3 text-center">N° de série</th>
                     <th scope="col" class="px-6 py-3 text-center">Bicycode</th>
                     <th scope="col" class="px-6 py-3">Ref Recyclerie</th>
-                    <th scope="col" class="px-6 py-3 text-center">Type </th>
-                    <th scope="col" class="px-6 py-3 text-center">Marque </th>
-                    <th scope="col" class="px-6 py-3 border-right-black text-center">Public </th>
-                    <th scope="col" class="px-6 py-3 text-center">Nom </th>
-                    <th scope="col" class="px-6 py-3 text-center">Type  </th>
+                     <th scope="col" class="px-6 py-3">
+                        Type
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for type in types_uniquesv %}
+                                    <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                     <th scope="col" class="px-6 py-3">
+                        Marque
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for marque in marques_uniques %}
+                                    <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                  
+                    <th scope="col" class="px-6 py-3">
+                        Public
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for public in publics_uniques %}
+                                    <a href="#" onclick="filterRows('public', '{{ public }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ public }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                   
+                     <th scope="col" class="px-6 py-3">
+                        Nom
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('nom_proprio', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for nom in nomsp_uniques %}
+                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                   
+                     <th scope="col" class="px-6 py-3">
+                        Type
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownTypep')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('statut', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for statut in statutp_uniques %}
+                                    <a href="#" onclick="filterRows('statut', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
