@@ -44,10 +44,20 @@
                 </div>
             </div>
         {% endfor %}
-{#        <div>{{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 p-2 border rounded border-black portrait:h-10'}}) }}</div>#}
-        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
+        <div class="mb-6 text-center">
+            {{ form_row(diagnosticForm.conclusion, {'label_attr': {'class': 'text-sm portrait:text-2xl'}, 'attr': {'class': 'space-x-4'}}) }}
+        </div>        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
+
+    <!-- Modal Structure -->
+    <div id="success-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-4 rounded shadow-lg text-center">
+            <h2 class="text-2xl font-semibold mb-4">Modifications enregistrées avec succès !</h2>
+            <button id="close-modal" class="bg-teal-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded">Fermer</button>
+        </div>
+    </div>
+
     <div class="details-container text-center mt-4">
         <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
     </div>
@@ -95,7 +105,25 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateCategoryBackground();
+            const form = document.querySelector('form');
+            const submitButton = document.getElementById('submit-button');
+            const successModal = document.getElementById('success-modal');
+            const closeModalButton = document.getElementById('close-modal');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                // Show the modal
+                successModal.classList.remove('hidden');
+
+                // Hide the modal when the close button is clicked
+                closeModalButton.addEventListener('click', () => {
+                    successModal.classList.add('hidden');
+                    form.submit(); // Submit the form after closing the modal
+                });
+            });
+
+            updateCategoryBackground(); // Initial check on page load
             document.querySelectorAll('input[type=radio]').forEach(radio => {
                 radio.addEventListener('change', updateCategoryBackground);
             });
