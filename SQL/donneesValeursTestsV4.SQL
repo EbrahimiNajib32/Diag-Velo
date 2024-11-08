@@ -4,8 +4,8 @@ INSERT INTO `proprietaire` (`id`, `nom_proprio`, `telephone`, `email`) VALUES (N
 -- Ajout de 2 vélos
 INSERT INTO `velo` (`id`, `proprietaire_id`, `numero_de_serie`, `marque`, `ref_recyclerie`, `couleur`, `poids`, `taille_roues`, `taille_cadre`, `etat`, `url_photo`, `date_de_enregistrement`, `date_de_vente`, `type`, `emplacement`, `commentaire`, `date_destruction`, `public`) VALUES (NULL, '1', '123', 'peugeot', '456', 'vert', '12', '26', '20', '', NULL, '2024-04-25 09:08:55.000000', NULL, 'VTT', 'test', NULL, NULL, 'Femme'), (NULL, '1', NULL, 'auchan', '789', 'Bleu', '25', '24', '20', 'moyen', NULL, '2024-04-25 09:08:55.000000', NULL, 'Gravel', 'test2', 'a voir', NULL, 'Homme');
 
--- Ajout de 1 utilisateur 
-INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (NULL, 'Admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa','1');
+/*-- Ajout de 1 utilisateur
+INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (NULL, 'Admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa','1');*/
 
 -- Ajout type de diagnostique
 INSERT INTO `diagnostic_type` (`id`, `nom_type`, `date_creation_type`, `actif`) VALUES
