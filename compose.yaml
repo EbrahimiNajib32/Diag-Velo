@@ -37,8 +37,6 @@ services:
               npm install &&
               npm run build &&
               php bin/console doctrine:migrations:migrate --no-interaction &&
-              # Vérification de l'existence des tables et chargement des fixtures si nécessaire
-              (php -r 'exit((int) (count((new PDO(\"mysql:host=db;dbname=${MYSQL_DATABASE}\", \"${MYSQL_USER}\", \"${MYSQL_PASSWORD}\"))->query(\"SHOW TABLES\")) > 0);') || php bin/console doctrine:fixtures:load --no-interaction --append;
               apache2-foreground
             "
 
