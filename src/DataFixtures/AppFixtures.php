@@ -66,9 +66,17 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($elements as $data) {
-            $element = new ElementControl();
-            $element->setElement($data['element']);
-            $manager->persist($element);
+
+           $existingElement = $manager->getRepository(ElementControl::class)
+                       ->find($data['id']); // Utiliser l'id pour être sûr que c'est une entrée unique
+
+                   if (!$existingElement) {
+                       // Si l'élément n'existe pas, on le crée
+                       $element = new ElementControl();
+                       $element->setId($data['id']);
+                       $element->setElement($data['element']);
+                       $manager->persist($element);
+                   }
         }
 
         // Load EtatControl data
@@ -80,29 +88,49 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($etats as $data) {
-            $etat = new EtatControl();
-            $etat->setNomEtat($data['nom_etat']);
-            $manager->persist($etat);
+            $existingEtat = $manager->getRepository(EtatControl::class)
+                        ->find($data['id']); // Utiliser l'id pour la vérification
+
+                    if (!$existingEtat) {
+                        // Si l'état n'existe pas, on le crée
+                        $etat = new EtatControl();
+                        $etat->setId($data['id']);
+                        $etat->setNomEtat($data['nom_etat']);
+                        $manager->persist($etat);
+                    }
         }
 
         // Load Utilisateur data
-        $user = new Utilisateur();
-        $user->setNom('admin');
-        $user->setRole('0');  // Ensure this matches your user entity's role field definition
-        $user->setPassword('$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa');  // assuming this is a hashed password
-        $manager->persist($user);
 
+       $existingUser = $manager->getRepository(Utilisateur::class)
+                   ->findOneBy(['nom' => 'admin']);
+
+               if (!$existingUser) {
+                   $user = new Utilisateur();
+                   $user->setNom('admin');
+                   $user->setRole('0');  // Assurez-vous que cela correspond au champ de rôle de votre entité
+                   $user->setPassword('$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa');  // mot de passe haché
+                   $manager->persist($user);
+               }
+        // Load DiagnosticType data
         $diagnosticTypes = [
             ['id' => 1, 'nom_type' => 'Global', 'date_creation_type' => new \DateTime('2024-05-06'), 'actif' => true],
             ['id' => 2, 'nom_type' => 'Sécurité', 'date_creation_type' => new \DateTime('2024-05-06'), 'actif' => true],
         ];
 
         foreach ($diagnosticTypes as $data) {
-            $diagnosticType = new DiagnosticType();
-            $diagnosticType->setNomType($data['nom_type']);
-            $diagnosticType->setDateCreationType($data['date_creation_type']);
-            $diagnosticType->setActif($data['actif']);
-            $manager->persist($diagnosticType);
+            $existingDiagnosticType = $manager->getRepository(DiagnosticType::class)
+                        ->find($data['id']); // Vérification par l'id
+
+                    if (!$existingDiagnosticType) {
+                        // Si le type de diagnostic n'existe pas, on le crée
+                        $diagnosticType = new DiagnosticType();
+                        $diagnosticType->setId($data['id']);
+                        $diagnosticType->setNomType($data['nom_type']);
+                        $diagnosticType->setDateCreationType($data['date_creation_type']);
+                        $diagnosticType->setActif($data['actif']);
+                        $manager->persist($diagnosticType);
+                    }
         }
 
         $manager->flush();
@@ -173,16 +201,25 @@ class AppFixtures extends Fixture
             $elementControl = $manager->getRepository(ElementControl::class)->find($data['elementControlId']);
 
             if ($diagnosticType && $elementControl) {
-                $diagnosticTypeElement = new DiagnosticTypeElementcontrol();
-                $diagnosticTypeElement->setIdDianosticType($diagnosticType);
-                $diagnosticTypeElement->setIdElementcontrol($elementControl);
-                $manager->persist($diagnosticTypeElement);
+                            $existingAssociation = $manager->getRepository(DiagnosticTypeElementcontrol::class)
+                                ->findOneBy(['id_dianostic_type' => $diagnosticType, 'id_elementcontrol' => $elementControl]);
+
+                            if (!$existingAssociation) {
+                                $diagnosticTypeElement = new DiagnosticTypeElementcontrol();
+                                $diagnosticTypeElement->setIdDianosticType($diagnosticType);
+                                $diagnosticTypeElement->setIdElementcontrol($elementControl);
+                                $manager->persist($diagnosticTypeElement);
+                            }
             } else {
                 // Log or handle the missing entity cases here
                 echo "DiagnosticType or ElementControl not found for ids: " . $data['diagnosticTypeId'] . ", " . $data['elementControlId'] . "\n";
             }
         }
 
-        $manager->flush();
+       try {
+           $manager->flush();
+       } catch (\Exception $e) {
+           echo "Erreur lors du flush: " . $e->getMessage();
+       }
     }
 }
