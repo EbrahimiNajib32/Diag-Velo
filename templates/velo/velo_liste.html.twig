@@ -23,6 +23,25 @@
                     <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
                 </div>
 
+                <form action="{{ path('velo_details', {'ref_recyclerie': app.request.query.get('ref_recyclerie', '') }) }}" method="GET" class="max-w-lg mx-auto mb-10 pt-4">
+                    <div class="flex justify-center items-center">
+                        <!-- Champ de recherche -->
+                        <input type="text"
+                               name="ref_recyclerie"
+                               placeholder="Chercher..."
+                               class="w-full border-none rounded-l-lg px-4 py-2 shadow-sm focus:outline-none text-gray-700 transition-colors duration-200"
+                               value="{{ app.request.query.get('ref_recyclerie', '') }}"
+                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5; height: 40px; padding-left: 15px;">
+
+                        <!-- Bouton de recherche avec icône -->
+                        <button type="submit"
+                                class="bg-black hover:bg-gray-700 text-white rounded-r-lg h-11 px-4 py-2 transition-colors duration-200 focus:outline-none">
+                            <i class="bi bi-search text-white text-xl"></i>
+                        </button>
+                    </div>
+                </form>
+
+
 
                 <!-- Select elements -->
                 <div class="flex flex-wrap w-full space-y-2 sm:space-y-0">

@@ -15,25 +15,7 @@
     <div class="text-center portrait:text-3xl mb-6">
         <p>Explorez notre application pour découvrir comment nous sauvons des vélos de la casse et les remettons en état pour une mobilité durable dans la région Mulhousienne !</p>
     </div>
-    <form action="{{ path('velo_details', {'ref_recyclerie': app.request.query.get('ref_recyclerie', '') }) }}" method="GET" class="max-w-lg mx-auto mb-10 pt-4">
-        <div class="flex justify-center items-center space-x-2">
-            <!-- Champ de recherche -->
-            <input type="text"
-                   name="ref_recyclerie"
-                   placeholder="Search..."
-                   class="w-full border-none rounded-full px-4 py-2 shadow-sm focus:outline-none text-gray-700 transition-colors duration-200"
-                   value="{{ app.request.query.get('ref_recyclerie', '') }}"
-                   style="border: 1px solid #E5E7EB; background-color: #F5F5F5; height: 40px; padding-left: 15px;">
 
-            <!-- Bouton de recherche avec icône -->
-            <button type="submit"
-                    class="bg-gray-700 hover:bg-gray-800 text-white rounded-full p-3 transition-colors duration-200 focus:outline-none">
-                <i class="bi bi-search text-2xl" style="opacity: 1; visibility: visible;"></i> <!-- Assure que l'icône est visible -->
-            </button>
-
-
-        </div>
-    </form>
 
 
     <div class="max-w-lg mx-auto text-center portrait:max-w-2xl">
