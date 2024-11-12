@@ -1,5 +1,10 @@
 
 -- ATTENTION il faut intégrer en 1er ce fichier dans la base avant toute manipulations
+-- Insérer les types de diagnostics
+INSERT INTO `diagnostic_type` (`id`, `nom_type`, `date_creation_type`, `actif`)
+VALUES
+    ('1', 'Global', '2024-11-01', '1'),
+    ('2', 'Sécurité', '2024-11-01', '1');
 
 INSERT INTO element_control (id,element)
 VALUES
@@ -58,4 +63,65 @@ VALUES
     (3, 'Pas OK'),
     (4, 'N/A');
 
-INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`) VALUES (NULL, 'admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa');
+
+-- Insérer les types de diagnostic et éléments de contrôle associés
+INSERT INTO `diagnostic_type_elementcontrol` (`id`, `id_dianostic_type_id`, `id_elementcontrol_id`)
+VALUES
+    (1, 2, 40),
+    (2, 2, 41),
+    (3, 2, 42),
+    (4, 2, 43),
+    (5, 2, 44),
+    (6, 2, 45),
+    (7, 2, 46),
+    (8, 2, 47),
+    (9, 1, 1),
+    (10, 1, 2),
+    (11, 1, 3),
+    (12, 1, 4),
+    (13, 1, 5),
+    (14, 1, 6),
+    (15, 1, 7),
+    (16, 1, 8),
+    (17, 1, 9),
+    (18, 1, 10),
+    (19, 1, 11),
+    (20, 1, 12),
+    (21, 1, 13),
+    (22, 1, 14),
+    (23, 1, 15),
+    (24, 1, 16),
+    (25, 1, 17),
+    (26, 1, 18),
+    (27, 1, 19),
+    (28, 1, 20),
+    (29, 1, 21),
+    (30, 1, 22),
+    (31, 1, 23),
+    (32, 1, 24),
+    (33, 1, 25),
+    (34, 1, 26),
+    (35, 1, 27),
+    (36, 1, 28),
+    (37, 1, 29),
+    (38, 1, 30),
+    (39, 1, 31),
+    (40, 1, 32),
+    (41, 1, 33),
+    (42, 1, 34),
+    (43, 1, 35),
+    (44, 1, 36),
+    (45, 1, 37),
+    (46, 1, 38),
+    (47, 1, 39),
+    (48, 1, 40),
+    (49, 1, 41),
+    (50, 1, 42),
+    (51, 1, 43),
+    (52, 1, 44),
+    (53, 1, 45),
+    (54, 1, 46),
+    (55, 1, 47);
+
+-- Ajout de 1 utilisateur
+INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (NULL, 'Admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa','1');
