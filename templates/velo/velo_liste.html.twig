@@ -13,33 +13,31 @@
 
         <h1 class="text-3xl font-bold text-center text-black">Liste des vélos</h1>
         {% if pagination|length > 0 %}
+
         <!-- Formulaire de filtrage -->
         <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
             <div class="flex flex-col space-y-4">
-                <!-- Input elements -->
-                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0 sm:w-auto sm:flex-none">
-                    <input type="text" id="searchOwner" onkeyup="filterByOwner()" placeholder="Propriétaire" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
-                    <input type="text" id="searchSerial" onkeyup="filterBySerial()" placeholder="Numéro de série" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
-                    <input type="text" id="searchReference" onkeyup="filterByReference()" placeholder="Référence recyclerie" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2">
+
+                <div class="flex justify-center items-center w-full mt-4"> <!-- Adds space above the search bar -->
+                    <div class="relative w-full max-w-lg">
+                        <input type="text"
+                               id="mainSearch"
+                               name="ref_recyclerie"
+                               placeholder="Propriétaire, Numéro de Série, Référence recyclerie"
+                               class="border-none rounded-full pl-3 pr-12 py-3 shadow-md focus:outline-none text-gray-700 transition-colors duration-200 w-full"
+                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5;"
+                               onkeyup="filterTable()">
+
+                        <!-- Ensure the icon is positioned correctly on the right -->
+                        <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+            <i class="bi bi-search text-gray-500"></i>
+        </span>
+                    </div>
                 </div>
 
-                <form action="{{ path('velo_details', {'ref_recyclerie': app.request.query.get('ref_recyclerie', '') }) }}" method="GET" class="max-w-lg mx-auto mb-10 pt-4">
-                    <div class="flex justify-center items-center">
-                        <!-- Champ de recherche -->
-                        <input type="text"
-                               name="ref_recyclerie"
-                               placeholder="Chercher..."
-                               class="w-full border-none rounded-l-lg px-4 py-2 shadow-sm focus:outline-none text-gray-700 transition-colors duration-200"
-                               value="{{ app.request.query.get('ref_recyclerie', '') }}"
-                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5; height: 40px; padding-left: 15px;">
 
-                        <!-- Bouton de recherche avec icône -->
-                        <button type="submit"
-                                class="bg-black hover:bg-gray-700 text-white rounded-r-lg h-11 px-4 py-2 transition-colors duration-200 focus:outline-none">
-                            <i class="bi bi-search text-white text-xl"></i>
-                        </button>
-                    </div>
-                </form>
+
+
 
 
 
@@ -201,6 +199,32 @@
     </style>
 
     <script>
+
+         // Fonction de recherche globale
+            function filterTable() {
+            const input = document.getElementById("mainSearch");
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+            const ownerCell = row.querySelector("[data-owner]");
+            const serialCell = row.querySelector("[data-serial]");
+            const referenceCell = row.querySelector("[data-reference]");
+
+            const ownerText = ownerCell ? ownerCell.textContent.toUpperCase() : "";
+            const serialText = serialCell ? serialCell.textContent.toUpperCase() : "";
+            const referenceText = referenceCell ? referenceCell.textContent.toUpperCase() : "";
+
+            if (ownerText.includes(filter) || serialText.includes(filter) || referenceText.includes(filter)) {
+            row.style.display = "";
+        } else {
+                row.style.display = "none";
+            }
+            });
+            }
+
+
+
         function filterRows(attribute, value) {
             const rows = document.querySelectorAll("tbody tr");
             rows.forEach(row => {
@@ -209,46 +233,46 @@
             });
         }
 
-        function filterByReference() {
-            const input = document.getElementById("searchReference");
-            const filter = input.value.toUpperCase();
-            const rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const cell = row.querySelector("[data-reference]");
-                if (cell) {
-                    const txtValue = cell.textContent || cell.innerText;
-                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-                }
-            });
-        }
-
-        function filterBySerial() {
-            const input = document.getElementById("searchSerial");
-            const filter = input.value.toUpperCase();
-            const rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const cell = row.querySelector("[data-serial]");
-                if (cell) {
-                    const txtValue = cell.textContent || cell.innerText;
-                    console.log(`Checking row: ${txtValue} with filter: ${filter}`);
-                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-                }
-            });
-        }
-
-
-        function filterByOwner() {
-            const input = document.getElementById("searchOwner");
-            const filter = input.value.toUpperCase();
-            const rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const cell = row.querySelector("[data-owner]");
-                if (cell) {
-                    const txtValue = cell.textContent || cell.innerText;
-                    row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-                }
-            });
-        }
+        // function filterByReference() {
+        //     const input = document.getElementById("searchReference");
+        //     const filter = input.value.toUpperCase();
+        //     const rows = document.querySelectorAll("tbody tr");
+        //     rows.forEach(row => {
+        //         const cell = row.querySelector("[data-reference]");
+        //         if (cell) {
+        //             const txtValue = cell.textContent || cell.innerText;
+        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        //         }
+        //     });
+        // }
+        //
+        // function filterBySerial() {
+        //     const input = document.getElementById("searchSerial");
+        //     const filter = input.value.toUpperCase();
+        //     const rows = document.querySelectorAll("tbody tr");
+        //     rows.forEach(row => {
+        //         const cell = row.querySelector("[data-serial]");
+        //         if (cell) {
+        //             const txtValue = cell.textContent || cell.innerText;
+        //             console.log(`Checking row: ${txtValue} with filter: ${filter}`);
+        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        //         }
+        //     });
+        // }
+        //
+        //
+        // function filterByOwner() {
+        //     const input = document.getElementById("searchOwner");
+        //     const filter = input.value.toUpperCase();
+        //     const rows = document.querySelectorAll("tbody tr");
+        //     rows.forEach(row => {
+        //         const cell = row.querySelector("[data-owner]");
+        //         if (cell) {
+        //             const txtValue = cell.textContent || cell.innerText;
+        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+        //         }
+        //     });
+        // }
 
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButtons = document.querySelectorAll('[data-modal-toggle]');
