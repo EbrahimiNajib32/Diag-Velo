@@ -30,8 +30,8 @@
                                     <div class="font-bold">
                                         {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
-                                    <div class="mt-2">
-                                        {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'class': 'form-radio flex justify-around'}}) }}
+                                    <div class="flex justify-center items-center mt-2 space-x-2">
+                                        {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'class': 'form-radio flex justify-around items-center space-x-2'}}) }}
                                         {{ form_errors(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
                                 </div>
