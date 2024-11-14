@@ -280,9 +280,35 @@
 
         const searchStructure = async searchText => {
             if (!searchText) {
-                matchListStructure.innerHTML = '';
+                matchListStructure.innerHTML = ``;
                 return;
             }
+            try {
+                const response = await fetch(`{{ path('autocomplete_structures') }}?structure=${searchText}`);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        matchListStructure.innerHTML = '';
+                        const errorMessage = document.createElement('div');
+                        errorMessage.textContent = "Aucune structure trouvée pour ce nom.";
+                        errorMessage.classList.add('autocomplete-list');
+                        matchListStructure.appendChild(errorMessage);
+                    } else {
+                        throw new Error('Erreur de serveur');
+                    }
+                    return;
+                }
+
+                const result = await response.json();
+                showSuggestions(result);
+            } catch (error) {
+                matchListStructure.innerHTML = '';
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = "Une erreur est survenue lors de la recherche.";
+                errorMessage.classList.add('autocomplete-list');
+                matchListStructure.appendChild(errorMessage);
+            }
+
             const response = await fetch(`{{ path('autocomplete_structures') }}?structure=${searchText}`);
             const result = await response.json();
 
@@ -292,9 +318,6 @@
         structureSearch.addEventListener('input', () => {
             searchStructure(structureSearch.value);
         });
-
-
-
     </script>
 
 {% endblock %}
