@@ -22,6 +22,13 @@
                 {{ form_widget(userForm.role, {'attr': {'class': 'form-control p-2 rounded'}}) }}
                 {{ form_errors(userForm.role) }}
             </div>
+            <div class="mb-3">
+                <div class="relative">
+                    {{ form_label(userForm.structure) }}
+                    {{ form_widget(userForm.structure, {'attr': {'class': 'form-control p-2 rounded border border-gray-300'}}) }}
+                </div>
+                {{ form_errors(userForm.structure) }}
+            </div>
 
             <div class="mb-3">
                 <div class="relative">
@@ -29,8 +36,10 @@
                         {{ form_label(userForm.password) }}
                     </div>
                     {{ form_widget(userForm.password, {'attr': {'class': 'form-control p-2 rounded'}}) }}
-                    <span class="absolute inset-y-0 right-0 flex items-center px-2">
-                        <button type="button" class="toggle-password text-sm p-1 ">Montrer</button>
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                        <button type="button" class="toggle-password" style="background: none; border: none;">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </span>
                 </div>
                 {{ form_errors(userForm.password) }}

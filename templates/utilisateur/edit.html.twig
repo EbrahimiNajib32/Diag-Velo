@@ -26,6 +26,14 @@
 
             <div class="mb-4">
                 <div class="relative">
+                    {{ form_label(userForm.structure) }}
+                    {{ form_widget(userForm.structure, {'attr': {'class': 'form-control p-2 rounded border border-gray-300'}}) }}
+                </div>
+                {{ form_errors(userForm.structure) }}
+            </div>
+
+            <div class="mb-4">
+                <div class="relative">
                     {{ form_label(userForm.password) }}
                     {{ form_widget(userForm.password, {'attr': {'class': 'form-control p-2 rounded border border-gray-300'}}) }}
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2">

@@ -21,6 +21,17 @@ class UtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, Utilisateur::class);
     }
 
+    public function findMatchingStructures(string $structure): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.structure')
+            ->where('u.structure LIKE :structure')
+            ->setParameter('structure', '%' . $structure . '%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Utilisateur[] Returns an array of Utilisateur objects
     //     */
