@@ -26,7 +26,9 @@ class Utilisateur implements UserInterface , PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $isActive = true;
-    
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $structure = null;
 
     public function getId(): ?int
     {
@@ -109,6 +111,18 @@ class Utilisateur implements UserInterface , PasswordAuthenticatedUserInterface
     public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getStructure(): ?string
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(?string $structure): self
+    {
+        $this->structure = $structure;
 
         return $this;
     }
