@@ -3,6 +3,29 @@
 {% block title %}Liste des Utilisateurs{% endblock %}
 
 {% block body %}
+    <style>
+        .autocomplete-list {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            position: absolute;
+            width: 240px;
+            z-index: 1000;
+        }
+
+        .autocomplete-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Liste des Utilisateurs
             <a href="{{ path('utilisateur_new') }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -15,6 +38,12 @@
         <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
             <div class="flex space-x-4">
                 <input type="text" name="nom" placeholder="Nom" class="px-4 py-2 border rounded" value="{{ app.request.query.get('nom') }}">
+
+                <div class="auto-complete-structure">
+                    <input id="structure-search" type="text" name="structure" placeholder="Structure" class="px-4 py-2 border rounded" value="{{ app.request.query.get('structure') }}">
+                    <div id="match-list-structure"></div>
+                </div>
+
                 <select name="statut" class="px-4 py-2 border rounded">
                     <option value="">Tous les statuts</option>
                     <option value="1" {{ app.request.query.get('statut') == '1' ? 'selected' : '' }}>Actif</option>
@@ -37,6 +66,7 @@
                     <th scope="col" class="py-3 px-6">ID</th>
                     <th scope="col" class="py-3 px-6">Nom</th>
                     <th scope="col" class="py-3 px-6">Rôle(s)</th>
+                    <th scope="col" class="py-3 px-6">Structure</th>
                     <th scope="col" class="py-3 px-6">Actions</th>
                 </tr>
                 </thead>
@@ -54,6 +84,7 @@
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.structure }}</td>
                         <td class="py-4 px-6">
                             <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
                         </td>
@@ -72,6 +103,7 @@
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.structure }}</td>
                         <td class="py-4 px-6"></td>
                     </tr>
                 {% endfor %}
@@ -215,6 +247,53 @@
         function closeMessageModal() {
             document.getElementById('message-modal').classList.add('hidden');
         }
+
+        /*** autocomplete **/
+        const structureSearch = document.getElementById('structure-search');
+        const matchListStructure = document.getElementById('match-list-structure');
+
+        const showSuggestions = (suggestions) => {
+            matchListStructure.innerHTML = '';
+
+            if (suggestions.length === 0) {
+                return;
+            }
+
+            const list = document.createElement('ul');
+            list.classList.add('autocomplete-list');
+
+            suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.classList.add('autocomplete-item');
+
+                list.appendChild(li);
+
+                li.addEventListener('click', () => {
+                    structureSearch.value = suggestion;
+                    matchListStructure.innerHTML = '';
+                });
+            });
+
+            matchListStructure.appendChild(list);
+        };
+
+        const searchStructure = async searchText => {
+            if (!searchText) {
+                matchListStructure.innerHTML = '';
+                return;
+            }
+            const response = await fetch(`{{ path('autocomplete_structures') }}?structure=${searchText}`);
+            const result = await response.json();
+
+            showSuggestions(result);
+        }
+
+        structureSearch.addEventListener('input', () => {
+            searchStructure(structureSearch.value);
+        });
+
+
 
     </script>
 
