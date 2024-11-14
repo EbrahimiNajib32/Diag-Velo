@@ -145,8 +145,8 @@ class FormDiagnosticType extends AbstractType
             $builder->add('etat_' . $elementId, ChoiceType::class, [
                 'choices' => [
                     'OK' => 1,
-                    'Pas OK' => 2,
-                    'À reviser' => 3,
+                    'À reviser' => 2,
+                    'Pas OK' => 3,
                     'N/A' => 4,
                 ],
                 'data' => $currentState,

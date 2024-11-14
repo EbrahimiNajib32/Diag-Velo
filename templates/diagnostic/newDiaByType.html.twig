@@ -6,13 +6,47 @@
 
 {% block body %}
 
- <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center">
+    <style>
+        input[type=radio]:focus + label {
+            background-color: rgb(20 184 166 );
+            border-radius: 10px;
+            padding: 5px;
+            color: white;
+        }
+
+        input[type=radio]:checked + label::before {
+            background-color: rgb(20 184 166 );
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        input[type=radio] + label {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        input[type=radio]:checked + label,
+        input[type=radio] + label.selected {
+            background-color: rgb(20 184 166 );
+            border-radius: 10px;
+            padding: 5px;
+            color: white;
+        }
+        }
+    </style>
+
+    <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center">
         <h1 class="text-xl font-semibold text-gray-700 text-center portrait:text-3xl">Nouveau Diagnostic {{ typeDiagnostic.nomType }}</h1>
         {{ form_start(diagnosticForm, {'attr': {'class': 'space-y-3 portrait:space-y-6'}}) }}
 
         <div class="grid grid-cols-3 md:grid-cols-3 gap-1 mb-6 border text-sm portrait:text-2xl">
             <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) }}</div>
-            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border'}}) }}</div>
+            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
+            <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
         </div>
 
         {% for category, elements in diagnosticElements %}
@@ -29,8 +63,10 @@
                                     <div class="font-bold">
                                         {{ form_label(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
-                                    <div class="mt-2">
-                                        {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'class': 'form-radio flex justify-around'}}) }}
+                                    <div class="flex justify-center items-center mt-2 space-x-2">
+                                        {{ form_widget(attribute(diagnosticForm, 'etat_' ~ element.id), {'attr': {'id': 'etat_' ~ element.id, 'class': 'hidden-radio-button'}}) }}
+                                        <label for="etat_{{ element.id }}" class="custom-radio-label">
+                                        </label>
                                         {{ form_errors(attribute(diagnosticForm, 'etat_' ~ element.id)) }}
                                     </div>
                                 </div>
@@ -52,6 +88,15 @@
         <button type="submit" class="w-full mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md" id="submit-button" style="display: none;">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
+
+    <!-- Modal Structure -->
+    <div id="success-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-4 rounded shadow-lg text-center">
+            <h2 class="text-2xl font-semibold mb-4">Modifications enregistrées avec succès !</h2>
+            <button id="close-modal" class="bg-teal-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded">Fermer</button>
+        </div>
+    </div>
+
     <div class="details-container text-center mt-4">
         <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
     </div>
@@ -138,24 +183,42 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            const submitButton = document.getElementById('submit-button');
+            const successModal = document.getElementById('success-modal');
+            const closeModalButton = document.getElementById('close-modal');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                // Show the modal
+                successModal.classList.remove('hidden');
+
+                // Hide the modal when the close button is clicked
+                closeModalButton.addEventListener('click', () => {
+                    successModal.classList.add('hidden');
+                    form.submit(); // Submit the form after closing the modal
+                });
+            });
+
             updateCategoryBackground(); // Initial check on page load
             document.querySelectorAll('input[type=radio]').forEach(radio => {
                 radio.addEventListener('change', updateCategoryBackground);
             });
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const radios = document.querySelectorAll('input[type=radio]');
+            radios.forEach(radio => {
+                const label = radio.nextElementSibling;
+                radio.addEventListener('change', () => {
+                    radios.forEach(r => {
+                        r.nextElementSibling.classList.remove('selected');
+                    });
+
+                    label.classList.add('selected');
+                });
+            });
+        });
     </script>
-
-
-
-
-
-{#ancien code d'affichage
-    <h1>Éléments de diagnostic pour {{ typeDiagnostic.nomType }}</h1>
-    <ul>
-        {% for element in elementsDiagnostic %}
-            <li>ID de DiagnosticTypeElementcontrol : {{ element.id }}</li>
-            <li>ID de l'élément de contrôle : {{ element.idElementcontrol.id }}</li>
-            <li>Contenu de l'élément : {{ element.idElementcontrol.element }}</li>
-        {% endfor %}
-    </ul>#}
 {% endblock %}

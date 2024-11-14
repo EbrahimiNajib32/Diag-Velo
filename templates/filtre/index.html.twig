@@ -1,0 +1,64 @@
+{# templates/filtre/index.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Informations sur les vélos</title>
+</head>
+<body>
+    <h1>Informations sur les vélos</h1>
+    <ul>
+        <li>Marques :
+            <ul>
+                {% for marque in marques %}
+                    <li>{{ marque }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Couleurs :
+            <ul>
+                {% for couleur in couleurs %}
+                    <li>{{ couleur }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Types :
+            <ul>
+                {% for type in types %}
+                    <li>{{ type }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Publics :
+            <ul>
+                {% for public in publics %}
+                    <li>{{ public }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
+    <h1>Informations sur les diagnostics</h1>
+    <ul>
+        {% for diagnostic in date_diagnostic %}
+            <li>Date: {{ diagnostic|date('Y-m-d H:i:s') }}</li> {# formatage de la date #}
+        {% endfor %}
+        {% for conclusion in conclusions %}
+            <li>Conclusion: {{ conclusion }}</li>
+        {% endfor %}
+        {% for statut in status %}
+            <li>Statut: {{ statut }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Informations sur les propriétaires</h1>
+    <ul>
+        {% for nomProprio in nomsProprio %}
+            <li>Nom du propriétaire: {{ nomProprio }}</li>
+        {% endfor %}
+        {% for statut in statuts %}
+            <li>Statut: {{ statut }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -29,16 +29,17 @@ services:
       - "${APP_PORT_EXTERNAL}:80"
     user: root
     command: >
-      bash -c "
-      /usr/local/bin/wait-for-it.sh db:3306 --timeout=30 -- echo 'db is up' &&
-      chmod -R 777 /var/www/public/images &&
-      composer install &&
-      composer require doctrine/doctrine-fixtures-bundle --dev &&
-      npm install &&
-      npm run build &&
-      php bin/console doctrine:migrations:migrate --no-interaction &&
-      php bin/console doctrine:fixtures:load --no-interaction &&
-      apache2-foreground"
+            bash -c "
+              /usr/local/bin/wait-for-it.sh db:3306 --timeout=30 -- echo 'db is up' &&
+              chmod -R 777 /var/www/public/images &&
+              composer install &&
+              composer require doctrine/doctrine-fixtures-bundle --dev &&
+              npm install &&
+              npm run build &&
+              php bin/console doctrine:migrations:migrate --no-interaction &&
+              apache2-foreground
+            "
+
     depends_on:
       - db
 volumes:
