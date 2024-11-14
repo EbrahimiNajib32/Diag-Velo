@@ -3,69 +3,89 @@
 {% block title %}Bienvenue{% endblock %}
 
 {% block body %}
-    <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-    </div>
-    <div class="fixed top-0 right-0">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-    </div>
-    <div class="max-w-lg mx-auto text-center py-20">
-        <h1 class="text-4xl font-bold mb-4">Bienvenue</h1>
-    </div>
-    <div class="text-center portrait:text-3xl mb-6">
-        <p>Explorez notre application pour découvrir comment nous sauvons des vélos de la casse et les remettons en état pour une mobilité durable dans la région Mulhousienne !</p>
-    </div>
-
-    <div class="max-w-lg mx-auto text-center portrait:max-w-2xl">
-        <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg mt-3">
-            <a href="{{ path('velo_new') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>
-                Saisir un vélo
-            </a>
-            <a href="/type/diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-card-checklist text-3xl mr-4 portrait:text-6xl"></i>
-                Diagnostic vélo
-            </a>
-            <a href="/diagnosticEnCours" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-arrow-up-left-circle text-3xl mr-4 portrait:text-6xl"></i>
-                Reprendre un diagnostic
-            </a>
-            <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-search text-3xl mr-4 portrait:text-6xl"></i>
-                Consulter des vélos
-            </a>
-
-            <a href="{{ path('diagnostics_recapitulatif') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                <i class="bi bi-clipboard-data text-3xl mr-4 portrait:text-6xl"></i>
-                Récapitulatif des Diagnostics
-            </a>
-
+    <header class="relative w-full top-0 left-0 flex justify-between z-10">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-        {% if app.user %}
-            <div class="mb-3">
-                Bienvenue {{ app.user.userIdentifier }} ! Votre rôle est :
-                {% if is_granted('ROLE_ADMIN') %}
-                    Administrateur
-                {% elseif is_granted('ROLE_USER') %}
-                    Utilisateur
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </header>
+
+    <main>
+        <div class="max-w-lg mx-auto text-center mb-4 md:mb-0">
+            <h1 class="text-4xl font-bold">Bienvenue</h1>
+        </div>
+        <div id="text-home" class="text-center portrait:text-3xl mb-6 md:mb-0">
+            <p>Explorez notre application pour découvrir comment nous sauvons des vélos de la casse et les remettons en état pour une mobilité durable dans la région Mulhousienne !</p>
+        </div>
+
+        <div class="max-w-lg mx-auto text-center portrait:max-w-2xl mt-0 md:mt-3">
+            <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg">
+
+                <a href="/diagnosticEnCours" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                    <i class="bi bi-arrow-up-left-circle text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                    Diagnostics
+                </a>
+
+                <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                    <i class="bi bi-search text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                    Vélos
+                </a>
+
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('diagnostics_recapitulatif') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                            <i class="bi bi-clipboard-data text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                            Statistiques
+                        </a>
+
+                        <a href="{{ path('app_dashboard') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                            <i class="bi bi-speedometer text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i> 
+                            Tableau de bord
+                        </a>
+                    {% endif %}
                 {% endif %}
+
             </div>
 
-            <a href="{{ path('app_logout') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg text-xl shadow p-3 portrait:text-4xl">
-                <i class="bi bi-box-arrow-left text-2xl"></i> Déconnecter
-            </a>
+            {% if app.user %}
+                <div class="mb-3">
+                    Bienvenue {{ app.user.userIdentifier }} ! Votre rôle est :
+                    {% if is_granted('ROLE_ADMIN') %}
+                        Administrateur
+                    {% elseif is_granted('ROLE_USER') %}
+                        Utilisateur
+                    {% endif %}
+                </div>
+                    <a href="{{ path('app_logout') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg text-lg shadow px-4 py-2 portrait:text-2xl">
+                        <i class="bi bi-box-arrow-left text-xl portrait:text-3xl mr-2"></i> Déconnecter
+                    </a>
 
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_dashboard') }}" class="bg-teal-500 m-3 hover:bg-green-400 text-white rounded-lg text-xl shadow p-3 portrait:text-4xl">
-                    <i class="bi bi-speedometer text-2xl"></i> Tableau de bord
-                </a>
+            {% else %}
+                <div class="mt-3">
+                    <a href="{{ path('app_login') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg text-lg shadow px-4 py-2 portrait:text-2xl">
+                        <i class="bi bi-box-arrow-in-right text-xl portrait:text-3xl mr-2"></i> Se Connecter
+                    </a>
+                </div>
             {% endif %}
-        {% else %}
-            <div class="mt-3">
-                <a href="{{ path('app_login') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg text-xl shadow p-3 portrait:text-4xl">
-                    <i class="bi bi-box-arrow-in-right text-2xl"></i> Se Connecter
-                </a>
-            </div>
-        {% endif %}
-    </div>
+        </div>
+    </main>
+
+    <footer class="fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </footer>
+
+    <style>
+        {# Disparition du texte d'introduction pour le responsive #}
+        @media (min-width: 840px){
+            #text-home{display:block;}
+        }
+        @media (max-width: 840px){
+            #text-home{display:none;}
+        }
+    </style>
 {% endblock %}
+

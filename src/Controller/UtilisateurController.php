@@ -55,6 +55,7 @@ class UtilisateurController extends AbstractController
         $nom = $request->query->get('nom');
         $statut = $request->query->get('statut');
         $role = $request->query->get('role');
+        $structure = $request->query->get('structure');
 
         $queryBuilder = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u');
 
@@ -72,6 +73,11 @@ class UtilisateurController extends AbstractController
         if ($role !== null && $role !== '') {
             $queryBuilder->andWhere('u.role = :role')
                 ->setParameter('role', $role);
+        }
+
+        if ($structure !== null && $structure !== '') {
+            $queryBuilder->andWhere('u.structure LIKE :structure')
+                ->setParameter('structure', '%' . $structure . '%');
         }
 
         $utilisateurs = $queryBuilder->getQuery()->getResult();
