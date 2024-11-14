@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,5 +32,24 @@ class AutoCompleteController extends AbstractController
 
         return new JsonResponse($formattedProprietaires);
     }
+
+    public function autocompleteStructures(UtilisateurRepository $utilisateurRepository, Request $request): JsonResponse
+    {
+        $searchText = $request->query->get('structure');
+        $structures = $utilisateurRepository->findMatchingStructures($searchText);
+
+        if (empty($structures)) {
+            return new JsonResponse(['message' => 'No structures found'], 404);
+        }
+
+        $formattedStructures = [];
+        foreach ($structures as $structure) {
+            $formattedStructures[] = $structure['structure'];
+        }
+
+        return new JsonResponse($formattedStructures);
+    }
+
+
 }
 
