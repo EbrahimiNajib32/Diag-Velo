@@ -142,6 +142,14 @@ class Diagnostic
     #[ORM\JoinColumn(nullable: false)]
     private ?DiagnosticType $diagnosticType = null;
 
+    #[ORM\ManyToOne(inversedBy: 'diagnostics')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $Lieu_id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'diagnostics')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?DiagnostictypeLieutype $Diagnostictype_LieuType_id = null;
+
     public function __construct()
     {
         $this->diagnosticElements = new ArrayCollection();
@@ -219,6 +227,30 @@ class Diagnostic
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getLieuId(): ?Lieu
+    {
+        return $this->Lieu_id;
+    }
+
+    public function setLieuId(?Lieu $Lieu_id): static
+    {
+        $this->Lieu_id = $Lieu_id;
+
+        return $this;
+    }
+
+    public function getDiagnostictypeLieuTypeId(): ?DiagnostictypeLieutype
+    {
+        return $this->Diagnostictype_LieuType_id;
+    }
+
+    public function setDiagnostictypeLieuTypeId(?DiagnostictypeLieutype $Diagnostictype_LieuType_id): static
+    {
+        $this->Diagnostictype_LieuType_id = $Diagnostictype_LieuType_id;
 
         return $this;
     }

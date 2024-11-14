@@ -31,9 +31,16 @@ class DiagnosticType
     #[ORM\OneToMany(targetEntity: DiagnosticTypeElementcontrol::class, mappedBy: 'idDianosticType', orphanRemoval: true)]
     private Collection $diagnosticTypeElementcontrols;
 
+    /**
+     * @var Collection<int, DiagnostictypeLieutype>
+     */
+    #[ORM\OneToMany(targetEntity: DiagnostictypeLieutype::class, mappedBy: 'diagnostic_type_id')]
+    private Collection $diagnostictypeLieutypes;
+
     public function __construct()
     {
         $this->diagnosticTypeElementcontrols = new ArrayCollection();
+        $this->diagnostictypeLieutypes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,6 +109,36 @@ class DiagnosticType
             // set the owning side to null (unless already changed)
             if ($diagnosticTypeElementcontrol->getIdDianosticType() === $this) {
                 $diagnosticTypeElementcontrol->setIdDianosticType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DiagnostictypeLieutype>
+     */
+    public function getDiagnostictypeLieutypes(): Collection
+    {
+        return $this->diagnostictypeLieutypes;
+    }
+
+    public function addDiagnostictypeLieutype(DiagnostictypeLieutype $diagnostictypeLieutype): static
+    {
+        if (!$this->diagnostictypeLieutypes->contains($diagnostictypeLieutype)) {
+            $this->diagnostictypeLieutypes->add($diagnostictypeLieutype);
+            $diagnostictypeLieutype->setDiagnosticTypeId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiagnostictypeLieutype(DiagnostictypeLieutype $diagnostictypeLieutype): static
+    {
+        if ($this->diagnostictypeLieutypes->removeElement($diagnostictypeLieutype)) {
+            // set the owning side to null (unless already changed)
+            if ($diagnostictypeLieutype->getDiagnosticTypeId() === $this) {
+                $diagnostictypeLieutype->setDiagnosticTypeId(null);
             }
         }
 
