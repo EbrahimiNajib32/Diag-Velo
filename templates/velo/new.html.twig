@@ -133,6 +133,7 @@
             {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
             {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
 
+
             <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center mb-10">
                 <div class="text-center">
                     <button id="cameraIcon" type="button" class="cameraIcon text-4xl mt-10">
@@ -149,15 +150,42 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="flex items-center justify-center">
-            <button type="submit" class="w-full bg-teal-500 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">Soumettre</button>
-            {{ form_end(form) }}
-        </div>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center my-3 bg-green-100 text-green-800 p-3 rounded">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+            <div class="flex justify-center mt-4">
+                <!-- Bouton pour enregistrer et aller au diagnostic -->
+                <button type="submit" name="action" value="go_to_diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 w-full flex items-center justify-center">
+                    <i class="bi bi-search text-2xl lg:text-3xl mr-2 lg:mr-4"></i>
+                    Aller au diagnostic
+                </button>
+            </div>
+
+            <div class="flex justify-center mt-4">
+                <!-- Bouton pour enregistrer et rester sur la même page -->
+                <button type="submit" name="action" value="stay" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 w-full flex items-center justify-center">
+                    <i class="bi bi-pencil text-2xl lg:text-3xl mr-2 lg:mr-4"></i>
+                    Enregistrer un autre vélo
+                </button>
+            </div>
+            <div class="flex items-center justify-center mt-4">
+                <!-- Bouton pour enregistrer et aller à l'accueil -->
+                <button type="submit" name="action" value="return_home" class="w-full bg-teal-500 text-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <i class="bi bi-floppy text-2xl lg:text-3xl mr-2 lg:mr-4"></i>
+                Enregistrer et retour Accueil
+                </button>
+            </div>
+    {{ form_end(form) }}
     </div>
     <div class="details-container text-center mt-4">
         <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil sans enregistrer les modifications</a>
     </div>
+
+
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
