@@ -24,7 +24,7 @@ class UtilisateurRepository extends ServiceEntityRepository
     public function findMatchingStructures(string $structure): array
     {
         return $this->createQueryBuilder('u')
-            ->select('u.structure')
+            ->select('DISTINCT u.structure')
             ->where('u.structure LIKE :structure')
             ->setParameter('structure', '%' . $structure . '%')
             ->setMaxResults(10)
