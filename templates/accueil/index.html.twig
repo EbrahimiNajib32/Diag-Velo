@@ -71,21 +71,59 @@
             {% endif %}
         </div>
 
-        <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
-            <div class="relative max-w-5xl mx-auto bg-white rounded-lg overflow-y-auto">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b">
-                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Titre de la Modal</h3>
-                    <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <!-- Contenu de la modal -->
-                <div class="p-4">
-                    Contenu de la modal ici.
-                </div>
-            </div>
+<!-- Modal pour la sélection et l'ajout de lieux -->
+<div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="relative max-w-5xl mx-auto bg-white rounded-lg overflow-y-auto">
+        <!-- En-tête de la modal -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b">
+            <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Gestion des lieux</h3>
+            <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
+                <i class="bi bi-x-lg"></i>
+            </button>
         </div>
 
+        <!-- Contenu de la modal -->
+        <div class="p-4 space-y-4">
+            <!-- Liste de lieux avec boutons radio -->
+            <div class="mb-4">
+                <h4 class="text-lg font-medium text-gray-800">Lieux disponibles</h4>
+                <form id="select-lieu-form">
+                    <div id="lieux-radio-group" class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="radio" name="selected_lieu" value="Lieu 1" class="mr-2">
+                            Lieu 1 - Adresse du lieu 1
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="selected_lieu" value="Lieu 2" class="mr-2">
+                            Lieu 2 - Adresse du lieu 2
+                        </label>
+                        <!-- Ajoutez d'autres lieux ici -->
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulaire d'ajout d'un nouveau lieu -->
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="text-lg font-medium text-gray-800 mb-3">Ajouter un nouveau lieu</h4>
+                <form id="new-lieu-form">
+                    <div class="mb-4">
+                        <label for="lieu-nom" class="block text-sm font-medium text-gray-700">Nom du lieu :</label>
+                        <input type="text" id="lieu-nom" name="lieu_nom" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm" placeholder="Entrez le nom du lieu">
+                    </div>
+                    <div class="mb-4">
+                        <label for="lieu-adresse" class="block text-sm font-medium text-gray-700">Adresse :</label>
+                        <input type="text" id="lieu-adresse" name="lieu_adresse" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm" placeholder="Entrez l'adresse du lieu">
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-colors duration-200">
+                            Ajouter le lieu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
     </main>
 
     <footer class="fixed bottom-0 w-full bg-white">
