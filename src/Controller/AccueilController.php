@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use App\Entity\Velo;
 use App\Form\SearchVeloType;
+use App\Form\LieuType;
+use App\Entity\Lieu;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,24 +29,39 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute('velo_details', ['ref_recyclerie' => $refRecyclerie]);
         }
 
+        // Formulaire de création de lieu
+        $lieu = new Lieu();
+        $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Lieu ajouté avec succès.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'searchForm' => $searchForm->createView(),
+            'lieuForm' => $lieuForm->createView(),
         ]);
     }
-#[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
-public function veloDetails(EntityManagerInterface $entityManager, Request $request, $ref_recyclerie = null): Response
-{
-    if ($ref_recyclerie === null) {
-        $refRecyclerie = $request->query->get('ref_recyclerie');
-    }
-    $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
 
-    if (!$velo) {
-        $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
-        return $this->redirectToRoute('app_accueil');
-    }
+    #[Route('/velo/details/{ref_recyclerie?}', name: 'velo_details')]
+    public function veloDetails(EntityManagerInterface $entityManager, Request $request, $ref_recyclerie = null): Response
+    {
+        if ($ref_recyclerie === null) {
+            $refRecyclerie = $request->query->get('ref_recyclerie');
+        }
+        $velo = $entityManager->getRepository(Velo::class)->findOneBy(['ref_recyclerie' => $refRecyclerie]);
 
-    return $this->render('velo/détails/velo_details.html.twig', ['velo' => $velo]);
-}
+        if (!$velo) {
+            $this->addFlash('error', 'Aucun vélo trouvé avec la référence de recyclérie spécifiée.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        return $this->render('velo/détails/velo_details.html.twig', ['velo' => $velo]);
+    }
 }
