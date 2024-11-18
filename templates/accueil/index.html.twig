@@ -23,8 +23,8 @@
         <div class="max-w-lg mx-auto text-center portrait:max-w-2xl mt-0 md:mt-3">
             <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg">
 
-                <a href="/diagnosticEnCours" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
-                    <i class="bi bi-arrow-up-left-circle text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                <a data-modal-toggle="modal-lieu" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full">
+                    <i class="bi bi-arrow-up-left-circle text-2xl lg:text-3xl mr-2"></i>
                     Diagnostics
                 </a>
 
@@ -70,6 +70,129 @@
                 </div>
             {% endif %}
         </div>
+
+        <!-- Modal de lieu -->
+        <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+            <!-- Backdrop -->
+            <div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+
+            <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b">
+                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Lieux</h3>
+                    <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Lieux disonible -->
+                <div class="p-4 space-y-4 overflow-y-auto" style="max-height: calc(90vh - 120px);">
+                    <div class="mb-4">
+                        <h4 class="text-lg font-medium text-gray-800">Lieux disponibles</h4>
+                        {% if lieu_disponible|length > 0 %}
+                            <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Type de lieu</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Nom</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Adresse</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Ville</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Code Postal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lieu in lieu_disponible %}
+                                        <tr class= "hover:bg-gray-400 transition-all ease-in-out duration-150" 
+                                            onclick="window.location.href='{{ path('app_diagnostic_en_cours', {'id': lieu.id}) }}'">
+                                            <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.adresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.ville }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.codePostal }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="text-gray-500">Aucun lieu disponible pour le moment.</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Formulaire d'ajout d'un nouveau lieu -->
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="text-lg font-medium text-gray-800 mb-3">Ajouter un nouveau lieu</h4>
+                        {{ form_start(lieuForm, {'attr': {'id': 'new-lieu-form'}}) }}
+                            <div class="mb-4">
+                                <label for="lieu_type" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.type_lieu_id) }}
+                                </label>
+                                {{ form_widget(lieuForm.type_lieu_id, {
+                                    'attr': {
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm'
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.type_lieu_id) }}
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="lieu_nom" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.nom_lieu) }}
+                                </label>
+                                {{ form_widget(lieuForm.nom_lieu, {
+                                    'attr': {
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                        'placeholder': 'Entrez le nom du lieu'
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.nom_lieu) }}
+                            </div>
+                            <div class="mb-4">
+                                <label for="lieu_adresse" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.adresse_lieu) }}
+                                </label>
+                                {{ form_widget(lieuForm.adresse_lieu, {
+                                    'attr': {
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                        'placeholder': "Entrez l'adresse du lieu"
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.adresse_lieu) }}
+                            </div>
+                            <div class="mb-4">
+                                <label for="lieu_ville" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.ville) }}
+                                </label>
+                                {{ form_widget(lieuForm.ville, {
+                                    'attr': {
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                        'placeholder': 'Entrez la ville'
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.ville) }}
+                            </div>
+                            <div class="mb-4">
+                                <label for="lieu_code_postal" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.code_postal) }}
+                                </label>
+                                {{ form_widget(lieuForm.code_postal, {
+                                    'attr': {
+                                        'type' : 'number',
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                        'placeholder': 'Entrez le code postal'
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.code_postal) }}
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-colors duration-200">
+                                    Ajouter le lieu
+                                </button>
+                            </div>
+                        {{ form_end(lieuForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="fixed bottom-0 w-full bg-white">
@@ -86,6 +209,39 @@
         @media (max-width: 840px){
             #text-home{display:none;}
         }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
     </style>
+    <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        const openModalButton = document.querySelector('[data-modal-toggle="modal-lieu"]');
+        const closeModalButton = document.querySelector('[data-modal-hide="modal-lieu"]');
+        const modal = document.getElementById("modal-lieu");
+
+        // Ouvrir la modal
+        openModalButton.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+        });
+
+        // Fermer la modal en cliquant sur le bouton de fermeture
+        closeModalButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+
+        // Fermer la modal en cliquant sur le fond (backdrop)
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+    });
+
+    
+    </script>
 {% endblock %}
 
