@@ -20,9 +20,13 @@ class LieuType extends AbstractType
             ->add('code_postal')
             ->add('type_lieu_id', EntityType::class, [
                 'class' => TypeLieu::class,
-                'choice_label' => 'id',
-            ])
-        ;
+                'choice_label' => 'nom_type_lieu',
+                'label' => 'Type de lieu',
+                'placeholder' => 'Choisissez un type de lieu',
+                'attr' => [
+                    'class' => 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

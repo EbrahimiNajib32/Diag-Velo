@@ -71,41 +71,65 @@
             {% endif %}
         </div>
 
-        <!-- Modal pour la sélection et l'ajout de lieux -->
+        <!-- Modal de lieu -->
         <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
             <div class="relative max-w-5xl mx-auto bg-white rounded-lg overflow-y-auto">
-                <!-- En-tête de la modal -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b">
-                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Gestion des lieux</h3>
+                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Lieux</h3>
                     <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
 
-                <!-- Contenu de la modal -->
+                <!-- Lieux disonible -->
                 <div class="p-4 space-y-4">
-                    <!-- Liste de lieux avec boutons radio -->
                     <div class="mb-4">
                         <h4 class="text-lg font-medium text-gray-800">Lieux disponibles</h4>
-                        <form id="select-lieu-form">
-                            <div id="lieux-radio-group" class="space-y-2">
-                                <label class="flex items-center">
-                                    <input type="radio" name="selected_lieu" value="Lieu 1" class="mr-2">
-                                    Lieu 1 - Adresse du lieu 1
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="radio" name="selected_lieu" value="Lieu 2" class="mr-2">
-                                    Lieu 2 - Adresse du lieu 2
-                                </label>
-                                <!-- Ajoutez d'autres lieux ici -->
-                            </div>
-                        </form>
+                        {% if lieu_disponible|length > 0 %}
+                            <table class="min-w-full bg-white border border-gray-300">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">Nom</th>
+                                        <th class="px-4 py-2 border-b">Adresse</th>
+                                        <th class="px-4 py-2 border-b">Ville</th>
+                                        <th class="px-4 py-2 border-b">Code Postal</th>
+                                        <th class="px-4 py-2 border-b">Type de lieu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lieu in lieu_disponible %}
+                                        <tr class="cursor-pointer hover:bg-gray-100"
+                                            onclick="window.location.href=''">
+                                            <td class="px-4 py-2 border-b">{{ lieu.NomLieu }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.AdresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.Ville }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.CodePostal }}</td>
+                                            <td class="px-4 py-2 border-b"> {{ lieu.TypeLieuId.nomTypeLieu}} </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="text-gray-500">Aucun lieu disponible pour le moment.</p>
+                        {% endif %}
                     </div>
 
                     <!-- Formulaire d'ajout d'un nouveau lieu -->
                     <div class="bg-gray-100 p-4 rounded-lg">
                         <h4 class="text-lg font-medium text-gray-800 mb-3">Ajouter un nouveau lieu</h4>
                         {{ form_start(lieuForm, {'attr': {'id': 'new-lieu-form'}}) }}
+                            <div class="mb-4">
+                                <label for="lieu_type" class="block text-sm font-medium text-gray-700">
+                                    {{ form_label(lieuForm.type_lieu_id) }}
+                                </label>
+                                {{ form_widget(lieuForm.type_lieu_id, {
+                                    'attr': {
+                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm'
+                                    }
+                                }) }}
+                                {{ form_errors(lieuForm.type_lieu_id) }}
+                            </div>
+
                             <div class="mb-4">
                                 <label for="lieu_nom" class="block text-sm font-medium text-gray-700">
                                     {{ form_label(lieuForm.nom_lieu) }}
@@ -153,17 +177,6 @@
                                     }
                                 }) }}
                                 {{ form_errors(lieuForm.code_postal) }}
-                            </div>
-                            <div class="mb-4">
-                                <label for="lieu_type" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.type_lieu_id) }}
-                                </label>
-                                {{ form_widget(lieuForm.type_lieu_id, {
-                                    'attr': {
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm'
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.type_lieu_id) }}
                             </div>
                             <div class="flex justify-end">
                                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-colors duration-200">
