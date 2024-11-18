@@ -31,7 +31,7 @@ class AccueilController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Lieu ajouté avec succès.');
-            return $this->redirectToRoute('app_accueil');
+            return $this->redirectToRoute('app_diagnostic_en_cours', ['id' => $lieu->getId()]);
         }
 
         return $this->render('accueil/index.html.twig', [

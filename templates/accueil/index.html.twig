@@ -72,8 +72,11 @@
         </div>
 
         <!-- Modal de lieu -->
-        <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
-            <div class="relative max-w-5xl mx-auto bg-white rounded-lg overflow-y-auto">
+        <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+            <!-- Backdrop -->
+            <div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+
+            <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b">
                     <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Lieux</h3>
                     <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
@@ -82,29 +85,29 @@
                 </div>
 
                 <!-- Lieux disonible -->
-                <div class="p-4 space-y-4">
+                <div class="p-4 space-y-4 overflow-y-auto" style="max-height: calc(90vh - 120px);">
                     <div class="mb-4">
                         <h4 class="text-lg font-medium text-gray-800">Lieux disponibles</h4>
                         {% if lieu_disponible|length > 0 %}
-                            <table class="min-w-full bg-white border border-gray-300">
+                            <table class="min-w-full bg-white border border-gray-300 rounded-lg">
                                 <thead>
                                     <tr>
-                                        <th class="px-4 py-2 border-b">Nom</th>
-                                        <th class="px-4 py-2 border-b">Adresse</th>
-                                        <th class="px-4 py-2 border-b">Ville</th>
-                                        <th class="px-4 py-2 border-b">Code Postal</th>
-                                        <th class="px-4 py-2 border-b">Type de lieu</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Type de lieu</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Nom</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Adresse</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Ville</th>
+                                        <th class="px-4 py-2 border-b text-left text-sm font-semibold text-gray-600">Code Postal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for lieu in lieu_disponible %}
-                                        <tr class="cursor-pointer hover:bg-gray-100"
-                                            onclick="window.location.href=''">
-                                            <td class="px-4 py-2 border-b">{{ lieu.NomLieu }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.AdresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.Ville }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.CodePostal }}</td>
-                                            <td class="px-4 py-2 border-b"> {{ lieu.TypeLieuId.nomTypeLieu}} </td>
+                                        <tr class= "hover:bg-gray-400 transition-all ease-in-out duration-150" 
+                                            onclick="window.location.href='{{ path('app_diagnostic_en_cours', {'id': lieu.id}) }}'">
+                                            <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.adresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.ville }}</td>
+                                            <td class="px-4 py-2 border-b">{{ lieu.codePostal }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -172,6 +175,7 @@
                                 </label>
                                 {{ form_widget(lieuForm.code_postal, {
                                     'attr': {
+                                        'type' : 'number',
                                         'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
                                         'placeholder': 'Entrez le code postal'
                                     }
@@ -185,10 +189,10 @@
                             </div>
                         {{ form_end(lieuForm) }}
                     </div>
-
                 </div>
             </div>
         </div>
+
     </main>
 
     <footer class="fixed bottom-0 w-full bg-white">
