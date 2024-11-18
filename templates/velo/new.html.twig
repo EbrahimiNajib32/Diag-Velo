@@ -60,13 +60,13 @@
 
 
 </style>
-
-    <div class="bg-gray-100 flex flex-col min-h-screen justify-center">
-    <div class="w-full">
-    <div class="bg-white p-6 border border-gray-300 rounded-lg shadow-lg w-full">
+<body>
+    <div class="bg-white flex flex-col min-h-screen justify-center" style="background-color: white;">
+    <div class="w-full max-w-7xl mx-auto">
+    <div class="bg-white p-6   w-full ">
         <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
-        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-        <div class="grid grid-cols-2 gap-4 ">
+        {{ form_start(form, {'attr': {'class': 'space-y-4', 'style': 'max-width:500px; margin:auto;'}}) }}
+        <div class="grid grid-cols-1 gap-4 mx-2 sm:mx-4 md:mx-25 lg:mx-42">
             <div class="border border-black rounded p-3 text-center">
                 <div>
                     {{ form_label(form.chosir_ou_ajouter) }}
@@ -120,18 +120,20 @@
             </div>
             {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
             {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-            {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-            {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-            {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-            {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-            {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
             {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
             {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+            {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+            {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+            {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
             {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
             {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-            {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-            {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-            {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
+
+
 
 
             <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center mb-10">
@@ -185,7 +187,7 @@
     </div>
 
 
-
+</body>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
