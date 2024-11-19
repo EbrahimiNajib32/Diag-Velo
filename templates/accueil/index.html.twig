@@ -102,7 +102,7 @@
                                 <tbody>
                                     {% for lieu in lieu_disponible %}
                                         <tr class= "hover:bg-gray-400 transition-all ease-in-out duration-150" 
-                                            onclick="window.location.href='{{ path('app_diagnostic_en_cours', {'id': lieu.id}) }}'">
+                                            onclick="window.location.href='{{ path('app_lieu_choisi', {'id': lieu.id}) }}'">
                                             <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
                                             <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
                                             <td class="px-4 py-2 border-b">{{ lieu.adresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>

@@ -1,191 +1,211 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="flex-col-2 flex justify-between">
-        <div class="">
+    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+        <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-        <div class="">
+        
+        <div class="flex flex-col justify-center items-center text-xl font-bold text-blue-600">
+            <div>{{ lieu.nom }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.nomType }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.adresse}}</div>
+            <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.codePostal }}</div>
+        </div>
+        
+        <div id="headerLogoCite">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
-    </div>
-    <div class="container mx-auto">
-
-        <h1 class="text-3xl font-bold text-center text-black">Liste des vélos</h1>
+    </header>
 
 
-        <div class="flex justify-center mb-3 mt-3">
-                    <a href="{{ path('velo_new') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-sm shadow transition-colors duration-200 w-auto inline-flex items-center justify-center">
-                        <i class="bi bi-plus text-lg mr-1"></i>
-                        Créer un un Vélo
-                    </a>
-                </div>
+    <main>
+        <div class="container mx-auto">
 
-        {% if pagination|length > 0 %}
+            <h1 class="text-3xl font-bold text-center text-black">Liste des vélos</h1>
 
-                <!-- Formulaire de filtrage -->
-        <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
-            <div class="flex flex-col space-y-4">
 
-                <div class="flex justify-center items-center w-full mt-4"> <!-- Adds space above the search bar -->
-                    <div class="relative w-full max-w-lg">
-                        <input type="text"
-                               id="mainSearch"
-                               name="ref_recyclerie"
-                               placeholder="Propriétaire, Numéro de Série, Référence recyclerie"
-                               class="border-none rounded-full pl-3 pr-12 py-3 shadow-md focus:outline-none text-gray-700 transition-colors duration-200 w-full"
-                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5;"
-                               onkeyup="filterTable()">
-
-                        <!-- Ensure the icon is positioned correctly on the right -->
-                        <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
-            <i class="bi bi-search text-gray-500"></i>
-        </span>
+            <div class="flex justify-center mb-3 mt-3">
+                        <a href="{{ path('velo_new') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-sm shadow transition-colors duration-200 w-auto inline-flex items-center justify-center">
+                            <i class="bi bi-plus text-lg mr-1"></i>
+                            Créer un un Vélo
+                        </a>
                     </div>
-                </div>
 
+            {% if pagination|length > 0 %}
 
+                    <!-- Formulaire de filtrage -->
+            <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
+                <div class="flex flex-col space-y-4">
 
+                    <div class="flex justify-center items-center w-full mt-4"> <!-- Adds space above the search bar -->
+                        <div class="relative w-full max-w-lg">
+                            <input type="text"
+                                id="mainSearch"
+                                name="ref_recyclerie"
+                                placeholder="Propriétaire, Numéro de Série, Référence recyclerie"
+                                class="border-none rounded-full pl-3 pr-12 py-3 shadow-md focus:outline-none text-gray-700 transition-colors duration-200 w-full"
+                                style="border: 1px solid #E5E7EB; background-color: #F5F5F5;"
+                                onkeyup="filterTable()">
 
-                <!-- Select elements -->
-                <div class="flex flex-wrap w-full space-y-2 sm:space-y-0">
-                    <select name="marque" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('marque', this.value)" style="cursor: pointer;">
-                        <option value="" selected>Marques</option>
-                        {% for marque in marques_uniques %}
-                            <option value="{{ marque }}">{{ marque }}</option>
-                        {% endfor %}
-                    </select>
-                    <select name="couleur" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('couleur', this.value)" style="cursor: pointer;">
-                        <option value="" selected>Couleurs</option>
-                        {% for couleur in couleurs_uniques %}
-                            <option value="{{ couleur }}">{{ couleur }}</option>
-                        {% endfor %}
-                    </select>
-                    <select name="type" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('type', this.value)" style="cursor: pointer;">
-                        <option value="" selected>Types</option>
-                        {% for type in types_uniques %}
-                            <option value="{{ type }}">{{ type }}</option>
-                        {% endfor %}
-                    </select>
-                    <select name="public" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('public', this.value)" style="cursor: pointer;">
-                        <option value="" selected>Publics</option>
-                        {% for public in publics_uniques %}
-                            <option value="{{ public }}">{{ public }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </form>
-
-
-
-
-        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-2 py-3">ID</th>
-                    <th scope="col" class="px-2 py-3">Propriétaire</th>
-                    <th scope="col" class="px-2 py-3">Numéro de série</th>
-                    <th scope="col" class="px-2 py-3">Référence recyclerie</th>
-                    <th scope="col" class="px-2 py-3">Marque</th>
-                    <th scope="col" class="px-2 py-3">Couleur</th>
-                    <th scope="col" class="px-2 py-3">Type</th>
-                    <th scope="col" class="px-2 py-3">Public</th>
-                    <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
-                    <th scope="col" class="px-2 py-3">Date de vente</th>
-                    <th scope="col" class="px-2 py-3">Date de destruction</th>
-                    <th scope="col" class="px-2 py-3">Historique</th>
-                    <th scope="col" class="px-2 py-3"> faire Diagnostic</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for velo in pagination %}
-                    <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
-                        <td class="px-2 py-4 border-r border-b border-gray-300">
-                            {% if velo.date_de_vente is not null %}
-                                {{ velo.date_de_vente|date('d/m/Y') }}
-                            {% endif %}
-                        </td>
-
-                        <td class="px-2 py-4 border-r border-b border-gray-300">
-                            {% if velo.date_destruction is not null %}
-                                {{ velo.date_destruction|date('d/m/Y') }}
-                            {% endif %}
-                        </td>
-                        <td class="px-2 py-4">
-                            <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
-                                Voir
-                            </button>
-                        </td>
-                     <td class="px-2 py-4">
-                         <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
-                             Faire
-                         </a>
-                     </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <div class="pagination mx-auto justify-center">
-                {{ knp_pagination_render(pagination) }}
-            </div>
-            {% else %}
-                <div class="text-center py-8">
-                    <p class="text-gray-500 text-lg">Aucun vélo trouvé.</p>
-                </div>
-            {% endif %}
-        </div>
-
-
-        <div class="details-container text-center mt-4">
-            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
-        </div>
-    </div>
-
-
-    {% for velo in pagination %}
-        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
-            <div class="relative max-w-5xl justify-center items-center mx-auto">
-                <div class="bg-white rounded-lg overflow-y-auto">
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b ">
-                        <h3 class="text-xl text-center font-semibold text-gray-900">
-                            Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçu le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
-                        </h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </div>
-                    {% if diagnostics[velo.id] is defined %}
-                        {% for diagnostic in diagnostics[velo.id] %}
-                            <div class="bg-gray-100 rounded p-5  mb-4 mt-4 text-center">
-                                <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
-                                <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
-                                 <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
-                                <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
-                                <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
-                                <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
-                                <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="p-5 rounded-lg mb-3 text-center">
-                            <p class="text-center m-5">Pas de diagnostics.</p>
+                            <!-- Ensure the icon is positioned correctly on the right -->
+                            <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                <i class="bi bi-search text-gray-500"></i>
+            </span>
                         </div>
-                    {% endif %}
+                    </div>
+
+
+
+
+                    <!-- Select elements -->
+                    <div class="flex flex-wrap w-full space-y-2 sm:space-y-0">
+                        <select name="marque" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('marque', this.value)" style="cursor: pointer;">
+                            <option value="" selected>Marques</option>
+                            {% for marque in marques_uniques %}
+                                <option value="{{ marque }}">{{ marque }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="couleur" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('couleur', this.value)" style="cursor: pointer;">
+                            <option value="" selected>Couleurs</option>
+                            {% for couleur in couleurs_uniques %}
+                                <option value="{{ couleur }}">{{ couleur }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="type" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('type', this.value)" style="cursor: pointer;">
+                            <option value="" selected>Types</option>
+                            {% for type in types_uniques %}
+                                <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="public" class="px-4 py-2 border rounded w-full sm:w-auto mr-4 mb-2" onchange="filterRows('public', this.value)" style="cursor: pointer;">
+                            <option value="" selected>Publics</option>
+                            {% for public in publics_uniques %}
+                                <option value="{{ public }}">{{ public }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
+            </form>
+
+
+
+
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-2 py-3">ID</th>
+                        <th scope="col" class="px-2 py-3">Propriétaire</th>
+                        <th scope="col" class="px-2 py-3">Numéro de série</th>
+                        <th scope="col" class="px-2 py-3">Référence recyclerie</th>
+                        <th scope="col" class="px-2 py-3">Marque</th>
+                        <th scope="col" class="px-2 py-3">Couleur</th>
+                        <th scope="col" class="px-2 py-3">Type</th>
+                        <th scope="col" class="px-2 py-3">Public</th>
+                        <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
+                        <th scope="col" class="px-2 py-3">Date de vente</th>
+                        <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Historique</th>
+                        <th scope="col" class="px-2 py-3"> faire Diagnostic</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for velo in pagination %}
+                        <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                            <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">
+                                {% if velo.date_de_vente is not null %}
+                                    {{ velo.date_de_vente|date('d/m/Y') }}
+                                {% endif %}
+                            </td>
+
+                            <td class="px-2 py-4 border-r border-b border-gray-300">
+                                {% if velo.date_destruction is not null %}
+                                    {{ velo.date_destruction|date('d/m/Y') }}
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-4">
+                                <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
+                                    Voir
+                                </button>
+                            </td>
+                        <td class="px-2 py-4">
+                            <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                Faire
+                            </a>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="pagination mx-auto justify-center">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+                {% else %}
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 text-lg">Aucun vélo trouvé.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="details-container text-center mt-4">
+                <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
             </div>
         </div>
+
+
+        {% for velo in pagination %}
+            <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
+                <div class="relative max-w-5xl justify-center items-center mx-auto">
+                    <div class="bg-white rounded-lg overflow-y-auto">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b ">
+                            <h3 class="text-xl text-center font-semibold text-gray-900">
+                                Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçu le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        {% if diagnostics[velo.id] is defined %}
+                            {% for diagnostic in diagnostics[velo.id] %}
+                                <div class="bg-gray-100 rounded p-5  mb-4 mt-4 text-center">
+                                    <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
+                                    <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
+                                    <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
+                                    <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
+                                    <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
+                                    <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
+                                    <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-5 rounded-lg mb-3 text-center">
+                                <p class="text-center m-5">Pas de diagnostics.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+    </main>
+
+    <footer class="fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </footer>
     {% endfor %}
 
 
