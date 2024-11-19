@@ -1,58 +1,75 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="flex-col-2 flex justify-between">
-        <div class="">
+    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+        <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-        <div class="">
+        
+        <div class="flex flex-col justify-center items-center text-xl font-bold text-blue-600">
+            <div>{{ lieu.nom }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.nomType }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.adresse}}</div>
+            <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
+            <div class="text-sm text-gray-600">{{ lieu.codePostal }}</div>
+        </div>
+        
+        <div id="headerLogoCite">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
-    </div>
-    <div class="container mx-auto">
-        <h1 class="text-3xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
+    </header>
+
+    <main>
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
 
 
-        <div class="flex justify-center mb-4">
-            <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-sm shadow transition-colors duration-200 w-auto inline-flex items-center justify-center">
-                <i class="bi bi-plus text-lg mr-1"></i>
-                Créer un diagnostic
-            </a>
-        </div>
+            <div class="flex justify-center mb-4">
+                <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-sm shadow transition-colors duration-200 w-auto inline-flex items-center justify-center">
+                    <i class="bi bi-plus text-lg mr-1"></i>
+                    Créer un diagnostic
+                </a>
+            </div>
 
-
-
-        <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
-            <thead class="bg-gray-200">
-            <tr class=" text-black">
-                <th class="px-2 py-2">Reference<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2">Date d'enregistrement <i class="ml-1 bi bi-arrow-down-up"></i></th>
-                <th class="px-2 py-2"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for item in filteredDiagnostics %}
-                <tr class="border">
-                    <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
-                    <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateDeEnregistrement }}</td>
-                    <td class="px-4 py-2 ">
-                        <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
-                            Reprendre
-                        </a>
-                    </td>
+            <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
+                <thead class="bg-gray-200">
+                <tr class=" text-black">
+                    <th class="px-2 py-2">Reference<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Date d'enregistrement <i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2"></th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for item in filteredDiagnostics %}
+                    <tr class="border">
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateDeEnregistrement }}</td>
+                        <td class="px-4 py-2 ">
+                            <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
+                                Reprendre
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-        <div class="details-container text-center mt-4">
-            <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
+            <div class="details-container text-center mt-4">
+                <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
+            </div>
         </div>
-    </div>
+
+    </main>
+
+    <footer class="fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </footer>
 {% endblock %}
