@@ -14,6 +14,7 @@ use App\Entity\EtatControl;
 use App\Entity\ElementControl;
 use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Proprietaire;
 use App\Entity\Utilisateur;
 use App\Form\FormDiagnosticType;
@@ -122,7 +123,7 @@ class DiagnosticController extends AbstractController
 
 // route pour l'affichage uniquement des diagnostics en cours
 #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request): Response
+public function diagnosticEnCours(EntityManagerInterface $entityManager, SessionInterface $session, \Symfony\Component\HttpFoundation\Request $request): Response
 {
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
     $filteredDiagnostics = [];
@@ -146,8 +147,10 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, \Symfon
     }
 
     // Render a Twig template, passing the filtered diagnostics
+    dump($session->all());
     return $this->render('diagnostic_en_cour/index.html.twig', [
-        'filteredDiagnostics' => $filteredDiagnostics
+        'filteredDiagnostics' => $filteredDiagnostics,
+        'lieu' => $session->get('lieu')
     ]);
 }
 

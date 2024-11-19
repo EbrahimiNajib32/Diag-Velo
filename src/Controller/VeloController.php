@@ -10,6 +10,7 @@ use App\Entity\Diagnostic;
 use App\Entity\Velo;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,7 +82,7 @@ class VeloController extends AbstractController
 
 
     #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request ): Response
+    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
     {
         $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('v.id', 'p.nom_proprio', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
@@ -166,6 +167,7 @@ class VeloController extends AbstractController
             'couleurs_uniques' => $couleurs_uniques,
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
+            'lieu' => $session->get('lieu'),
         ]);
     }
 
