@@ -24,61 +24,63 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class VeloController extends AbstractController
 {
- #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
- public function new(Request $request, EntityManagerInterface $entityManager): Response
- {
-     $velo = new Velo();
-     $form = $this->createForm(VeloInfoType::class, $velo);
-     $form->handleRequest($request);
+    // Route pour créer un nouveau vélo
+    #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $velo = new Velo();
+        $form = $this->createForm(VeloInfoType::class, $velo);
+        $form->handleRequest($request);
 
-     if ($form->isSubmitted() && $form->isValid()) {
-         $velo->setDateDeEnregistrement(new \DateTime());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $velo->setDateDeEnregistrement(new \DateTime());
 
-         $base64Image = $form->get('url_photo')->getData();
-         if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
-             $data = substr($base64Image, strpos($base64Image, ',') + 1);
-             $data = base64_decode($data);
+            // Traitement de l'image
+            $base64Image = $form->get('url_photo')->getData();
+            if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
+                $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                $data = base64_decode($data);
 
-             $imageName = uniqid() . '.' . $type[1];
-             $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+                $imageName = uniqid() . '.' . $type[1];
+                $filePath = $this->getParameter('images_directory') . '/' . $imageName;
 
-             if (!file_exists($this->getParameter('images_directory'))) {
-                 mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
-             }
-             file_put_contents($filePath, $data);
+                if (!file_exists($this->getParameter('images_directory'))) {
+                    mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                }
+                file_put_contents($filePath, $data);
 
-             $webPath = '/images/velo/' . $imageName;
-             $velo->setUrlPhoto($webPath);
-         }
+                $webPath = '/images/velo/' . $imageName;
+                $velo->setUrlPhoto($webPath);
+            }
 
-         if ($velo->getProprietaire()) {
-             $entityManager->persist($velo->getProprietaire());
-         }
-         $entityManager->persist($velo);
-         $entityManager->flush();
+            if ($velo->getProprietaire()) {
+                $entityManager->persist($velo->getProprietaire());
+            }
+            $entityManager->persist($velo);
+            $entityManager->flush();
 
-         // Vérifier l'action demandée par le bouton
-         $action = $request->request->get('action');
-         if ($action === 'return_home') {
-             // Si "Retour Accueil", on redirige vers la page d'accueil
-             $this->addFlash('success', 'Vélo enregistré avec succès !');
-             return $this->redirectToRoute('app_accueil');
-         }
-        if ($action === 'go_to_diagnostic') {
-            // Si "Aller au Diagnostic", on redirige vers la page de diagnostic avec l'ID du vélo
+            // Vérifier l'action demandée par le bouton
+            $action = $request->request->get('action');
+            if ($action === 'return_home') {
+                // Si "Retour Accueil", on redirige vers la page d'accueil
+                $this->addFlash('success', 'Vélo enregistré avec succès !');
+                return $this->redirectToRoute('app_accueil');
+            }
+            if ($action === 'go_to_diagnostic') {
+                // Si "Aller au Diagnostic", on redirige vers la page de diagnostic avec l'ID du vélo
+                $this->addFlash('success', 'Vélo enregistré avec succès !');
+                return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
+            }
+
+            // Si "Enregistrer un autre vélo", on recharge la page
             $this->addFlash('success', 'Vélo enregistré avec succès !');
-            return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
+            return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
         }
 
-         // Si "Enregistrer un autre vélo", on recharge la page
-         $this->addFlash('success', 'Vélo enregistré avec succès !');
-         return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
-     }
-
-     return $this->render('velo/new.html.twig', [
-         'form' => $form->createView(),
-     ]);
- }
+        return $this->render('velo/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
 
 
@@ -92,11 +94,12 @@ class VeloController extends AbstractController
            ->leftJoin('v.proprietaire', 'p')
            ->getQuery();
 
-       $pagination = $paginator->paginate(
-           $query,
-           $request->query->getInt('page', 1),
-           10
-       );
+        // Pagination des résultats
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
 
        // Récupérer les diagnostics associés
        $diagnostics = [];
@@ -134,42 +137,64 @@ class VeloController extends AbstractController
            $diagnostics[$veloId] = $diagnosticData;
        }
 
-       // Obtenir les listes uniques
-       $marques_uniques = array_column($entityManager->createQueryBuilder()
-           ->select('DISTINCT v.marque')
-           ->from(Velo::class, 'v')
-           ->getQuery()
-           ->getArrayResult(), 'marque');
+        // Récupére les marques distinctes des vélos affichés dans le tableau
+        $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.marque')
+            ->getQuery();
 
-       $couleurs_uniques = array_column($entityManager->createQueryBuilder()
-           ->select('DISTINCT v.couleur')
-           ->from(Velo::class, 'v')
-           ->getQuery()
-           ->getArrayResult(), 'couleur');
+        $marques = $marqueQuery->getResult();
 
-       $types_uniques = array_column($entityManager->createQueryBuilder()
-           ->select('DISTINCT v.type')
-           ->from(Velo::class, 'v')
-           ->getQuery()
-           ->getArrayResult(), 'type');
+        // Extraire uniquement les valeurs des marques
+        $marques_uniques = array_map(function ($marque) {
+            return $marque['marque'];
+        }, $marques);
 
-       $publics_uniques = array_column($entityManager->createQueryBuilder()
-           ->select('DISTINCT v.public')
-           ->from(Velo::class, 'v')
-           ->getQuery()
-           ->getArrayResult(), 'public');
+        // Requête pour obtenir les couleurs uniques
+        $couleurQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.couleur')
+            ->getQuery();
 
-       // Retourner les résultats au template Twig
-       return $this->render('velo/velo_liste.html.twig', [
-           'pagination' => $pagination,
-           'diagnostics' => $diagnostics,
-           'marques_uniques' => $marques_uniques,
-           'couleurs_uniques' => $couleurs_uniques,
-           'types_uniques' => $types_uniques,
-           'publics_uniques' => $publics_uniques,
-           'lieu' => $session->get('lieu'),
-       ]);
-   }
+        $couleurs = $couleurQuery->getResult();
+
+        // Extraction des valeurs des couleurs
+        $couleurs_uniques = array_column($couleurs, 'couleur');
+
+        // Requête pour obtenir les types uniques
+        $typeQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.type')
+            ->getQuery();
+
+        $types = $typeQuery->getResult();
+
+        // Extraction des valeurs des types
+                $types_uniques = array_map(function ($type) {
+                    return $type['type'];
+                }, $types);
+
+        // Requête pour obtenir les catégories de public uniques
+        $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.public')
+            ->getQuery();
+
+        $publics = $publicQuery->getResult();
+
+        // Extraction des valeurs des catégories de public
+        $publics_uniques = array_map(function ($public) {
+            return $public['public'];
+        }, $publics);
+
+
+        // Passe les données au modèle Twig
+        return $this->render('velo/velo_liste.html.twig', [
+            'pagination' => $pagination,
+            'diagnostics' => $diagnostics,
+            'marques_uniques' => $marques_uniques,
+            'couleurs_uniques' => $couleurs_uniques,
+            'types_uniques' => $types_uniques,
+            'publics_uniques' => $publics_uniques,
+            'lieu' => $session->get('lieu'),
+        ]);
+    }
 
 
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]

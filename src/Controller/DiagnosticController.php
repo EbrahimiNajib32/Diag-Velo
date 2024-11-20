@@ -62,8 +62,9 @@ class DiagnosticController extends AbstractController
             return new JsonResponse($diagnosticData);
     }
 
+
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager): Response
+    public function diagnosticById(int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
