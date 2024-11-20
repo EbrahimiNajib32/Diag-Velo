@@ -11,20 +11,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TypeDiagnosticController extends AbstractController
 {
     #[Route('/type/diagnostic', name: 'app_type_diagnostic')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, SessionInterface $session,): Response
     // Récupérer uniquement les types de diagnostic actifs
     {
+
+        // Récupérer le lieu depuis la session
+        $lieu = $session->get('lieu');
+
+        // Si le lieu n'est pas trouvé dans la session, vous pouvez choisir de rediriger l'utilisateur ou afficher un message d'erreur
+        if (!$lieu) {
+            $this->addFlash('error', 'Aucun lieu sélectionné.');
+            return $this->redirectToRoute('app_accueil');
+        }
+
         $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findBy(['actif' => true]);
 
 
+        // Passer le lieu et les types de diagnostics au template
         return $this->render('diagnostic/choixTypeDiagnostic.html.twig', [
-            'typesDiagnostic' => $typesDiagnostic,
+            'lieu' => $lieu, // Passer le lieu au template
+            'typesDiagnostic' => $typesDiagnostic, // Passer les types de diagnostics
         ]);
     }
 
