@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
+use App\Entity\DiagnostictypeLieutype;
 use App\Entity\ElementControl;
 use App\Form\TypeDiagnosticType;
 use App\Repository\DiagnosticTypeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +19,41 @@ use Doctrine\ORM\EntityManagerInterface;
 class TypeDiagnosticController extends AbstractController
 {
     #[Route('/type/diagnostic', name: 'app_type_diagnostic')]
-    public function index(EntityManagerInterface $entityManager): Response
-    // Récupérer uniquement les types de diagnostic actifs
+    public function index(EntityManagerInterface $entityManager, SessionInterface $session): Response
+    // Récupérer uniquement les types de diagnostic en fonction du type de lieux et actif
     {
-        $typesDiagnostic = $entityManager->getRepository(DiagnosticType::class)->findBy(['actif' => true]);
+        // Récupérer l'id du type de lieu depuis la session
+        $idTypeLieu = $session->get('lieu')['idType'];
 
-
-        return $this->render('diagnostic/choixTypeDiagnostic.html.twig', [
-            'typesDiagnostic' => $typesDiagnostic,
+        // Récupérer les IDs des diagnostics associés à ce type de lieu
+        $diagnosticTypeIds = $entityManager->getRepository(DiagnostictypeLieutype::class)->findBy([
+            'Lieu_type_id' => $idTypeLieu,
+            'actif' => true,
         ]);
+
+        // Extraire les IDs des types de diagnostic
+        $diagnosticTypeIdsArray = array_map(function ($relation) {
+            return $relation->getDiagnosticTypeId(); 
+        }, $diagnosticTypeIds);
+
+        // Récupérer les informations des types de diagnostic
+        $typesDiagnostics = $entityManager->getRepository(DiagnosticType::class)->findBy([
+            'id' => $diagnosticTypeIdsArray,
+            'actif' => true,
+        ]);
+
+        if (count($typesDiagnostics) >= 1) {
+            return $this->render('diagnostic/choixTypeDiagnostic.html.twig', [
+                'typesDiagnostic' => $typesDiagnostics,
+            ]);
+        } else {
+            $this->addFlash("error", "Aucun type de diagnostic n’est disponible pour ce type de lieu, veuillez contacter l'administrateur");
+            return $this->redirectToRoute('velo_info');
+        }
+        
+
+
+
     }
 
     #[Route('/dashboard/typediagnostic', name: 'app_type_diagnostic_liste')]

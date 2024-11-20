@@ -21,6 +21,15 @@
 
 
     <main>
+
+    {% for message in app.session.flashbag().get('error') %}
+        <div id="error-popup" class="error-popup">
+            <p>{{ message }}</p>
+            <span id="close-popup" class="close-btn">&times;</span>
+        </div>
+    {% endfor %}
+
+
         <div class="container mx-auto">
 
             <h1 class="text-3xl font-bold text-center text-black">Liste des vélos</h1>
@@ -230,9 +239,100 @@
             z-index: 50;
         }
 
+        /* Style général du pop-up */
+.error-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    background-color: #e74c3c; 
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); 
+    z-index: 1000; 
+    opacity: 0; /* Début avec opacité 0 */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; 
+    max-width: 400px; 
+    width: 80%; 
+}
+
+/* Style du texte à l'intérieur */
+.error-popup p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Bouton OK */
+.error-popup .ok-btn {
+    display: inline-block;
+    background-color: #f39c12; /* Couleur dorée pour le bouton OK */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.error-popup .ok-btn:hover {
+    background-color: #f1c40f; /* Couleur dorée plus claire au survol */
+}
+
+/* Style du bouton de fermeture */
+.close-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    padding: 0;
+}
+.close-btn:hover {
+    color: #f1c40f; /* Changer la couleur au survol */
+}
+
+
+
+
+
+
     </style>
 
     <script>
+
+    // Vérifier si le pop-up existe dans le DOM
+    const popup = document.getElementById('error-popup');
+    if (popup) {
+        popup.style.display = 'block';
+        popup.style.opacity = 1; 
+        popup.style.transform = 'translate(-50%, -50%)';
+        
+        // Cacher après 4 secondes
+        setTimeout(function() {
+            popup.style.opacity = 0; 
+            popup.style.transform = 'translate(-50%, -60%)';
+            setTimeout(function() {
+                popup.style.display = 'none'; 
+            }, 500);
+        }, 4000); 
+    }
+
+    // Fermer le pop-up en cliquant sur la croix
+    document.getElementById('close-popup')?.addEventListener('click', function() {
+        popup.style.opacity = 0;
+        popup.style.transform = 'translate(-50%, -60%)';
+        setTimeout(function() {
+            popup.style.display = 'none';
+        }, 500);
+    });
+
 
          // Fonction de recherche globale
             function filterTable() {
