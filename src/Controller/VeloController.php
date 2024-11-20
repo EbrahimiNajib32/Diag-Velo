@@ -85,7 +85,7 @@ class VeloController extends AbstractController
     public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
     {
         $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('v.id', 'p.nom_proprio', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+            ->select('v.id', 'v.url_photo', 'p.nom_proprio', 'v.numero_de_serie', 'v.bicycode','v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
             ->leftJoin('v.proprietaire', 'p')
             ->getQuery();
 
