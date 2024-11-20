@@ -9,6 +9,7 @@ use App\Entity\Proprietaire;
 use App\Entity\Diagnostic;
 use App\Entity\Velo;
 use App\Entity\Lieu;
+use App\Entity\TypeLieu;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -82,103 +83,93 @@ class VeloController extends AbstractController
 
 
 
-    #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
-    {
-        $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('v.id', 'v.url_photo', 'p.nom_proprio', 'v.numero_de_serie', 'v.bicycode','v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
-            ->leftJoin('v.proprietaire', 'p')
-            ->getQuery();
+   #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
+   public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
+   {
+       // Préparation des vélos paginés
+       $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+           ->select('v.id', 'v.url_photo', 'p.nom_proprio', 'v.numero_de_serie', 'v.bicycode', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+           ->leftJoin('v.proprietaire', 'p')
+           ->getQuery();
 
-        // Pagination des résultats
-        $pagination = $paginator->paginate(
-            $query, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            10 /*limit per page*/
-        );
+       $pagination = $paginator->paginate(
+           $query,
+           $request->query->getInt('page', 1),
+           10
+       );
 
-        // If needed, fetch diagnostics separately for each bicycle
-        $diagnostics = [];
-        foreach ($pagination as $velo) {
-            $veloId = $velo['id'];
-            $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+       // Récupérer les diagnostics associés
+       $diagnostics = [];
+       foreach ($pagination as $velo) {
+           $veloId = $velo['id'];
+           $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
 
-            foreach($diagnosticData as &$diagnostic){
+           foreach ($diagnosticData as &$diagnostic) {
+               // 1. Récupérer le lieu lié au diagnostic
+               $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
 
-                $lieu = $entityManager->getRepository(Lieu::class)->findOneBy(['id' => $diagnostic->getLieuId()->getId()]);
-                $diagnostic->lieu = $lieu;
-            }
-        //dd($diagnosticData);
-           // dd($diagnosticData);
-            if (!empty($diagnosticData)) {
-                $diagnostics[$veloId] = $diagnosticData;
-            }
-        }
-        foreach ($diagnostics as $veloId => $diagnosticData) {
-            usort($diagnosticData, function ($a, $b) {
-                return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
-            });
-            $diagnostics[$veloId] = $diagnosticData;
-        }
+               // 2. Ajouter dynamiquement le lieu
+               $diagnostic->lieu = $lieu;
 
-        // Récupére les marques distinctes des vélos affichés dans le tableau
-        $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.marque')
-            ->getQuery();
+               // 3. Récupérer et ajouter le type de lieu
+               if ($lieu && $lieu->getTypeLieuId()) {
+                   $typeLieu = $entityManager->getRepository(TypeLieu::class)->find($lieu->getTypeLieuId()->getId());
+                   $diagnostic->typeLieu = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+               } else {
+                   $diagnostic->typeLieu = 'Non défini';
 
-        $marques = $marqueQuery->getResult();
+               }
+           }
+            //dd($diagnosticData);
+           if (!empty($diagnosticData)) {
+               $diagnostics[$veloId] = $diagnosticData;
+           }
+       }
 
-        // Extraire uniquement les valeurs des marques
-        $marques_uniques = array_map(function ($marque) {
-            return $marque['marque'];
-        }, $marques);
+       // Trier les diagnostics par date
+       foreach ($diagnostics as $veloId => $diagnosticData) {
+           usort($diagnosticData, function ($a, $b) {
+               return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
+           });
+           $diagnostics[$veloId] = $diagnosticData;
+       }
 
-        // Requête pour obtenir les couleurs uniques
-        $couleurQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.couleur')
-            ->getQuery();
+       // Obtenir les listes uniques
+       $marques_uniques = array_column($entityManager->createQueryBuilder()
+           ->select('DISTINCT v.marque')
+           ->from(Velo::class, 'v')
+           ->getQuery()
+           ->getArrayResult(), 'marque');
 
-        $couleurs = $couleurQuery->getResult();
+       $couleurs_uniques = array_column($entityManager->createQueryBuilder()
+           ->select('DISTINCT v.couleur')
+           ->from(Velo::class, 'v')
+           ->getQuery()
+           ->getArrayResult(), 'couleur');
 
-        // Extraction des valeurs des couleurs
-        $couleurs_uniques = array_column($couleurs, 'couleur');
+       $types_uniques = array_column($entityManager->createQueryBuilder()
+           ->select('DISTINCT v.type')
+           ->from(Velo::class, 'v')
+           ->getQuery()
+           ->getArrayResult(), 'type');
 
-        // Requête pour obtenir les types uniques
-        $typeQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.type')
-            ->getQuery();
+       $publics_uniques = array_column($entityManager->createQueryBuilder()
+           ->select('DISTINCT v.public')
+           ->from(Velo::class, 'v')
+           ->getQuery()
+           ->getArrayResult(), 'public');
 
-        $types = $typeQuery->getResult();
-
-        // Extraction des valeurs des types
-                $types_uniques = array_map(function ($type) {
-                    return $type['type'];
-                }, $types);
-
-        // Requête pour obtenir les catégories de public uniques
-        $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.public')
-            ->getQuery();
-
-        $publics = $publicQuery->getResult();
-
-        // Extraction des valeurs des catégories de public
-        $publics_uniques = array_map(function ($public) {
-            return $public['public'];
-        }, $publics);
-
-
-        // Passe les données au modèle Twig
-        return $this->render('velo/velo_liste.html.twig', [
-            'pagination' => $pagination,
-            'diagnostics' => $diagnostics,
-            'marques_uniques' => $marques_uniques,
-            'couleurs_uniques' => $couleurs_uniques,
-            'types_uniques' => $types_uniques,
-            'publics_uniques' => $publics_uniques,
-            'lieu' => $session->get('lieu'),
-        ]);
-    }
+       // Retourner les résultats au template Twig
+       return $this->render('velo/velo_liste.html.twig', [
+           'pagination' => $pagination,
+           'diagnostics' => $diagnostics,
+           'marques_uniques' => $marques_uniques,
+           'couleurs_uniques' => $couleurs_uniques,
+           'types_uniques' => $types_uniques,
+           'publics_uniques' => $publics_uniques,
+           'lieu' => $session->get('lieu'),
+       ]);
+   }
 
 
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]

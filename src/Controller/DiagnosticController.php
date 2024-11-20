@@ -23,8 +23,8 @@ use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use App\Entity\Velo;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Lieu;
-use App\Entity\DiagnostictypeLieutype;
+
+
 
 
 
@@ -224,11 +224,11 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
              // Attribuer le type de diagnostic au nouveau diagnostic
             $diagnostic->setDiagnosticType($typeDiagnostic);
 
-            // Récupération du lieu 
+            // Récupération du lieu
             $lieu = $session->get('lieu');
             $lieuEntity = $entityManager->getRepository(Lieu::class)->find($lieu['id']);
 
-            //Récupération de diagnostictypelieutype avec des conditions 
+            //Récupération de diagnostictypelieutype avec des conditions
             $diagnostictypeLieuType = $entityManager->getRepository(DiagnostictypeLieutype::class)->findOneBy([
                 'Lieu_type_id' => $lieu['idType'],
                 'diagnostic_type_id' => $typeDiagnostic,

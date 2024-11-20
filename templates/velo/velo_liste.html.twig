@@ -252,7 +252,7 @@
                                 {% for diagnostic in diagnostics[velo.id] %}
                                     <div class="bg-gray-100 rounded p-5 mb-4 text-center">
                                         <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
-                                        <p><strong>Lieu:</strong> {{ diagnostic.lieu.getNomLieu() }}-{{ diagnostic.lieu.getville() }} </p>
+                                        <p><strong>Lieu:</strong> {{ diagnostic.typeLieu }}-{{ diagnostic.lieu.getNomLieu() }}-{{ diagnostic.lieu.getville() }} </p>
                                         <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('d/m/Y') : 'Non disponible' }}</p>
                                         <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
                                         <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
