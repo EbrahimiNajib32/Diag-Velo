@@ -8,6 +8,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Proprietaire;
 use App\Entity\Diagnostic;
 use App\Entity\Velo;
+use App\Entity\Lieu;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -101,6 +102,14 @@ class VeloController extends AbstractController
         foreach ($pagination as $velo) {
             $veloId = $velo['id'];
             $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+
+            foreach($diagnosticData as &$diagnostic){
+
+                $lieu = $entityManager->getRepository(Lieu::class)->findOneBy(['id' => $diagnostic->getLieuId()->getId()]);
+                $diagnostic->lieu = $lieu;
+            }
+        //dd($diagnosticData);
+           // dd($diagnosticData);
             if (!empty($diagnosticData)) {
                 $diagnostics[$veloId] = $diagnosticData;
             }
