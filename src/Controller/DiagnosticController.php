@@ -8,13 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Entity\Lieu;
 use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
 use App\Entity\ElementControl;
 use App\Entity\DiagnosticType;
 use App\Entity\DiagnosticTypeElementcontrol;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Entity\DiagnostictypeLieutype;
 use App\Entity\Proprietaire;
 use App\Entity\Utilisateur;
 use App\Form\FormDiagnosticType;
@@ -185,7 +187,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     // creation d'un diagnostique suivant un type de diagnostique
 
     #[Route('/diagnostic/elements/{id}', name: 'app_diagnostic_elements_by_type',methods: ['GET', 'POST']) ]
-    public function diagnosticElementsByType(Request $request,int $id, EntityManagerInterface $entityManager): Response
+    public function diagnosticElementsByType(Request $request,int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
     
          
@@ -207,6 +209,19 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             $diagnostic->setDateDiagnostic(new \DateTime());
              // Attribuer le type de diagnostic au nouveau diagnostic
             $diagnostic->setDiagnosticType($typeDiagnostic);
+
+            // Récupération du lieu 
+            $lieu = $session->get('lieu');
+            $lieuEntity = $entityManager->getRepository(Lieu::class)->find($lieu['id']);
+
+            //Récupération de diagnostictypelieutype avec des conditions 
+            $diagnostictypeLieuType = $entityManager->getRepository(DiagnostictypeLieutype::class)->findOneBy([
+                'Lieu_type_id' => $lieu['idType'],
+                'diagnostic_type_id' => $typeDiagnostic,
+                'actif' => true,
+            ]);
+            $diagnostic->setLieuId($lieuEntity);
+            $diagnostic->setDiagnostictypeLieuTypeId($diagnostictypeLieuType);
 
             $entityManager->persist($diagnostic);
             //dd($diagnostic);
@@ -296,6 +311,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             'typeDiagnostic' => $typeDiagnostic,
             'diagnosticForm' => $form->createView(),
             'diagnosticElements' => $categorizedElements,
+            'lieu' => $session->get('lieu'),
         ]);
 
     }
