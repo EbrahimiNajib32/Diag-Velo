@@ -1,5 +1,5 @@
 <?php
-//src/Controller/DiagosticController.php
+ //src/Controller/DiagosticController.php
 
 namespace App\Controller;
 
@@ -22,18 +22,22 @@ use App\Entity\Utilisateur;
 use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use App\Entity\Velo;
+use App\Form\LieuType;
 use Doctrine\ORM\EntityManagerInterface;
+
+
+
 
 
 
 class DiagnosticController extends AbstractController
 {
-   #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
-   public function index(EntityManagerInterface $entityManager): JsonResponse
-   {
-       // Récupérer tous les diagnostics
-       $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-       $diagnosticData = [];
+    #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
+        public function index(EntityManagerInterface $entityManager): JsonResponse
+        {
+            // Récupérer tous les diagnostics
+            $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+            $diagnosticData = [];
 
             foreach ($diagnostics as $diagnostic) {
                 // Récupérer l'entité Lieu associée à ce diagnostic
@@ -56,8 +60,8 @@ class DiagnosticController extends AbstractController
                 ];
             }
 
-       return new JsonResponse($diagnosticData);
-   }
+            return new JsonResponse($diagnosticData);
+    }
 
 
 
@@ -137,29 +141,32 @@ class DiagnosticController extends AbstractController
 
 
 // route pour l'affichage uniquement des diagnostics en cours
-    #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
-    public function diagnosticEnCours(EntityManagerInterface $entityManager, SessionInterface $session, \Symfony\Component\HttpFoundation\Request $request): Response
-    {
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $filteredDiagnostics = [];
+#[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
+public function diagnosticEnCours(EntityManagerInterface $entityManager, SessionInterface $session, \Symfony\Component\HttpFoundation\Request $request): Response
+{
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findBy(
+        ['Lieu_id' => $session->get('lieu')['id']]
+    );
 
-        foreach ($diagnostics as $diagnostic) {
-            // Remplacez la vérification du nombre d'éléments "OK" par l'utilisation du statut de l'entité Diagnostic
-            if ($diagnostic->getStatus() === 'en cours') {
-                $velo = $diagnostic->getVelo();
-                $filteredDiagnostics[] = [
-                    'diagnostic' => $diagnostic,
-                    'veloDetails' => [
-                        'id' => $velo->getId(),
-                        'couleur' => $velo->getCouleur(),
-                        'marque' => $velo->getMarque(),
-                        'refRecyclerie' => $velo->getRefRecyclerie(),
-                        'type' => $velo->getType(),
-                        'dateDeEnregistrement' => $velo->getDateDeEnregistrement() ? $velo->getDateDeEnregistrement()->format('Y-m-d') : null,
-                    ]
-                ];
-            }
+    $filteredDiagnostics = [];
+
+    foreach ($diagnostics as $diagnostic) {
+        // Remplacez la vérification du nombre d'éléments "OK" par l'utilisation du statut de l'entité Diagnostic
+        if ($diagnostic->getStatus() === 'en cours') {
+            $velo = $diagnostic->getVelo();
+            $filteredDiagnostics[] = [
+                'diagnostic' => $diagnostic,
+                'veloDetails' => [
+                    'id' => $velo->getId(),
+                    'couleur' => $velo->getCouleur(),
+                    'marque' => $velo->getMarque(),
+                    'refRecyclerie' => $velo->getRefRecyclerie(),
+                    'type' => $velo->getType(),
+                    'dateDeEnregistrement' => $velo->getDateDeEnregistrement() ? $velo->getDateDeEnregistrement()->format('Y-m-d') : null,
+                ]
+            ];
         }
+    }
 
     // Render a Twig template, passing the filtered diagnostics
     dump($session->all());
@@ -331,8 +338,11 @@ class DiagnosticController extends AbstractController
     //******************************************//
     // reprise d'un diagnostique version multi diagnostic
     #[Route('/diagnostic/reprendreMulti/{id}', name: 'reprendre_Multidiagnostic', methods: ['GET', 'POST'])]
-    public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
+
+        $lieu = $session->get('lieu');
+
         //recupération de l'id du daignostic dans l'URL
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
         if (!$diagnostic) {
@@ -341,18 +351,6 @@ class DiagnosticController extends AbstractController
         }
 
 
-        // Récupération des états des éléments de contrôle
-        /*$etatsElementsControle = [];
-
-        foreach ($diagnosticElements as $diagnosticElement) {
-            $elementControl = $diagnosticElement->getElementControl();
-            $etatControl = $diagnosticElement->getEtatControl(); // Récupérer l'état du DiagnosticElement
-            if ($elementControl && $etatControl) {
-                $etatsElementsControle[$elementControl->getId()] = $etatControl;
-            }
-        }*/
-
-        // categorization des éléments pour mise en page
         //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $diagnosticElementsDisplayed = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $diagnostic->getDiagnosticType()]);
 
@@ -433,6 +431,7 @@ class DiagnosticController extends AbstractController
             'diagnosticForm' => $form->createView(),
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $categorizedElements,
+            'lieu' => $lieu,
             //'etatsElementsControle' => $etatsElementsControle, // Ajout de la variable au rendu du template
         ]);
     }
@@ -517,7 +516,7 @@ class DiagnosticController extends AbstractController
 
     // reprise d'un diagnostique version mono diagnostic
     #[Route('/diagnostic/reprendre/{id}', name: 'reprendre_diagnostic', methods: ['GET', 'POST'])]
-    public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
         if (!$diagnostic) {
@@ -766,3 +765,5 @@ class DiagnosticController extends AbstractController
 
 
 }
+
+
