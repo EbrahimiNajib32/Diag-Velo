@@ -5,7 +5,7 @@
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-        
+
         <div class="flex flex-col justify-center items-center text-xl font-bold text-blue-600">
             <div>{{ lieu.nom }}</div>
             <div class="text-sm text-gray-600">{{ lieu.nomType }}</div>
@@ -13,7 +13,7 @@
             <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
             <div class="text-sm text-gray-600">{{ lieu.codePostal }}</div>
         </div>
-        
+
         <div id="headerLogoCite">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
@@ -29,7 +29,7 @@
             <div class="flex justify-center mb-3 mt-3">
                         <a href="{{ path('velo_new') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-sm shadow transition-colors duration-200 w-auto inline-flex items-center justify-center">
                             <i class="bi bi-plus text-lg mr-1"></i>
-                            Créer un un Vélo
+                            Créer un Vélo
                         </a>
                     </div>
 
@@ -55,7 +55,6 @@
             </span>
                         </div>
                     </div>
-
 
 
 
@@ -167,37 +166,110 @@
 
 
         {% for velo in pagination %}
-            <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
-                <div class="relative max-w-5xl justify-center items-center mx-auto">
-                    <div class="bg-white rounded-lg overflow-y-auto">
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b ">
-                            <h3 class="text-xl text-center font-semibold text-gray-900">
-                                Diagnostics  de marque {{ velo.marque }} type {{ velo.type }} - Ref : {{ velo.ref_recyclerie }} - Reçu le : {{ velo.date_de_enregistrement|date('Y-m-d') }}
-                            </h3>
-                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
+        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
+            <div class="relative max-w-5xl justify-center items-center mx-auto">
+                <div class="bg-white rounded-lg overflow-y-auto">
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b">
+                        <!-- Bouton de fermeture -->
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-center w-full">
+                        <!-- Titre -->
+                        <h3 class="text-xl font-semibold text-gray-900">Historique du vélo de {{ velo.nom_proprio }}</h3>
+
+                        <!-- Section photo -->
+                        <div class="mt-4">
+                            {% if velo.url_photo is defined and velo.url_photo is not empty %}
+                                <img src="{{ velo.url_photo }}" alt="Photo du vélo {{ velo.marque }}" class="mx-auto max-w-xs rounded shadow-md">
+                            {% else %}
+                                <img src="/path/to/default-image.jpg" alt="Image par défaut" class="mx-auto max-w-xs rounded shadow-md">
+                            {% endif %}
                         </div>
-                        {% if diagnostics[velo.id] is defined %}
-                            {% for diagnostic in diagnostics[velo.id] %}
-                                <div class="bg-gray-100 rounded p-5  mb-4 mt-4 text-center">
-                                    <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
-                                    <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('Y-m-d') : 'Non disponible' }}</p>
-                                    <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
-                                    <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
-                                    <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
-                                    <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
-                                    <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
+
+                        <!-- Tableau des informations -->
+                        <div class="mt-6">
+                            <table class="table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
+                                <tbody>
+                                <!-- Première section : Propriétaire, Marque, Type, Couleur -->
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2">Marque</th>
+                                    <th class="border border-gray-300 px-4 py-2">Type</th>
+                                    <th class="border border-gray-300 px-4 py-2">Couleur</th>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.marque }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.type }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.couleur }}</td>
+                                </tr>
+
+                                <!-- Deuxième section : Référence Recyclerie, Numéro de Série, Bicycode -->
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2">Référence Recyclerie</th>
+                                    <th class="border border-gray-300 px-4 py-2">Numéro de Série</th>
+                                    <th class="border border-gray-300 px-4 py-2">Bicycode</th>
+
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.ref_recyclerie }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.numero_de_serie }}</td>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.bicycode }}</td>
+
+                                </tr>
+
+                                <!-- Troisième section : Dates -->
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2">Date de Réception</th>
+                                    <th class="border border-gray-300 px-4 py-2">Date de Vente</th>
+                                    <th class="border border-gray-300 px-4 py-2">Date de Destruction</th>
+
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                                    <td class="px-2 py-4 border-r border-b border-gray-300">
+                                        {% if velo.date_de_vente is not null %}
+                                            {{ velo.date_de_vente|date('d/m/Y') }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="px-2 py-4 border-r border-b border-gray-300">
+                                        {% if velo.date_destruction is not null %}
+                                            {{ velo.date_destruction|date('d/m/Y') }}
+                                        {% endif %}
+                                    </td>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <!-- Section Diagnostics -->
+                        <div class="mt-6">
+                            {% if diagnostics[velo.id] is defined %}
+                                {% for diagnostic in diagnostics[velo.id] %}
+                                    <div class="bg-gray-100 rounded p-5 mb-4 text-center">
+                                        <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
+                                        <p><strong>Lieu:</strong> {{ diagnostic.typeLieu }}-{{ diagnostic.lieu.getNomLieu() }}-{{ diagnostic.lieu.getville() }} </p>
+                                        <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('d/m/Y') : 'Non disponible' }}</p>
+                                        <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
+                                        <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
+                                        <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
+                                        <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
+                                        <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="p-5 rounded-lg mb-3 text-center">
+                                    <p class="text-center m-5">Pas de diagnostics.</p>
                                 </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="p-5 rounded-lg mb-3 text-center">
-                                <p class="text-center m-5">Pas de diagnostics.</p>
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
     </main>
 
@@ -267,46 +339,6 @@
             });
         }
 
-        // function filterByReference() {
-        //     const input = document.getElementById("searchReference");
-        //     const filter = input.value.toUpperCase();
-        //     const rows = document.querySelectorAll("tbody tr");
-        //     rows.forEach(row => {
-        //         const cell = row.querySelector("[data-reference]");
-        //         if (cell) {
-        //             const txtValue = cell.textContent || cell.innerText;
-        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-        //         }
-        //     });
-        // }
-        //
-        // function filterBySerial() {
-        //     const input = document.getElementById("searchSerial");
-        //     const filter = input.value.toUpperCase();
-        //     const rows = document.querySelectorAll("tbody tr");
-        //     rows.forEach(row => {
-        //         const cell = row.querySelector("[data-serial]");
-        //         if (cell) {
-        //             const txtValue = cell.textContent || cell.innerText;
-        //             console.log(`Checking row: ${txtValue} with filter: ${filter}`);
-        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-        //         }
-        //     });
-        // }
-        //
-        //
-        // function filterByOwner() {
-        //     const input = document.getElementById("searchOwner");
-        //     const filter = input.value.toUpperCase();
-        //     const rows = document.querySelectorAll("tbody tr");
-        //     rows.forEach(row => {
-        //         const cell = row.querySelector("[data-owner]");
-        //         if (cell) {
-        //             const txtValue = cell.textContent || cell.innerText;
-        //             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-        //         }
-        //     });
-        // }
 
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButtons = document.querySelectorAll('[data-modal-toggle]');

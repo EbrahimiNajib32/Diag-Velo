@@ -26,30 +26,45 @@ use Doctrine\ORM\EntityManagerInterface;
 
 
 
+
+
+
 class DiagnosticController extends AbstractController
 {
     #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
-    {
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $diagnosticData = [];
+        public function index(EntityManagerInterface $entityManager): JsonResponse
+        {
+            // Récupérer tous les diagnostics
+            $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+            $diagnosticData = [];
 
-        foreach ($diagnostics as $diagnostic) {
-            $diagnosticData[] = [
-                'id' => $diagnostic->getId(),
-                'id_velo' => $diagnostic->getVelo()->getId(),
-                'id_user' => $diagnostic->getIdUser(),
-                'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-                'cout_reparation' => $diagnostic->getCoutReparation(),
-                'conclusion' => $diagnostic->getConclusion(),
-            ];
-        }
+            foreach ($diagnostics as $diagnostic) {
+                // Récupérer l'entité Lieu associée à ce diagnostic
+                $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
 
-        return new JsonResponse($diagnosticData);
+                $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;  // On récupère le type de lieu associé au lieu
+                $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';  // Récupération du nom du type de lieu
+
+                // Ajouter les données du diagnostic, y compris celles du lieu et du type de lieu
+                $diagnosticData[] = [
+                    'id' => $diagnostic->getId(),
+                    'id_velo' => $diagnostic->getVelo()->getId(),
+                    'id_user' => $diagnostic->getIdUser(),
+                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                    'cout_reparation' => $diagnostic->getCoutReparation(),
+                    'conclusion' => $diagnostic->getConclusion(),
+                    'lieu_nom' => $lieu ? $lieu->getNomLieu() : 'Non défini',
+                    'lieu_ville' => $lieu ? $lieu->getVille() : 'Non défini',
+                    'type_lieu_nom' => $typeLieuNom,
+                ];
+            }
+
+            return new JsonResponse($diagnosticData);
     }
 
+
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager): Response
+    public function diagnosticById(int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
@@ -83,13 +98,13 @@ class DiagnosticController extends AbstractController
                 'etat' => $etat->getNomEtat(),
             ];
         }
-        
+
             // Récupérer le nom du type de diagnostic
             $diagnosticType = $diagnostic->getDiagnosticType();
             $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
-    
-           
-        
+
+
+
 
 
         // Fetch the bike details associated with the diagnostic
@@ -189,8 +204,8 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     #[Route('/diagnostic/elements/{id}', name: 'app_diagnostic_elements_by_type',methods: ['GET', 'POST']) ]
     public function diagnosticElementsByType(Request $request,int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
-    
-         
+
+
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
         //var_dump($typeDiagnostic);
@@ -200,21 +215,21 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
         // ajout partie pour creation form pour affichage comme version1
         $diagnostic = new Diagnostic();
-       
- 
+
+
         $form = $this->createForm(FormDiagnosticType::class, $diagnostic, ['idTypeDiag' => $id]);
-       
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
              // Attribuer le type de diagnostic au nouveau diagnostic
             $diagnostic->setDiagnosticType($typeDiagnostic);
 
-            // Récupération du lieu 
+            // Récupération du lieu
             $lieu = $session->get('lieu');
             $lieuEntity = $entityManager->getRepository(Lieu::class)->find($lieu['id']);
 
-            //Récupération de diagnostictypelieutype avec des conditions 
+            //Récupération de diagnostictypelieutype avec des conditions
             $diagnostictypeLieuType = $entityManager->getRepository(DiagnostictypeLieutype::class)->findOneBy([
                 'Lieu_type_id' => $lieu['idType'],
                 'diagnostic_type_id' => $typeDiagnostic,
@@ -269,20 +284,20 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             $entityManager->flush();
 
             return $this->redirectToRoute('app_accueil');
-            
+
         }// fin partie creation form
-        
-        
+
+
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
-       
+
         if (!$typeDiagnostic) {
             // Gérer le cas où le type de diagnostic n'est pas trouvé
         }
 
         // Récupérer les éléments de diagnostic associés à ce type de diagnostic
         $elementsDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-       
+
         // Récupérer le contenu du champ 'element' de l'entité 'ElementControl'
         $elementContents = [];
         foreach ($elementsDiagnostic as $elementDiagnostic) {
@@ -293,7 +308,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
                 $elementContents[] = $elementControl;//->getElement();
             }
         }
-        
+
         // categorization des éléments pour mise en page
         $categorizedElements = [];
         foreach ($elementContents as $element) {
@@ -305,7 +320,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             }
             $categorizedElements[$category][] = $element;
         }
-        
+
 
         return $this->render('diagnostic/newDiaByType.html.twig', [
             'typeDiagnostic' => $typeDiagnostic,
@@ -327,10 +342,10 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             return $this->redirectToRoute('app_error');
         }
 
-        
+
         // Récupération des états des éléments de contrôle
         /*$etatsElementsControle = [];
-        
+
         foreach ($diagnosticElements as $diagnosticElement) {
             $elementControl = $diagnosticElement->getElementControl();
             $etatControl = $diagnosticElement->getEtatControl(); // Récupérer l'état du DiagnosticElement
@@ -338,7 +353,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
                 $etatsElementsControle[$elementControl->getId()] = $etatControl;
             }
         }*/
-                
+
         // categorization des éléments pour mise en page
         //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $diagnosticElementsDisplayed = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $diagnostic->getDiagnosticType()]);
@@ -366,8 +381,8 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             'idTypeDiag' => $diagnostic->getDiagnosticType(),
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $diagnosticElements,
-        ]); 
-       
+        ]);
+
         $form->handleRequest($request);
 //dd($form);
 
@@ -423,7 +438,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             //'etatsElementsControle' => $etatsElementsControle, // Ajout de la variable au rendu du template
         ]);
     }
-   
+
 
     //#####################################################################################//
     // creation d'un diagnostique Version mono diagnostic
@@ -501,7 +516,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     }
 
 
-    
+
     // reprise d'un diagnostique version mono diagnostic
     #[Route('/diagnostic/reprendre/{id}', name: 'reprendre_diagnostic', methods: ['GET', 'POST'])]
     public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
@@ -658,9 +673,9 @@ public function recapitulatif(EntityManagerInterface $entityManager): Response
 
     // Extract the 'status' values from the result
     $statusd_uniques = array_column($statusd_uniques, 'status');
-    
-    
-    
+
+
+
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
     $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
         ->select('DISTINCT v.type')
@@ -708,8 +723,8 @@ public function recapitulatif(EntityManagerInterface $entityManager): Response
     $statutp_uniques = array_column(  $statutp_uniques, 'statut');
 
 
-   
-   
+
+
 
     return $this->render('diagnostic/recapitulatif.html.twig', [
         'diagnostics' => $diagnostics,
@@ -724,7 +739,7 @@ public function recapitulatif(EntityManagerInterface $entityManager): Response
         'dates_uniques' =>$dates_uniques,
         'noms_uniques' =>$noms_uniques
 
-        
+
     ]);
     }
 
