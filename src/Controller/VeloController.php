@@ -54,8 +54,10 @@ class VeloController extends AbstractController
             if ($velo->getProprietaire()) {
                 $entityManager->persist($velo->getProprietaire());
             }
+
             $entityManager->persist($velo);
             $entityManager->flush();
+
 
             // Vérifier l'action demandée par le bouton
             $action = $request->request->get('action');
