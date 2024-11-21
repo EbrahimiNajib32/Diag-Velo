@@ -64,9 +64,13 @@ class DiagnosticController extends AbstractController
     }
 
 
+
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
-    {
+    public function diagnosticById(
+        int $id,
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
+    ): Response {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
         if (!$diagnostic) {
@@ -75,7 +79,6 @@ class DiagnosticController extends AbstractController
             ]);
             return new Response($content, Response::HTTP_NOT_FOUND);
         }
-
 
         $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
@@ -100,15 +103,19 @@ class DiagnosticController extends AbstractController
             ];
         }
 
-            // Récupérer le nom du type de diagnostic
-            $diagnosticType = $diagnostic->getDiagnosticType();
-            $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
+        // Récupérer le nom du type de diagnostic
+        $diagnosticType = $diagnostic->getDiagnosticType();
+        $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
 
+        // Récupérer les informations sur le lieu et le type de lieu
+        $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
 
+        $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;
+        $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+        $lieuNom = $lieu ? $lieu->getNomLieu() : 'Non défini';
+        $lieuVille = $lieu ? $lieu->getVille() : 'Non défini';
 
-
-
-        // Fetch the bike details associated with the diagnostic
+        // Récupérer les détails du vélo associé au diagnostic
         $bike = $diagnostic->getVelo();
         $bikeDetails = [
             'id' => $bike->getId(),
@@ -121,6 +128,7 @@ class DiagnosticController extends AbstractController
             'taille_cadre' => $bike->getTailleCadre(),
         ];
 
+        // Préparer les données du diagnostic
         $diagnosticData = [
             'id' => $diagnostic->getId(),
             'id_velo' => $diagnostic->getVelo()->getId(),
@@ -135,6 +143,9 @@ class DiagnosticController extends AbstractController
             'bike' => $bikeDetails,
             'categorizedElements' => $categorizedElements,
             'nomType' => $nomType,
+            'typeLieuNom' => $typeLieuNom,
+            'lieuNom' => $lieuNom,
+            'lieuVille' => $lieuVille,
         ]);
     }
 
@@ -143,7 +154,10 @@ class DiagnosticController extends AbstractController
 #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
 public function diagnosticEnCours(EntityManagerInterface $entityManager, SessionInterface $session, \Symfony\Component\HttpFoundation\Request $request): Response
 {
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findBy(
+        ['Lieu_id' => $session->get('lieu')['id']]
+    );
+
     $filteredDiagnostics = [];
 
     foreach ($diagnostics as $diagnostic) {
@@ -331,7 +345,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         ]);
 
     }
-                        //******************************************//
+    //******************************************//
     // reprise d'un diagnostique version multi diagnostic
     #[Route('/diagnostic/reprendreMulti/{id}', name: 'reprendre_Multidiagnostic', methods: ['GET', 'POST'])]
     public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
@@ -365,7 +379,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         //dd($categorizedElements);
 
 
-       // dd($etatsElementsControle);
+        // dd($etatsElementsControle);
         // Récupération des éléments du diagnostic en fonction de son ID
         $diagnosticElements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
@@ -619,16 +633,16 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
 
     #[Route('/diagnostics/recapitulatif', name: 'diagnostics_recapitulatif', methods: ['GET'])]
-public function recapitulatif(EntityManagerInterface $entityManager): Response
-{
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $noms_uniques = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u')
-        ->select('DISTINCT u.nom')
-        ->getQuery()
-        ->getResult();
+    public function recapitulatif(EntityManagerInterface $entityManager): Response
+    {
+        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+        $noms_uniques = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u')
+            ->select('DISTINCT u.nom')
+            ->getQuery()
+            ->getResult();
 
-    // Extract the 'type' values from the result
-    $noms_uniques = array_column($noms_uniques, 'nom');
+        // Extract the 'type' values from the result
+        $noms_uniques = array_column($noms_uniques, 'nom');
 
     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
     $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')

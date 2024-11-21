@@ -20,8 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
-
 class VeloController extends AbstractController
 {
     // Route pour créer un nouveau vélo
@@ -101,6 +99,32 @@ class VeloController extends AbstractController
             10 /*limit per page*/
         );
 
+        // Récupérer les diagnostics associés
+            $diagnostics = [];
+            foreach ($pagination as $velo) {
+                $veloId = $velo['id'];
+                $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+
+                foreach ($diagnosticData as &$diagnostic) {
+                    // 1. Récupérer le lieu lié au diagnostic
+                    $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
+
+                    // 2. Ajouter dynamiquement le lieu
+                    $diagnostic->lieu = $lieu;
+
+                    // 3. Récupérer et ajouter le type de lieu
+                    if ($lieu && $lieu->getTypeLieuId()) {
+                        $typeLieu = $entityManager->getRepository(TypeLieu::class)->find($lieu->getTypeLieuId()->getId());
+                        $diagnostic->typeLieu = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+                    } else {
+                        $diagnostic->typeLieu = 'Non défini';
+                    }
+                }
+//dd($diagnosticData);
+                if (!empty($diagnosticData)) {
+                    $diagnostics[$veloId] = $diagnosticData;
+                }
+            }
        // Récupérer les diagnostics associés
        $diagnostics = [];
        foreach ($pagination as $velo) {
@@ -129,13 +153,13 @@ class VeloController extends AbstractController
            }
        }
 
-       // Trier les diagnostics par date
-       foreach ($diagnostics as $veloId => $diagnosticData) {
-           usort($diagnosticData, function ($a, $b) {
-               return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
-           });
-           $diagnostics[$veloId] = $diagnosticData;
-       }
+        // Trie les diagnostics par date pour chaque vélo
+        foreach ($diagnostics as $veloId => $diagnosticData) {
+            usort($diagnosticData, function ($a, $b) {
+                return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
+            });
+            $diagnostics[$veloId] = $diagnosticData;
+        }
 
         // Récupére les marques distinctes des vélos affichés dans le tableau
         $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
