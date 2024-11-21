@@ -41,7 +41,7 @@ class DiagnosticController extends AbstractController
             'id_velo' => $diagnostic->getVelo()->getId(),
             'id_user' => $diagnostic->getIdUser(),
             'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-//            'cout_reparation' => $diagnostic->getCoutReparation(),
+            'cout_reparation' => $diagnostic->getCoutReparation(),
             'conclusion' => $diagnostic->getConclusion(),
         ];
     }
@@ -173,7 +173,7 @@ class DiagnosticController extends AbstractController
                     'id_velo' => $diagnostic->getVelo()->getId(),
                     'id_user' => $diagnostic->getIdUser(),
                     'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-//                    'cout_reparation' => $diagnostic->getCoutReparation(),
+                    'cout_reparation' => $diagnostic->getCoutReparation(),
                     'conclusion' => $diagnostic->getConclusion(),
                 ];
             }
