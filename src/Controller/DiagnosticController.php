@@ -35,27 +35,26 @@ class DiagnosticController extends AbstractController
        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
        $diagnosticData = [];
 
-       foreach ($diagnostics as $diagnostic) {
-           // Récupérer l'entité Lieu associée à ce diagnostic
-           $lieu = $diagnostic->getLieuId(); // Récupère l'entité Lieu associée
+            foreach ($diagnostics as $diagnostic) {
+                // Récupérer l'entité Lieu associée à ce diagnostic
+                $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
 
-           // Vérifie si le lieu existe et récupère le type de lieu
-           $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;
-           $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+                $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;  // On récupère le type de lieu associé au lieu
+                $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';  // Récupération du nom du type de lieu
 
-           // Ajouter les données du diagnostic, y compris celles du lieu et du type de lieu
-           $diagnosticData[] = [
-               'id' => $diagnostic->getId(),
-               'id_velo' => $diagnostic->getVelo()->getId(),
-               'id_user' => $diagnostic->getIdUser(),
-               'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('d-m-Y H:i:s'),
-               'cout_reparation' => $diagnostic->getCoutReparation(),
-               'conclusion' => $diagnostic->getConclusion(),
-               'lieu_nom' => $lieu ? $lieu->getNomLieu() : 'Non défini',
-               'lieu_ville' => $lieu ? $lieu->getVille() : 'Non défini',
-               'type_lieu_nom' => $typeLieuNom,
-           ];
-       }
+                // Ajouter les données du diagnostic, y compris celles du lieu et du type de lieu
+                $diagnosticData[] = [
+                    'id' => $diagnostic->getId(),
+                    'id_velo' => $diagnostic->getVelo()->getId(),
+                    'id_user' => $diagnostic->getIdUser(),
+                    'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
+                    'cout_reparation' => $diagnostic->getCoutReparation(),
+                    'conclusion' => $diagnostic->getConclusion(),
+                    'lieu_nom' => $lieu ? $lieu->getNomLieu() : 'Non défini',
+                    'lieu_ville' => $lieu ? $lieu->getVille() : 'Non défini',
+                    'type_lieu_nom' => $typeLieuNom,
+                ];
+            }
 
        return new JsonResponse($diagnosticData);
    }
@@ -98,9 +97,9 @@ class DiagnosticController extends AbstractController
             ];
         }
 
-        // Récupérer le nom du type de diagnostic
-        $diagnosticType = $diagnostic->getDiagnosticType();
-        $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
+            // Récupérer le nom du type de diagnostic
+            $diagnosticType = $diagnostic->getDiagnosticType();
+            $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
 
 
 
@@ -162,13 +161,13 @@ class DiagnosticController extends AbstractController
             }
         }
 
-        // Render a Twig template, passing the filtered diagnostics
-        dump($session->all());
-        return $this->render('diagnostic_en_cour/index.html.twig', [
-            'filteredDiagnostics' => $filteredDiagnostics,
-            'lieu' => $session->get('lieu')
-        ]);
-    }
+    // Render a Twig template, passing the filtered diagnostics
+    dump($session->all());
+    return $this->render('diagnostic_en_cour/index.html.twig', [
+        'filteredDiagnostics' => $filteredDiagnostics,
+        'lieu' => $session->get('lieu')
+    ]);
+}
 
     #[Route('/diagnosticNonCommencer', name: 'app_diagnostic_non_commencer', methods: ['GET'])]
     public function diagnosticNonCommencer(EntityManagerInterface $entityManager): JsonResponse
@@ -221,7 +220,7 @@ class DiagnosticController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $diagnostic->setDateDiagnostic(new \DateTime());
-            // Attribuer le type de diagnostic au nouveau diagnostic
+             // Attribuer le type de diagnostic au nouveau diagnostic
             $diagnostic->setDiagnosticType($typeDiagnostic);
 
             // Récupération du lieu
@@ -636,110 +635,110 @@ class DiagnosticController extends AbstractController
         // Extract the 'type' values from the result
         $noms_uniques = array_column($noms_uniques, 'nom');
 
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
-            ->select('DISTINCT d.date_diagnostic')
-            ->getQuery()
-            ->getResult();
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+        ->select('DISTINCT d.date_diagnostic')
+        ->getQuery()
+        ->getResult();
 
-        // Extract the 'type' values from the result
-        $dates_uniques = array_column($dates_uniques, 'date_diagnostic');
+    // Extract the 'type' values from the result
+    $dates_uniques = array_column($dates_uniques, 'date_diagnostic');
 
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
-            ->select('DISTINCT dt.nomType')
-            ->getQuery()
-            ->getResult();
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
+        ->select('DISTINCT dt.nomType')
+        ->getQuery()
+        ->getResult();
 
-        // Extract the 'type' values from the result
-        $types_uniquesd = array_column($types_uniquesd, 'nomType');
+    // Extract the 'type' values from the result
+    $types_uniquesd = array_column($types_uniquesd, 'nomType');
 
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $conclusions_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.conclusion')
-            ->getQuery()
-            ->getResult();
+     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $conclusions_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.conclusion')
+        ->getQuery()
+        ->getResult();
 
-        // Extract the 'conclusion' values from the result
-        $conclusions_uniques = array_column($conclusions_uniques, 'conclusion');
-
-
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $statusd_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.status')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'status' values from the result
-        $statusd_uniques = array_column($statusd_uniques, 'status');
+    // Extract the 'conclusion' values from the result
+    $conclusions_uniques = array_column($conclusions_uniques, 'conclusion');
 
 
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $statusd_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.status')
+        ->getQuery()
+        ->getResult();
 
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.type')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'type' values from the result
-        $types_uniquesv = array_column($types_uniquesv, 'type');
-
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $marques_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.marque')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'type' values from the result
-        $marques_uniques = array_column($marques_uniques, 'marque');
-
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $publics_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('DISTINCT v.public')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'type' values from the result
-        $publics_uniques = array_column($publics_uniques, 'public');
-
-
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $nomsp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
-            ->select('DISTINCT p.nom_proprio')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'type' values from the result
-        $nomsp_uniques = array_column( $nomsp_uniques, 'nom_proprio');
-
-        $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-        $statutp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
-            ->select('DISTINCT p.statut')
-            ->getQuery()
-            ->getResult();
-
-        // Extract the 'type' values from the result
-        $statutp_uniques = array_column(  $statutp_uniques, 'statut');
+    // Extract the 'status' values from the result
+    $statusd_uniques = array_column($statusd_uniques, 'status');
 
 
 
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.type')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $types_uniquesv = array_column($types_uniquesv, 'type');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $marques_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.marque')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $marques_uniques = array_column($marques_uniques, 'marque');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $publics_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+        ->select('DISTINCT v.public')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $publics_uniques = array_column($publics_uniques, 'public');
 
 
-        return $this->render('diagnostic/recapitulatif.html.twig', [
-            'diagnostics' => $diagnostics,
-            'types_uniquesv' => $types_uniquesv,
-            'types_uniquesd' => $types_uniquesd,
-            'conclusions_uniques' => $conclusions_uniques,
-            'statusd_uniques' => $statusd_uniques,
-            'marques_uniques' => $marques_uniques,
-            'publics_uniques' => $publics_uniques,
-            'nomsp_uniques' => $nomsp_uniques,
-            'statutp_uniques' => $statutp_uniques,
-            'dates_uniques' =>$dates_uniques,
-            'noms_uniques' =>$noms_uniques
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $nomsp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+        ->select('DISTINCT p.nom_proprio')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $nomsp_uniques = array_column( $nomsp_uniques, 'nom_proprio');
+
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $statutp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+        ->select('DISTINCT p.statut')
+        ->getQuery()
+        ->getResult();
+
+    // Extract the 'type' values from the result
+    $statutp_uniques = array_column(  $statutp_uniques, 'statut');
 
 
-        ]);
+
+
+
+    return $this->render('diagnostic/recapitulatif.html.twig', [
+        'diagnostics' => $diagnostics,
+        'types_uniquesv' => $types_uniquesv,
+        'types_uniquesd' => $types_uniquesd,
+        'conclusions_uniques' => $conclusions_uniques,
+        'statusd_uniques' => $statusd_uniques,
+        'marques_uniques' => $marques_uniques,
+        'publics_uniques' => $publics_uniques,
+        'nomsp_uniques' => $nomsp_uniques,
+        'statutp_uniques' => $statutp_uniques,
+        'dates_uniques' =>$dates_uniques,
+        'noms_uniques' =>$noms_uniques
+
+
+    ]);
     }
 
 

@@ -111,32 +111,22 @@ class Diagnostic
 
         return $this;
     }
-    
+
     #[ORM\ManyToOne(targetEntity: Velo::class)]
     #[ORM\JoinColumn(name: "id_velo", referencedColumnName: "id")]
-    
+
     private ?Velo $velo;
-    
-    
+
+
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id")]
-    
     private ?Utilisateur $utilisateur;
 
     #[ORM\OneToMany(targetEntity: DiagnosticElement::class, mappedBy: 'diagnostic', cascade: ['persist', 'remove'])]
-
     private Collection $diagnosticElements;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
-
-
-
-
-
-
-
-
 
     #[ORM\ManyToOne(inversedBy: 'id')]
     #[ORM\JoinColumn(nullable: false)]
@@ -200,22 +190,22 @@ class Diagnostic
     {
     return $this->velo;
     }
-    
+
     public function setVelo(?Velo $velo): static
     {
     $this->velo = $velo;
     return $this;
     }
-    
+
     public function getUtilisateur(): ?Utilisateur
     {
     return $this->utilisateur;
     }
-    
+
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
     $this->utilisateur = $utilisateur;
-    
+
     return $this;
     }
 
@@ -255,5 +245,5 @@ class Diagnostic
         return $this;
     }
 
-   
+
     }

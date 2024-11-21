@@ -80,14 +80,17 @@ class VeloController extends AbstractController
         ]);
     }
 
-    // Route pour afficher les informations des vélos
-    #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
-    {
-        $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('v.id', 'p.nom_proprio', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
-            ->leftJoin('v.proprietaire', 'p')
-            ->getQuery();
+
+
+
+   #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
+   public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
+   {
+       // Préparation des vélos paginés
+       $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+           ->select('v.id', 'v.url_photo', 'p.nom_proprio', 'v.numero_de_serie', 'v.bicycode', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+           ->leftJoin('v.proprietaire', 'p')
+           ->getQuery();
 
         // Pagination des résultats
         $pagination = $paginator->paginate(
@@ -122,6 +125,33 @@ class VeloController extends AbstractController
                     $diagnostics[$veloId] = $diagnosticData;
                 }
             }
+       // Récupérer les diagnostics associés
+       $diagnostics = [];
+       foreach ($pagination as $velo) {
+           $veloId = $velo['id'];
+           $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+
+           foreach ($diagnosticData as &$diagnostic) {
+               // 1. Récupérer le lieu lié au diagnostic
+               $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
+
+               // 2. Ajouter dynamiquement le lieu
+               $diagnostic->lieu = $lieu;
+
+               // 3. Récupérer et ajouter le type de lieu
+               if ($lieu && $lieu->getTypeLieuId()) {
+                   $typeLieu = $entityManager->getRepository(TypeLieu::class)->find($lieu->getTypeLieuId()->getId());
+                   $diagnostic->typeLieu = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+               } else {
+                   $diagnostic->typeLieu = 'Non défini';
+
+               }
+           }
+            //dd($diagnosticData);
+           if (!empty($diagnosticData)) {
+               $diagnostics[$veloId] = $diagnosticData;
+           }
+       }
 
         // Trie les diagnostics par date pour chaque vélo
         foreach ($diagnostics as $veloId => $diagnosticData) {
@@ -131,38 +161,54 @@ class VeloController extends AbstractController
             $diagnostics[$veloId] = $diagnosticData;
         }
 
-        // Récupère les marques, couleurs, types et publics distincts des vélos
+        // Récupére les marques distinctes des vélos affichés dans le tableau
         $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('DISTINCT v.marque')
             ->getQuery();
+
         $marques = $marqueQuery->getResult();
+
+        // Extraire uniquement les valeurs des marques
         $marques_uniques = array_map(function ($marque) {
             return $marque['marque'];
         }, $marques);
 
+        // Requête pour obtenir les couleurs uniques
         $couleurQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('DISTINCT v.couleur')
             ->getQuery();
+
         $couleurs = $couleurQuery->getResult();
+
+        // Extraction des valeurs des couleurs
         $couleurs_uniques = array_column($couleurs, 'couleur');
 
+        // Requête pour obtenir les types uniques
         $typeQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('DISTINCT v.type')
             ->getQuery();
-        $types = $typeQuery->getResult();
-        $types_uniques = array_map(function ($type) {
-            return $type['type'];
-        }, $types);
 
+        $types = $typeQuery->getResult();
+
+        // Extraction des valeurs des types
+                $types_uniques = array_map(function ($type) {
+                    return $type['type'];
+                }, $types);
+
+        // Requête pour obtenir les catégories de public uniques
         $publicQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
             ->select('DISTINCT v.public')
             ->getQuery();
+
         $publics = $publicQuery->getResult();
+
+        // Extraction des valeurs des catégories de public
         $publics_uniques = array_map(function ($public) {
             return $public['public'];
         }, $publics);
 
-        // Passe les données au modèle Twig, y compris les informations du lieu depuis la session
+
+        // Passe les données au modèle Twig
         return $this->render('velo/velo_liste.html.twig', [
             'pagination' => $pagination,
             'diagnostics' => $diagnostics,
@@ -170,7 +216,7 @@ class VeloController extends AbstractController
             'couleurs_uniques' => $couleurs_uniques,
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
-            'lieu' => $session->get('lieu'), // Passer la variable 'lieu' depuis la session
+            'lieu' => $session->get('lieu'),
         ]);
     }
 
