@@ -57,11 +57,55 @@
         margin-left: 2px;
     }
 
-
+    #error-notification {
+        position: fixed;
+        top: 0; 
+        right: 0;
+        padding: 16px;
+        background-color: #fef2f2;
+        border-left: 8px solid #f87171;
+        color: #b91c1c;
+        border-radius: 8px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        z-index: 50; 
+    }
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+    .w-6 {
+        width: 24px;
+    }
+    .h-6 {
+        height: 24px;
+    }
+    .mr-3 {
+        margin-right: 12px;
+    }
 
 </style>
 <body>
     <div class="bg-white flex flex-col min-h-screen justify-center" style="background-color: white;">
+    {% if form.email.vars.errors|length > 0 %}
+        <div id="error-notification" class="bg-red-100 border-l-8 border-red-500 text-red-700 px-6 py-4 rounded-lg shadow-lg mb-4 text-left fixed top-4 right-0 z-50" role="alert">
+            <div class="flex items-center">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <strong>Erreur :</strong> {{ form.email.vars.errors|first.message }}
+            </div>
+            <script>
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            </script>
+        </div>
+    {% endif %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success text-center my-3 bg-green-100 text-green-800 p-3 rounded">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="w-full max-w-7xl mx-auto">
     <div class="bg-white p-6   w-full ">
         <h1 class="mb-3 text-2xl font-bold text-center text-gray-900">Saisir un vélo</h1>
@@ -152,11 +196,6 @@
                     </div>
                 </div>
             </div>
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success text-center my-3 bg-green-100 text-green-800 p-3 rounded">
-                {{ message }}
-            </div>
-        {% endfor %}
 
             <div class="flex justify-center mt-4">
                 <!-- Bouton pour enregistrer et aller au diagnostic -->
