@@ -143,7 +143,10 @@ class DiagnosticController extends AbstractController
 #[Route('/diagnosticEnCours', name: 'app_diagnostic_en_cours', methods: ['GET'])]
 public function diagnosticEnCours(EntityManagerInterface $entityManager, SessionInterface $session, \Symfony\Component\HttpFoundation\Request $request): Response
 {
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findBy(
+        ['Lieu_id' => $session->get('lieu')['id']]
+    );
+    
     $filteredDiagnostics = [];
 
     foreach ($diagnostics as $diagnostic) {
