@@ -8,6 +8,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Proprietaire;
 use App\Entity\Diagnostic;
 use App\Entity\Velo;
+use App\Entity\Lieu;
+use App\Entity\TypeLieu;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -22,72 +24,75 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class VeloController extends AbstractController
 {
- #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
- public function new(Request $request, EntityManagerInterface $entityManager): Response
- {
-     $velo = new Velo();
-     $form = $this->createForm(VeloInfoType::class, $velo);
-     $form->handleRequest($request);
+    // Route pour créer un nouveau vélo
+    #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $velo = new Velo();
+        $form = $this->createForm(VeloInfoType::class, $velo);
+        $form->handleRequest($request);
 
-     if ($form->isSubmitted() && $form->isValid()) {
-         $velo->setDateDeEnregistrement(new \DateTime());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $velo->setDateDeEnregistrement(new \DateTime());
 
-         $base64Image = $form->get('url_photo')->getData();
-         if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
-             $data = substr($base64Image, strpos($base64Image, ',') + 1);
-             $data = base64_decode($data);
+            // Traitement de l'image
+            $base64Image = $form->get('url_photo')->getData();
+            if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
+                $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                $data = base64_decode($data);
 
-             $imageName = uniqid() . '.' . $type[1];
-             $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+                $imageName = uniqid() . '.' . $type[1];
+                $filePath = $this->getParameter('images_directory') . '/' . $imageName;
 
-             if (!file_exists($this->getParameter('images_directory'))) {
-                 mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
-             }
-             file_put_contents($filePath, $data);
+                if (!file_exists($this->getParameter('images_directory'))) {
+                    mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                }
+                file_put_contents($filePath, $data);
 
-             $webPath = '/images/velo/' . $imageName;
-             $velo->setUrlPhoto($webPath);
-         }
+                $webPath = '/images/velo/' . $imageName;
+                $velo->setUrlPhoto($webPath);
+            }
 
-         if ($velo->getProprietaire()) {
-             $entityManager->persist($velo->getProprietaire());
-         }
-         $entityManager->persist($velo);
-         $entityManager->flush();
+            if ($velo->getProprietaire()) {
+                $entityManager->persist($velo->getProprietaire());
+            }
+            $entityManager->persist($velo);
+            $entityManager->flush();
 
-         // Vérifier l'action demandée par le bouton
-         $action = $request->request->get('action');
-         if ($action === 'return_home') {
-             // Si "Retour Accueil", on redirige vers la page d'accueil
-             $this->addFlash('success', 'Vélo enregistré avec succès !');
-             return $this->redirectToRoute('app_accueil');
-         }
-        if ($action === 'go_to_diagnostic') {
-            // Si "Aller au Diagnostic", on redirige vers la page de diagnostic avec l'ID du vélo
+            // Vérifier l'action demandée par le bouton
+            $action = $request->request->get('action');
+            if ($action === 'return_home') {
+                // Si "Retour Accueil", on redirige vers la page d'accueil
+                $this->addFlash('success', 'Vélo enregistré avec succès !');
+                return $this->redirectToRoute('app_accueil');
+            }
+            if ($action === 'go_to_diagnostic') {
+                // Si "Aller au Diagnostic", on redirige vers la page de diagnostic avec l'ID du vélo
+                $this->addFlash('success', 'Vélo enregistré avec succès !');
+                return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
+            }
+
+            // Si "Enregistrer un autre vélo", on recharge la page
             $this->addFlash('success', 'Vélo enregistré avec succès !');
-            return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
+            return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
         }
 
-         // Si "Enregistrer un autre vélo", on recharge la page
-         $this->addFlash('success', 'Vélo enregistré avec succès !');
-         return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
-     }
-
-     return $this->render('velo/new.html.twig', [
-         'form' => $form->createView(),
-     ]);
- }
+        return $this->render('velo/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
 
 
 
-    #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
-    {
-        $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-            ->select('v.id', 'p.nom_proprio', 'v.numero_de_serie', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
-            ->leftJoin('v.proprietaire', 'p')
-            ->getQuery();
+   #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
+   public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
+   {
+       // Préparation des vélos paginés
+       $query = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+           ->select('v.id', 'v.url_photo', 'p.nom_proprio', 'v.numero_de_serie', 'v.bicycode', 'v.marque', 'v.ref_recyclerie', 'v.couleur', 'v.date_de_enregistrement', 'v.type', 'v.public', 'v.date_de_vente', 'v.date_destruction')
+           ->leftJoin('v.proprietaire', 'p')
+           ->getQuery();
 
         // Pagination des résultats
         $pagination = $paginator->paginate(
@@ -96,21 +101,41 @@ class VeloController extends AbstractController
             10 /*limit per page*/
         );
 
-        // If needed, fetch diagnostics separately for each bicycle
-        $diagnostics = [];
-        foreach ($pagination as $velo) {
-            $veloId = $velo['id'];
-            $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
-            if (!empty($diagnosticData)) {
-                $diagnostics[$veloId] = $diagnosticData;
-            }
-        }
-        foreach ($diagnostics as $veloId => $diagnosticData) {
-            usort($diagnosticData, function ($a, $b) {
-                return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
-            });
-            $diagnostics[$veloId] = $diagnosticData;
-        }
+       // Récupérer les diagnostics associés
+       $diagnostics = [];
+       foreach ($pagination as $velo) {
+           $veloId = $velo['id'];
+           $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+
+           foreach ($diagnosticData as &$diagnostic) {
+               // 1. Récupérer le lieu lié au diagnostic
+               $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
+
+               // 2. Ajouter dynamiquement le lieu
+               $diagnostic->lieu = $lieu;
+
+               // 3. Récupérer et ajouter le type de lieu
+               if ($lieu && $lieu->getTypeLieuId()) {
+                   $typeLieu = $entityManager->getRepository(TypeLieu::class)->find($lieu->getTypeLieuId()->getId());
+                   $diagnostic->typeLieu = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+               } else {
+                   $diagnostic->typeLieu = 'Non défini';
+
+               }
+           }
+            //dd($diagnosticData);
+           if (!empty($diagnosticData)) {
+               $diagnostics[$veloId] = $diagnosticData;
+           }
+       }
+
+       // Trier les diagnostics par date
+       foreach ($diagnostics as $veloId => $diagnosticData) {
+           usort($diagnosticData, function ($a, $b) {
+               return $a->getDateDiagnostic() <=> $b->getDateDiagnostic();
+           });
+           $diagnostics[$veloId] = $diagnosticData;
+       }
 
         // Récupére les marques distinctes des vélos affichés dans le tableau
         $marqueQuery = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')

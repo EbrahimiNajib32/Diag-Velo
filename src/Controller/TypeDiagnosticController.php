@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -22,8 +23,9 @@ class TypeDiagnosticController extends AbstractController
     public function index(EntityManagerInterface $entityManager, SessionInterface $session): Response
     // Récupérer uniquement les types de diagnostic en fonction du type de lieux et actif
     {
+        $lieu = $session->get('lieu');
         // Récupérer l'id du type de lieu depuis la session
-        $idTypeLieu = $session->get('lieu')['idType'];
+        $idTypeLieu = $lieu['idType'];
 
         // Récupérer les IDs des diagnostics associés à ce type de lieu
         $diagnosticTypeIds = $entityManager->getRepository(DiagnostictypeLieutype::class)->findBy([
@@ -44,6 +46,7 @@ class TypeDiagnosticController extends AbstractController
 
         if (count($typesDiagnostics) >= 1) {
             return $this->render('diagnostic/choixTypeDiagnostic.html.twig', [
+                'lieu' => $lieu,
                 'typesDiagnostic' => $typesDiagnostics,
             ]);
         } else {
