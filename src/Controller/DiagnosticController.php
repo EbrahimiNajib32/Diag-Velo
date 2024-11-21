@@ -66,8 +66,11 @@ class DiagnosticController extends AbstractController
 
 
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
-    public function diagnosticById(int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
-    {
+    public function diagnosticById(
+        int $id,
+        EntityManagerInterface $entityManager,
+        SessionInterface $session
+    ): Response {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
 
         if (!$diagnostic) {
@@ -76,7 +79,6 @@ class DiagnosticController extends AbstractController
             ]);
             return new Response($content, Response::HTTP_NOT_FOUND);
         }
-
 
         $elements = $entityManager->getRepository(DiagnosticElement::class)->findBy(['diagnostic' => $diagnostic]);
 
@@ -101,15 +103,19 @@ class DiagnosticController extends AbstractController
             ];
         }
 
-            // Récupérer le nom du type de diagnostic
-            $diagnosticType = $diagnostic->getDiagnosticType();
-            $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
+        // Récupérer le nom du type de diagnostic
+        $diagnosticType = $diagnostic->getDiagnosticType();
+        $nomType = $diagnosticType ? $diagnosticType->getNomType() : 'Type non défini';
 
+        // Récupérer les informations sur le lieu et le type de lieu
+        $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
 
+        $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;
+        $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+        $lieuNom = $lieu ? $lieu->getNomLieu() : 'Non défini';
+        $lieuVille = $lieu ? $lieu->getVille() : 'Non défini';
 
-
-
-        // Fetch the bike details associated with the diagnostic
+        // Récupérer les détails du vélo associé au diagnostic
         $bike = $diagnostic->getVelo();
         $bikeDetails = [
             'id' => $bike->getId(),
@@ -122,6 +128,7 @@ class DiagnosticController extends AbstractController
             'taille_cadre' => $bike->getTailleCadre(),
         ];
 
+        // Préparer les données du diagnostic
         $diagnosticData = [
             'id' => $diagnostic->getId(),
             'id_velo' => $diagnostic->getVelo()->getId(),
@@ -136,6 +143,9 @@ class DiagnosticController extends AbstractController
             'bike' => $bikeDetails,
             'categorizedElements' => $categorizedElements,
             'nomType' => $nomType,
+            'typeLieuNom' => $typeLieuNom,
+            'lieuNom' => $lieuNom,
+            'lieuVille' => $lieuVille,
         ]);
     }
 
