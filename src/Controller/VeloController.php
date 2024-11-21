@@ -8,6 +8,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Proprietaire;
 use App\Entity\Diagnostic;
 use App\Entity\Velo;
+use App\Entity\Lieu;
+use App\Entity\TypeLieu;
 use App\Form\VeloInfoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -94,15 +96,32 @@ class VeloController extends AbstractController
             10 /*limit per page*/
         );
 
-        // Si nécessaire, récupère les diagnostics séparément pour chaque vélo
-        $diagnostics = [];
-        foreach ($pagination as $velo) {
-            $veloId = $velo['id'];
-            $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
-            if (!empty($diagnosticData)) {
-                $diagnostics[$veloId] = $diagnosticData;
+        // Récupérer les diagnostics associés
+            $diagnostics = [];
+            foreach ($pagination as $velo) {
+                $veloId = $velo['id'];
+                $diagnosticData = $entityManager->getRepository(Diagnostic::class)->findBy(['velo' => $veloId]);
+
+                foreach ($diagnosticData as &$diagnostic) {
+                    // 1. Récupérer le lieu lié au diagnostic
+                    $lieu = $diagnostic->getLieuId() ? $entityManager->getRepository(Lieu::class)->find($diagnostic->getLieuId()) : null;
+
+                    // 2. Ajouter dynamiquement le lieu
+                    $diagnostic->lieu = $lieu;
+
+                    // 3. Récupérer et ajouter le type de lieu
+                    if ($lieu && $lieu->getTypeLieuId()) {
+                        $typeLieu = $entityManager->getRepository(TypeLieu::class)->find($lieu->getTypeLieuId()->getId());
+                        $diagnostic->typeLieu = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+                    } else {
+                        $diagnostic->typeLieu = 'Non défini';
+                    }
+                }
+//dd($diagnosticData);
+                if (!empty($diagnosticData)) {
+                    $diagnostics[$veloId] = $diagnosticData;
+                }
             }
-        }
 
         // Trie les diagnostics par date pour chaque vélo
         foreach ($diagnostics as $veloId => $diagnosticData) {

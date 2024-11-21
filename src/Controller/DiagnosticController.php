@@ -28,25 +28,38 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DiagnosticController extends AbstractController
 {
-    #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
-{
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $diagnosticData = [];
+   #[Route('/diagnostic', name: 'app_diagnostic', methods: ['GET'])]
+   public function index(EntityManagerInterface $entityManager): JsonResponse
+   {
+       // Récupérer tous les diagnostics
+       $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+       $diagnosticData = [];
 
-    foreach ($diagnostics as $diagnostic) {
-        $diagnosticData[] = [
-            'id' => $diagnostic->getId(),
-            'id_velo' => $diagnostic->getVelo()->getId(),
-            'id_user' => $diagnostic->getIdUser(),
-            'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-            'cout_reparation' => $diagnostic->getCoutReparation(),
-            'conclusion' => $diagnostic->getConclusion(),
-        ];
-    }
+       foreach ($diagnostics as $diagnostic) {
+           // Récupérer l'entité Lieu associée à ce diagnostic
+           $lieu = $diagnostic->getLieuId(); // Récupère l'entité Lieu associée
 
-    return new JsonResponse($diagnosticData);
-}
+           // Vérifie si le lieu existe et récupère le type de lieu
+           $typeLieu = $lieu ? $lieu->getTypeLieuId() : null;
+           $typeLieuNom = $typeLieu ? $typeLieu->getNomTypeLieu() : 'Non défini';
+
+           // Ajouter les données du diagnostic, y compris celles du lieu et du type de lieu
+           $diagnosticData[] = [
+               'id' => $diagnostic->getId(),
+               'id_velo' => $diagnostic->getVelo()->getId(),
+               'id_user' => $diagnostic->getIdUser(),
+               'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('d-m-Y H:i:s'),
+               'cout_reparation' => $diagnostic->getCoutReparation(),
+               'conclusion' => $diagnostic->getConclusion(),
+               'lieu_nom' => $lieu ? $lieu->getNomLieu() : 'Non défini',
+               'lieu_ville' => $lieu ? $lieu->getVille() : 'Non défini',
+               'type_lieu_nom' => $typeLieuNom,
+           ];
+       }
+
+       return new JsonResponse($diagnosticData);
+   }
+
 
 
     #[Route('/diagnostic/{id}', name: 'app_diagnostic_by_id', methods: ['GET'])]
@@ -211,11 +224,11 @@ class DiagnosticController extends AbstractController
             // Attribuer le type de diagnostic au nouveau diagnostic
             $diagnostic->setDiagnosticType($typeDiagnostic);
 
-            // Récupération du lieu 
+            // Récupération du lieu
             $lieu = $session->get('lieu');
             $lieuEntity = $entityManager->getRepository(Lieu::class)->find($lieu['id']);
 
-            //Récupération de diagnostictypelieutype avec des conditions 
+            //Récupération de diagnostictypelieutype avec des conditions
             $diagnostictypeLieuType = $entityManager->getRepository(DiagnostictypeLieutype::class)->findOneBy([
                 'Lieu_type_id' => $lieu['idType'],
                 'diagnostic_type_id' => $typeDiagnostic,
