@@ -298,7 +298,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_accueil');
+            return $this->redirectToRoute('app_diagnostic_en_cours');
 
         }// fin partie creation form
 
@@ -501,7 +501,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_accueil');
+            return $this->redirectToRoute('app_diagnostic_en_cours');
         }
 
         $elements = $entityManager->getRepository(ElementControl::class)->findAll();
