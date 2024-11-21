@@ -22,6 +22,7 @@ use App\Entity\Utilisateur;
 use App\Form\FormDiagnosticType;
 use App\Form\TypeDiagnosticType;
 use App\Entity\Velo;
+use App\Form\LieuType;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -40,7 +41,7 @@ class DiagnosticController extends AbstractController
             'id_velo' => $diagnostic->getVelo()->getId(),
             'id_user' => $diagnostic->getIdUser(),
             'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-            'cout_reparation' => $diagnostic->getCoutReparation(),
+//            'cout_reparation' => $diagnostic->getCoutReparation(),
             'conclusion' => $diagnostic->getConclusion(),
         ];
     }
@@ -172,7 +173,7 @@ class DiagnosticController extends AbstractController
                     'id_velo' => $diagnostic->getVelo()->getId(),
                     'id_user' => $diagnostic->getIdUser(),
                     'date_diagnostic' => $diagnostic->getDateDiagnostic()->format('Y-m-d H:i:s'),
-                    'cout_reparation' => $diagnostic->getCoutReparation(),
+//                    'cout_reparation' => $diagnostic->getCoutReparation(),
                     'conclusion' => $diagnostic->getConclusion(),
                 ];
             }
@@ -319,8 +320,11 @@ class DiagnosticController extends AbstractController
     //******************************************//
     // reprise d'un diagnostique version multi diagnostic
     #[Route('/diagnostic/reprendreMulti/{id}', name: 'reprendre_Multidiagnostic', methods: ['GET', 'POST'])]
-    public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function reprendreMultiDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
+
+        $lieu = $session->get('lieu');
+
         //recupération de l'id du daignostic dans l'URL
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
         if (!$diagnostic) {
@@ -329,18 +333,6 @@ class DiagnosticController extends AbstractController
         }
 
 
-        // Récupération des états des éléments de contrôle
-        /*$etatsElementsControle = [];
-
-        foreach ($diagnosticElements as $diagnosticElement) {
-            $elementControl = $diagnosticElement->getElementControl();
-            $etatControl = $diagnosticElement->getEtatControl(); // Récupérer l'état du DiagnosticElement
-            if ($elementControl && $etatControl) {
-                $etatsElementsControle[$elementControl->getId()] = $etatControl;
-            }
-        }*/
-
-        // categorization des éléments pour mise en page
         //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
         $diagnosticElementsDisplayed = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $diagnostic->getDiagnosticType()]);
 
@@ -421,6 +413,7 @@ class DiagnosticController extends AbstractController
             'diagnosticForm' => $form->createView(),
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $categorizedElements,
+            'lieu' => $lieu,
             //'etatsElementsControle' => $etatsElementsControle, // Ajout de la variable au rendu du template
         ]);
     }
@@ -505,7 +498,7 @@ class DiagnosticController extends AbstractController
 
     // reprise d'un diagnostique version mono diagnostic
     #[Route('/diagnostic/reprendre/{id}', name: 'reprendre_diagnostic', methods: ['GET', 'POST'])]
-    public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function reprendreDiagnostic(int $id, Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $diagnostic = $entityManager->getRepository(Diagnostic::class)->find($id);
         if (!$diagnostic) {
