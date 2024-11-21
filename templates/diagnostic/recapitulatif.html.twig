@@ -56,6 +56,7 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
             <th colspan="6" class="px-6 py-3 text-center">Informations sur le Diagnostic</th>
+            <th colspan="4" class="px-6 py-3 text-center">Informations sur le Lieu</th>
             <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
             <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
         </tr>
@@ -122,6 +123,10 @@
                             </div>
                         </div>
                     </th>
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">Type</th>
+                    <th scope="col" class="px-6 py-3 text-center">Nom</th>
+                    <th scope="col" class="px-6 py-3 text-center">Ville</th>
+                    <th scope="col" class="px-6 py-3">Code postal</th>
                    {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
                     <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
                     <th scope="col" class="px-6 py-3 text-center">N° de série</th>
@@ -151,7 +156,7 @@
                             </div>
                         </div>
                     </th>
-                  
+
                     <th scope="col" class="px-6 py-3">
                         Public
                         <div style="position: relative; display: inline-block;">
@@ -164,7 +169,7 @@
                             </div>
                         </div>
                     </th>
-                   
+
                      <th scope="col" class="px-6 py-3">
                         Nom
                         <div style="position: relative; display: inline-block;">
@@ -177,7 +182,7 @@
                             </div>
                         </div>
                     </th>
-                   
+
                      <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
@@ -196,7 +201,7 @@
                  {% set rowNumber = 0 %}
                {% for diagnostic in diagnostics %}
     {% set rowNumber = rowNumber + 1 %}
-    <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}" 
+    <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}"
         data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
         data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
         data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
@@ -272,7 +277,7 @@
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
 
-       
+
 
         function filterRows(attribute, value) {
             const rows = document.querySelectorAll("tbody tr");

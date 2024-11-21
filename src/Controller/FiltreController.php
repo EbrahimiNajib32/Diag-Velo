@@ -32,6 +32,9 @@ class FiltreController extends AbstractController
     $statusDiagnostic = $this->veloInfoService->getStatusDiagnostic();
     $nomsProprio = $this->veloInfoService->getNomsProprio();
     $statutsProprio = $this->veloInfoService->getStatutsProprio();
+    // Récupérer les détails des lieux et types de lieux
+     $lieuxDetails = $this->veloInfoService->getLieuxDetails(); // Liste complète des lieux
+     $typesLieu = $this->veloInfoService->getNomsTypesLieu(); // Noms des types de lieux
 
     // Extraire uniquement les valeurs des marques
     $marques_uniques = array_map(function ($marque) {
@@ -85,6 +88,8 @@ class FiltreController extends AbstractController
         'status' => $status_uniques,
         'nomsProprio' => $nomsProprio_uniques,
         'statuts' => $statutsProprio_uniques,
+        'lieuxDetails' => $lieuxDetails, // Détails des lieux
+        'typesLieu' => $typesLieu, // Noms des types de lieux
     ]);
 }
 
