@@ -22,6 +22,7 @@ class FiltreController extends AbstractController
      */
     public function index(): Response
 {
+
     // Récupérer toutes les informations depuis le service
     $marques = $this->veloInfoService->getMarques();
     $couleurs = $this->veloInfoService->getCouleurs();
@@ -34,6 +35,7 @@ class FiltreController extends AbstractController
     $statutsProprio = $this->veloInfoService->getStatutsProprio();
     // Récupérer les détails des lieux et types de lieux
      $lieuxDetails = $this->veloInfoService->getLieuxDetails(); // Liste complète des lieux
+    //dd($lieuxDetails);
      $typesLieu = $this->veloInfoService->getNomsTypesLieu(); // Noms des types de lieux
 
     // Extraire uniquement les valeurs des marques
@@ -91,6 +93,7 @@ class FiltreController extends AbstractController
         'lieuxDetails' => $lieuxDetails, // Détails des lieux
         'typesLieu' => $typesLieu, // Noms des types de lieux
     ]);
+    dd($lieuxDetails, $typesLieu);
 }
 
 }

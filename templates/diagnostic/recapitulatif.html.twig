@@ -207,6 +207,13 @@
         data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
         data-conclusion="{{ diagnostic.conclusion }}"
         data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
+
+        data-type-lieu="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
+        data-nom-lieu="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
+        data-ville="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+        data-code-postal="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}">
+
+
         data-status="{{ diagnostic.status }}"
         data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
         data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
