@@ -449,7 +449,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
     //#####################################################################################//
     // creation d'un diagnostique Version mono diagnostic
-    #[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
+    /*#[Route('/new/diagnostic', name: 'diagnostic_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $diagnostic = new Diagnostic();
@@ -601,7 +601,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $categorizedElements,
         ]);
-    }
+    }*/
 
     #[Route('/diagnostics/velo/{id}', name: 'app_diagnostics_by_velo_id', methods: ['GET'])]
     public function diagnosticsByVeloId(int $id, EntityManagerInterface $entityManager): JsonResponse
@@ -635,120 +635,122 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     #[Route('/diagnostics/recapitulatif', name: 'diagnostics_recapitulatif', methods: ['GET'])]
     public function recapitulatif(EntityManagerInterface $entityManager): Response
     {
+        // Récupérer tous les diagnostics
         $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
+
+        // Récupérer les noms uniques des utilisateurs
         $noms_uniques = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u')
             ->select('DISTINCT u.nom')
             ->getQuery()
             ->getResult();
-
-        // Extract the 'type' values from the result
         $noms_uniques = array_column($noms_uniques, 'nom');
 
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
-        ->select('DISTINCT d.date_diagnostic')
-        ->getQuery()
-        ->getResult();
+        // Récupérer les dates uniques des diagnostics
+        $dates_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('d')
+            ->select('DISTINCT d.date_diagnostic')
+            ->getQuery()
+            ->getResult();
+        $dates_uniques = array_column($dates_uniques, 'date_diagnostic');
 
-    // Extract the 'type' values from the result
-    $dates_uniques = array_column($dates_uniques, 'date_diagnostic');
+        // Récupérer les types uniques de diagnostics
+        $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
+            ->select('DISTINCT dt.nomType')
+            ->getQuery()
+            ->getResult();
+        $types_uniquesd = array_column($types_uniquesd, 'nomType');
 
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $types_uniquesd = $entityManager->getRepository(DiagnosticType::class)->createQueryBuilder('dt')
-        ->select('DISTINCT dt.nomType')
-        ->getQuery()
-        ->getResult();
+        // Récupérer les conclusions uniques
+        $conclusions_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.conclusion')
+            ->getQuery()
+            ->getResult();
+        $conclusions_uniques = array_column($conclusions_uniques, 'conclusion');
 
-    // Extract the 'type' values from the result
-    $types_uniquesd = array_column($types_uniquesd, 'nomType');
+        // Récupérer les statuses uniques
+        $statusd_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.status')
+            ->getQuery()
+            ->getResult();
+        $statusd_uniques = array_column($statusd_uniques, 'status');
 
-     $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $conclusions_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.conclusion')
-        ->getQuery()
-        ->getResult();
+        // Récupérer les types de vélos uniques
+        $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.type')
+            ->getQuery()
+            ->getResult();
+        $types_uniquesv = array_column($types_uniquesv, 'type');
 
-    // Extract the 'conclusion' values from the result
-    $conclusions_uniques = array_column($conclusions_uniques, 'conclusion');
+        // Récupérer les marques uniques de vélos
+        $marques_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.marque')
+            ->getQuery()
+            ->getResult();
+        $marques_uniques = array_column($marques_uniques, 'marque');
 
+        // Récupérer les publics uniques de vélos
+        $publics_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
+            ->select('DISTINCT v.public')
+            ->getQuery()
+            ->getResult();
+        $publics_uniques = array_column($publics_uniques, 'public');
 
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $statusd_uniques = $entityManager->getRepository(Diagnostic::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.status')
-        ->getQuery()
-        ->getResult();
+        // Récupérer les noms uniques des propriétaires
+        $nomsp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.nom_proprio')
+            ->getQuery()
+            ->getResult();
+        $nomsp_uniques = array_column($nomsp_uniques, 'nom_proprio');
 
-    // Extract the 'status' values from the result
-    $statusd_uniques = array_column($statusd_uniques, 'status');
+        // Récupérer les statuts uniques des propriétaires
+        $statutp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.statut')
+            ->getQuery()
+            ->getResult();
+        $statutp_uniques = array_column($statutp_uniques, 'statut');
 
+        // Ajouter les informations sur le lieu (type, nom, ville, code postal)
+        $lieux = [];
+        foreach ($diagnostics as $diagnostic) {
+            $lieu = $diagnostic->getLieuId(); // Récupère l'objet Lieu
+            if ($lieu) {
+                // Initialiser le type de lieu si c'est un proxy
+                if ($lieu->getTypeLieuId() && !$entityManager->getUnitOfWork()->isInIdentityMap($lieu->getTypeLieuId())) {
+                    $entityManager->initializeObject($lieu->getTypeLieuId());
+                }
 
-
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $types_uniquesv = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.type')
-        ->getQuery()
-        ->getResult();
-
-    // Extract the 'type' values from the result
-    $types_uniquesv = array_column($types_uniquesv, 'type');
-
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $marques_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.marque')
-        ->getQuery()
-        ->getResult();
-
-    // Extract the 'type' values from the result
-    $marques_uniques = array_column($marques_uniques, 'marque');
-
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $publics_uniques = $entityManager->getRepository(Velo::class)->createQueryBuilder('v')
-        ->select('DISTINCT v.public')
-        ->getQuery()
-        ->getResult();
-
-    // Extract the 'type' values from the result
-    $publics_uniques = array_column($publics_uniques, 'public');
-
-
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $nomsp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
-        ->select('DISTINCT p.nom_proprio')
-        ->getQuery()
-        ->getResult();
-
-    // Extract the 'type' values from the result
-    $nomsp_uniques = array_column( $nomsp_uniques, 'nom_proprio');
-
-    $diagnostics = $entityManager->getRepository(Diagnostic::class)->findAll();
-    $statutp_uniques = $entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
-        ->select('DISTINCT p.statut')
-        ->getQuery()
-        ->getResult();
-
-    // Extract the 'type' values from the result
-    $statutp_uniques = array_column(  $statutp_uniques, 'statut');
-
-
-
-
-
-    return $this->render('diagnostic/recapitulatif.html.twig', [
-        'diagnostics' => $diagnostics,
-        'types_uniquesv' => $types_uniquesv,
-        'types_uniquesd' => $types_uniquesd,
-        'conclusions_uniques' => $conclusions_uniques,
-        'statusd_uniques' => $statusd_uniques,
-        'marques_uniques' => $marques_uniques,
-        'publics_uniques' => $publics_uniques,
-        'nomsp_uniques' => $nomsp_uniques,
-        'statutp_uniques' => $statutp_uniques,
-        'dates_uniques' =>$dates_uniques,
-        'noms_uniques' =>$noms_uniques
-
-
-    ]);
+                // Ajout des lieux dans le tableau
+                $lieux[] = [
+                    'typeLieu' => $lieu->getTypeLieuId() ? $lieu->getTypeLieuId()->getNomTypeLieu() : 'N/A', // Accède au typeLieu et au nom
+                    'nomLieu' => $lieu->getNomLieu(),
+                    'ville' => $lieu->getVille(),
+                    'codePostal' => $lieu->getCodePostal()
+                ];
+            }
+        }
+// Ajout de dd() pour déboguer;
+       //dd($diagnostics);
+        /*dd([
+            'diagnostics' => $diagnostics,
+            'lieux' => $lieux,  // Affiche les informations liées au lieu
+        ]);*/
+        // Retourner les données au template
+        return $this->render('diagnostic/recapitulatif.html.twig', [
+            'diagnostics' => $diagnostics,
+            'types_uniquesv' => $types_uniquesv,
+            'types_uniquesd' => $types_uniquesd,
+            'conclusions_uniques' => $conclusions_uniques,
+            'statusd_uniques' => $statusd_uniques,
+            'marques_uniques' => $marques_uniques,
+            'publics_uniques' => $publics_uniques,
+            'nomsp_uniques' => $nomsp_uniques,
+            'statutp_uniques' => $statutp_uniques,
+            'dates_uniques' => $dates_uniques,
+            'noms_uniques' => $noms_uniques,
+            'lieux' => $lieux // Ajout des lieux
+        ]);
     }
+
+
 
 
 //    #[Route('/diagnosticAReparer', name: 'app_diagnostic_a_reparer', methods: ['GET'])]
