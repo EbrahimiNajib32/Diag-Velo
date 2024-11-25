@@ -125,10 +125,10 @@ class TypeDiagnosticController extends AbstractController
                 $entityManager->persist($diagnosticType);
                 $entityManager->flush();
                 $this->addFlash('success', 'Nouveau type de diagnostic enregistré avec succès !');
-                return $this->redirectToRoute('app_type_diagnostic');
+                return $this->redirectToRoute('app_type_diagnostic_liste');
             }catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
-                return $this->redirectToRoute('app_type_diagnostic');
+                return $this->redirectToRoute('app_type_diagnostic_liste');
             }
 
         }

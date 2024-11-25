@@ -47,7 +47,6 @@ class VeloInfoType extends AbstractType
                 'label' => 'Marque'
             ])
             ->add('numero_de_serie', TextType::class, [
-                'required' => false,
                 'label' => 'Numéro de série'
             ])
             ->add('etat', ChoiceType::class, [
