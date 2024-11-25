@@ -227,7 +227,63 @@ class VeloInfoType extends AbstractType
                 }
             }
         });
+        $this->addColorCheckboxes($builder);
     }
+
+
+    private function getBrandChoices()
+    {
+        $brands = [
+            'Autres', 'Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
+            'Canyon', 'Cinelli', 'Cleary Bikes', 'Colnago', 'Commençal', 'Co-op Cycles (REI)', 'Dahon', 'De Rosa',
+            'Diamondback', 'Dynacraft', 'Eddy Merckx', 'Electra', 'Evil Bike Co.', 'Fairdale', 'Felt', 'Focus',
+            'Fuji', 'Ghost', 'GT', 'Holdsworth', 'Huffy', 'Ibis', 'Jamis', 'Kona', 'Lapierre', 'LeMond', 'Linus',
+            'Look', 'Marin', 'Masi', 'Mercier', 'Mikado', 'Mongoose', 'Mondraker', 'Norco', 'Orange Bikes', 'Orient Bikes',
+            'Orbea', 'Pashley Cycles', 'Peugeot', 'Pinarello', 'Pivot', 'Planet X', 'Polygon', 'Public Bikes', 'Quintana Roo',
+            'Rabeneick', 'Raleigh', 'Ridley', 'Ritte', 'Rocky Mountain', 'Salsa', 'Saracen', 'Schwinn', 'Sekine', 'Serotta',
+            'Simcoe', 'Sole Bicycles', 'Sommer', 'Soma', 'Spot Brand', 'Staiger', 'State Bicycle Co.', 'Storck', 'Strider',
+            'Stromer', 'Surly', 'Tern', 'Throne Cycles', 'Tokyobike', 'Torpado', 'Transition', 'Union', 'Van Nicholas',
+            'VanMoof', 'Veloretti', 'Vitus', 'Wilier Triestina', 'Woom', 'Yeti Cycles', 'Zinn'
+        ];
+        asort($brands);
+        return array_combine($brands, $brands);
+    }
+
+
+
+    private function addColorCheckboxes(FormBuilderInterface $builder)
+    {
+        $builder->add('couleur', ChoiceType::class, [
+            'choices' => [
+                'Blanc' => 'white',
+                'Beige' => 'beige',
+                'Saumon' => 'darksalmon',
+                'Rose' => 'pink',
+                'Jaune' => 'yellow',
+                'Or' => 'gold',
+                'Orange' => 'orange',
+                'Rouge' => 'red',
+                'Kaki' => 'khaki',
+                'Vert fluo' => 'lime',
+                'Vert' => 'green',
+                'Olive' => 'olive',
+                'Bleu océan' => 'aqua',
+                'Bleu' => 'blue',
+                'Bleu foncé' => 'navy',
+                'Violet' => 'violet',
+                'Brun' => 'brown',
+                'Gris' => 'grey',
+                'Noir' => 'black',
+                'Argent' => 'silver'
+            ],
+            'expanded' => true,
+            'multiple' => true,
+            'mapped' => false,
+            'required' => false,
+            'label' => 'Couleurs (multiples)'
+        ]);
+    }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
