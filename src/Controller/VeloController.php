@@ -219,6 +219,7 @@ class VeloController extends AbstractController
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
             'lieu' => $session->get('lieu'),
+
         ]);
     }
 
@@ -318,4 +319,37 @@ class VeloController extends AbstractController
             'pagination' => $pagination
         ]);
     }
+
+    #[Route('/velo/edit/{id}', name: 'velo_edit', methods: ['GET', 'POST'])]
+    public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Recherche du vélo par son ID
+        $velo = $entityManager->getRepository(Velo::class)->find($id);
+
+        if (!$velo) {
+            $this->addFlash('error', 'Aucun vélo trouvé avec l\'ID spécifié.');
+            return $this->redirectToRoute('velo_liste'); // Redirection vers la liste des vélos
+        }
+
+        // Création du formulaire
+        $form = $this->createForm(VeloInfoType::class, $velo);
+        $form->handleRequest($request);
+
+        // Si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Les informations du vélo ont été mises à jour avec succès.');
+
+            // Redirection vers la page actuelle après la modification
+            return $this->redirectToRoute('velo_edit', ['id' => $velo->getId()]);
+        }
+
+        // Rendu de la vue pour afficher les détails et le formulaire
+        return $this->render('velo/détails/velo_details.html.twig', [
+            'velo' => $velo,
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

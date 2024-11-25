@@ -6,13 +6,16 @@
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
 
-        <div class="flex flex-col justify-center items-center text-xl font-bold text-blue-600">
+        {% if lieu %}
             <div>{{ lieu.nom }}</div>
             <div class="text-sm text-gray-600">{{ lieu.nomType }}</div>
-            <div class="text-sm text-gray-600">{{ lieu.adresse}}</div>
+            <div class="text-sm text-gray-600">{{ lieu.adresse }}</div>
             <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
             <div class="text-sm text-gray-600">{{ lieu.codePostal }}</div>
-        </div>
+        {% else %}
+            <div class="text-red-500">Les informations sur le lieu ne sont pas disponibles.</div>
+        {% endif %}
+
 
         <div id="headerLogoCite">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
@@ -142,6 +145,7 @@
                         <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
                         <th scope="col" class="px-2 py-3">Date de vente</th>
                         <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
                         <th scope="col" class="px-2 py-3"> faire Diagnostic</th>
                     </tr>
@@ -168,6 +172,11 @@
                                 {% if velo.date_destruction is not null %}
                                     {{ velo.date_destruction|date('d/m/Y') }}
                                 {% endif %}
+                            </td>
+                            <td class="px-2 py-4">
+                                <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                    Modifier
+                                </a>
                             </td>
                             <td class="px-2 py-4">
                                 <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
@@ -354,7 +363,7 @@
                 modal.classList.remove("hidden");
                 modal.classList.add("flex");
                 setTimeout(() => {
-                    window.location.href = "{{ path('app_accueil') }}";  
+                    window.location.href = "{{ path('app_accueil') }}";
             }, 6000);
             }
 
