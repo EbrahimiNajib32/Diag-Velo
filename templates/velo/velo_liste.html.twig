@@ -145,6 +145,7 @@
                         <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
                         <th scope="col" class="px-2 py-3">Date de vente</th>
                         <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
                         <th scope="col" class="px-2 py-3"> faire Diagnostic</th>
                     </tr>
@@ -171,6 +172,11 @@
                                 {% if velo.date_destruction is not null %}
                                     {{ velo.date_destruction|date('d/m/Y') }}
                                 {% endif %}
+                            </td>
+                            <td class="px-2 py-4">
+                                <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                    Modifier
+                                </a>
                             </td>
                             <td class="px-2 py-4">
                                 <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
@@ -357,7 +363,7 @@
                 modal.classList.remove("hidden");
                 modal.classList.add("flex");
                 setTimeout(() => {
-                    window.location.href = "{{ path('app_accueil') }}";  
+                    window.location.href = "{{ path('app_accueil') }}";
             }, 6000);
             }
 
