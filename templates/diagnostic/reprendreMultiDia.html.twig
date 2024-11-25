@@ -99,7 +99,33 @@
             </div>
         {% endfor %}
 
-<div class="mb-6 text-center">
+        <style>
+            input[type=radio]:focus + label,
+            input[type=radio]:checked + label {
+                background-color: rgb(20 184 166);
+                border-radius: 10px;
+                padding: 5px;
+                color: white;
+            }
+
+            input[type=radio] + label {
+                position: relative;
+                cursor: pointer;
+                display: inline-block;
+                margin: 5px;
+                padding: 5px;
+                border-radius: 10px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            input[type=radio] {
+                visibility: hidden;
+                position: absolute;
+            }
+        </style>
+
+
+        <div class="mb-6 text-center">
             {{ form_row(diagnosticForm.conclusion, {'label_attr': {'class': 'text-sm portrait:text-2xl'}, 'attr': {'class': 'space-x-4'}}) }}
         </div>        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
