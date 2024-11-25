@@ -273,7 +273,7 @@
                         </div>
                     </div>
                     {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
                     {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
                     {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
                     {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
