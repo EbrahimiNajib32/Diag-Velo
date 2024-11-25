@@ -34,12 +34,17 @@ class UtilisateurController extends AbstractController
             // Hash the password
             $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
             $utilisateur->setPassword($hashedPassword);
+            try{
+                $entityManager->persist($utilisateur);
+                $entityManager->flush();
 
-            $entityManager->persist($utilisateur);
-            $entityManager->flush();
+                $this->addFlash('success', 'Nouveau utilisateur ajouté!');
+                return $this->redirectToRoute('utilisateur_liste');
 
-            $this->addFlash('success', 'Nouveau utilisateur ajouté!');
-            return $this->redirectToRoute('app_dashboard');
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
+                return $this->redirectToRoute('utilisateur_liste');
+            }
         }
 
         return $this->render('utilisateur/new.html.twig', [

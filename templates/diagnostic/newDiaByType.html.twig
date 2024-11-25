@@ -161,14 +161,6 @@
         {{ form_end(diagnosticForm) }}
     </div>
 
-    <!-- Modal Structure -->
-    <div id="success-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-4 rounded shadow-lg text-center">
-            <h2 class="text-2xl font-semibold mb-4">Modifications enregistrées avec succès !</h2>
-            <button id="close-modal" class="bg-teal-500 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded">Fermer</button>
-        </div>
-    </div>
-
     <script>
         const modal = document.getElementById("modal-erreur");
         const OpenModal = document.getElementById('OpenModal');
@@ -287,21 +279,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('form');
             const submitButton = document.getElementById('submit-button');
-            const successModal = document.getElementById('success-modal');
             const closeModalButton = document.getElementById('close-modal');
-
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                // Show the modal
-                successModal.classList.remove('hidden');
-
-                // Hide the modal when the close button is clicked
-                closeModalButton.addEventListener('click', () => {
-                    successModal.classList.add('hidden');
-                    form.submit(); // Submit the form after closing the modal
-                });
-            });
 
             updateCategoryBackground(); // Initial check on page load
             document.querySelectorAll('input[type=radio]').forEach(radio => {

@@ -69,12 +69,17 @@ class ElementControlController extends AbstractController
 
             // Combine the values and set the mapped property
             $element->setElement($category . ':' . $elementName);
-
-            $entityManager->persist($element);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Nouvel élément ajouté avec succès.');
-            return $this->redirectToRoute('app_dashboard_element_control');
+            
+            try{
+                $entityManager->persist($element);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Nouvel élément de controle ajouté avec succès.');
+                return $this->redirectToRoute('app_dashboard_element_control');
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
+                return $this->redirectToRoute('app_dashboard_element_control');
+            }
         }
 
         return $this->render('element_control/new.html.twig', [

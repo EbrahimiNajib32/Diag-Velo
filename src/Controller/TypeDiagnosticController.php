@@ -52,10 +52,6 @@ class TypeDiagnosticController extends AbstractController
             $this->addFlash("error", "Aucun type de diagnostic n’est disponible pour ce type de lieu, veuillez contacter l'administrateur");
             return $this->redirectToRoute('velo_info');
         }
-        
-
-
-
     }
 
     #[Route('/dashboard/typediagnostic', name: 'app_type_diagnostic_liste')]
@@ -125,10 +121,16 @@ class TypeDiagnosticController extends AbstractController
                 }
             }
 
-            $entityManager->persist($diagnosticType);
-            $entityManager->flush();
+            try{
+                $entityManager->persist($diagnosticType);
+                $entityManager->flush();
+                $this->addFlash('success', 'Nouveau type de diagnostic enregistré avec succès !');
+                return $this->redirectToRoute('app_type_diagnostic');
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
+                return $this->redirectToRoute('app_type_diagnostic');
+            }
 
-            return $this->redirectToRoute('app_type_diagnostic');
         }
 
         $elements = $entityManager->getRepository(ElementControl::class)->findAll();

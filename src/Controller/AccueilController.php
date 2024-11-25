@@ -46,7 +46,7 @@ class AccueilController extends AbstractController
                 'nomType' => $lieu->getTypeLieuId()->getNomTypeLieu()
             ]);
             
-            $this->addFlash('success', 'Lieu ajouté avec succès.');
+            $this->addFlash('success', 'Lieu enregistré avec succès !');
             return $this->redirectToRoute('app_diagnostic_en_cours');
         }
 
