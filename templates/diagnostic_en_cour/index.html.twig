@@ -1,6 +1,55 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    {% for message in app.flashes('success') %}
+        <div class="fixed top-5 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
+            <div class="text-green-500">
+                <i class="bi bi-check-circle-fill text-green-500 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-gray-800">{{ message }}</p>
+            </div>
+            <button
+                type="button"
+                class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
+                onclick="hideFlashMessage()"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    {% endfor %}
+
+    <style>
+        /* Animation Slide-In */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%); 
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Animation Slide-Out */
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Classe d'animation */
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .slide-out {
+            animation: slideOut 0.5s ease-in forwards;
+        }
+    </style>
     <header class="relative w-full top-0 left-0 flex justify-between items-center">
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
@@ -72,4 +121,22 @@
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
     </footer>
+
+    <script>
+        function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.classList.remove('slide-in');
+                flashMessage.classList.add('slide-out');
+
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 500); 
+            }
+        }
+        
+        setTimeout(() => {
+            hideFlashMessage();
+        }, 5000);
+    </script>
 {% endblock %}

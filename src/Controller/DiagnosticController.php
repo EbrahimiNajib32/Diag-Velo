@@ -298,6 +298,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
 
             $entityManager->flush();
 
+            $this->addFlash('success', 'Diagnostic enregistrer avec succès!');
             return $this->redirectToRoute('app_diagnostic_en_cours');
 
         }// fin partie creation form
@@ -432,7 +433,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             }
 
             $entityManager->flush();
-            $this->addFlash('success', 'Diagnostic updated successfully.');
+            $this->addFlash('success', 'Diagnostic modifié avec succès!');
             return $this->redirectToRoute('app_diagnostic_en_cours');
         }
 
