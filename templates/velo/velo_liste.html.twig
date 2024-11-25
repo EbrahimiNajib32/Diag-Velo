@@ -147,7 +147,9 @@
                         <th scope="col" class="px-2 py-3">Date de destruction</th>
                         <th scope="col" class="px-2 py-3">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
-{#                        <th scope="col" class="px-2 py-3"> faire Diagnostic</th>#}
+                        {% if lieu %}
+                            <th scope="col" class="px-2 py-3">Faire Diagnostic</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -183,11 +185,16 @@
                                     Voir
                                 </button>
                             </td>
-{#                        <td class="px-2 py-4">#}
-{#                            <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">#}
-{#                                Faire#}
-{#                            </a>#}
-{#                        </td>#}
+                            {% if lieu %}
+                                <td class="px-2 py-4">
+                                    <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                        Faire
+                                    </a>
+                                </td>
+                            {% else %}
+
+                            {% endif %}
+
                         </tr>
                     {% endfor %}
                     </tbody>
