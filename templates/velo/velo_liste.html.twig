@@ -7,8 +7,8 @@
         </div>
 
         {% if lieu %}
-            <div>{{ lieu.nom }}</div>
             <div class="text-sm text-gray-600">{{ lieu.nomType }}</div>
+            <div>{{ lieu.nom }}</div>
             <div class="text-sm text-gray-600">{{ lieu.adresse }}</div>
             <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
             <div class="text-sm text-gray-600">{{ lieu.codePostal }}</div>
@@ -145,6 +145,7 @@
                         <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
                         <th scope="col" class="px-2 py-3">Date de vente</th>
                         <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
 {#                        <th scope="col" class="px-2 py-3"> faire Diagnostic</th>#}
                     </tr>

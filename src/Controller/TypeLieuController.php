@@ -60,10 +60,16 @@ class TypeLieuController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($typeLieu);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_type_lieu_liste');
+            try {
+                $entityManager->persist($typeLieu);
+                $entityManager->flush();
+            
+                $this->addFlash('success', 'Nouveau type de lieu enregistré avec succès !');
+                return $this->redirectToRoute('app_type_lieu_liste');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
+                return $this->redirectToRoute('app_type_lieu_liste');
+            }
         }
 
         return $this->render('type_lieu/newTypeLieu.html.twig', [
