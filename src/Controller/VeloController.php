@@ -219,6 +219,7 @@ class VeloController extends AbstractController
             'types_uniques' => $types_uniques,
             'publics_uniques' => $publics_uniques,
             'lieu' => $session->get('lieu'),
+
         ]);
     }
 
