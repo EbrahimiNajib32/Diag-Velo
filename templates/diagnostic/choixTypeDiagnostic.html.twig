@@ -28,7 +28,7 @@
         /* Animation Slide-In */
     @keyframes slideIn {
         from {
-            transform: translateX(100%); 
+            transform: translateX(100%);
         }
         to {
             transform: translateX(0);
@@ -53,7 +53,7 @@
     .slide-out {
         animation: slideOut 0.5s ease-in forwards;
     }
-    
+
     </style>
     <div class="fixed top-0 left-0">
         <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
@@ -65,8 +65,8 @@
 
     <div class="max-w-lg mx-auto text-center py-20">
             <div>
-                <button 
-                    onclick="history.back()" 
+                <button
+                    onclick="history.back()"
                     class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center mb-4"
                     aria-label="Retour">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 lg:w-7 lg:h-7 mr-2 lg:mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -80,8 +80,8 @@
 
     {# Affichage des informations de lieu #}
     <div class="flex flex-row justify-center items-center text-xl font-bold text-blue-600 mt-6 mb-8">
-        <div class="mr-4">{{ lieu.nom }}</div>
         <div class="mx-4 text-sm text-gray-600">{{ lieu.nomType }}</div>
+        <div class="mr-4">{{ lieu.nom }}</div>
         <div class="ml-4 text-sm text-gray-600">{{ lieu.ville }}</div>
     </div>
 
@@ -108,10 +108,10 @@
 
                 setTimeout(() => {
                     flashMessage.remove();
-                }, 500); 
+                }, 500);
             }
         }
-        
+
         setTimeout(() => {
             hideFlashMessage();
         }, 5000);
