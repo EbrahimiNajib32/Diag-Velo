@@ -68,10 +68,10 @@
                     <div>
                         {{ form_label(userForm.password) }}
                     </div>
-                    {{ form_widget(userForm.password, {'attr': {'class': 'form-control p-2 rounded'}}) }}
+                    {{ form_widget(userForm.password, {'attr': {'class': 'form-control border p-2 rounded'}}) }}
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                         <button type="button" class="toggle-password" style="background: none; border: none;">
-                            <i class="fas fa-eye"></i>
+                            <i id='eye' class="fas fa-eye"></i>
                         </button>
                     </span>
                 </div>
@@ -95,12 +95,13 @@
         document.querySelector('.toggle-password').addEventListener('click', function (e) {
             e.preventDefault();
             let passwordInput = document.querySelector('#{{ userForm.password.vars.id }}');
+            let i = document.getElementById('eye');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                this.textContent = 'Cacher';
+                i.classList = 'fas fa-eye-slash';
             } else {
                 passwordInput.type = 'password';
-                this.textContent = 'Montrer';
+                i.classList = 'fas fa-eye';
             }
         });
 
