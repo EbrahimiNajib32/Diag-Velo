@@ -336,11 +336,15 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-between mt-1 space-x-2">
-                        <button type="submit" name="action" value="go_to_diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
-                            <i class="bi bi-search text-lg lg:text-xl mr-2 lg:mr-3"></i>
-                            Diagnostic
-                        </button>
+                    <div class="flex justify-center">
+                            {% if lieu %}
+                                <button type="submit" name="action" value="go_to_diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
+                                    <i class="bi bi-search text-lg lg:text-xl mr-2 lg:mr-3"></i>
+                                    Diagnostic
+                                </button>
+                            {% endif %}
+                        </div>
+
                         
                         <button type="submit" name="action" value="stay" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
                             <i class="bi bi-plus-circle text-lg lg:text-xl mr-2 lg:mr-3"></i> 

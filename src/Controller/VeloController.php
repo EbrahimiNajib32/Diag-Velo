@@ -24,7 +24,7 @@ class VeloController extends AbstractController
 {
     // Route pour créer un nouveau vélo
     #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,  SessionInterface $session): Response
     {
         $velo = new Velo();
         $form = $this->createForm(VeloInfoType::class, $velo);
@@ -79,6 +79,8 @@ class VeloController extends AbstractController
 
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
+            'lieu' => $session->get('lieu'),
+
         ]);
     }
 
