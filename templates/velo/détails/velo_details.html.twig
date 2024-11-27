@@ -15,25 +15,35 @@
             margin-left: 3px;
         }
     </style>
-    <h1 class="text-center text-lg font-semibold">Modifier le vélo {{ velo.getRefRecyclerie() }}</h1>
+    <h1 class="text-center text-lg font-semibold">
+        Modifier le vélo :<br>
+        Ref Recyclerie: {{ velo.getRefRecyclerie() }} &nbsp;&nbsp;
+        numéro de série : {{ velo.getNumeroDeSerie() }} &nbsp;&nbsp;
+        Bicycode: {{ velo.getBicycode() }} &nbsp;&nbsp;
+        Marque: {{ velo.marque }}<br>
+        Propriétaire:  {{ velo.getProprietaire.getNomProprio() }} &nbsp;&nbsp;
+    </h1>
+
+
     <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
         <div class="">
             <h2 class="text-center font-bold">Détails du Vélo</h2>
             <ul class="details-list">
-                <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
                 <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Modèle: <span id="commentaire">{{ velo.model }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
             </ul>
         </div>
         <div class="">
@@ -57,6 +67,9 @@
     <div class="flex flex-col-3 gap-2 mx-auto justify-center  items-center  mt-10">
         <a href="{{ path('app_accueil') }}" class="button-style">
             <i class="bi bi-box-arrow-left mr-1 text-xl"></i> Retour à l'accueil
+        </a>
+        <a href="{{ path('velo_info') }}" class="button-style">
+            <i class="bi bi-box-arrow-left mr-1 text-xl"></i> Retour Liste vélos
         </a>
         <button type="button" class="button-style edit-button">
             <i class="bi bi-pen mr-1 text-xl"></i>Modifier

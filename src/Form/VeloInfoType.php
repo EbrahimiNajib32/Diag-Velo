@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Form;
-use App\Entity\Proprietaire; // Make sure this is correct
+
+use App\Entity\Proprietaire;
 use App\Entity\Velo;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,9 +21,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\File;
 
 class VeloInfoType extends AbstractType
 {
@@ -36,31 +34,21 @@ class VeloInfoType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $builder
-            ->add('couleur', HiddenType::class, [
-                'mapped' => false,
-            ])
-            ->add('ref_recyclerie', TextType::class , [
+            ->add('ref_recyclerie', TextType::class, [
                 'required' => false,
                 'label' => 'Référence Recyclerie'
             ])
-
-           ->add('bicycode', TextType::class, [
-               'required' => false,
+            ->add('bicycode', TextType::class, [
+                'required' => false,
                 'label' => 'Bicycode'
-           ])
-
+            ])
             ->add('marque', TextType::class, [
                 'label' => 'Marque'
             ])
-
-
-            ->add('numero_de_serie', TextType::class , [
-                'required' => false,
+            ->add('numero_de_serie', TextType::class, [
                 'label' => 'Numéro de série'
             ])
-
             ->add('etat', ChoiceType::class, [
                 'required' => true,
                 'choices' => [
@@ -69,20 +57,17 @@ class VeloInfoType extends AbstractType
                     'moyen' => 'moyen',
                     'mauvais' => 'mauvais',
                     'très mauvais' => 'très mauvais',
-
                 ],
                 'label' => 'Etat'
             ])
-
-            ->add('model', TextType::class, [  // Ajout du champ modèle
+            ->add('model', TextType::class, [
                 'required' => false,
                 'label' => 'Modèle'
             ])
-
-            ->add('poids' , TextType::class , [
-                        'required' => false,
-                        'label' => 'Poids'
-                        ])
+            ->add('poids', TextType::class, [
+                'required' => false,
+                'label' => 'Poids'
+            ])
             ->add('taille_roues', ChoiceType::class, [
                 'choices' => [
                     '12 pouces (203 mm)' => '12',
@@ -102,7 +87,7 @@ class VeloInfoType extends AbstractType
                     '32 pouces (ISO 686)' => '32',
                     '36 pouces (914 mm)' => '36'
                 ],
-                'label' => 'Taille des roues',
+                'label' => 'Taille des roues'
             ])
             ->add('taille_cadre', IntegerType::class, [
                 'required' => false,
@@ -112,15 +97,12 @@ class VeloInfoType extends AbstractType
                 'label' => 'Photo',
                 'mapped' => false,
                 'required' => false,
-                'attr' => ['id' => 'url_photo'],  // Ensure this attribute is set
+                'attr' => ['id' => 'url_photo'],
             ])
-
-
             ->add('origine', TextType::class, [
-                  'required' => false,
-                   'label' => 'Origine du vélo'
-             ])
-
+                'required' => false,
+                'label' => 'Origine du vélo'
+            ])
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'BMX' => 'BMX',
@@ -130,25 +112,37 @@ class VeloInfoType extends AbstractType
                     'VILLE' => 'VILLE',
                     'VTC' => 'VTC',
                     'VTT' => 'VTT',
+                    'VAE' => 'VAE',
+                    'Cargo VAE' => 'Cargo VAE',
+                    'Longtail VAE' => 'Longtail VAE',
+                    'Tricycle' => 'Tricycle',
+                    'Cyclotourisme' => 'Cyclotourisme',
+                    'Fat bike' => 'Fat bike',
+                    'Vélo couché' => 'Vélo couché',
+                    'Tandem' => 'Tandem',
+                    'Draisienne' => 'Draisienne',
+                    'Draisienne électrique' => 'Draisienne électrique',
+                    'Remorque' => 'Remorque',
+                    'Trotinette' => 'Trotinette',
+                    'Trotinette électrique' => 'Trotinette électrique',
                     'Autres' => 'Autres',
-
                 ],
-                'label' => 'Type de vélo',
+                'label' => 'Type de vélo'
             ])
-            ->add('public', ChoiceType::class , [
-                    'choices' => [
-                        'Homme' => 'Homme',
-                        'Femme' => 'Femme',
-                        'Unisex' => 'Unisex',
-                        'Enfant' => 'Enfant',
-                    ],
-                    'label' => 'Public',]
-            )
-            ->add('commentaire', TextType::class , [
+            ->add('public', ChoiceType::class, [
+                'choices' => [
+                    'Homme' => 'Homme',
+                    'Femme' => 'Femme',
+                    'Unisex' => 'Unisex',
+                    'Enfant' => 'Enfant',
+                ],
+                'label' => 'Public'
+            ])
+            ->add('commentaire', TextType::class, [
                 'required' => false,
                 'label' => 'Commentaire'
             ])
-            ->add('emplacement', TextType::class , [
+            ->add('emplacement', TextType::class, [
                 'required' => false,
                 'label' => 'Emplacement'
             ])
@@ -161,10 +155,9 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'label' => 'Choisir ou Ajouter Proprietaire',
                 'choice_attr' => function($choice, $key, $value) {
-                    return ['class' => 'choice-option']; // Add a class to each option
+                    return ['class' => 'choice-option'];
                 }
             ])
-
             ->add('autocomplete_proprietaire', TextType::class, [
                 'required' => false,
                 'mapped' => false,
@@ -178,7 +171,7 @@ class VeloInfoType extends AbstractType
                 'choice_label' => 'nomProprio',
                 'required' => false,
                 'placeholder' => 'Sélectionner un propriétaire',
-                'attr' => ['style' => 'display:none;'], // Hide this field, as it's set through autocomplete
+                'attr' => ['style' => 'display:none;'],
             ])
             ->add('nom_proprio', TextType::class, [
                 'mapped' => false,
@@ -189,13 +182,9 @@ class VeloInfoType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['placeholder' => 'Email ..', 'style' => 'display: none;'],
-                'constraints' => [
-                    new Email(),
-                ],
-
+                'constraints' => [new Email()],
             ])
-
-            ->add('telephone', TelType::class, [ //Type spéciale pour téléphone ouvre un pavé numérique a la place d'un clavier complet
+            ->add('telephone', TelType::class, [
                 'mapped' => false,
                 'required' => false,
                 'attr' => [
@@ -204,7 +193,6 @@ class VeloInfoType extends AbstractType
                     'maxlength' => 15,
                 ],
             ])
-
             ->add('statut', ChoiceType::class, [
                 'choices' => [
                     'Particulier' => 'Particulier',
@@ -212,65 +200,30 @@ class VeloInfoType extends AbstractType
                 ],
                 'mapped' => false,
                 'label' => 'Statut',
-                'required' => true            
+                'required' => true
             ]);
 
-        $builder->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) {
-                $form = $event->getForm();
-                $velo = $form->getData();
-                $proprietaire = $velo->getProprietaire();
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $velo = $form->getData();
+            $proprietaire = $velo->getProprietaire();
 
-                if (!$proprietaire) {
+            if (!$proprietaire) {
+                $nomProprio = $form->get('nom_proprio')->getData();
+                $email = $form->get('email')->getData();
+                $telephone = $form->get('telephone')->getData();
+                $statut = $form->get('statut')->getData();
 
-                    $nomProprio = $form->get('nom_proprio')->getData();
-                    $email = $form->get('email')->getData();
-                    $telephone = $form->get('telephone')->getData();
-                    $statut = $form->get('statut')->getData();
-
-                    if (!empty($nomProprio) || !empty($email) || !empty($telephone) || !empty($statut)) {
-                        $newProprietaire = new Proprietaire();
-                        $newProprietaire->setNomProprio($nomProprio);
-                        $newProprietaire->setEmail($email);
-                        $newProprietaire->setTelephone($telephone);
-                        $newProprietaire->setStatut($statut);
-
-                        $this->entityManager->persist($newProprietaire);
-                        $this->entityManager->flush();
-
-
-                        $velo->setProprietaire($newProprietaire);
-                    }
-                } else {
-
-                    if (!empty($proprietaire->getNomProprio()) || !empty($proprietaire->getEmail()) || !empty($proprietaire->getTelephone()) || !empty($proprietaire->getStatut())) {
-
-                        $proprietaire->setNomProprio($proprietaire->getNomProprio());
-                        $proprietaire->setEmail($proprietaire->getEmail());
-                        $proprietaire->setTelephone($proprietaire->getTelephone());
-                        $proprietaire->setStatut($proprietaire->getStatut());
-
-                        $this->entityManager->flush();
-                    }
+                if (!empty($nomProprio) || !empty($email) || !empty($telephone) || !empty($statut)) {
+                    $newProprietaire = new Proprietaire();
+                    $newProprietaire->setNomProprio($nomProprio);
+                    $newProprietaire->setEmail($email);
+                    $newProprietaire->setTelephone($telephone);
+                    $newProprietaire->setStatut($statut);
+                    $this->entityManager->persist($newProprietaire);
+                    $this->entityManager->flush();
+                    $velo->setProprietaire($newProprietaire);
                 }
-            }
-        );
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $velo = $event->getData();
-            $form = $event->getForm();
-            if ($velo && $velo->getCouleur()) {
-                $colors = explode('&', $velo->getCouleur());
-                $form->get('couleur')->setData(join(',', $colors));
-            }
-        });
-
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-            $data = $form->get('couleur')->getData();
-            if ($data) {
-                $colors = implode('&', $data);
-                $event->getData()->setCouleur($colors);
             }
         });
         $this->addColorCheckboxes($builder);
@@ -329,6 +282,7 @@ class VeloInfoType extends AbstractType
             'label' => 'Couleurs (multiples)'
         ]);
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {

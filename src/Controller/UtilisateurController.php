@@ -34,12 +34,17 @@ class UtilisateurController extends AbstractController
             // Hash the password
             $hashedPassword = $passwordHasher->hashPassword($utilisateur, $password);
             $utilisateur->setPassword($hashedPassword);
+            try{
+                $entityManager->persist($utilisateur);
+                $entityManager->flush();
 
-            $entityManager->persist($utilisateur);
-            $entityManager->flush();
+                $this->addFlash('success', 'Nouveau utilisateur ajouté!');
+                return $this->redirectToRoute('utilisateur_liste');
 
-            $this->addFlash('success', 'Nouveau utilisateur ajouté!');
-            return $this->redirectToRoute('app_dashboard');
+            }catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement, Veuillez réasseyer ultérieurement');
+                return $this->redirectToRoute('utilisateur_liste');
+            }
         }
 
         return $this->render('utilisateur/new.html.twig', [
@@ -55,6 +60,7 @@ class UtilisateurController extends AbstractController
         $nom = $request->query->get('nom');
         $statut = $request->query->get('statut');
         $role = $request->query->get('role');
+        $structure = $request->query->get('structure');
 
         $queryBuilder = $entityManager->getRepository(Utilisateur::class)->createQueryBuilder('u');
 
@@ -72,6 +78,11 @@ class UtilisateurController extends AbstractController
         if ($role !== null && $role !== '') {
             $queryBuilder->andWhere('u.role = :role')
                 ->setParameter('role', $role);
+        }
+
+        if ($structure !== null && $structure !== '') {
+            $queryBuilder->andWhere('u.structure LIKE :structure')
+                ->setParameter('structure', '%' . $structure . '%');
         }
 
         $utilisateurs = $queryBuilder->getQuery()->getResult();

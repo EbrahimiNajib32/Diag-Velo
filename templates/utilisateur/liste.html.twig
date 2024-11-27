@@ -3,6 +3,97 @@
 {% block title %}Liste des Utilisateurs{% endblock %}
 
 {% block body %}
+
+    <!--Notification en cas de réussite !-->
+    {% for message in app.flashes('success') %}
+        <div class="fixed top-5 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
+            <div class="text-green-500">
+                <i class="bi bi-check-circle-fill text-green-500 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-gray-800">{{ message }}</p>
+            </div>
+            <button
+                type="button"
+                class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
+                onclick="hideFlashMessage()"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    {% endfor %}
+    <!--Notification en cas d'erreur !-->
+    {% for message in app.flashes('error') %}
+        <div class="fixed top-5 right-0 z-50 bg-white border border-red-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
+            <div class="text-red-500">
+                <i class="bi bi-x-circle-fill text-red-500 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-gray-800">{{ message }}</p>
+            </div>
+            <button
+                type="button"
+                class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
+                onclick="hideFlashMessage()"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    {% endfor %}
+
+    <style>
+
+        /* Animation Slide-In */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%); 
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Animation Slide-Out */
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Classe d'animation */
+        .slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .slide-out {
+            animation: slideOut 0.5s ease-in forwards;
+        }
+
+        .autocomplete-list {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            position: absolute;
+            width: 240px;
+            z-index: 1000;
+        }
+
+        .autocomplete-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
     <div class="container mx-auto mt-8">
         <h1 class="text-2xl font-bold mb-6 text-center">Liste des Utilisateurs
             <a href="{{ path('utilisateur_new') }}" class="text-white bg-teal-500 hover:bg-green-400 m-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
@@ -15,6 +106,12 @@
         <form method="get" action="{{ path('utilisateur_liste') }}" class="mb-4">
             <div class="flex space-x-4">
                 <input type="text" name="nom" placeholder="Nom" class="px-4 py-2 border rounded" value="{{ app.request.query.get('nom') }}">
+
+                <div class="auto-complete-structure">
+                    <input id="structure-search" type="text" name="structure" placeholder="Structure" class="px-4 py-2 border rounded" value="{{ app.request.query.get('structure') }}">
+                    <div id="match-list-structure"></div>
+                </div>
+
                 <select name="statut" class="px-4 py-2 border rounded">
                     <option value="">Tous les statuts</option>
                     <option value="1" {{ app.request.query.get('statut') == '1' ? 'selected' : '' }}>Actif</option>
@@ -37,6 +134,7 @@
                     <th scope="col" class="py-3 px-6">ID</th>
                     <th scope="col" class="py-3 px-6">Nom</th>
                     <th scope="col" class="py-3 px-6">Rôle(s)</th>
+                    <th scope="col" class="py-3 px-6">Structure</th>
                     <th scope="col" class="py-3 px-6">Actions</th>
                 </tr>
                 </thead>
@@ -54,6 +152,7 @@
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.structure }}</td>
                         <td class="py-4 px-6">
                             <a href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}" class="text-white bg-teal-500 hover:bg-green-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Modifier</a>
                         </td>
@@ -72,6 +171,7 @@
                         <td class="py-4 px-6">{{ utilisateur.id }}</td>
                         <td class="py-4 px-6">{{ utilisateur.nom }}</td>
                         <td class="py-4 px-6">{{ utilisateur.getRoles|join(', ') }}</td>
+                        <td class="py-4 px-6">{{ utilisateur.structure }}</td>
                         <td class="py-4 px-6"></td>
                     </tr>
                 {% endfor %}
@@ -143,6 +243,39 @@
 
 
     <script>
+    
+        function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.classList.remove('slide-in');
+                flashMessage.classList.add('slide-out');
+
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 500); 
+            }
+        }
+        
+        setTimeout(() => {
+            hideFlashMessage();
+        }, 5000);
+
+        function hideErrorNotification() {
+            const errorNotification = document.getElementById('error-notification');
+            if (errorNotification) {
+                errorNotification.classList.remove('slide-in');
+                errorNotification.classList.add('slide-out');
+
+                setTimeout(() => {
+                    errorNotification.remove();
+                }, 500);
+            }
+        }
+
+        setTimeout(() => {
+            hideErrorNotification();
+        }, 7000);
+
         var userIdToDisable = null; // Variable pour stocker l'ID de l'utilisateur à désactiver
         var currentCheckbox = null; // Variable pour stocker l'élément checkbox actuel
 
@@ -216,6 +349,76 @@
             document.getElementById('message-modal').classList.add('hidden');
         }
 
+        /*** autocomplete **/
+        const structureSearch = document.getElementById('structure-search');
+        const matchListStructure = document.getElementById('match-list-structure');
+
+        const showSuggestions = (suggestions) => {
+            matchListStructure.innerHTML = '';
+
+            if (suggestions.length === 0) {
+                return;
+            }
+
+            const list = document.createElement('ul');
+            list.classList.add('autocomplete-list');
+
+            suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.textContent = suggestion;
+                li.classList.add('autocomplete-item');
+
+                list.appendChild(li);
+
+                li.addEventListener('click', () => {
+                    structureSearch.value = suggestion;
+                    matchListStructure.innerHTML = '';
+                });
+            });
+
+            matchListStructure.appendChild(list);
+        };
+
+        const searchStructure = async searchText => {
+            if (!searchText) {
+                matchListStructure.innerHTML = ``;
+                return;
+            }
+            try {
+                const response = await fetch(`{{ path('autocomplete_structures') }}?structure=${searchText}`);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        matchListStructure.innerHTML = '';
+                        const errorMessage = document.createElement('div');
+                        errorMessage.textContent = "Aucune structure trouvée pour ce nom.";
+                        errorMessage.classList.add('autocomplete-list');
+                        matchListStructure.appendChild(errorMessage);
+                    } else {
+                        throw new Error('Erreur de serveur');
+                    }
+                    return;
+                }
+
+                const result = await response.json();
+                showSuggestions(result);
+            } catch (error) {
+                matchListStructure.innerHTML = '';
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = "Une erreur est survenue lors de la recherche.";
+                errorMessage.classList.add('autocomplete-list');
+                matchListStructure.appendChild(errorMessage);
+            }
+
+            const response = await fetch(`{{ path('autocomplete_structures') }}?structure=${searchText}`);
+            const result = await response.json();
+
+            showSuggestions(result);
+        }
+
+        structureSearch.addEventListener('input', () => {
+            searchStructure(structureSearch.value);
+        });
     </script>
 
 {% endblock %}

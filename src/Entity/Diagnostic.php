@@ -111,36 +111,34 @@ class Diagnostic
 
         return $this;
     }
-    
+
     #[ORM\ManyToOne(targetEntity: Velo::class)]
     #[ORM\JoinColumn(name: "id_velo", referencedColumnName: "id")]
-    
+
     private ?Velo $velo;
-    
-    
+
+
     #[ORM\ManyToOne(targetEntity: Utilisateur::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id")]
-    
     private ?Utilisateur $utilisateur;
 
     #[ORM\OneToMany(targetEntity: DiagnosticElement::class, mappedBy: 'diagnostic', cascade: ['persist', 'remove'])]
-
     private Collection $diagnosticElements;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-
-
-
-
-
-
-
-
     #[ORM\ManyToOne(inversedBy: 'id')]
     #[ORM\JoinColumn(nullable: false)]
     private ?DiagnosticType $diagnosticType = null;
+
+    #[ORM\ManyToOne(inversedBy: 'diagnostics')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $Lieu_id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'diagnostics')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?DiagnostictypeLieutype $Diagnostictype_LieuType_id = null;
 
     public function __construct()
     {
@@ -192,22 +190,22 @@ class Diagnostic
     {
     return $this->velo;
     }
-    
+
     public function setVelo(?Velo $velo): static
     {
     $this->velo = $velo;
     return $this;
     }
-    
+
     public function getUtilisateur(): ?Utilisateur
     {
     return $this->utilisateur;
     }
-    
+
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
     $this->utilisateur = $utilisateur;
-    
+
     return $this;
     }
 
@@ -223,5 +221,29 @@ class Diagnostic
         return $this;
     }
 
-   
+    public function getLieuId(): ?Lieu
+    {
+        return $this->Lieu_id;
+    }
+
+    public function setLieuId(?Lieu $Lieu_id): static
+    {
+        $this->Lieu_id = $Lieu_id;
+
+        return $this;
+    }
+
+    public function getDiagnostictypeLieuTypeId(): ?DiagnostictypeLieutype
+    {
+        return $this->Diagnostictype_LieuType_id;
+    }
+
+    public function setDiagnostictypeLieuTypeId(?DiagnostictypeLieutype $Diagnostictype_LieuType_id): static
+    {
+        $this->Diagnostictype_LieuType_id = $Diagnostictype_LieuType_id;
+
+        return $this;
+    }
+
+
     }

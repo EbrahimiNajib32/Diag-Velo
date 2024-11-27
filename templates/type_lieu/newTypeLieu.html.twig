@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <div class="container max-w-lg text-center border bg-white shadow rounded-lg">
+
+
+            {{ form_start(form) }}
+            <h1 class="text-2xl font-bold my-4">Créer un nouveau type de lieu</h1>
+            <div class="mb-3">
+                <h3>Nom du type de lieu</h3>
+                {{ form_widget(form.nom_type_lieu, {'attr': {'class': 'p-2 border border-gray-300 rounded'}}) }}
+            </div>
+
+
+            <div class="mt-4">
+                <button type="submit" class="bg-teal-500 text-white py-2 px-4 rounded hover:bg-teal-600">Créer</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <div class="mt-6 flex justify-center">
+        <a href="{{ path('app_type_lieu_liste') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour liste type des lieux</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.toggle-category').forEach(button => {
+                button.addEventListener('click', function () {
+                    var categoryElements = this.closest('.category').querySelector('.category-elements');
+                    categoryElements.style.display = categoryElements.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+
+            document.querySelectorAll('.select-all-checkbox').forEach(selectAllCheckbox => {
+                selectAllCheckbox.addEventListener('change', function () {
+                    var category = this.getAttribute('data-category');
+                    var checkboxes = document.querySelectorAll(`.element-checkbox[data-category="${category}"]`);
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+            });
+
+            document.querySelectorAll('.element-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    var category = this.getAttribute('data-category');
+                    var allCheckboxes = document.querySelectorAll(`.element-checkbox[data-category="${category}"]`);
+                    var selectAllCheckbox = document.querySelector(`.select-all-checkbox[data-category="${category}"]`);
+                    var allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
+                    selectAllCheckbox.checked = allChecked;
+                });
+            });
+        });
+    </script>
+{% endblock %}

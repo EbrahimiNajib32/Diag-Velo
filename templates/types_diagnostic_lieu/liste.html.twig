@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paramétrage des diagnostics par type de lieu{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto mt-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Paramétrage des diagnostics par type de lieu</h1>
+
+        <!-- Table -->
+        <div class="container mx-auto mt-8">
+            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500 border-collapse border border-gray-200">
+                    <thead>
+                    <tr>
+                        <th class="py-3 px-6 border border-gray-200">Types de diagnostics</th>
+                        {% for lieu in typesLieux %}
+                            <th class="py-3 px-6 border border-gray-200 text-center">{{ lieu.getNomTypeLieu }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for diagnostic in typesDiagnostics %}
+                        <tr>
+                            <td class="py-4 px-6 border border-gray-200">{{ diagnostic.getNomType }}</td>
+                            {% for lieu in typesLieux %}
+                                <td class="py-4 px-6 border border-gray-200 text-center">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input
+                                                type="checkbox"
+                                                id="checkbox-{{ diagnostic.getId }}-{{ lieu.getId }}"
+                                                class="sr-only peer"
+                                                {{ mapping[diagnostic.getId][lieu.getId] ? 'checked' : '' }}
+                                                onchange="toggleStatus('{{ path('toggle_diagnostic_lieu_status', {'diagnosticId': diagnostic.getId, 'lieuId': lieu.getId}) }}', {{ diagnostic.getId }}, {{ lieu.getId }})"
+                                        />
+                                        <div class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-green-600"></div>
+                                    </label>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-center">
+            <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au tableau de bord</a>
+        </div>
+
+    <script>
+        function toggleStatus(url, diagnosticId, lieuId) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.newStatus) {
+                        document.querySelector(`#checkbox-${diagnosticId}-${lieuId}`).checked = true;
+                    } else {
+                        document.querySelector(`#checkbox-${diagnosticId}-${lieuId}`).checked = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                    alert("Une erreur s'est produite lors de la mise à jour du statut.");
+                });
+        }
+    </script>
+
+{% endblock %}

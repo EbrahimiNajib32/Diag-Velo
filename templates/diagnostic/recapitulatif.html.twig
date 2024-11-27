@@ -56,6 +56,7 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
             <th colspan="6" class="px-6 py-3 text-center">Informations sur le Diagnostic</th>
+            <th colspan="4" class="px-6 py-3 text-center">Informations sur le Lieu</th>
             <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
             <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
         </tr>
@@ -122,6 +123,10 @@
                             </div>
                         </div>
                     </th>
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">Type</th>
+                    <th scope="col" class="px-6 py-3 text-center">Nom</th>
+                    <th scope="col" class="px-6 py-3 text-center">Ville</th>
+                    <th scope="col" class="px-6 py-3">Code postal</th>
                    {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
                     <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
                     <th scope="col" class="px-6 py-3 text-center">N° de série</th>
@@ -151,7 +156,7 @@
                             </div>
                         </div>
                     </th>
-                  
+
                     <th scope="col" class="px-6 py-3">
                         Public
                         <div style="position: relative; display: inline-block;">
@@ -164,7 +169,7 @@
                             </div>
                         </div>
                     </th>
-                   
+
                      <th scope="col" class="px-6 py-3">
                         Nom
                         <div style="position: relative; display: inline-block;">
@@ -177,7 +182,7 @@
                             </div>
                         </div>
                     </th>
-                   
+
                      <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
@@ -193,40 +198,48 @@
                 </tr>
                 </thead>
                 <tbody>
-                 {% set rowNumber = 0 %}
-               {% for diagnostic in diagnostics %}
-    {% set rowNumber = rowNumber + 1 %}
-    <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}" 
-        data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
-        data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
-        data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
-        data-conclusion="{{ diagnostic.conclusion }}"
-        data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
-        data-status="{{ diagnostic.status }}"
-        data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
-        data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
-        data-nom_proprio="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.NomProprio : 'N/A' }}"
-        data-statut="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
-    >
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
-        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
-        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.NomProprio : 'N/A' }}</td>
-        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
-    </tr>
-{% endfor %}
-
+                {% set rowNumber = 0 %}
+                {% for diagnostic in diagnostics %}
+                    {% set rowNumber = rowNumber + 1 %}
+                    <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}"
+                        data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
+                        data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
+                        data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
+                        data-conclusion="{{ diagnostic.conclusion }}"
+                        data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
+                        data-type-lieu="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
+                        data-nom-lieu="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
+                        data-ville="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+                        data-code-postal="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
+                        data-status="{{ diagnostic.status }}"
+                        data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
+                        data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
+                        data-nom_proprio="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
+                        data-statut="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
+                    >
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
+
             </table>
             {% else %}
                 <div class="text-center py-8">
@@ -272,7 +285,7 @@
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
 
-       
+
 
         function filterRows(attribute, value) {
             const rows = document.querySelectorAll("tbody tr");
@@ -376,6 +389,5 @@
                 modal.classList.add("hidden");
             }
         });
-
     </script>
 {% endblock %}

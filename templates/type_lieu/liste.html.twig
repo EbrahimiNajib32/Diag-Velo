@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Types de diagnostics{% endblock %}
+{% block title %}Types de lieu{% endblock title %}
 
 {% block body %}
-
     <!--Notification en cas de réussite !-->
     {% for message in app.flashes('success') %}
         <div class="fixed top-5 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
@@ -40,7 +39,9 @@
             </button>
         </div>
     {% endfor %}
-        <style>
+
+
+    <style>
     
         /* Animation Slide-In */
         @keyframes slideIn {
@@ -70,17 +71,17 @@
         .slide-out {
             animation: slideOut 0.5s ease-in forwards;
         }
+        
     </style>
-
     <div class="container mx-auto mt-8">
-        <h1 class="text-2xl font-bold mb-6 text-center">Types des diagnostics</h1>
+        <h1 class="text-2xl font-bold mb-6 text-center">Types de lieu</h1>
 
         <div>
-            <a href="{{ path('app_create_diagnostic_type') }}" class="button-style w-full hover:bg-green-400"><i class="bi bi-plus-circle mr-2"></i>Ajouter un type de diagnostic</a>
+            <a href="{{ path('app_create_lieu_type') }}" class="button-style w-full hover:bg-green-400"><i class="bi bi-plus-circle mr-2"></i>Ajouter un type de lieu</a>
         </div>
 
         <!-- Form for filtering -->
-        <form action="{{ path('app_type_diagnostic_liste') }}" method="get" class="mb-4">
+        <form action="{{ path('app_type_lieu_liste') }}" method="get" class="mb-4">
             <label for="status" class="block text-sm font-medium text-gray-700">Filtrer par statut:</label>
             <select id="status" name="status" class="mt-1 block w-1/5 pl-5 pr-16 py-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" onchange="this.form.submit()">
                 <option value="">Tous</option>
@@ -89,8 +90,6 @@
             </select>
         </form>
 
-
-
         <!-- Table -->
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left text-gray-500">
@@ -98,24 +97,22 @@
                 <tr>
                     <th scope="col" class="py-3 px-6">Status</th>
                     <th scope="col" class="py-3 px-6">ID</th>
-                    <th scope="col" class="py-3 px-6">Nom</th>
-                    <th scope="col" class="py-3 px-6">Date de création</th>
+                    <th scope="col" class="py-3 px-6">Type de lieu</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for diagnostic in typesDiagnostic %}
-                    <tr class="bg-white border-b {{ diagnostic.isActif ? 'bg-white' : 'bg-gray-300' }}">
+                {% for lieu in typesLieu %}
+                    <tr class="bg-white border-b {{ lieu.actif ? 'bg-white' : 'bg-gray-300' }}">
                         <td class="py-4 px-6">
                             <label class="inline-flex items-center me-5 cursor-pointer">
-                                <input type="checkbox" class="sr-only peer" {{ diagnostic.isActif ? 'checked' : '' }}
-                                       onclick="toggleUserStatus({{ diagnostic.getId }})">
+                                <input type="checkbox" class="sr-only peer" {{ lieu.actif ? 'checked' : '' }}
+                                       onclick="toggleLieuStatus({{ lieu.id }})">
                                 <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-                                <span id="status-{{ diagnostic.getId }}" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ diagnostic.isActif ? 'Actif' : 'Inactif' }}</span>
+                                <span id="status-{{ lieu.id }}" class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ lieu.actif ? 'Actif' : 'Inactif' }}</span>
                             </label>
                         </td>
-                        <td class="py-4 px-6">{{ diagnostic.getId }}</td>
-                        <td class="py-4 px-6">{{ diagnostic.getNomType }}</td>
-                        <td class="py-4 px-6">{{ diagnostic.getDateCreationType|date('Y-m-d') }}</td>
+                        <td class="py-4 px-6">{{ lieu.id }}</td>
+                        <td class="py-4 px-6">{{ lieu.nomTypeLieu }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -124,61 +121,60 @@
         <div class="mt-6 flex justify-center">
             <a href="{{ path('app_dashboard') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl"></i> Retour au tableau de bord</a>
         </div>
+ 
+        <!-- JavaScript -->
+        <script>
 
-    <script>
+            function hideFlashMessage() {
+                const flashMessage = document.getElementById('flash-message');
+                if (flashMessage) {
+                    flashMessage.classList.remove('slide-in');
+                    flashMessage.classList.add('slide-out');
 
-         function hideFlashMessage() {
-            const flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                flashMessage.classList.remove('slide-in');
-                flashMessage.classList.add('slide-out');
-
-                setTimeout(() => {
-                    flashMessage.remove();
-                }, 500); 
+                    setTimeout(() => {
+                        flashMessage.remove();
+                    }, 500); 
+                }
             }
-        }
-        
-        setTimeout(() => {
-            hideFlashMessage();
-        }, 5000);
+            
+            setTimeout(() => {
+                hideFlashMessage();
+            }, 5000);
 
-        function hideErrorNotification() {
-            const errorNotification = document.getElementById('error-notification');
-            if (errorNotification) {
-                errorNotification.classList.remove('slide-in');
-                errorNotification.classList.add('slide-out');
+            function hideErrorNotification() {
+                const errorNotification = document.getElementById('error-notification');
+                if (errorNotification) {
+                    errorNotification.classList.remove('slide-in');
+                    errorNotification.classList.add('slide-out');
 
-                setTimeout(() => {
-                    errorNotification.remove();
-                }, 500);
+                    setTimeout(() => {
+                        errorNotification.remove();
+                    }, 500);
+                }
             }
-        }
 
-        setTimeout(() => {
-            hideErrorNotification();
-        }, 7000);
+            setTimeout(() => {
+                hideErrorNotification();
+            }, 7000);
 
-        function toggleUserStatus(diagnosticId) {
-            fetch(`{{ path('toggle_diagnostic_status', {'id': 0}) }}`.replace('/0', '/' + diagnosticId), {
-                method: 'POST',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        const statusElement = document.getElementById(`status-${diagnosticId}`);
-                        if (statusElement) {
-                            statusElement.textContent = data.newStatus === 'Active' ? 'Actif' : 'Inactif';
-                        }
-                    }
+            function toggleLieuStatus(lieuId) {
+                fetch(`{{ path('toggle_lieu_status', {'id': 0}) }}`.replace('/0', '/' + lieuId), {
+                    method: 'POST',
                 })
-                .catch(error => {
-                    console.error('Erreur :', error);
-                    alert('Erreur', 'Une erreur s\'est produite lors de la mise à jour du statut.');
-                });
-        }
-    </script>
-
-
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            const statusElement = document.getElementById(`status-${lieuId}`);
+                            if (statusElement) {
+                                statusElement.textContent = data.newStatus === 'Active' ? 'Actif' : 'Inactif';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur :', error);
+                        alert('Erreur', 'Une erreur s\'est produite lors de la mise à jour du statut.');
+                    });
+            }
+        </script>
 
 {% endblock %}

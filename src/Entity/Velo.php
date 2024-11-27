@@ -35,12 +35,20 @@ class Velo
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $bicycode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ref_recyclerie = null;
 
     #[ORM\Column(length: 255)]
     private ?string $marque = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $ref_recyclerie = null;
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $public = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $etat = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $couleur = null;
@@ -51,29 +59,23 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $taille_roues = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0, nullable: true)]
     private ?string $taille_cadre = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $etat = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $url_photo = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_de_enregistrement = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_de_vente = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
 
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $emplacement = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 //
 //     #[ORM\ManyToOne(inversedBy: 'proprietaire')]
@@ -86,9 +88,6 @@ private ?Proprietaire $proprietaire = null;
 
 #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
 private ?\DateTimeInterface $date_destruction = null;
-
-#[ORM\Column(length: 255, nullable: true)]
-private ?string $public = null;
 
 
  #[ORM\Column(type: "string", length: 255, nullable: true)]
