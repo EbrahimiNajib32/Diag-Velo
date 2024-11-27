@@ -307,10 +307,6 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
 
-        if (!$typeDiagnostic) {
-            // Gérer le cas où le type de diagnostic n'est pas trouvé
-        }
-
         // Récupérer les éléments de diagnostic associés à ce type de diagnostic
         $elementsDiagnostic = $entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
 

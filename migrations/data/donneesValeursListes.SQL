@@ -6,6 +6,7 @@ VALUES
     ('1', 'Global', '2024-11-01', '1'),
     ('2', 'Sécurité', '2024-11-01', '1');
 
+/*
 INSERT INTO element_control (id,element)
 VALUES
     (1, 'cadre: aspect général'),
@@ -55,6 +56,58 @@ VALUES
     (45, 'sécurité: catadioptres pédales '),
     (46, 'sécurité: catadioptres roues Av+Ar '),
     (47, 'sécurité: sonnette');
+*/
+
+INSERT INTO element_control (id, element)
+VALUES
+    (1, 'sécurité: dynamo'),
+    (2, 'sécurité: éclairage à piles'),
+    (3, 'sécurité: lumière avant'),
+    (4, 'sécurité: lumière arrière'),
+    (5, 'sécurité: catadioptres Av+Ar'),
+    (6, 'sécurité: catadioptres pédales'),
+    (7, 'sécurité: catadioptres roues Av+Ar'),
+    (8, 'sécurité: sonnette'),
+    (9, 'cadre: aspect général'),
+    (10, 'cadre: béquille'),
+    (11, 'direction: guidon'),
+    (12, 'direction: fourche'),
+    (13, 'direction: jeu'),
+    (14, 'roue avant: pneu'),
+    (15, 'roue avant: chambre à air'),
+    (16, 'roue avant: rayonnage'),
+    (17, 'roue avant: moyeu et axe'),
+    (18, 'roue avant: garde-boue'),
+    (19, 'frein avant: levier'),
+    (20, 'frein avant: patin'),
+    (21, 'frein avant: câble'),
+    (22, 'frein avant: tension/réglage'),
+    (23, 'transmission: pédales'),
+    (24, 'transmission: plateaux'),
+    (25, 'transmission: axe'),
+    (26, 'transmission: chaîne'),
+    (27, 'dérailleur avant: dérailleur'),
+    (28, 'dérailleur avant: commande manette'),
+    (29, 'dérailleur avant: câble'),
+    (30, 'dérailleur avant: tension/réglage'),
+    (31, 'roue arrière: pneu'),
+    (32, 'roue arrière: chambre à air'),
+    (33, 'roue arrière: rayonnage'),
+    (34, 'roue arrière: moyeu et axe'),
+    (35, 'roue arrière: garde-boue'),
+    (36, 'roue arrière: porte-bagages'),
+    (37, 'frein arrière: levier'),
+    (38, 'frein arrière: patin'),
+    (39, 'frein arrière: câble'),
+    (40, 'frein arrière: tension/réglage'),
+    (41, 'dérailleur arrière: dérailleur'),
+    (42, 'dérailleur arrière: commande manette'),
+    (43, 'dérailleur arrière: câble'),
+    (44, 'dérailleur arrière: tension/réglage'),
+    (45, 'dérailleur arrière: pignons'),
+    (46, 'assise: selle'),
+    (47, 'assise: fixation');
+
 
 INSERT INTO etat_control (id, nom_etat)
 VALUES
@@ -67,14 +120,14 @@ VALUES
 -- Insérer les types de diagnostic et éléments de contrôle associés
 INSERT INTO `diagnostic_type_elementcontrol` (`id`, `id_dianostic_type_id`, `id_elementcontrol_id`)
 VALUES
-    (1, 2, 40),
-    (2, 2, 41),
-    (3, 2, 42),
-    (4, 2, 43),
-    (5, 2, 44),
-    (6, 2, 45),
-    (7, 2, 46),
-    (8, 2, 47),
+    (1, 2, 1),
+    (2, 2, 2),
+    (3, 2, 3),
+    (4, 2, 4),
+    (5, 2, 5),
+    (6, 2, 6),
+    (7, 2, 7),
+    (8, 2, 8),
     (9, 1, 1),
     (10, 1, 2),
     (11, 1, 3),
