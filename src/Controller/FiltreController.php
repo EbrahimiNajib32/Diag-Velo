@@ -93,7 +93,7 @@ class FiltreController extends AbstractController
         'lieuxDetails' => $lieuxDetails, // Détails des lieux
         'typesLieu' => $typesLieu, // Noms des types de lieux
     ]);
-    dd($lieuxDetails, $typesLieu);
+   // dd($lieuxDetails, $typesLieu);
 }
 
 }
