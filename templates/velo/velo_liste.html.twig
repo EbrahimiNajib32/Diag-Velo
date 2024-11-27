@@ -218,9 +218,10 @@
 
 
         {% for velo in pagination %}
-        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden pt-10 fixed z-50 items-center justify-center md:inset-0 modal-backdrop">
-            <div class="relative max-w-5xl justify-center items-center mx-auto">
-                <div class="bg-white rounded-lg overflow-y-auto">
+        <div id="modal-{{ velo.id }}" tabindex="-1" aria-hidden="true" class="hidden fixed z-50 inset-0 flex items-center justify-center modal-backdrop">
+            <div class="relative max-w-3xl w-full max-h-[90vh] mx-4 overflow-hidden bg-white rounded-lg shadow-lg">
+
+            <div class="bg-white rounded-lg overflow-y-auto">
                     <div class="flex items-center justify-between p-4 md:p-5 border-b">
                         <!-- Bouton de fermeture -->
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal-{{ velo.id }}">
@@ -228,7 +229,7 @@
                         </button>
                     </div>
 
-                    <div class="text-center w-full">
+                <div class="text-center w-full px-5 overflow-y-auto" style="max-height: 75vh;">
                         <!-- Titre -->
                         <h3 class="text-xl font-semibold text-gray-900">Historique du vélo de {{ velo.nom_proprio }}</h3>
 
@@ -241,8 +242,9 @@
                             {% endif %}
                         </div>
 
+
                         <!-- Tableau des informations -->
-                        <div class="mt-6">
+                        <div class="mt-6 overflow-auto">
                             <table class="table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
                                 <tbody>
                                 <!-- Première section : Propriétaire, Marque, Type, Couleur -->
@@ -298,26 +300,31 @@
 
 
                         <!-- Section Diagnostics -->
-                        <div class="mt-6">
+                        <div class="mt-6 overflow-auto max-h-56">
                             {% if diagnostics[velo.id] is defined %}
-                                {% for diagnostic in diagnostics[velo.id] %}
-                                    <div class="bg-gray-100 rounded p-5 mb-4 text-center">
-                                        <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
-                                        <p><strong>Lieu:</strong> {{ diagnostic.typeLieu }}-{{ diagnostic.lieu.getNomLieu() }}-{{ diagnostic.lieu.getville() }} </p>
-                                        <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('d/m/Y') : 'Non disponible' }}</p>
-                                        <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
-                                        <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
-                                        <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
-                                        <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
-                                        <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
-                                    </div>
-                                {% endfor %}
+                                <div class="max-h-96">
+                                    {% set diagnostics_trie = diagnostics[velo.id]|sort((a, b) => b.getDateDiagnostic() <=> a.getDateDiagnostic()) %}
+                                    {% for diagnostic in diagnostics_trie %}
+                                        <div class="bg-gray-100 rounded p-5 mb-4 text-center">
+                                            <h4><strong>Diagnostic {{ loop.index }}:</strong></h4>
+                                            <p><strong>Lieu:</strong> {{ diagnostic.typeLieu }} - {{ diagnostic.lieu.getNomLieu() }} - {{ diagnostic.lieu.getville() }} </p>
+                                            <p><strong>Date Diagnostic:</strong> {{ diagnostic.getDateDiagnostic() is not null ? diagnostic.getDateDiagnostic()|date('d/m/Y') : 'Non disponible' }}</p>
+                                            <p><strong>Type de Diagnostic:</strong> {{ diagnostic.getDiagnosticType() is not null ? diagnostic.getDiagnosticType().getNomType() : 'Non disponible' }}</p>
+                                            <p><strong>Coût Réparation:</strong> {{ diagnostic.getCoutReparation() is not null ? diagnostic.getCoutReparation() : 'Aucun' }}</p>
+                                            <p><strong>Conclusion:</strong> {{ diagnostic.getConclusion() is not null ? diagnostic.getConclusion() : 'Aucun' }}</p>
+                                            <p class="mb-3"><strong>Status:</strong> {{ diagnostic.getStatus() is not null ? diagnostic.getStatus() : 'Non défini' }}</p>
+                                            <a class="bg-teal-500 p-2 rounded text-white" href="/diagnostic/{{ diagnostic.getId() is not null ? diagnostic.getId() }}">Voir diagnostic</a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             {% else %}
                                 <div class="p-5 rounded-lg mb-3 text-center">
                                     <p class="text-center m-5">Pas de diagnostics.</p>
                                 </div>
                             {% endif %}
                         </div>
+
+
                     </div>
                 </div>
             </div>
