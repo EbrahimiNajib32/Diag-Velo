@@ -42,7 +42,7 @@
         <div class="max-w-lg mx-auto text-center portrait:max-w-2xl mt-0 md:mt-3">
             <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg">
 
-                <a data-modal-toggle="modal-lieu" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full">
+                <a data-modal-toggle="modal-lieu" class="cursor-pointer bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
                     <i class="bi bi-arrow-up-left-circle text-2xl lg:text-3xl mr-2"></i>
                     Diagnostics
                 </a>
@@ -107,7 +107,9 @@
                 <div class="p-4 space-y-4 overflow-y-auto" style="max-height: calc(90vh - 120px);">
                     <div class="mb-4">
                         <h4 class="text-lg font-medium text-gray-800">Lieux disponibles</h4>
-                        {% if lieu_disponible|length > 0 %}
+                        {% set lieux_actifs = lieu_disponible|filter(lieu => lieu.typeLieuId.actif) %}
+                        {% if lieux_actifs|length > 0 %}
+
                             <table class="min-w-full bg-white border border-gray-300 rounded-lg">
                                 <thead>
                                     <tr>
@@ -119,20 +121,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for lieu in lieu_disponible %}
-                                        <tr class= "hover:bg-gray-400 transition-all ease-in-out duration-150" 
-                                            onclick="window.location.href='{{ path('app_lieu_choisi', {'id': lieu.id}) }}'">
-                                            <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.adresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.ville }}</td>
-                                            <td class="px-4 py-2 border-b">{{ lieu.codePostal }}</td>
-                                        </tr>
+                                    {% for lieu in lieux_actifs %}
+                                            <tr class= "cursor-pointer hover:bg-gray-400 transition-all ease-in-out duration-150" 
+                                                onclick="window.location.href='{{ path('app_lieu_choisi', {'id': lieu.id}) }}'">
+                                                <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
+                                                <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
+                                                <td class="px-4 py-2 border-b">{{ lieu.adresseLieu is not null ? lieu.adresseLieu : 'Adresse non définie' }}</td>
+                                                <td class="px-4 py-2 border-b">{{ lieu.ville }}</td>
+                                                <td class="px-4 py-2 border-b">{{ lieu.codePostal }}</td>
+                                            </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         {% else %}
-                            <p class="text-gray-500">Aucun lieu disponible pour le moment.</p>
+                                <div class="mb-4">
+                                    <p class="text-gray-500">Aucun lieu disponible pour le moment.</p>
+                                </div>
                         {% endif %}
                     </div>
 
@@ -140,72 +144,71 @@
                     <div class="bg-gray-100 p-4 rounded-lg">
                         <h4 class="text-lg font-medium text-gray-800 mb-3">Ajouter un nouveau lieu</h4>
                         {{ form_start(lieuForm, {'attr': {'id': 'new-lieu-form'}}) }}
-                            <div class="mb-4">
-                                <label for="lieu_type" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.type_lieu_id) }}
-                                </label>
-                                {{ form_widget(lieuForm.type_lieu_id, {
-                                    'attr': {
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm'
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.type_lieu_id) }}
-                            </div>
 
-                            <div class="mb-4">
-                                <label for="lieu_nom" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.nom_lieu) }}
-                                </label>
-                                {{ form_widget(lieuForm.nom_lieu, {
-                                    'attr': {
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
-                                        'placeholder': 'Entrez le nom du lieu'
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.nom_lieu) }}
-                            </div>
-                            <div class="mb-4">
-                                <label for="lieu_adresse" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.adresse_lieu) }}
-                                </label>
-                                {{ form_widget(lieuForm.adresse_lieu, {
-                                    'attr': {
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
-                                        'placeholder': "Entrez l'adresse du lieu"
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.adresse_lieu) }}
-                            </div>
-                            <div class="mb-4">
-                                <label for="lieu_ville" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.ville) }}
-                                </label>
-                                {{ form_widget(lieuForm.ville, {
-                                    'attr': {
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
-                                        'placeholder': 'Entrez la ville'
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.ville) }}
-                            </div>
-                            <div class="mb-4">
-                                <label for="lieu_code_postal" class="block text-sm font-medium text-gray-700">
-                                    {{ form_label(lieuForm.code_postal) }}
-                                </label>
-                                {{ form_widget(lieuForm.code_postal, {
-                                    'attr': {
-                                        'type' : 'number',
-                                        'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
-                                        'placeholder': 'Entrez le code postal'
-                                    }
-                                }) }}
-                                {{ form_errors(lieuForm.code_postal) }}
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-colors duration-200">
-                                    Ajouter le lieu
-                                </button>
-                            </div>
+                        <div class="mb-4">
+                            <label for="lieu_type" class="block text-sm font-medium text-gray-700">
+                                {{ form_label(lieuForm.type_lieu_id) }}
+                            </label>
+                            {{ form_widget(lieuForm.type_lieu_id) }}
+                            {{ form_errors(lieuForm.type_lieu_id) }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="lieu_nom" class="block text-sm font-medium text-gray-700">
+                                {{ form_label(lieuForm.nom_lieu) }}
+                            </label>
+                            {{ form_widget(lieuForm.nom_lieu, {
+                                'attr': {
+                                    'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                    'placeholder': 'Entrez le nom du lieu'
+                                }
+                            }) }}
+                            {{ form_errors(lieuForm.nom_lieu) }}
+                        </div>
+                        <div class="mb-4">
+                            <label for="lieu_adresse" class="block text-sm font-medium text-gray-700">
+                                {{ form_label(lieuForm.adresse_lieu) }}
+                            </label>
+                            {{ form_widget(lieuForm.adresse_lieu, {
+                                'attr': {
+                                    'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                    'placeholder': "Entrez l'adresse du lieu"
+                                }
+                            }) }}
+                            {{ form_errors(lieuForm.adresse_lieu) }}
+                        </div>
+                        <div class="mb-4">
+                            <label for="lieu_ville" class="block text-sm font-medium text-gray-700">
+                                {{ form_label(lieuForm.ville) }}
+                            </label>
+                            {{ form_widget(lieuForm.ville, {
+                                'attr': {
+                                    'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                    'placeholder': 'Entrez la ville'
+                                }
+                            }) }}
+                            {{ form_errors(lieuForm.ville) }}
+                        </div>
+                        <div class="mb-4">
+                            <label for="lieu_code_postal" class="block text-sm font-medium text-gray-700">
+                                {{ form_label(lieuForm.code_postal) }}
+                            </label>
+                            {{ form_widget(lieuForm.code_postal, {
+                                'attr': {
+                                    'type' : 'number',
+                                    'class': 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
+                                    'placeholder': 'Entrez le code postal'
+                                }
+                            }) }}
+                            {{ form_errors(lieuForm.code_postal) }}
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-colors duration-200">
+                                Ajouter le lieu
+                            </button>
+                        </div>
+
                         {{ form_end(lieuForm) }}
                     </div>
                 </div>

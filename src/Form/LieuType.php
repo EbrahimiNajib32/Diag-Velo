@@ -23,6 +23,11 @@ class LieuType extends AbstractType
                 'choice_label' => 'nom_type_lieu',
                 'label' => 'Type de lieu',
                 'placeholder' => 'Choisissez un type de lieu',
+                'query_builder' => function (\Doctrine\ORM\EntityRepository $repository){
+                    return $repository->createQueryBuilder('act')
+                        ->where('act.actif = :actif')
+                        ->setParameter('actif', true);
+                },
                 'attr' => [
                     'class' => 'mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm',
                 ],
