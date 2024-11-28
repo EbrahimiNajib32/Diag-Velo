@@ -65,8 +65,8 @@
                     <th scope="col" class="px-6 py-3">
                         fait par
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in noms_uniques %}
                                     <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
@@ -143,8 +143,8 @@
                     <th scope="col" class="px-6 py-3 text-center">
                         Nom
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownNomLieu')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomLieu" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nomV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in noms_lieux_uniques %}
                                     <a href="#" onclick="filterRows('nomV', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
@@ -190,8 +190,8 @@
                      <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownTypeV')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownTypeV" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for type in types_uniquesv %}
                                     <a href="#" onclick="filterRows('typeV', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
@@ -228,8 +228,8 @@
                      <th scope="col" class="px-6 py-3">
                         Nom
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownNomProprietaire')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nom_proprio', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in nomsp_uniques %}
                                     <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
