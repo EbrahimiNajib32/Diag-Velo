@@ -124,11 +124,65 @@
                             </div>
                         </div>
                     </th>
-                    <th scope="col" class="px-6 py-3 border-left-black text-center">Type</th>
-                    <th scope="col" class="px-6 py-3 text-center">Nom</th>
-                    <th scope="col" class="px-6 py-3 text-center">Ville</th>
-                    <th scope="col" class="px-6 py-3">Code postal</th>
-                   {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
+
+                    <!-- Colonne Type -->
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">
+                        Type
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for type in types_lieux_uniques %}
+                                    <a href="#" onclick="filterRows('typeV', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+
+                    <!-- Colonne Nom -->
+                    <th scope="col" class="px-6 py-3 text-center">
+                        Nom
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('nomV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for nom in noms_lieux_uniques %}
+                                    <a href="#" onclick="filterRows('nomV', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+
+                    <!-- Colonne Ville -->
+                    <th scope="col" class="px-6 py-3 text-center">
+                        Ville
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownVille')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownVille" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('villeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for ville in villes_uniques %}
+                                    <a href="#" onclick="filterRows('villeV', '{{ ville }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ ville }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+
+                    <!-- Colonne Code postal -->
+                    <th scope="col" class="px-6 py-3">
+                        Code postal
+                        <div style="position: relative; display: inline-block;">
+                            <button onclick="toggleDropdown('dropdownCodePostal')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownCodePostal" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('codePostalV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for code_postal in codes_postaux_uniques %}
+                                    <a href="#" onclick="filterRows('codePostalV', '{{ code_postal }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ code_postal }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+
+
+                {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
                     <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
                     <th scope="col" class="px-6 py-3 text-center">N° de série</th>
                     <th scope="col" class="px-6 py-3 text-center">Bicycode</th>

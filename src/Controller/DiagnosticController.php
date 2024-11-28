@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Lieu;
+use App\Entity\TypeLieu;
 use App\Entity\Diagnostic;
 use App\Entity\DiagnosticElement;
 use App\Entity\EtatControl;
@@ -705,6 +706,35 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             ->getResult();
         $statutp_uniques = array_column($statutp_uniques, 'statut');
 
+        // Récupérer les types uniques de lieux
+        $types_lieux_uniques = $entityManager->getRepository(TypeLieu::class)->createQueryBuilder('tl')
+            ->select('DISTINCT tl.nom_type_lieu')
+            ->getQuery()
+            ->getResult();
+        $types_lieux_uniques = array_column($types_lieux_uniques, 'nom_type_lieu');
+
+        // Récupérer les noms uniques des lieux
+                $noms_lieux_uniques = $entityManager->getRepository(Lieu::class)->createQueryBuilder('l')
+                    ->select('DISTINCT l.nom_lieu')
+                    ->getQuery()
+                    ->getResult();
+                $noms_lieux_uniques = array_column($noms_lieux_uniques, 'nom_lieu');
+
+        // Récupérer les villes uniques
+                $villes_uniques = $entityManager->getRepository(Lieu::class)->createQueryBuilder('l')
+                    ->select('DISTINCT l.ville')
+                    ->getQuery()
+                    ->getResult();
+                $villes_uniques = array_column($villes_uniques, 'ville');
+
+        // Récupérer les codes postaux uniques
+                $codes_postaux_uniques = $entityManager->getRepository(Lieu::class)->createQueryBuilder('l')
+                    ->select('DISTINCT l.code_postal')
+                    ->getQuery()
+                    ->getResult();
+                $codes_postaux_uniques = array_column($codes_postaux_uniques, 'code_postal');
+
+
         // Ajouter les informations sur le lieu (type, nom, ville, code postal)
         $lieux = [];
         foreach ($diagnostics as $diagnostic) {
@@ -726,6 +756,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         }
 // Ajout de dd() pour déboguer;
        //dd($diagnostics);
+        //dd($noms_lieux_uniques);
         /*dd([
             'diagnostics' => $diagnostics,
             'lieux' => $lieux,  // Affiche les informations liées au lieu
@@ -743,7 +774,11 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             'statutp_uniques' => $statutp_uniques,
             'dates_uniques' => $dates_uniques,
             'noms_uniques' => $noms_uniques,
-            'lieux' => $lieux // Ajout des lieux
+            'lieux' => $lieux,// Ajout des lieux
+            'types_lieux_uniques' => $types_lieux_uniques, // Ajout des types de lieux
+            'noms_lieux_uniques' => $noms_lieux_uniques, // Ajout des noms de lieux
+            'villes_uniques' => $villes_uniques, // Ajout des villes
+            'codes_postaux_uniques' => $codes_postaux_uniques, // Ajout des codes postaux
         ]);
     }
 
