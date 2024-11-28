@@ -227,7 +227,7 @@ class VeloController extends AbstractController
 
 
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]
-    public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, $id): JsonResponse
+    public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): JsonResponse
     {
         $velo = $entityManager->getRepository(Velo::class)->find($id);
         if (!$velo) {
@@ -236,35 +236,21 @@ class VeloController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        foreach ($data as $key => $value) {
-            if ($key === 'proprietaireId') {
-                $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($value);
-                if ($proprietaire) {
-                    $velo->setProprietaire($proprietaire);
-                } else {
-                    return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
-                }
+        if (isset($data['proprietaireId'])) {
+            $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($data['proprietaireId']);
+            if ($proprietaire) {
+                $velo->setProprietaire($proprietaire);
             } else {
+                return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
+            }
+        }
+
+        foreach ($data as $key => $value) {
+            if ($key !== 'proprietaireId') {
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
-                    if (in_array($key, ['refRecyclerie', 'poids', 'tailleRoues', 'tailleCadre'])) {
-                        if ($value === null || $value === '') {
-                            $valueToSet = null;
-                        } else {
-                            switch ($key) {
-                                case 'poids':
-                                    $valueToSet = (string)$value;  // Treat 'poids' as string
-                                    break;
-                                case 'tailleRoues':
-                                case 'tailleCadre':
-                                    $valueToSet = (int)$value;
-                                    break;
-                                default:
-                                    $valueToSet = (string)$value;
-                                    break;
-                            }
-                        }
-                        $velo->$setter($valueToSet);
+                    if ($value !== null && $value !== '') {
+                        $velo->$setter($value);
                     }
                 }
             }
@@ -279,15 +265,14 @@ class VeloController extends AbstractController
             return new JsonResponse(['status' => 'error', 'errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
         }
 
+        // Sauvegarde des modifications
         try {
             $entityManager->flush();
             return new JsonResponse(['status' => 'success']);
         } catch (\Exception $e) {
-            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['status' => 'error', 'message' => 'An error occurred while saving: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     #[Route('/velo/reparations', name: 'velo_reparations', methods: ['GET'])]
     public function diagnosticsAReparer(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response {
