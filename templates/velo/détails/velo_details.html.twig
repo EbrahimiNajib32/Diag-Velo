@@ -56,10 +56,10 @@
                 <li class="">Téléphone : {{ velo.getProprietaire.getTelephone() }}</li>
                 <li class="">E mail : {{ velo.getProprietaire.getEmail() }}</li>
                     </div>
-                <div class="details-list">
+                <div class="">
                 <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
+                <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
                 </div>
             </ul>
         </div>
