@@ -52,9 +52,9 @@
                     <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
                 <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
                 <li class="text-xl font-bold">Propriétaire du Vélo</li>
-                <li class="">Nom et Prénom : {{ velo.getProprietaire.getNomProprio() }}</li>
-                <li class="">Téléphone : {{ velo.getProprietaire.getTelephone() }}</li>
-                <li class="">E mail : {{ velo.getProprietaire.getEmail() }}</li>
+                <li class="details-list">Nom et Prénom : <span>{{ velo.getProprietaire.getNomProprio() }}</span></li>
+                <li class="details-list">Téléphone : <span>{{ velo.getProprietaire.getTelephone() }}</span></li>
+                <li class="details-list">E mail : <span>{{ velo.getProprietaire.getEmail() }}</span></li>
                     </div>
                 <div class="">
                 <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
