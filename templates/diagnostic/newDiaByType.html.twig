@@ -117,7 +117,16 @@
             </div>
 
             <div>{{ form_row(diagnosticForm.cout_reparation, {'attr': {'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10'}}) }}</div>
-            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
+
+            <div class="mb-4">
+                <label for="velo" class="block text-gray-700 font-medium mb-1">Selected Vélo:</label>
+                <select id="velo" name="velo" readonly class="form-control border border-gray-300 rounded px-3 py-2 w-full">
+                    <option value="{{ velo.id }}">{{ velo.marque }} - {{ velo.refRecyclerie }} (ID: {{ velo.id }})</option>
+                </select>
+            </div>
+
+
+{#            <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>#}
             <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
         </div>
 

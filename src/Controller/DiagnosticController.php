@@ -222,6 +222,17 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     {
 
 
+        $veloId = $request->query->get('id');
+        $typeDiagnosticId = $request->query->get('typeDiagnosticId');
+
+
+        // Find the specific vélo by its ID
+        $velo = $entityManager->getRepository(Velo::class)->find($veloId);
+
+        if (!$velo) {
+            throw $this->createNotFoundException('Vélo not found');
+        }
+
         // Récupérer le type de diagnostic en fonction de l'ID du type
         $typeDiagnostic = $entityManager->getRepository(DiagnosticType::class)->find($id);
         //var_dump($typeDiagnostic);
@@ -335,11 +346,18 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         }
 
 
+        return $this->redirectToRoute('diagnostic_elements', [
+            'id' => $typeDiagnosticId,
+            'veloId' => $veloId,
+        ]);
+
+
         return $this->render('diagnostic/newDiaByType.html.twig', [
             'typeDiagnostic' => $typeDiagnostic,
             'diagnosticForm' => $form->createView(),
             'diagnosticElements' => $categorizedElements,
             'lieu' => $session->get('lieu'),
+            'velo' => $velo,
         ]);
 
     }
