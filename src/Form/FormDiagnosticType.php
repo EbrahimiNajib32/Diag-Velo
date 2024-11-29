@@ -86,22 +86,22 @@ class FormDiagnosticType extends AbstractType
                 'attr' => ['class' => 'form-checkbox mr-4'],
             ])
 
-            ->add('velo', EntityType::class, [
-                'class' => Velo::class,
-                'choice_label' => function ($velo) {
-                    return sprintf(
-                        '%s - %s - %s - %s ',
-                        $velo->getDateDeEnregistrement()->format('Y-m-d'),
-                        $velo->getRefRecyclerie(),
-                        $velo->getProprietaire()->getNomProprio(),
-                        $velo->getMarque()
-                    );
-                },
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('v')
-                        ->orderBy('v.date_de_enregistrement', 'DESC');
-                },
-            ])
+//            ->add('velo', EntityType::class, [
+//                'class' => Velo::class,
+//                'choice_label' => function ($velo) {
+//                    return sprintf(
+//                        '%s - %s - %s - %s ',
+//                        $velo->getDateDeEnregistrement()->format('Y-m-d'),
+//                        $velo->getRefRecyclerie(),
+//                        $velo->getProprietaire()->getNomProprio(),
+//                        $velo->getMarque()
+//                    );
+//                },
+//                'query_builder' => function (EntityRepository $er) {
+//                    return $er->createQueryBuilder('v')
+//                        ->orderBy('v.date_de_enregistrement', 'DESC');
+//                },
+//            ])
             ->add('utilisateur', EntityType::class, [
                 'class' => Utilisateur::class,
                 'choice_label' => 'Nom',

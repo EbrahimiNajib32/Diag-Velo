@@ -222,7 +222,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
     {
 
 
-        $veloId = $request->query->get('id');
+        $veloId = $request->query->get('veloId');
         $typeDiagnosticId = $request->query->get('typeDiagnosticId');
 
 
@@ -344,12 +344,6 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             }
             $categorizedElements[$category][] = $element;
         }
-
-
-        return $this->redirectToRoute('diagnostic_elements', [
-            'id' => $typeDiagnosticId,
-            'veloId' => $veloId,
-        ]);
 
 
         return $this->render('diagnostic/newDiaByType.html.twig', [
