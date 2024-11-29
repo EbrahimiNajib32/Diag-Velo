@@ -452,6 +452,7 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             'diagnostic' => $diagnostic,
             'diagnosticElements' => $categorizedElements,
             'lieu' => $lieu,
+            'selectedVelo' => $diagnostic->getVelo(),
             //'etatsElementsControle' => $etatsElementsControle, // Ajout de la variable au rendu du template
         ]);
     }

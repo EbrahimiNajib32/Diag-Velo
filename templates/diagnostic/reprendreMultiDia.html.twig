@@ -90,7 +90,17 @@
                     <div>{{ lieu.nom }}</div>
                     <div class="text-sm text-gray-600">{{ lieu.ville }}</div>
                 </div>
-                <div>{{ form_row(diagnosticForm.velo, {'attr': {'class': 'form-control border'}}) }}</div>
+
+
+                <div class="flex flex-col justify-center items-end text-right pr-0">
+                    <div class="text-right">
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Vélo sélectionné</label>
+                        <div class="text-base text-gray-900 font-semibold">
+                            {{ selectedVelo.marque }} - {{ selectedVelo.refRecyclerie }}
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             {% for category, elements in diagnosticElements %}
