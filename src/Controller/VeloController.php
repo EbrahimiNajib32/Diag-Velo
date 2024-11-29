@@ -243,6 +243,21 @@ class VeloController extends AbstractController
             } else {
                 return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
             }
+        } else if ($velo->getProprietaire()) {
+            $proprietaire = $velo->getProprietaire();
+
+            foreach ($data as $key => $value) {
+                if ($key !== 'proprietaireId') {
+                    $setter = 'set' . ucfirst($key);
+                    if (method_exists($proprietaire, $setter)) {
+                        if ($value !== null && $value !== '') {
+                            $proprietaire->$setter($value);
+                        }
+                    }
+                }
+            }
+
+            $entityManager->persist($proprietaire);
         }
 
         foreach ($data as $key => $value) {
@@ -310,33 +325,35 @@ class VeloController extends AbstractController
     #[Route('/velo/edit/{id}', name: 'velo_edit', methods: ['GET', 'POST'])]
     public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Recherche du vélo par son ID
         $velo = $entityManager->getRepository(Velo::class)->find($id);
 
         if (!$velo) {
             $this->addFlash('error', 'Aucun vélo trouvé avec l\'ID spécifié.');
-            return $this->redirectToRoute('velo_liste'); // Redirection vers la liste des vélos
+            return $this->redirectToRoute('velo_liste');
         }
 
-        // Création du formulaire
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            $proprietaire = $velo->getProprietaire();
+            if ($proprietaire) {
+                $entityManager->persist($proprietaire);
+            }
+
+            $entityManager->persist($velo);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Les informations du vélo ont été mises à jour avec succès.');
+            $this->addFlash('success', 'Les informations du vélo et du propriétaire ont été mises à jour avec succès.');
 
-            // Redirection vers la page actuelle après la modification
             return $this->redirectToRoute('velo_edit', ['id' => $velo->getId()]);
         }
 
-        // Rendu de la vue pour afficher les détails et le formulaire
         return $this->render('velo/détails/velo_details.html.twig', [
             'velo' => $velo,
             'form' => $form->createView(),
         ]);
     }
+
 
 }
