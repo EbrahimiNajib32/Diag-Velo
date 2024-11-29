@@ -323,7 +323,7 @@ class VeloController extends AbstractController
     }
 
     #[Route('/velo/edit/{id}', name: 'velo_edit', methods: ['GET', 'POST'])]
-    public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request, SessionInterface $session): Response
     {
         $velo = $entityManager->getRepository(Velo::class)->find($id);
 
@@ -352,6 +352,7 @@ class VeloController extends AbstractController
         return $this->render('velo/détails/velo_details.html.twig', [
             'velo' => $velo,
             'form' => $form->createView(),
+            'lieu' => $session->get('lieu'),
         ]);
     }
 
