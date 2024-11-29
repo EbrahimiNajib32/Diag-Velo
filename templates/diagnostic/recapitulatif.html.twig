@@ -230,9 +230,9 @@
                         <div style="position: relative; display: inline-block;">
                             <button onclick="toggleDropdown('dropdownNomProprietaire')" style="background: none; border: none; cursor: pointer;">▼</button>
                             <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('nom_proprio', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                <a href="#" onclick="filterRows('nomP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in nomsp_uniques %}
-                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                    <a href="#" onclick="filterRows('nomP', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -243,9 +243,9 @@
                         <div style="position: relative; display: inline-block;">
                             <button onclick="toggleDropdown('dropdownTypep')" style="background: none; border: none; cursor: pointer;">▼</button>
                             <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('statut', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for statut in statutp_uniques %}
-                                    <a href="#" onclick="filterRows('statut', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
+                                    <a href="#" onclick="filterRows('statutP', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -264,13 +264,13 @@
                         data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
                         data-typeL="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
                         data-nomV="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
-                        data-ville="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
-                        data-code-postal="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
+                        data-villeV="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+                        data-codepostalV="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
                         data-status="{{ diagnostic.status }}"
                         data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
                         data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
-                        data-nom_proprio="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
-                        data-statut="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
+                        data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
+                        data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
                     >
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
