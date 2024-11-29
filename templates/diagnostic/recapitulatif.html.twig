@@ -65,8 +65,8 @@
                     <th scope="col" class="px-6 py-3">
                         fait par
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in noms_uniques %}
                                     <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
@@ -129,11 +129,11 @@
                     <th scope="col" class="px-6 py-3 border-left-black text-center">
                         Type
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            <button onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownTypeL" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('typeL', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for type in types_lieux_uniques %}
-                                    <a href="#" onclick="filterRows('typeV', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                                    <a href="#" onclick="filterRows('typeL', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -143,8 +143,8 @@
                     <th scope="col" class="px-6 py-3 text-center">
                         Nom
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownNomLieu')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomLieu" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nomV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in noms_lieux_uniques %}
                                     <a href="#" onclick="filterRows('nomV', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
@@ -190,8 +190,8 @@
                      <th scope="col" class="px-6 py-3">
                         Type
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <button onclick="toggleDropdown('dropdownTypeV')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownTypeV" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for type in types_uniquesv %}
                                     <a href="#" onclick="filterRows('typeV', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
@@ -228,11 +228,11 @@
                      <th scope="col" class="px-6 py-3">
                         Nom
                         <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('nom_proprio', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            <button onclick="toggleDropdown('dropdownNomProprietaire')" style="background: none; border: none; cursor: pointer;">▼</button>
+                            <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('nomP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in nomsp_uniques %}
-                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                    <a href="#" onclick="filterRows('nomP', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -243,9 +243,9 @@
                         <div style="position: relative; display: inline-block;">
                             <button onclick="toggleDropdown('dropdownTypep')" style="background: none; border: none; cursor: pointer;">▼</button>
                             <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('statut', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for statut in statutp_uniques %}
-                                    <a href="#" onclick="filterRows('statut', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
+                                    <a href="#" onclick="filterRows('statutP', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -262,15 +262,15 @@
                         data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
                         data-conclusion="{{ diagnostic.conclusion }}"
                         data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
-                        data-type-lieu="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
-                        data-nom-lieu="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
-                        data-ville="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
-                        data-code-postal="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
+                        data-typeL="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
+                        data-nomV="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
+                        data-villeV="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+                        data-codepostalV="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
                         data-status="{{ diagnostic.status }}"
                         data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
                         data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
-                        data-nom_proprio="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
-                        data-statut="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
+                        data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
+                        data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
                     >
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
@@ -339,19 +339,42 @@
             var dropdown = document.getElementById(dropdownId);
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
-
+        // filtres combinés
+        let activeFilters = {}; // Objet pour stocker les filtres actifs
 
 
         function filterRows(attribute, value) {
-            const rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const attrValue = row.getAttribute('data-' + attribute);
-                row.style.display = value === "" || attrValue === value ? "" : "none";
-            });
+            if (value === "") {
+                delete activeFilters[attribute]; // Supprimez le filtre s'il est vide
+            } else {
+                activeFilters[attribute] = value; // Ajoutez ou mettez à jour le filtre
+            }
+
+            applyFilters(); // Appliquez tous les filtres actifs
+
+            // Fermez tous les menus déroulants
             document.querySelectorAll('.dropdown-content').forEach(dropdown => {
                 dropdown.style.display = 'none';
             });
         }
+        function applyFilters() {
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                let isVisible = true;
+
+                for (const [attribute, value] of Object.entries(activeFilters)) {
+                    const attrValue = row.getAttribute('data-' + attribute);
+                    if (attrValue !== value) {
+                        isVisible = false; // Cachez la ligne si un filtre ne correspond pas
+                        break;
+                    }
+                }
+
+                row.style.display = isVisible ? "" : "none";
+            });
+        }
+
 
         function hover(element, isHovering) {
             if (isHovering) {
