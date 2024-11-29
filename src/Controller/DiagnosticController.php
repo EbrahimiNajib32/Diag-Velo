@@ -172,13 +172,16 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
                     'couleur' => $velo->getCouleur(),
                     'marque' => $velo->getMarque(),
                     'refRecyclerie' => $velo->getRefRecyclerie(),
+                    'numeroSerie' => $velo->getNumeroDeSerie(),
+                    'bicycode' => $velo->getBicycode(),
                     'type' => $velo->getType(),
+                    'proprio' => $velo->getProprietaire(),
                     'dateDeEnregistrement' => $velo->getDateDeEnregistrement() ? $velo->getDateDeEnregistrement()->format('Y-m-d') : null,
                 ]
             ];
         }
     }
-
+    //dd($velo);
     // Render a Twig template, passing the filtered diagnostics
     dump($session->all());
     return $this->render('diagnostic_en_cour/index.html.twig', [
