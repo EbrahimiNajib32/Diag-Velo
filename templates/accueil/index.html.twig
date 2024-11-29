@@ -27,7 +27,7 @@
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
         <div id="headerLogoCite">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
         </div>
     </header>
 
@@ -43,12 +43,12 @@
             <div class="flex flex-col items-stretch shadow-lg p-6 rounded-lg">
 
                 <a data-modal-toggle="modal-lieu" class="cursor-pointer bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
-                    <i class="bi bi-arrow-up-left-circle text-2xl lg:text-3xl mr-2"></i>
+                    <i class="fas fa-tasks text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
                     Diagnostics
                 </a>
 
                 <a href="/velo/all" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
-                    <i class="bi bi-search text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                    <i class="fas fa-bicycle text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
                     Vélos
                 </a>
 
@@ -222,6 +222,7 @@
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
     </footer>
+    
 
     <style>
 
@@ -284,6 +285,17 @@
         setTimeout(() => {
             hideFlashMessage();
         }, 5000);
+
+         window.addEventListener('DOMContentLoaded', (event) => {
+            // Récupérer l'URL de la page
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Vérifier si le paramètre modal=open est présent dans l'URL
+            if (urlParams.get('modal') === 'open') {
+                const modal = document.getElementById('modal-lieu');
+                modal.classList.remove('hidden');  
+            }
+        });
     
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButton = document.querySelector('[data-modal-toggle="modal-lieu"]');
