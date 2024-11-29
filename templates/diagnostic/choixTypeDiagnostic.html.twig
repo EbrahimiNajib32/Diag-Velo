@@ -92,8 +92,11 @@
         <ul>
             {% for diagnostic in typesDiagnostic %}
                 <li>
-                    <a href="{{ path('app_diagnostic_elements_by_type', {'id': diagnostic.id}) }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
-                        <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>{{ diagnostic.nomType }}</a>
+                    <a href="{{ path('app_diagnostic_elements_by_type', {'id': diagnostic.id, 'veloId': app.request.query.get('id')}) }}"
+                       class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-8 py-3 text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-4xl">
+                        <i class="bi bi-bicycle text-3xl mr-4 portrait:text-6xl"></i>
+                        {{ diagnostic.nomType }}
+                    </a>
                 </li>
             {% endfor %}
         </ul>
