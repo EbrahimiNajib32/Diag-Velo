@@ -17,24 +17,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\{ ElementControl};
+use App\Entity\ElementControl;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use App\ConclusionDiagnostic;
 use App\Entity\DiagnosticTypeElementcontrol;
 use App\Entity\DiagnosticType;
-
 
 class FormDiagnosticType extends AbstractType
 {
     private $entityManager;
     private $security;
 
-
-    public function __construct(EntityManagerInterface $entityManager ,Security $security)
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
         $this->security = $security;
     }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -42,7 +40,6 @@ class FormDiagnosticType extends AbstractType
             'diagnostic' => null,
             'diagnosticElements' => [],
             'idTypeDiag' => 0,
-            //'diagnostic_type_id' => null // Ajouter l'option diagnostic_type_id ici
         ]);
     }
 
@@ -50,91 +47,76 @@ class FormDiagnosticType extends AbstractType
     {
         $diagnostic = $options['diagnostic'];
         $diagnosticElements = $options['diagnosticElements'];
-        $idTypeDiag = $options["idTypeDiag"];
+        $idTypeDiag = $options['idTypeDiag'];
         $currentUser = $this->security->getUser();
-        //TEST
-        // Utiliser l'ID pour récupérer l'objet DiagnosticType correspondant
+
+        // Récupérer l'objet DiagnosticType en fonction de l'ID
         $typeDiagnostic = $this->entityManager->getRepository(DiagnosticType::class)->find($idTypeDiag);
-    
-        // Assurez-vous que le type de diagnostic est récupéré avec succès
-         if (!$typeDiagnostic) {
-        // Gérer le cas où le type de diagnostic n'est pas trouvé
-    }
-        // FIN TEST
+        if (!$typeDiagnostic) {
+            // Gérer le cas où le type de diagnostic n'est pas trouvé
+        }
 
-
+        // Initialiser les états des éléments
         $elementStates = [];
         foreach ($diagnosticElements as $diagElement) {
             $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
         }
 
-       
+        // Ajouter le champ de coût de réparation
+        $builder->add('cout_reparation');
 
-        $builder ->add('cout_reparation');
-        $builder
-            ->add('cout_reparation')
+        // Ajouter le champ de conclusion
+        $builder->add('conclusion', ChoiceType::class, [
+            'label' => 'Conclusion',
+            'expanded' => true,
+            'multiple' => false,
+            'choices' => [
+                'R.A.S' => 'R.A.S',
+                'À réparer' => 'À réparer',
+                'Pour pièces' => 'pour pièces',
+            ],
+            'attr' => ['class' => 'form-checkbox mr-4'],
+        ]);
 
-            ->add('conclusion', ChoiceType::class, [
-                'label' => 'Conclusion',
-                'expanded' => true,
-                'multiple' => false,
-                'choices' => [
-                    'R.A.S' => 'R.A.S',
-                    'À réparer' => 'À réparer',
-                    'Pour pièces' => 'pour pièces',
-                ],
-                'attr' => ['class' => 'form-checkbox mr-4'],
-            ])
+//        // Ajouter le champ 'velo' conditionnellement
+//        if (empty($options['exclude_velo'])) {
+//            $builder->add('velo', EntityType::class, [
+//                'class' => Velo::class,
+//                'choice_label' => function ($velo) {
+//                    return sprintf(
+//                        '%s - %s - %s - %s',
+//                        $velo->getDateDeEnregistrement()->format('Y-m-d'),
+//                        $velo->getRefRecyclerie(),
+//                        $velo->getProprietaire()->getNomProprio(),
+//                        $velo->getMarque()
+//                    );
+//                },
+//                'query_builder' => function (EntityRepository $er) {
+//                    return $er->createQueryBuilder('v')
+//                        ->orderBy('v.date_de_enregistrement', 'DESC');
+//                },
+//                'label' => 'Vélo',
+//            ]);
+//        }
 
-            ->add('velo', EntityType::class, [
-                'class' => Velo::class,
-                'choice_label' => function ($velo) {
-                    return sprintf(
-                        '%s - %s - %s - %s ',
-                        $velo->getDateDeEnregistrement()->format('Y-m-d'),
-                        $velo->getRefRecyclerie(),
-                        $velo->getProprietaire()->getNomProprio(),
-                        $velo->getMarque()
-                    );
-                },
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('v')
-                        ->orderBy('v.date_de_enregistrement', 'DESC');
-                },
-            ])
-            ->add('utilisateur', EntityType::class, [
-                'class' => Utilisateur::class,
-                'choice_label' => 'Nom',
-                'query_builder' => function (EntityRepository $er) use ($currentUser) {
-                    return $er->createQueryBuilder('u')
-                        ->where('u.id = :userId')
-                        ->setParameter('userId', $currentUser->getId());
-                },
-                'data' => $currentUser,
-                'attr' => ['style' => 'display:none;'],
-                'required' => true,
-                'label' => false, // Make the label disappear
-            ]);
+        // Ajouter le champ 'utilisateur'
+        $builder->add('utilisateur', EntityType::class, [
+            'class' => Utilisateur::class,
+            'choice_label' => 'Nom',
+            'query_builder' => function (EntityRepository $er) use ($currentUser) {
+                return $er->createQueryBuilder('u')
+                    ->where('u.id = :userId')
+                    ->setParameter('userId', $currentUser->getId());
+            },
+            'data' => $currentUser,
+            'attr' => ['style' => 'display:none;'],
+            'required' => true,
+            'label' => false, // Cacher le label
+        ]);
 
-        foreach ($diagnosticElements as $diagElement) {
-            $elementStates[$diagElement->getElementControl()->getId()] = $diagElement->getEtatControl()->getId();
-            $elementComments[$diagElement->getElementControl()->getId()] = $diagElement->getCommentaire();
-        }
-
-
-        
-        // Récupérer le type de diagnostic en fonction de l'ID du type
-        $typeDiagnostic = $this->entityManager->getRepository(DiagnosticType::class)->find($idTypeDiag);
-        //var_dump($typeDiagnostic);
-        if (!$typeDiagnostic) {
-            // Gérer le cas où le type de diagnostic n'est pas trouvé
-        }
-
-        // Récupérer les éléments de diagnostic associés à ce type de diagnostic
+        // Récupérer et traiter les éléments de diagnostic
         $elementsDiagnostic = $this->entityManager->getRepository(DiagnosticTypeElementcontrol::class)->findBy(['idDianosticType' => $typeDiagnostic]);
-
         foreach ($elementsDiagnostic as $elementDiagnostic) {
-
             $elementControlId = $elementDiagnostic->getIdElementcontrol()->getId();
             $element = $this->entityManager->getRepository(ElementControl::class)->find($elementControlId);
 
@@ -168,4 +150,3 @@ class FormDiagnosticType extends AbstractType
         }
     }
 }
-
