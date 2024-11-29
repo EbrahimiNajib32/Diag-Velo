@@ -40,7 +40,7 @@
                 <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
-                <li class="bg-white rounded mr-2 mb-2 p-1">Modèle: <span id="commentaire">{{ velo.model }}</span></li>
+                <li class="bg-white rounded mr-2 mb-2 p-1">Modèle: <span id="model">{{ velo.model }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
                 <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
@@ -52,9 +52,9 @@
                     <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
                 <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
                 <li class="text-xl font-bold">Propriétaire du Vélo</li>
-                <li class="details-list">Nom et Prénom : <span>{{ velo.getProprietaire.getNomProprio() }}</span></li>
-                <li class="details-list">Téléphone : <span>{{ velo.getProprietaire.getTelephone() }}</span></li>
-                <li class="details-list">E mail : <span>{{ velo.getProprietaire.getEmail() }}</span></li>
+                <li class="details-list">Nom et Prénom : <span id="nom_proprio">{{ velo.getProprietaire.getNomProprio() }}</span></li>
+                <li class="details-list">Téléphone : <span id="telephone">{{ velo.getProprietaire.getTelephone() }}</span></li>
+                <li class="details-list">E mail : <span id="email">{{ velo.getProprietaire.getEmail() }}</span></li>
                     </div>
                 <div class="">
                 <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
@@ -87,6 +87,7 @@
             const editButton = document.querySelector('.edit-button');
             const saveButton = document.querySelector('.save-button');
             const fields = document.querySelectorAll('.details-list span');
+            const fieldsDate = document.querySelectorAll('.details-list input');
             const optionalFields = ['taille_cadre', 'taille_roues', 'ref_recyclerie', 'poids'];
 
             function toggleEditMode() {
@@ -109,6 +110,12 @@
                             let value = field.innerText.trim();
                             data[propName] = value;
                         }
+                    });
+
+                    fieldsDate.forEach(field => {
+                        let propName = field.id;
+                        propName = propName.replace(/_([a-z])/g, function (g) { return g[1].toUpperCase(); });
+                        data[propName] = field.value;
                     });
 
                     fetch(`/api/update-velo/{{ velo.id }}`, {
