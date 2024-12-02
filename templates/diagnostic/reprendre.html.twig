@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{# {% block body %}
     <div class="container shadow-2xl p-2 mt-3 mx-auto px-4 max-w-xl text-center ">
         <h1 class="text-xl font-semibold text-gray-700 text-center portrait:text-3xl">Continuer Diagnostic</h1>
         {{ form_start(diagnosticForm, {'attr': {'class': 'space-y-3 portrait:space-y-6'}}) }}
@@ -18,7 +18,7 @@
             <div>{{ form_row(diagnosticForm.utilisateur, {'attr': {'class': 'form-control border mb-2 mt-4'}}) }}</div>
         </div>
 
-        {% for category, elements in diagnosticElements %}
+       {#  {% for category, elements in diagnosticElements %}
             <div class="mb-2 text-center">
                 <h2 onclick="toggleSection(event)" class="flex justify-between items-center text-lg font-semibold cursor-pointer rounded-xl text-white portrait:text-3xl category-header" aria-expanded="false">
                     <div class="flex-1 text-center">{{ category }}</div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
         {% endfor %}
-{#        <div>{{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 p-2 border rounded border-black portrait:h-10'}}) }}</div>#}
+      <div>{{ form_row(diagnosticForm.conclusion, {'attr': {'class': 'form-control mb-2 mt-4 h-6 p-2 border rounded border-black portrait:h-10'}}) }}</div>#}
         <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
         {{ form_end(diagnosticForm) }}
     </div>
