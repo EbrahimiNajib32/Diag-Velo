@@ -216,10 +216,11 @@
         </div>
 
     </main>
-<footer class="bg-white border-t border-gray-300 py-4">
+
+<footer class="absolute w-full bg-white border-t border-gray-300 py-4">
     <!-- Section Logo -->
     <div class="flex justify-center items-center mb-4">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="h-8 md:h-10">
+        <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" class="h-8 md:h-10">
     </div>
 
     <!-- Section Contenu -->
@@ -229,29 +230,42 @@
             &copy; 2024 UHA 4.0 | Projet Vélo
         </div>
 
+        <div class="flex justify-center items-center gap-3 text-gray-700 mt-3">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com" 
+               target="_blank" 
+               class="flex items-center gap-2 hover:text-blue-500 transition duration-200">
+                <img src="{{ asset('images/uha_4_0_logo (4).png') }}" 
+                     alt="Logo UHA" 
+                     class="h-6 w-auto">
+                <span class="underline decoration-dotted decoration-blue-500 hover:decoration-solid">
+                    uha4point0@gmail.com
+                </span>
+            </a>
+        </div>
+
         <!-- Liste des participants -->
-        <div class="flex flex-wrap justify-center gap-3 text-xs sm:text-sm md:text-base text-gray-500 mt-3">
-            <a href="mailto:nina.gomez@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Nina Gomez
-            </a>
-            <a href="mailto:jeanluc.vassal@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Jean-Luc Vassal
-            </a>
-            <a href="mailto:najib.ebrahimi@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Najib Ebrahimi
-            </a>
-            <a href="mailto:julien.muller@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Julien Muller
-            </a>
-            <a href="mailto:adam.moudoux@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Adam Moudoux
-            </a>
-            <a href="mailto:liz.manresa@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Liz Manresa
-            </a>
-            <a href="mailto:girard@gmail.com" class="flex items-center gap-1 hover:text-yellow-500 transition">
-                <i class="fas fa-user-circle text-yellow-400"></i> Girard
-            </a>
+        <div class="flex flex-wrap justify-center gap-4 text-sm sm:text-base text-gray-600 mt-5">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Nina Gomez
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Jean-Luc Vassal
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Najib Ebrahimi
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Julien Muller
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Adam Moudoux
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Liz Manresa
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Girard
+            </div>
         </div>
 
         <!-- Signature -->
@@ -265,7 +279,18 @@
 
 
 
+
+
+
+
     <style>
+        html, body{
+            max-height:100vh;
+        }
+        footer{
+            max-height:10%;
+        }
+
 
         /* Animation Slide-In */
         @keyframes slideIn {
