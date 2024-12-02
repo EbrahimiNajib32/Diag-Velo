@@ -14,120 +14,184 @@
             cursor: text;
             margin-left: 3px;
         }
+
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: relative;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .container-details {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .container-proprio {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .container-proprio img {
+                max-width: 300px;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .container-details {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .container-proprio {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .container-proprio img {
+                max-width: 400px;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+        }
     </style>
 
-    <header class="relative w-full top-0 left-0 flex justify-between items-center">
-        <div id="headerLogoTissebands">
-            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-        </div>
+    <body>
+        <header class="flex relative w-full justify-between mb-2">
+            <div id="headerLogoTissebands">
+                <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+            </div>
+            <div id="headerLogoCite">
+                <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+            </div>
+        </header>
 
-        <div id="headerLogoCite">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-        </div>
-    </header>
-
-    <main>
-        {% if lieu %}
-            <div class="container mx-auto mb-4">
-                <h1 class="text-2xl font-bold text-black text-center">
-                    <i class="fas fa-bicycle mr-2"></i> Modification
-                </h1>
+        <main class="mb-4">
+            <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
+                {% if lieu %}
+                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
+                        <i class="fas fa-bicycle mr-2"></i> Modification
+                    </h1>
+                {% else %}
+                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
+                        <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
+                    </h1>
+                {% endif %}
             </div>
 
-        {% else %}
+            <nav class="py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
+                    <li class="breadcrumb-item font-bold">
+                        <a href="{{ path('app_accueil') }}" 
+                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
+                            <i class="fas fa-home mr-2"></i> Accueil
+                        </a>
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item font-bold">
+                        <a href="/velo/all" 
+                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
+                            <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
+                        </a>
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item text-black font-bold flex items-center">
+                        <i class="bi bi-pencil mr-2"></i> Modifier vélo
+                    </li>
+                </ol>
+            </nav>
 
-            <div class="container mx-auto mb-4">
-                <h1 class="text-2xl font-bold text-black text-center">
-                    <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
-                </h1>
-            </div>
+            <h1 class="text-center text-lg font-semibold">
 
-        {% endif %}
-
-        <nav class="py-3 px-4 container mx-auto flex justify-center mb-4">
-            <ol class="breadcrumb flex items-center space-x-4">
-                <li class="breadcrumb-item font-bold flex items-center">
-                    <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                        <i class="fas fa-home mr-2"></i> Accueil
-                    </a>
-                </li>
-                <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                <li class="breadcrumb-item font-bold flex items-center">
-                    <a href="/velo/all" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                        <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
-                    </a>
-                </li>
-                <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                <li class="breadcrumb-item text-black font-bold flex items-center">
-                    <i class="bi bi-pencil mr-2"></i> Modifier vélo
-                </li>
-            </ol>
-        </nav>
-
-        <h1 class="text-center text-lg font-semibold">
-
-            Ref Recyclerie: {{ velo.getRefRecyclerie() }} &nbsp;&nbsp;
-            numéro de série : {{ velo.getNumeroDeSerie() }} &nbsp;&nbsp;
-            Bicycode: {{ velo.getBicycode() }} &nbsp;&nbsp;
-            Marque: {{ velo.marque }}<br>
-            Propriétaire:  {{ velo.getProprietaire.getNomProprio() }} &nbsp;&nbsp;
-        </h1>
+                Ref Recyclerie: {{ velo.getRefRecyclerie() }} &nbsp;&nbsp;
+                numéro de série : {{ velo.getNumeroDeSerie() }} &nbsp;&nbsp;
+                Bicycode: {{ velo.getBicycode() }} &nbsp;&nbsp;
+                Marque: {{ velo.marque }}<br>
+                Propriétaire:  {{ velo.getProprietaire.getNomProprio() }} &nbsp;&nbsp;
+            </h1>
 
 
-        <div class="flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
-            <div class="">
-                <h2 class="text-center font-bold">Détails du Vélo</h2>
-                <ul class="details-list">
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
-                    <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Modèle: <span id="model">{{ velo.model }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
-                    <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
-                </ul>
-            </div>
-            <div class="">
-                <ul class="">
-                    <div class="details-list bg-white rounded p-2">
-                        <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
-                    <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
-                    <li class="text-xl font-bold">Propriétaire du Vélo</li>
-                    <li class="details-list">Nom et Prénom : <span id="nom_proprio">{{ velo.getProprietaire.getNomProprio() }}</span></li>
-                    <li class="details-list">Téléphone : <span id="telephone">{{ velo.getProprietaire.getTelephone() }}</span></li>
-                    <li class="details-list">E mail : <span id="email">{{ velo.getProprietaire.getEmail() }}</span></li>
+            <div class="container-details flex flex-col-2 gap-4 container mx-auto justify-center items-center bg-teal-500 shadow-lg rounded p-4 max-w-5xl ">
+                <div class="">
+                    <h2 class="text-center font-bold">Détails du Vélo</h2>
+                    <ul class="details-list">
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Référence recyclerie: <span id="ref_recyclerie">{{ velo.getRefRecyclerie() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Numéro de série: <span id="numero_de_serie">{{ velo.getNumeroDeSerie() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Bicycode: <span id="bicycode">{{ velo.getBicycode() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Couleur: <span id="couleur">{{ velo.couleur }}</span></li>
+                        <li class="bg-white rounded mr-2 mt-2 mb-2 p-1">Marque: <span id="marque">{{ velo.marque }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Type: <span id="type">{{ velo.type }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Public: <span id="public">{{ velo.getPublic() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">État: <span id="etat">{{ velo.etat }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Taille du Cadre: <span id="taille_cadre">{{ velo.getTailleCadre() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Taille des Roues: <span id="taille_roues">{{ velo.getTailleRoues() }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Poids: <span id="poids">{{ velo.poids }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Modèle: <span id="model">{{ velo.model }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Emplacement: <span id="emplacement">{{ velo.emplacement }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Commentaire: <span id="commentaire">{{ velo.commentaire }}</span></li>
+                        <li class="bg-white rounded mr-2 mb-2 p-1">Origine du vélo: <span id="origine">{{ velo.getOrigine() }}</span></li>
+                    </ul>
+                </div>
+                <div class="container-proprio">
+                    <ul class="">
+                        <div class="details-list bg-white rounded p-2">
+                            <h1 class="text-xl font-bold text-center">Photo du vélo</h1>
+                        <li class=""><img class="rounded border-4 border-black h-auto max-w-lg ms-auto" src="{{ velo.getUrlPhoto() }}" alt="Photo du Vélo"/></li>
+                        <li class="text-xl font-bold">Propriétaire du Vélo</li>
+                        <li class="details-list">Nom et Prénom : <span id="nom_proprio">{{ velo.getProprietaire.getNomProprio() }}</span></li>
+                        <li class="details-list">Téléphone : <span id="telephone">{{ velo.getProprietaire.getTelephone() }}</span></li>
+                        <li class="details-list">E mail : <span id="email">{{ velo.getProprietaire.getEmail() }}</span></li>
+                            </div>
+                        <div class="">
+                        <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
+                        <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
+                        <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
                         </div>
-                    <div class="">
-                    <li class="bg-white  rounded mr-2 mt-2 mb-2 p-1">Date d'Enregistrement: <span>{{ velo.getDateDeEnregistrement()|date('Y-m-d') }}</span></li>
-                    <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Vente: <input type="date" id="date_de_vente" value="{{ velo.getDateDeVente() ? velo.getDateDeVente()|date('Y-m-d') : '' }}"></li>
-                    <li class="details-list bg-white rounded mr-2 mb-2 p-1">Date de Destruction: <input type="date" id="date_destruction" value="{{ velo.getDateDestruction() ? velo.getDateDestruction()|date('Y-m-d') : '' }}"></li>
-                    </div>
-                </ul>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="flex flex-col-3 gap-2 mx-auto justify-center  items-center  mt-10">
-            <button type="button" class="button-style edit-button">
-                <i class="bi bi-pen mr-1 text-xl"></i>Modifier
-            </button>
-            <button type="submit" class="button-style save-button">
-                <i class="bi bi-box-arrow-down mr-1 text-xl"></i>Enregistrer
-            </button>
-        </div>
-    </main>
+            <div class="flex flex-col-3 gap-2 mx-auto justify-center  items-center  mt-10">
+                <button type="button" class="button-style edit-button">
+                    <i class="bi bi-pen mr-1 text-xl"></i>Modifier
+                </button>
+                <button type="submit" class="button-style save-button">
+                    <i class="bi bi-box-arrow-down mr-1 text-xl"></i>Enregistrer
+                </button>
+            </div>
+        </main>
 
-    <footer class="fixed bottom-0 w-full bg-white">
-        <div class="flex justify-center content-center">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-        </div>
-    </footer>
+        <footer class="w-full">
+            <div id="bottom-logo" class="flex justify-center items-center py-6">
+                <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
+            </div>
+        </footer>
 {% endblock %}
 
 {% block javascripts %}

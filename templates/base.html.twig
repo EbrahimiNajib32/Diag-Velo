@@ -17,13 +17,16 @@
     <style>
         html, body {
             min-height: 100vh;
+            max-width: 100vw;
         }
         @media (min-width: 500px) {
-            #bottom-logo { display: none; }
+            #bottom-logo {
+                display: none;
+            }
             #headerLogoCite { display: block; }
         }
         @media (max-width: 500px) {
-            #bottom-logo { display: block; }
+            #bottom-logo { display: flex; }
             #headerLogoTissebands {
                 display: flex;
                 width: 100%;
@@ -31,6 +34,7 @@
             }
             #headerLogoCite { display: none; }
         }
+
     </style>
 
         {% block javascripts %}

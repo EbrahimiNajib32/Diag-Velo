@@ -38,16 +38,71 @@
         tbody tr:hover {
             background-color: #e9ecef;
         }
+
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: relative;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 50px;
+                margin-top: 100px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-    </div>
-    <div class="fixed top-0 right-0">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-    </div>
+    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </header>
+
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold text-center text-black mb-8">Récapitulatif des Diagnostics</h1>
 
@@ -74,8 +129,9 @@
 
 
         <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+        <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
-            <table class="w-full text-lg text-left text-gray-650">
+            <table class="table w-full text-lg text-left text-gray-650">
                 <thead class="text-lg text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th colspan="6" class="px-6 py-3 text-center docker compose up
@@ -318,23 +374,10 @@
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
                         <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-left-black border-b border-gray-300"
-                            data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
-                            {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
-                            data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
-                            {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
-                            data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
-                            {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
-                            data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
-                            {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
-                        </td>
-
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
                         <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
@@ -356,6 +399,12 @@
         </div>
     </div>
     </div>
+
+    <footer class="logo-footer fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+        </div>
+    </footer>
 
     <style>
         h1 {
@@ -382,8 +431,6 @@
             z-index: 50;
         }
     </style>
-
-
 
      <script>
 

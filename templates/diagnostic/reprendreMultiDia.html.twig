@@ -59,7 +59,7 @@
             <p class="text-gray-700 font-semibold text-center">{{lieu.nomType}} {{lieu.nom}} à {{lieu.ville}}</p>
         </div>
 
-         <nav class="py-3 px-4 container mx-auto flex justify-center mb-4">
+        <nav class="py-3 px-4 container mx-auto flex justify-center mb-4">
             <ol class="breadcrumb flex items-center space-x-4">
                 <li class="breadcrumb-item font-bold flex items-center">
                     <a id="OpenModalAccueil" href="#" data-url="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
@@ -153,6 +153,28 @@
                     visibility: hidden;
                     position: absolute;
                 }
+
+                @media screen and (max-width: 500px) {
+                    .logo-footer {
+                        display: block;
+                        position: relative;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
+                }
+
+                @media screen and (min-width: 501px) and (max-width: 900px) {
+                    .logo-footer {
+                        display: none;
+                    }
+                }
+
+                @media screen and (min-width: 901px) {
+                    .logo-footer {
+                        display: none;
+                    }
+                }
             </style>
 
 
@@ -164,7 +186,7 @@
 
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-white">
+    <footer class="logo-footer bottom-0 w-full bg-white">
         <div class="flex justify-center content-center">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>

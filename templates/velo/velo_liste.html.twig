@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+    <body>
+    <header class="flex relative w-full justify-between mb-2">
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-
         <div id="headerLogoCite">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
         </div>
     </header>
 
-    <main>
+    <main class="mb-4">
         <!--Mesage d'erreur sous la forme d'un pop-up!-->
         {% for message in app.session.flashbag().get('error') %}
         <div id="modal-erreur" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto hidden">
@@ -50,22 +50,25 @@
 
         <div class="container mx-auto">
 
-
             {% if lieu %}
-                <div class="container mx-auto mb-4">
-                    <h1 class="text-2xl font-bold text-black text-center"><i class="fas fa-tasks mr-2"></i> Diagnostic</h1>
-                    <p class="text-gray-700 font-semibold text-center">{{lieu.nomType}} {{lieu.nom}} à {{lieu.ville}}</p>
+                <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
+                        <i class="fas fa-tasks mr-2"></i> Diagnostic
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-700 font-semibold text-center">
+                        {{ lieu.nomType }} {{ lieu.nom }} à {{ lieu.ville }}
+                    </p>
                 </div>
 
-                <nav class="py-3 px-4 container mx-auto flex justify-center mb-4">
-                    <ol class="breadcrumb flex items-center space-x-4">
-                        <li class="breadcrumb-item font-bold flex items-center">
+                <nav class="w-full py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                    <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
+                        <li class="breadcrumb-item font-bold">
                             <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
                                 <i class="fas fa-home mr-2"></i> Accueil
                             </a>
                         </li>
                         <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                        <li class="breadcrumb-item font-bold flex items-center">
+                        <li class="breadcrumb-item font-bold">
                             <a href="{{ path('app_diagnostic_en_cours') }}" class="text-blue-500 hover:text-blue-600 flex items-center hover:underline">
                                 Créer/Reprendre diagnostic
                             </a>
@@ -76,25 +79,23 @@
                         </li>
                     </ol>
                 </nav>
-
             {% else %}
-
-                <div class="container mx-auto mb-4">
-                    <h1 class="text-2xl font-bold text-black text-center">
+                <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
                         <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
                     </h1>
                 </div>
 
-                <nav class="py-3 px-4 container mx-auto flex justify-center mb-4">
-                    <ol class="breadcrumb flex items-center space-x-4">
+                <nav class="py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                    <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
                         <li class="breadcrumb-item">
-                            <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
+                            <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
                                 <i class="fas fa-home mr-2"></i> Page d'accueil
                             </a>
                         </li>
                         <li><i class="fas fa-angle-right text-gray-400"></i></li>
                         <li class="breadcrumb-item text-black font-bold flex items-center">
-                             <i class="bi bi-search mr-2"></i> Créer/Séléctionner Vélo
+                            <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
                         </li>
                     </ol>
                 </nav>
@@ -167,8 +168,8 @@
 
 
 
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500">
+            <div class="table-container overflow-x-auto relative shadow-md sm:rounded-lg">
+                <table class="table w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-2 py-3">ID</th>
@@ -276,8 +277,8 @@
 
 
                         <!-- Tableau des informations -->
-                        <div class="mt-6 overflow-auto">
-                            <table class="table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
+                        <div class="table-container mt-6 overflow-auto">
+                            <table class="table table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
                                 <tbody>
                                 <!-- Première section : Propriétaire, Marque, Type, Couleur -->
                                 <tr class="bg-gray-100">
@@ -365,11 +366,13 @@
     {% endfor %}
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-white">
-        <div class="flex justify-center content-center">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+    <footer class="w-full">
+        <div id="bottom-logo" class="flex justify-center items-center py-6 ">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
         </div>
-    </footer>
+    </footer>   
+
+    </body>
 
     <style>
         .py-3{
@@ -392,10 +395,58 @@
             z-index: 50;
         }
 
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 10vh;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+
+            .logo-footer {
+                display: none;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
     </style>
 
     <script>
-
         document.addEventListener("DOMContentLoaded", () => {
             const modal = document.getElementById("modal-erreur");
             const closeModalButton = document.querySelector('[data-modal-hide="modal-erreur"]');

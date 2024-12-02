@@ -181,7 +181,6 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
             ];
         }
     }
-    //dd($diagnostic);
     //dd($velo);
     // Render a Twig template, passing the filtered diagnostics
     dump($session->all());
