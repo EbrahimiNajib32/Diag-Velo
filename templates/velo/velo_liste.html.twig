@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+    <header class="relative w-full top-0 left-0 flex justify-between items-center mb-2">
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
@@ -11,7 +11,7 @@
         </div>
     </header>
 
-    <main>
+    <main class="mb-2">
         <!--Mesage d'erreur sous la forme d'un pop-up!-->
         {% for message in app.session.flashbag().get('error') %}
         <div id="modal-erreur" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto hidden">
@@ -365,11 +365,11 @@
     {% endfor %}
     </main>
 
-    <footer class="logo-footer bottom-0 w-full bg-white">
-        <div class="flex justify-center content-center">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+    <footer class="w-full">
+        <div id="bottom-logo" class="flex justify-center items-center py-6 border-b border-gray-300">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
         </div>
-    </footer>
+    </footer>   
 
     <style>
         .py-3{

@@ -22,7 +22,7 @@
         </div>
     {% endfor %}
 
-    <header class="relative w-full top-0 left-0 flex justify-between z-10">
+    <header class="flex relative w-full justify-between">
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
@@ -217,36 +217,48 @@
 
     </main>
 
-<footer class="absolute w-full bg-white border-t border-gray-300">
+<footer class="w-full bg-gray-100 text-gray-700">
     <!-- Section Logo -->
-    <div id="bottom-logo" class="flex justify-center items-center mb-4">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" class="h-8 md:h-10">
+    <div id="bottom-logo" class="flex justify-center items-center py-6 border-b border-gray-300">
+        <img src="{{ asset('images/nouveau log 1.png') }}">
     </div>
 
     <!-- Section Contenu -->
-    <div class="container mx-auto text-center px-4">
-        <!-- Copyright -->
-        <div class="text-sm font-semibold text-gray-600 sm:text-base md:text-lg">
-            &copy; 2024 UHA 4.0 | Projet Vélo
+    <div class="container mx-auto px-4 py-8">
+        <!-- Navigation rapide -->
+        <div class="flex flex-wrap justify-center gap-6 mb-6">
+            <a href="#about" class="text-sm sm:text-base hover:text-blue-500 transition">À propos</a>
+            <a href="#services" class="text-sm sm:text-base hover:text-blue-500 transition">Services</a>
+            <a href="#contact" class="text-sm sm:text-base hover:text-blue-500 transition">Contact</a>
+            <a href="#faq" class="text-sm sm:text-base hover:text-blue-500 transition">FAQ</a>
         </div>
 
-        <div class="flex justify-center items-center gap-3 text-gray-700 mt-3">
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com"
-               target="_blank"
-               class="flex items-center gap-2 hover:text-blue-500 transition duration-200">
-                <img src="{{ asset('images/uha_4_0_logo (4).png') }}"
-                     alt="Logo UHA"
-                     class="h-6 w-auto">
-                <span class="underline decoration-dotted decoration-blue-500 hover:decoration-solid">
-                    uha4point0@gmail.com
-                </span>
-            </a>
+        <!-- Copyright et Contact -->
+        <div class="text-center mb-6">
+            <div class="text-sm sm:text-base md:text-lg font-semibold">
+                &copy; 2024 UHA 4.0 | Projet Vélo
+            </div>
+            <div class="flex justify-center items-center gap-3 mt-3">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com"
+                   target="_blank"
+                   class="flex items-center gap-2 hover:text-blue-500 transition duration-200">
+                    <img src="{{ asset('images/uha_4_0_logo (4).png') }}"
+                         alt="Logo UHA"
+                         class="h-6 w-auto">
+                    <span class="underline decoration-dotted decoration-blue-500 hover:decoration-solid">
+                        uha4point0@gmail.com
+                    </span>
+                </a>
+            </div>
         </div>
 
         <!-- Liste des participants -->
-        <div class="flex flex-wrap justify-center gap-4 text-sm sm:text-base text-gray-600 mt-5">
+        <div class="flex flex-wrap justify-center gap-4 text-sm sm:text-base text-gray-600 mb-6">
             <div class="flex items-center gap-2">
                 <i class="fas fa-user-circle text-blue-400"></i> Nina Gomez
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-blue-400"></i> Liz Manresa
             </div>
             <div class="flex items-center gap-2">
                 <i class="fas fa-user-circle text-blue-400"></i> Jean-Luc Vassal
@@ -261,19 +273,36 @@
                 <i class="fas fa-user-circle text-blue-400"></i> Adam Moudoux
             </div>
             <div class="flex items-center gap-2">
-                <i class="fas fa-user-circle text-blue-400"></i> Liz Manresa
+                <i class="fas fa-user-circle text-blue-400"></i> Girard Mehdi
             </div>
             <div class="flex items-center gap-2">
-                <i class="fas fa-user-circle text-blue-400"></i> Girard
+                <i class="fas fa-user-circle text-blue-400"></i> Adam Moukhliss
             </div>
         </div>
 
+        <!-- Réseaux sociaux -->
+        <div class="flex justify-center items-center gap-4 mb-6">
+            <a href="https://facebook.com" target="_blank" class="hover:text-blue-600 transition">
+                <i class="fab fa-facebook-f text-2xl"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="hover:text-blue-400 transition">
+                <i class="fab fa-twitter text-2xl"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="hover:text-blue-700 transition">
+                <i class="fab fa-linkedin-in text-2xl"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" class="hover:text-pink-500 transition">
+                <i class="fab fa-instagram text-2xl"></i>
+            </a>
+        </div>
+
         <!-- Signature -->
-        <div class="text-xs text-gray-400 mt-3">
+        <div class="text-center text-xs text-gray-500">
             Développé avec ❤️ par les étudiants de l'UHA 4.0.
         </div>
     </div>
 </footer>
+
 
     <style>
         html, body{
