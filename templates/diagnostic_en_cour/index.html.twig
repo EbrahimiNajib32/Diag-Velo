@@ -100,17 +100,16 @@
         }
     </style>
 
-    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+    <header class="flex relative w-full justify-between mb-2">
         <div id="headerLogoTissebands">
             <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
         </div>
-
         <div id="headerLogoCite">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
         </div>
     </header>
 
-    <main>
+    <main class="mb-4">
         <div class="container mx-auto">
 
             <div class="container mx-auto mb-4">
@@ -189,11 +188,11 @@
 
     </main>
 
-    <footer class="logo-footer bottom-0 bg- flex justify-center items-center">
-        <div class="flex justify-center content-center">
-            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+    <footer class="w-full">
+        <div id="bottom-logo" class="flex justify-center items-center py-6">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
         </div>
-    </footer>
+    </footer>  
 
     <script>
         function hideFlashMessage() {
