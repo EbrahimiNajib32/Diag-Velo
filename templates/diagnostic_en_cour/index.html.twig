@@ -49,6 +49,55 @@
         .slide-out {
             animation: slideOut 0.5s ease-in forwards;
         }
+
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: fixed;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+
+            .logo-footer {
+                display: none;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .table-container {
+                overflow-x: visible;
+            }
+
+            .table {
+                width: auto;
+                min-width: 900px;
+            }
+
+            .logo-footer {
+                display: none;
+            }
+        }
     </style>
 
     <header class="relative w-full top-0 left-0 flex justify-between items-center">
@@ -98,47 +147,50 @@
 
             </div>
             <h1 class="text-2xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
-            <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
-                <thead class="bg-gray-200">
-                <tr class=" text-black">
-                    <th class="px-2 py-2">Id Vélo<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Bicycode<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Reference Recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Date d'enregistrement <i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">propriétaire<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2"></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in filteredDiagnostics %}
-                    <tr class="border">
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.id }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.numeroSerie }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.bicycode }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateDeEnregistrement }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.proprio.nomProprio }}</td>
-                        <td class="px-4 py-2 ">
-                            <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
-                                Continuer
-                            </a>
-                        </td>
+            <div class="table-container max-w-full">
+                <table class="table max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
+                    <thead class="bg-gray-200">
+                    <tr class=" text-black">
+                        <th class="px-2 py-2">Id Vélo<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Bicycode<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Reference Recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">Date d'enregistrement <i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2">propriétaire<i class="ml-1 bi bi-arrow-down-up"></i></th>
+                        <th class="px-2 py-2"></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for item in filteredDiagnostics %}
+                        <tr class="border">
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.id }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.numeroSerie }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.bicycode }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateDeEnregistrement }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.proprio.nomProprio }}</td>
+                            <td class="px-4 py-2 ">
+                                <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
+                                    Continuer
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-white">
+    <footer class="logo-footer fixed bottom-0 bg- flex justify-center items-center">
         <div class="flex justify-center content-center">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>

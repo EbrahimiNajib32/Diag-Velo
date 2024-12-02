@@ -38,21 +38,76 @@
         tbody tr:hover {
             background-color: #e9ecef;
         }
+
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: relative;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 50px;
+                margin-top: 100px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-    </div>
-    <div class="fixed top-0 right-0">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-    </div>
+    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </header>
+
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold text-center text-black mb-8">Récapitulatif des Diagnostics</h1>
-        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+        <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
-            <table class="w-full text-lg text-left text-gray-650">
+            <table class="table w-full text-lg text-left text-gray-650">
                 <thead class="text-lg text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th colspan="6" class="px-6 py-3 text-center docker compose up
@@ -319,6 +374,12 @@
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
         </div>
     </div>
+
+    <footer class="logo-footer fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+        </div>
+    </footer>
 
     <style>
         h1 {
