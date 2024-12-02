@@ -277,8 +277,8 @@
 
 
                         <!-- Tableau des informations -->
-                        <div class="mt-6 overflow-auto">
-                            <table class="table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
+                        <div class="table-container mt-6 overflow-auto">
+                            <table class="table table-auto border-collapse border border-gray-300 mx-auto text-center w-full">
                                 <tbody>
                                 <!-- Première section : Propriétaire, Marque, Type, Couleur -->
                                 <tr class="bg-gray-100">
@@ -366,7 +366,7 @@
     {% endfor %}
     </main>
 
-    <footer class="logo-footer fixed bottom-0 w-full bg-white">
+    <footer class="logo-footer bottom-0 w-full bg-white">
         <div class="flex justify-center content-center">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
@@ -396,11 +396,11 @@
         @media screen and (max-width: 500px) {
             .logo-footer {
                 display: block;
-                position: fixed;
+                position: absolute;
                 bottom: 0;
                 left: 50%;
                 transform: translateX(-50%);
-                height: 50px;
+                height: 10vh;
             }
 
             .table-container {
@@ -429,17 +429,17 @@
         }
 
         @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+
             .table-container {
-                overflow-x: visible;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .table {
-                width: auto;
-                min-width: 900px;
-            }
-
-            .logo-footer {
-                display: none;
+                width: 100%;
             }
         }
     </style>

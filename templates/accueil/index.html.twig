@@ -217,9 +217,9 @@
 
     </main>
 
-<footer class="absolute w-full bg-white border-t border-gray-300 py-4">
+<footer class="absolute w-full bg-white border-t border-gray-300">
     <!-- Section Logo -->
-    <div class="flex justify-center items-center mb-4">
+    <div id="bottom-logo" class="flex justify-center items-center mb-4">
         <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" class="h-8 md:h-10">
     </div>
 
@@ -231,11 +231,11 @@
         </div>
 
         <div class="flex justify-center items-center gap-3 text-gray-700 mt-3">
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com" 
-               target="_blank" 
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com"
+               target="_blank"
                class="flex items-center gap-2 hover:text-blue-500 transition duration-200">
-                <img src="{{ asset('images/uha_4_0_logo (4).png') }}" 
-                     alt="Logo UHA" 
+                <img src="{{ asset('images/uha_4_0_logo (4).png') }}"
+                     alt="Logo UHA"
                      class="h-6 w-auto">
                 <span class="underline decoration-dotted decoration-blue-500 hover:decoration-solid">
                     uha4point0@gmail.com
@@ -275,22 +275,14 @@
     </div>
 </footer>
 
-
-
-
-
-
-
-
-
     <style>
         html, body{
-            max-height:100vh;
+            max-height:80vh;
         }
         footer{
-            max-height:10vh;
             position: absolute;
             bottom: 0;
+
         }
 
 
@@ -325,9 +317,16 @@
         {# Disparition du texte d'introduction pour le responsive #}
         @media (min-width: 840px){
             #text-home{display:block;}
+            footer {
+                max-height: 20vh;
+            }
         }
         @media (max-width: 840px){
             #text-home{display:none;}
+            footer {
+                max-height: 20vh;
+            }
+
         }
 
         .modal-backdrop {

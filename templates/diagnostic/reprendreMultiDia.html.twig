@@ -157,6 +157,28 @@
                     visibility: hidden;
                     position: absolute;
                 }
+
+                @media screen and (max-width: 500px) {
+                    .logo-footer {
+                        display: block;
+                        position: relative;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
+                }
+
+                @media screen and (min-width: 501px) and (max-width: 900px) {
+                    .logo-footer {
+                        display: none;
+                    }
+                }
+
+                @media screen and (min-width: 901px) {
+                    .logo-footer {
+                        display: none;
+                    }
+                }
             </style>
 
 
@@ -168,7 +190,7 @@
 
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-white">
+    <footer class="logo-footer bottom-0 w-full bg-white">
         <div class="flex justify-center content-center">
             <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
         </div>
