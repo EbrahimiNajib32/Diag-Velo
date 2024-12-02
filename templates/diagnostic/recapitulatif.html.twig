@@ -50,6 +50,29 @@
     </div>
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold text-center text-black mb-8">Récapitulatif des Diagnostics</h1>
+
+
+
+        <!-- Formulaire de filtrage -->
+            <div class="flex flex-col space-y-4">
+
+                <div class="flex justify-center items-center w-full mt-4"> <!-- Adds space above the search bar -->
+                    <div class="relative w-full max-w-lg">
+                        <input type="text"
+                               id="mainSearch"
+                               name="ref_recyclerie"
+                               placeholder="ID Vélo, N° de Série, Bicycode; Ref Recyclerie; Nom Propriétaire"
+                               class="border-none rounded-full pl-3 pr-12 py-3 shadow-md focus:outline-none text-gray-700 transition-colors duration-200 w-full"
+                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5;"
+                               onkeyup="filterTable()">
+
+                        <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                <i class="bi bi-search text-gray-500"></i>
+            </span>
+                    </div>
+                </div>
+
+
         <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
             <table class="w-full text-lg text-left text-gray-650">
@@ -282,10 +305,23 @@
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
                         <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300"
+                            data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
+                        </td>
+
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
                         <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
@@ -332,6 +368,8 @@
             z-index: 50;
         }
     </style>
+
+
 
      <script>
 
@@ -425,6 +463,43 @@
                 }
             }
         }
+
+
+        // Nouvelle fonction de filtrage global pour la barre de recherche principale
+        function filterTable() {
+            const input = document.getElementById("mainSearch").value.toUpperCase();
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                const veloIdCell = row.querySelector("[data-velo-id]");
+                const serialCell = row.querySelector("[data-serial]");
+                const bicycodeCell = row.querySelector("[data-bicycode]");
+                const referenceCell = row.querySelector("[data-reference]");
+
+                // Récupération du texte de chaque cellule
+                const veloIdText = veloIdCell ? veloIdCell.textContent.toUpperCase() : "";
+                const serialText = serialCell ? serialCell.textContent.toUpperCase() : "";
+                const bicycodeText = bicycodeCell ? bicycodeCell.textContent.toUpperCase() : "";
+                const referenceText = referenceCell ? referenceCell.textContent.toUpperCase() : "";
+
+                // Comparaison avec la valeur de recherche
+                if (
+                    veloIdText.includes(input) ||
+                    serialText.includes(input) ||
+                    bicycodeText.includes(input) ||
+                    referenceText.includes(input)
+                ) {
+                    row.style.display = "";  // Affiche la ligne si correspondance
+                } else {
+                    row.style.display = "none";  // Masque la ligne si pas de correspondance
+                }
+            });
+        }
+
+        // Ajouter un écouteur d'événements pour la barre de recherche
+        document.getElementById("mainSearch").addEventListener("input", filterBikeInfo);
+
+
 
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButtons = document.querySelectorAll('[data-modal-toggle]');
