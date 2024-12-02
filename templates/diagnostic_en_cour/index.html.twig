@@ -101,14 +101,14 @@
             <table class="max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
                 <thead class="bg-gray-200">
                 <tr class=" text-black">
-                    <th class="px-2 py-2">Id Vélo<i class="ml-1 bi bi-arrow-down-up"></i></th>
+
                     <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">Bicycode<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">Reference Recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                    <th class="px-2 py-2">Date d'enregistrement <i class="ml-1 bi bi-arrow-down-up"></i></th>
+                    <th class="px-2 py-2">Date du diagnostic <i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2">propriétaire<i class="ml-1 bi bi-arrow-down-up"></i></th>
                     <th class="px-2 py-2"></th>
                 </tr>
@@ -116,14 +116,14 @@
                 <tbody>
                 {% for item in filteredDiagnostics %}
                     <tr class="border">
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.id }}</td>
+
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.numeroSerie }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.bicycode }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
-                        <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.dateDeEnregistrement }}</td>
+                        <td class="px-4 py-2 border-r border-b">{{ item.diagnostic.dateDiagnostic|date('d/m/Y H:i') }}</td>
                         <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.proprio.nomProprio }}</td>
                         <td class="px-4 py-2 ">
                             <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
