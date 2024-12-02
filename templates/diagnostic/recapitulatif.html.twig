@@ -342,6 +342,7 @@
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
         </div>
     </div>
+    </div>
 
     <style>
         h1 {
@@ -466,38 +467,68 @@
 
 
         // Nouvelle fonction de filtrage global pour la barre de recherche principale
+
         function filterTable() {
-            const input = document.getElementById("mainSearch").value.toUpperCase();
-            const rows = document.querySelectorAll("tbody tr");
+            const input = document.getElementById("mainSearch").value.toUpperCase(); // Valeur de recherche principale
+            const rows = document.querySelectorAll("tbody tr"); // Sélectionne toutes les lignes du tableau
 
             rows.forEach(row => {
+                // Récupère les cellules correspondant à chaque champ
                 const veloIdCell = row.querySelector("[data-velo-id]");
                 const serialCell = row.querySelector("[data-serial]");
                 const bicycodeCell = row.querySelector("[data-bicycode]");
                 const referenceCell = row.querySelector("[data-reference]");
 
-                // Récupération du texte de chaque cellule
-                const veloIdText = veloIdCell ? veloIdCell.textContent.toUpperCase() : "";
-                const serialText = serialCell ? serialCell.textContent.toUpperCase() : "";
-                const bicycodeText = bicycodeCell ? bicycodeCell.textContent.toUpperCase() : "";
-                const referenceText = referenceCell ? referenceCell.textContent.toUpperCase() : "";
+                // Récupère le texte des cellules (en majuscule pour une comparaison uniforme)
+                const veloIdText = veloIdCell ? veloIdCell.textContent.trim().toUpperCase() : "";
+                const serialText = serialCell ? serialCell.textContent.trim().toUpperCase() : "";
+                const bicycodeText = bicycodeCell ? bicycodeCell.textContent.trim().toUpperCase() : "";
+                const referenceText = referenceCell ? referenceCell.textContent.trim().toUpperCase() : "";
 
-                // Comparaison avec la valeur de recherche
-                if (
+                // Comparaison avec la valeur de la recherche (si vide, ignore la recherche)
+                let isMatch = false;
+
+                // Filtrage de la barre de recherche : recherche dans les colonnes spécifiques uniquement
+                if (input === "" ||
                     veloIdText.includes(input) ||
                     serialText.includes(input) ||
                     bicycodeText.includes(input) ||
                     referenceText.includes(input)
                 ) {
-                    row.style.display = "";  // Affiche la ligne si correspondance
+                    isMatch = true; // Correspondance avec la recherche
+                }
+
+                // Filtrage avec les autres filtres (dropdowns)
+                for (const [attribute, value] of Object.entries(activeFilters)) {
+                    const cell = row.querySelector(`[data-${attribute}]`);
+                    if (cell && cell.textContent.trim().toUpperCase() !== value.toUpperCase()) {
+                        isMatch = false; // Si un filtre actif ne correspond pas, on cache la ligne
+                        break;
+                    }
+                }
+
+                // Affiche ou cache la ligne en fonction de la correspondance avec les filtres
+                if (isMatch) {
+                    row.style.display = ""; // Affiche la ligne
                 } else {
-                    row.style.display = "none";  // Masque la ligne si pas de correspondance
+                    row.style.display = "none"; // Cache la ligne
                 }
             });
         }
 
+        // Fonction pour gérer les filtres dropdown (exemple de gestion des filtres par attribut)
+        function filterByDropdown(attribute, value) {
+            if (value === "") {
+                delete activeFilters[attribute]; // Supprime le filtre si la valeur est vide
+            } else {
+                activeFilters[attribute] = value; // Ajoute ou met à jour le filtre
+            }
+
+            filterTable(); // Applique les filtres (y compris la recherche)
+        }
+
         // Ajouter un écouteur d'événements pour la barre de recherche
-        document.getElementById("mainSearch").addEventListener("input", filterBikeInfo);
+        document.getElementById("mainSearch").addEventListener("input", filterTable);
 
 
 
