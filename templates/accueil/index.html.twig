@@ -91,15 +91,47 @@
             {% endif %}
         </div>
 
+        <!-- Modal Participant-->
+        <div id="participantModal" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+            <!-- Backdrop -->
+            <div id="backdrop-participant"class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+
+            <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b">
+                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Nos participants</h3>
+                    <button id="closeModalParticipant" type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-center space-x-4">
+                        <img src="photo1.jpg" alt="Participant 1" class="w-12 h-12 rounded-full">
+                        <div>
+                            <p class="font-semibold">Participant 1</p>
+                            <p>Développeur</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center space-x-4">
+                        <img src="photo2.jpg" alt="Participant 2" class="w-12 h-12 rounded-full">
+                        <div>
+                            <p class="font-semibold">Participant 2</p>
+                            <p>Designer</p>
+                        </div>
+                    </li>
+                    <!-- Ajouter d'autres participants ici -->
+                </ul>
+            </div>
+        </div>
+
         <!-- Modal de lieu -->
         <div id="modal-lieu" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
             <!-- Backdrop -->
-            <div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+            <div id="backdrop-lieu" class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
 
             <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b">
                     <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Créer/Séléctionner un lieu</h3>
-                    <button type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
+                    <button id="closeModalLieu" type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
@@ -247,7 +279,7 @@
                             <a href="https://www.uha4point0.fr" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Site Internet</a>
                         </li>
                         <li>
-                            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Participants</a>
+                            <a href="#" id="openModalParticipant" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Voir Participants</a>
                         </li>
                     </ul>
                 </div>
@@ -255,7 +287,7 @@
                     <h2 class="mb-6 text-sm font-semibold text-black uppercase dark:text-black">Légal</h2>
                     <ul class="text-black dark:text-gray-600 font-medium">
                         <li class="mb-4">
-                            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Mentions légale</a>
+                            <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Mentions Légale</a>
                         </li>
                         <li>
                             <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Terms &amp; Conditions</a>
@@ -266,7 +298,7 @@
         </div>
         <hr class="my-6 border-gray-300 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <div class="sm:flex sm:items-center sm:justify-between">
-            <span class="text-sm text-black sm:text-center dark:text-gray-600">© 2024 <a href="https://flowbite.com/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Projet Vélo™</a> réalisé ave</span>
+            <span class="text-sm text-black sm:text-center dark:text-gray-600">© 2024 <strong>Cité du réemploi</strong>. Développé avec ❤️ par les étudiants de l'UHA 4.0.</span>
             <div class="flex mt-4 sm:justify-center sm:mt-0">
                 <a href="#" class="text-black hover:text-gray-900 dark:hover:text-black transition-colors duration-300">
                     <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
@@ -368,27 +400,55 @@
         });
     
         document.addEventListener("DOMContentLoaded", () => {
-            const openModalButton = document.querySelector('[data-modal-toggle="modal-lieu"]');
-            const closeModalButton = document.querySelector('[data-modal-hide="modal-lieu"]');
-            const modal = document.getElementById("modal-lieu");
+            // Modal Lieu
+            const openModalLieu = document.querySelector('[data-modal-toggle="modal-lieu"]');
+            const closeModalLieu = document.querySelector('[data-modal-hide="modal-lieu"]');
+            const modalLieu = document.getElementById("modal-lieu");
 
-            // Ouvrir la modal
-            openModalButton.addEventListener("click", () => {
-                modal.classList.remove("hidden");
+            // Ouvrir la modal pour le lieu
+            openModalLieu?.addEventListener("click", () => {
+                modalLieu.classList.remove('hidden');
             });
 
-            // Fermer la modal en cliquant sur le bouton de fermeture
-            closeModalButton.addEventListener("click", () => {
-                modal.classList.add("hidden");
+            // Fermer la modal pour le lieu
+            closeModalLieu?.addEventListener("click", () => {
+                modalLieu.classList.add("hidden");
             });
 
-            // Fermer la modal en cliquant sur le fond (backdrop)
-            modal.addEventListener("click", (event) => {
-                if (event.target === modal) {
-                    modal.classList.add("hidden");
+            // Fermer la modal en cliquant sur le backdrop (fond)
+            document.getElementById('backdrop-lieu').addEventListener("click", (event) => {
+                // Vérifier si l'élément cliqué est le fond (backdrop)
+                if (event.target === document.getElementById('backdrop-lieu')) {
+                    document.getElementById('modal-lieu').classList.add("hidden");
                 }
             });
+
+
+            // Modal Participant
+            const openModalParticipant = document.getElementById('openModalParticipant');
+            const closeModalParticipant = document.getElementById('closeModalParticipant');
+            const modalParticipant = document.getElementById('participantModal');
+
+            // Ouvrir la modal pour les participants
+            openModalParticipant?.addEventListener('click', function() {
+                modalParticipant.classList.remove('hidden');
+            });
+
+            // Fermer la modal pour les participants
+            closeModalParticipant?.addEventListener('click', function() {
+                modalParticipant.classList.add('hidden');
+            });
+            
+            // Fermer la modal des participants en cliquant sur le backdrop (fond)
+            document.getElementById('backdrop-participant').addEventListener("click", (event) => {
+                // Vérifier si l'élément cliqué est le fond (backdrop)
+                if (event.target === document.getElementById('backdrop-participant')) {
+                    document.getElementById('participantModal').classList.add("hidden");
+                }
+            });
+
         });
+
 
     </script>
 {% endblock %}
