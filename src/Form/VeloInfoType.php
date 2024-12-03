@@ -178,6 +178,11 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'attr' => ['placeholder' => 'Nom ..', 'style' => 'display: none;']
             ])
+            ->add('prenom', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['placeholder' => 'Prénom ..', 'style' => 'display: none;']
+            ])
             ->add('email', EmailType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -192,6 +197,16 @@ class VeloInfoType extends AbstractType
                     'style' => 'display: none;',
                     'maxlength' => 15,
                 ],
+            ])
+            ->add('date_de_naissance', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'placeholder' => 'Sélectionner votre date de naissance ..',
+                ],
+                'label' => 'Date de naissance',
             ])
             ->add('statut', ChoiceType::class, [
                 'choices' => [
@@ -213,13 +228,17 @@ class VeloInfoType extends AbstractType
                 $email = $form->get('email')->getData();
                 $telephone = $form->get('telephone')->getData();
                 $statut = $form->get('statut')->getData();
+                $prenom = $form->get('prenom')->getData();
+                $date_de_naissance = $form->get('date_de_naissance')->getData();
 
-                if (!empty($nomProprio) || !empty($email) || !empty($telephone) || !empty($statut)) {
+                if (!empty($nomProprio) || !empty($email) || !empty($telephone) || !empty($statut) || !empty($prenom) || !empty($date_de_naissance)) {
                     $newProprietaire = new Proprietaire();
                     $newProprietaire->setNomProprio($nomProprio);
                     $newProprietaire->setEmail($email);
                     $newProprietaire->setTelephone($telephone);
                     $newProprietaire->setStatut($statut);
+                    $newProprietaire->setPrenom($prenom);
+                    $newProprietaire->setDateDeNaissance($date_de_naissance);
                     $this->entityManager->persist($newProprietaire);
                     $this->entityManager->flush();
                     $velo->setProprietaire($newProprietaire);

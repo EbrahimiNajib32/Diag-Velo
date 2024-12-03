@@ -13,9 +13,15 @@ class ProprietaireType extends AbstractType
     {
         $builder
             ->add('nom_proprio')
+            ->add('prenom', null, [
+                'required' => false,
+            ])
             ->add('telephone')
             ->add('email')
             ->add('statut')
+            ->add('date_de_naissance', null, [
+                'required' => false,
+            ])
         ;
     }
 
