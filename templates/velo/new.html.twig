@@ -312,9 +312,17 @@
                             </div>
 
                             <div class="new-prop-field" style="display:none;">
-                                {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
+                                {{ form_label(form.nom_proprio, 'Nom', {'label_attr': {'class': 'required-field'}}) }}
                                 <div class="w-full">
                                     {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
+                                </div>
+                                {{ form_label(form.prenom, 'Prénom') }}
+                                <div class="w-full">
+                                    {{ form_widget(form.prenom, {'attr': {'class': 'w-full text-center'}}) }}
+                                </div>
+                                {{ form_label(form.date_de_naissance, 'Date de naissance') }}
+                                <div class="w-full">
+                                    {{ form_widget(form.date_de_naissance, {'attr': {'class': 'w-full text-center'}}) }}
                                 </div>
                                 {{ form_label(form.email, 'E-m@il', {'label_attr': {'class': 'required-field'}}) }}
                                 <div class="w-full">
