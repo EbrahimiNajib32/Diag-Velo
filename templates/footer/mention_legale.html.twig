@@ -1,0 +1,338 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <body class="flex flex-col min-h-screen  bg-gray-50">
+        <header class="flex relative w-full justify-between">
+            <div id="headerLogoTissebands">
+                <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+            </div>
+            <div id="headerLogoCite">
+                <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 bg-gray-50">
+        
+            <!-- Modal Participant-->
+            <div id="participantModal" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+                <!-- Backdrop -->
+                <div id="backdrop-participant"class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+
+                <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b">
+                        <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Nos participants</h3>
+                        <button id="closeModalParticipant" type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <!-- Liste des participants -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-gray-600">
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Nina Gomez</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Liz Manresa</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Jean-Luc Vassal</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Najib Ebrahimi</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Julien Muller</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Adam Moudoux</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Girard Mehdi</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                            <i class="fas fa-user-circle text-blue-400 text-3xl"></i>
+                            <span class="font-semibold">Adam Moukhliss</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="w-full py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
+                    <li class="breadcrumb-item font-bold">
+                        <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
+                            <i class="fas fa-home mr-2"></i> Accueil
+                        </a>
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item text-black font-bold flex items-center">
+                         Informations
+                    </li>
+                </ol>
+            </nav>
+
+            <div class="container mx-auto p-4 bg-white shadow rounded-lg">
+                <h1 class="text-3xl font-bold text-center text-gray-800 border-b pb-4 mb-6">
+                    <i class="fas fa-info-circle text-blue-600"></i> Mentions Légales
+                </h1>
+
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-user text-blue-600"></i> 1. Éditeur du site
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        <strong>Nom :</strong> UHA 4.0<br>
+                        <strong>Adresse :</strong> 18 Rue des Frères Lumière, 68200 Mulhouse<br>
+                        <strong>Téléphone :</strong> 03 89 33 64 38<br>
+                        <strong>Email :</strong> 
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com" class="text-blue-600 underline">uha4point0@gmail.com</a><br>
+                        <strong>RCS :</strong> Non inscrit<br>
+                        <strong>Directeur de la publication :</strong> Non inscrit
+                    </p>
+                </section>
+
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-server text-blue-600"></i> 2. Hébergement
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        <strong>Hébergeur :</strong> [Nom de l'hébergeur]<br>
+                        <strong>Adresse :</strong> [Adresse complète]<br>
+                        <strong>Téléphone :</strong> [Numéro de téléphone]<br>
+                        <strong>Site web :</strong> 
+                        <a href="[Lien vers le site]" target="_blank" class="text-blue-600 underline">[Lien vers le site]</a>
+                    </p>
+                </section>
+
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-copyright text-blue-600"></i> 3. Propriété intellectuelle
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Tous les contenus présents sur ce site (textes, images, vidéos, logos, etc.) sont protégés par les droits d'auteur. 
+                        Toute reproduction, même partielle, est strictement interdite sans autorisation préalable.
+                    </p>
+                </section>
+
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-user-shield text-blue-600"></i> 4. Protection des données
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Conformément au RGPD, vous disposez des droits d'accès, de modification, et de suppression de vos données personnelles. 
+                        Pour toute demande, contactez-nous à 
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com" class="text-blue-600 underline">uha4point0@gmail.com"</a>.
+                    </p>
+                </section>
+
+
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-exclamation-triangle text-blue-600"></i> 5. Limitation de responsabilité
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        L'éditeur ne saurait être tenu responsable en cas d'erreurs, d'omissions, ou de dommages directs ou indirects 
+                        liés à l'utilisation des informations présentes sur ce site.
+                    </p>
+                </section>
+            </div>
+        </main>
+
+        <main class="flex-1 p-6 bg-gray-50">
+            <div class="container mx-auto p-4 bg-white shadow rounded-lg">
+                <h1 class="text-3xl font-bold text-center text-gray-800 border-b pb-4 mb-6">
+                    <i class="fas fa-file-contract text-blue-600"></i> Termes et Conditions
+                </h1>
+
+                <!-- Introduction -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">Introduction</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Bienvenue sur notre site ! En accédant à ce site, vous acceptez de respecter et d’être lié par les termes 
+                        et conditions suivants. Si vous êtes en désaccord avec ces termes, veuillez ne pas utiliser ce site.
+                    </p>
+                </section>
+
+                <!-- Utilisation du site -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-laptop text-blue-600"></i> 1. Utilisation du site
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        L'accès à notre site est soumis aux lois et règlements en vigueur. Vous vous engagez à ne pas utiliser ce site 
+                        à des fins illégales ou non autorisées.
+                    </p>
+                </section>
+
+                <!-- Droits de propriété intellectuelle -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-copyright text-blue-600"></i> 2. Droits de propriété intellectuelle
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Tout contenu présent sur ce site, y compris les textes, graphiques, logos, images, et vidéos, est protégé par des 
+                        droits d'auteur et autres droits de propriété intellectuelle. Toute reproduction ou distribution sans 
+                        autorisation écrite est strictement interdite.
+                    </p>
+                </section>
+
+                <!-- Limitation de responsabilité -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-exclamation-circle text-blue-600"></i> 3. Limitation de responsabilité
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Nous ne garantissons pas que le site sera toujours disponible ou exempt d’erreurs. Nous ne serons pas responsables 
+                        des dommages résultant de l'utilisation ou de l'incapacité à utiliser ce site.
+                    </p>
+                </section>
+
+                <!-- Modifications des termes -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-sync-alt text-blue-600"></i> 4. Modifications des termes
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Nous nous réservons le droit de modifier ces termes à tout moment. Les changements entreront en vigueur dès 
+                        leur publication sur cette page.
+                    </p>
+                </section>
+
+                <!-- Contact -->
+                <section class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-3">
+                        <i class="fas fa-envelope text-blue-600"></i> 5. Contact
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Pour toute question ou demande concernant ces termes et conditions, veuillez nous contacter à 
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=uha4point0@gmail.com" class="text-blue-600 underline">uha4point0@gmail.com</a>.
+                    </p>
+                </section>
+            </div>
+        </main>
+
+        <footer class="bg-gray-50 p-4 text-center">
+            <div id="bottom-logo" class="flex justify-center items-center py-6 ">
+                <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
+            </div>
+
+            <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+                <div class="md:flex md:justify-between">
+                    <div class="mb-6 md:mb-0">
+                        <a href="https://www.uha4point0.fr/?fbclid=PAZXh0bgNhZW0CMTEAAaayysc-Bcv7vkGRugOYU-l2Tn-drMCjPl6ZNepo0zhuC1SSNuI9v4Y1HXU_aem_1MA2lWo9PytxfCCTuGcZOw" class="flex items-center">
+                            <img src="{{ asset('images/uha_4_0_logo (4).png') }}" alt="Logo UHA" class="h-8 me-3">
+                            <span class="self-center text-2xl font-semibold whitespace-nowrap text-black dark:text-black">UHA 4.0</span>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                        <div>
+                            <h2 class="mb-6 text-sm font-semibold text-black uppercase dark:text-black">Lien utile</h2>
+                            <ul class="text-black dark:text-gray-600 font-medium">
+                                <li class="mb-4">
+                                    <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Mode Emplois</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">À propos</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 class="mb-6 text-sm font-semibold text-black uppercase dark:text-black">Contact</h2>
+                            <ul class="text-black dark:text-gray-600 font-medium">
+                                <li class="mb-4">
+                                    <a href="https://www.uha4point0.fr" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Site Internet</a>
+                                </li>
+                                <li>
+                                    <a href="#" id="openModalParticipant" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Voir Participants</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 class="mb-6 text-sm font-semibold text-black uppercase dark:text-black">Légal</h2>
+                            <ul class="text-black dark:text-gray-600 font-medium">
+                                <li class="mb-4">
+                                    <a href="{{ path('app_footer') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Mentions Légale</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_footer', {'term' : 'true' }) }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Terms &amp; Conditions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-6 border-gray-300 sm:mx-auto dark:border-gray-700 lg:my-8" />
+                <div class="sm:flex sm:items-center sm:justify-between">
+                    <span class="text-sm text-black sm:text-center dark:text-gray-600">© 2024 <strong>Cité du Vélo</strong>. Développé avec ❤️ par les étudiants de l'UHA 4.0.</span>
+                    <div class="flex mt-4 sm:justify-center sm:mt-0">
+                      <!-- Facebook -->
+                        <a href="https://www.facebook.com/UHA4point0" class="text-black hover:text-gray-900 dark:hover:text-black transition-colors duration-300">
+                                <i class="bi bi-facebook fs-4"></i>
+                            <span class="sr-only">Facebook page</span>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/uha4.0/" class="text-black hover:text-gray-900 dark:hover:text-black ms-5 transition-colors duration-300">
+                                <i class="bi bi-instagram fs-4"></i>
+                            <span class="sr-only">Instagram community</span>
+                        </a>
+
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/channel/UCHGnFAHsqeIPXaY28gXOh-Q/featured" class="text-black hover:text-gray-900 dark:hover:text-black ms-5 transition-colors duration-300">
+                                        <i class="bi bi-youtube fs-4"></i>
+                            <span class="sr-only">YouTube page</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Récupérer l'URL de la page
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.get('term') === 'true') {
+                window.scrollTo({
+                    top: document.body.scrollHeight, // Hauteur totale du document
+                    behavior: 'smooth'
+                });
+            }
+
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+        
+            // Modal Participant
+            const openModalParticipant = document.getElementById('openModalParticipant');
+            const closeModalParticipant = document.getElementById('closeModalParticipant');
+            const modalParticipant = document.getElementById('participantModal');
+
+            // Ouvrir la modal pour les participants
+            openModalParticipant?.addEventListener('click', function() {
+                modalParticipant.classList.remove('hidden');
+            });
+
+            // Fermer la modal pour les participants
+            closeModalParticipant?.addEventListener('click', function() {
+                modalParticipant.classList.add('hidden');
+            });
+            
+            // Fermer la modal des participants en cliquant sur le backdrop (fond)
+            document.getElementById('backdrop-participant').addEventListener("click", (event) => {
+                // Vérifier si l'élément cliqué est le fond (backdrop)
+                if (event.target === document.getElementById('backdrop-participant')) {
+                    document.getElementById('participantModal').classList.add("hidden");
+                }
+            });
+
+        });
+
+
+    </script>
+{% endblock %}
