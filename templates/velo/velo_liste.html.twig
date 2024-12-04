@@ -198,9 +198,9 @@
                             <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
-                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
+                            <td class="marque-col px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
-                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
+                            <td class="marque-col px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300">
@@ -445,6 +445,7 @@
             .table {
                 width: 100%;
             }
+
         }
 
         @media screen and (min-width: 501px) and (max-width: 900px) {
@@ -493,6 +494,12 @@
         .table {
             table-layout: auto; /* Permet une largeur dynamique */
             width: 100%;
+        }
+
+        .tab_ctn td.marque-col {
+            white-space: nowrap; /* Empêche le retour à la ligne */
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
         }
 
     </style>
