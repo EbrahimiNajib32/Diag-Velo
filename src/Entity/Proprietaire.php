@@ -4,6 +4,7 @@ namespace App\Entity;
 use App\Repository\ProprietaireRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProprietaireRepository::class)]
@@ -28,6 +29,12 @@ class Proprietaire
 
     #[ORM\OneToMany(mappedBy: 'proprietaire', targetEntity: Velo::class)]
     private Collection $velos;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_de_naissance = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $prenom = null;
 
     public function __construct()
     {
@@ -105,5 +112,29 @@ class Proprietaire
     public function displayName(): string
     {
         return $this->nom_proprio; // Simplifiez si vous avez seulement un nom
+    }
+
+    public function getDateDeNaissance(): ?\DateTimeInterface
+    {
+        return $this->date_de_naissance;
+    }
+
+    public function setDateDeNaissance(?\DateTimeInterface $date_de_naissance): self
+    {
+        $this->date_de_naissance = $date_de_naissance;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
     }
 }
