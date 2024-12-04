@@ -131,7 +131,7 @@
         <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
         <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
-            <table class="table w-full text-lg text-left text-gray-650">
+            <table class="table-auto w-full text-lg text-left text-gray-650">
                 <thead class="text-lg text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th colspan="6" class="px-6 py-3 text-center docker compose up
@@ -364,39 +364,39 @@
                         data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
                         data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
                     >
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
-                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.status }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-left-black border-b border-gray-300"
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-left-black border-b border-gray-300"
                             data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
                             {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
                             data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
                             {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
                             data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
                             {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
                             data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
                             {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
                         </td>
 
 
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -431,12 +431,18 @@
             padding-left: 0.3rem;
             padding-right: 0.3rem;
         }
-        .tab_ctn {
+        {#  .tab_ctn {
             width: 95%;
             margin: auto;
-        }
-        .tab_ctn td:first-child, .tab_ctn th:first-child {
+        }#}
+         .tab_ctn td:first-child, .tab_ctn th:first-child {
             padding: 0.5rem;
+        }
+
+        .tab_ctn td.lieu-col {
+            white-space: nowrap; /* Empêche le retour à la ligne */
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
         }
         .modal-backdrop {
             background: rgba(0, 0, 0, 0.5);

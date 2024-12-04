@@ -174,20 +174,20 @@
                     <tr>
                         <th scope="col" class="px-2 py-3">ID</th>
                         <th scope="col" class="px-2 py-3">Propriétaire</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Numéro de série</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Référence recyclerie</th>
+                        <th scope="col" class="px-2 py-3">Numéro de série</th>
+                        <th scope="col" class="px-2 py-3">Référence recyclerie</th>
                         <th scope="col" class="px-2 py-3">Marque</th>
                         <th scope="col" class="px-2 py-3">Couleur</th>
                         <th scope="col" class="px-2 py-3">Type</th>
                         <th scope="col" class="px-2 py-3">Public</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date d'enregistrement</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date de vente</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
+                        <th scope="col" class="px-2 py-3">Date de vente</th>
+                        <th scope="col" class="px-2 py-3">Date de destruction</th>
                         <th scope="col" class="px-2 py-3">Photo</th>
-                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Détails vélo</th>
+                        <th scope="col" class="px-2 py-3">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
                         {% if lieu %}
-                            <th scope="col" class="px-2 py-3 whitespace-nowrap">Faire Diagnostic</th>
+                            <th scope="col" class="px-2 py-3">Faire Diagnostic</th>
                         {% endif %}
                     </tr>
                     </thead>
@@ -462,6 +462,12 @@
             }
         }
 
+        .table th {
+            white-space: nowrap; /* Empêche les retours à la ligne */
+            text-align: center; /* Centrer le texte des en-têtes */
+            padding: 8px; /* Ajustez les marges */
+        }
+
         @media screen and (min-width: 901px) {
             .logo-footer {
                 display: none;
@@ -475,7 +481,20 @@
             .table {
                 width: 100%;
             }
+
         }
+
+
+         .table th {
+             white-space: nowrap; /* Empêche les retours à la ligne */
+             text-align: center; /* Centrer le texte des en-têtes */
+             padding: 8px; /* Ajustez les marges */
+         }
+        .table {
+            table-layout: auto; /* Permet une largeur dynamique */
+            width: 100%;
+        }
+
     </style>
 
     <script>
