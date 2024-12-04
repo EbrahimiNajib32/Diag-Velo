@@ -168,26 +168,26 @@
 
 
 
-            <div class="table-container overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table class="table w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <div class="table-container overflow-x-auto relative shadow-md sm:rounded-lg" style="padding-right: 0px; margin-right: -129px; margin-left: -131px;">
+                <table class="table-auto  w-full text-lg text-left text-gray-650">
+                    <thead class="text-lg text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-2 py-3">ID</th>
                         <th scope="col" class="px-2 py-3">Propriétaire</th>
-                        <th scope="col" class="px-2 py-3">Numéro de série</th>
-                        <th scope="col" class="px-2 py-3">Référence recyclerie</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Numéro de série</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Référence recyclerie</th>
                         <th scope="col" class="px-2 py-3">Marque</th>
                         <th scope="col" class="px-2 py-3">Couleur</th>
                         <th scope="col" class="px-2 py-3">Type</th>
                         <th scope="col" class="px-2 py-3">Public</th>
-                        <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
-                        <th scope="col" class="px-2 py-3">Date de vente</th>
-                        <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date d'enregistrement</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date de vente</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Date de destruction</th>
                         <th scope="col" class="px-2 py-3">Photo</th>
-                        <th scope="col" class="px-2 py-3">Détails vélo</th>
+                        <th scope="col" class="px-2 py-3 whitespace-nowrap">Détails vélo</th>
                         <th scope="col" class="px-2 py-3">Historique</th>
                         {% if lieu %}
-                            <th scope="col" class="px-2 py-3">Faire Diagnostic</th>
+                            <th scope="col" class="px-2 py-3 whitespace-nowrap">Faire Diagnostic</th>
                         {% endif %}
                     </tr>
                     </thead>
@@ -215,23 +215,23 @@
                                 {% endif %}
                             </td>
                             <td class="px-2 py-4">
-                                <button data-modal-target="photo-modal-{{ velo.id }}" data-modal-toggle="photo-modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
+                                <button data-modal-target="photo-modal-{{ velo.id }}" data-modal-toggle="photo-modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white" type="button">
                                     <i class="fa-solid fa-eye text-white hover:text-gray-700"></i>
                                 </button>
                             </td>
                             <td class="px-2 py-4">
-                                <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white">
                                     Modifier
                                 </a>
                             </td>
                             <td class="px-2 py-4">
-                                <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
+                                <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white" type="button">
                                     Voir
                                 </button>
                             </td>
                             {% if lieu %}
                                 <td class="px-2 py-4">
-                                    <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
+                                    <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white">
                                         Faire
                                     </a>
                                 </td>
