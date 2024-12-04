@@ -142,9 +142,9 @@
                 </tr>
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>fait par</span>
-                            <button onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button class="arrow" onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -156,9 +156,9 @@
 
                     <th scope="col" class="px-6 py-3 text-center">ID </th>
                     <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Date</span>
-                            <button onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button class="arrow" onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -169,9 +169,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Type</span>
-                            <button onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button class="arrow" onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownTypeD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -182,9 +182,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Conclusion</span>
-                            <button onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button class="arrow" onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownConclusion" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('conclusion', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -196,9 +196,9 @@
 
                     {#<th scope="col" class="px-6 py-3 text-center">Conclusion</th>#}
                     <th scope="col" class="px-6 py-3">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Status</span>
-                            <button onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button class="arrow" onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownStatusD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('status', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -211,9 +211,9 @@
 
                     <!-- Colonne Type -->
                     <th scope="col" class="px-6 py-3 border-left-black text-center">
-                        <div style="display: flex; align-items: center; justify-content: center;">
+                        <div style="display: flex; align-items: center; justify-content: center;" class="filter">
                             <span>Type</span>
-                            <button onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer; margin-left: 5px;" class="arrow">▼</button>
                         </div>
                         <div id="dropdownTypeL" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('typeL', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -226,9 +226,9 @@
 
                     <!-- Colonne Nom -->
                     <th scope="col" class="px-6 py-3 text-center">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Nom</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomLieu')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomLieu')">▼</button>
                         </div>
                         <div id="dropdownNomLieu" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('nomV', ''); closeDropdown('dropdownNomLieu');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -241,9 +241,9 @@
 
                     <!-- Colonne Ville -->
                     <th scope="col" class="px-6 py-3 text-center">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Ville</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownVille')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownVille')">▼</button>
                         </div>
                         <div id="dropdownVille" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('villeV', ''); closeDropdown('dropdownVille');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -256,9 +256,9 @@
 
                     <!-- Colonne Code postal -->
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Code postal</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownCodePostal')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownCodePostal')">▼</button>
                         </div>
                         <div id="dropdownCodePostal" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('codePostalV', ''); closeDropdown('dropdownCodePostal');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -276,9 +276,9 @@
                     <th scope="col" class="px-6 py-3 text-center">Bicycode</th>
                     <th scope="col" class="px-6 py-3">Ref Recyclerie</th>
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Type</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypeV')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypeV')">▼</button>
                         </div>
                             <div id="dropdownTypeV" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -288,9 +288,9 @@
                             </div>
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Marque</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownMarque')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownMarque')">▼</button>
                         </div>
                             <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -302,9 +302,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Public</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownPublic')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownPublic')">▼</button>
                         </div>
                             <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -316,9 +316,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Nom</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomProprietaire')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomProprietaire')">▼</button>
                         </div>
                             <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nomP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -330,9 +330,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        <div class="flex items-center justify-center">
+                        <div class="filter flex items-center justify-center">
                             <span>Type</span>
-                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
+                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
                         </div>
                             <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -444,9 +444,25 @@
             height: 100vh;
             z-index: 50;
         }
+
+        .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+            transform: rotate(0deg);
+        }
+
+        .filter.active .arrow {
+            transform: rotate(180deg);
+            color: #38a89d;
+        }
     </style>
 
      <script>
+         document.querySelectorAll('.filter').forEach(function(filter) {
+             filter.addEventListener('click', function() {
+                 this.classList.toggle('active');
+             });
+         });
 
         function toggleDropdown(dropdownId) {
             var dropdown = document.getElementById(dropdownId);
