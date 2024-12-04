@@ -89,6 +89,22 @@
                 width: 100%;
             }
         }
+
+        .reset-button {
+            background-color: #38a89d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button:hover {
+            background-color: #60c6bc;
+        }
     </style>
 {% endblock %}
 
@@ -127,8 +143,11 @@
                     </div>
                 </div>
 
+                <div class="flex justify-center p-4">
+                    <button class="reset-button px-4 py-2" onclick="resetFilters()">Réinitialiser</button>
+                </div>
 
-        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+                <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
         <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
             <table class="table-auto w-full text-lg text-left text-gray-650">
@@ -528,6 +547,16 @@
                 row.style.display = isVisible ? "" : "none";
             });
         }
+
+        // Fonction pour réinitialiser tous les filtres (grâce à un bouton magique)
+         function resetFilters() {
+             activeFilters = {};
+             updateFilterStyles();
+             const rows = document.querySelectorAll('table tbody tr');
+             rows.forEach(row => {
+                 row.style.display = '';
+             });
+         }
 
 
         function hover(element, isHovering) {
