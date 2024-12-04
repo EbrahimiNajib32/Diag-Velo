@@ -227,7 +227,7 @@ class VeloController extends AbstractController
 
 
     #[Route('/api/update-velo/{id}', name: 'api_update_velo', methods: ['POST'])]
-    public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, $id): JsonResponse
+    public function updateVelo(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): JsonResponse
     {
         $velo = $entityManager->getRepository(Velo::class)->find($id);
         if (!$velo) {
@@ -236,35 +236,36 @@ class VeloController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        foreach ($data as $key => $value) {
-            if ($key === 'proprietaireId') {
-                $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($value);
-                if ($proprietaire) {
-                    $velo->setProprietaire($proprietaire);
-                } else {
-                    return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
-                }
+        if (isset($data['proprietaireId'])) {
+            $proprietaire = $entityManager->getRepository(Proprietaire::class)->find($data['proprietaireId']);
+            if ($proprietaire) {
+                $velo->setProprietaire($proprietaire);
             } else {
+                return new JsonResponse(['status' => 'error', 'message' => 'Proprietaire not found'], JsonResponse::HTTP_BAD_REQUEST);
+            }
+        } else if ($velo->getProprietaire()) {
+            $proprietaire = $velo->getProprietaire();
+
+            foreach ($data as $key => $value) {
+                if ($key !== 'proprietaireId') {
+                    $setter = 'set' . ucfirst($key);
+                    if (method_exists($proprietaire, $setter)) {
+                        if ($value !== null && $value !== '') {
+                            $proprietaire->$setter($value);
+                        }
+                    }
+                }
+            }
+
+            $entityManager->persist($proprietaire);
+        }
+
+        foreach ($data as $key => $value) {
+            if ($key !== 'proprietaireId') {
                 $setter = 'set' . ucfirst($key);
                 if (method_exists($velo, $setter)) {
-                    if (in_array($key, ['refRecyclerie', 'poids', 'tailleRoues', 'tailleCadre'])) {
-                        if ($value === null || $value === '') {
-                            $valueToSet = null;
-                        } else {
-                            switch ($key) {
-                                case 'poids':
-                                    $valueToSet = (string)$value;  // Treat 'poids' as string
-                                    break;
-                                case 'tailleRoues':
-                                case 'tailleCadre':
-                                    $valueToSet = (int)$value;
-                                    break;
-                                default:
-                                    $valueToSet = (string)$value;
-                                    break;
-                            }
-                        }
-                        $velo->$setter($valueToSet);
+                    if ($value !== null && $value !== '') {
+                        $velo->$setter($value);
                     }
                 }
             }
@@ -279,15 +280,14 @@ class VeloController extends AbstractController
             return new JsonResponse(['status' => 'error', 'errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
         }
 
+        // Sauvegarde des modifications
         try {
             $entityManager->flush();
             return new JsonResponse(['status' => 'success']);
         } catch (\Exception $e) {
-            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['status' => 'error', 'message' => 'An error occurred while saving: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     #[Route('/velo/reparations', name: 'velo_reparations', methods: ['GET'])]
     public function diagnosticsAReparer(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request): Response {
@@ -323,35 +323,38 @@ class VeloController extends AbstractController
     }
 
     #[Route('/velo/edit/{id}', name: 'velo_edit', methods: ['GET', 'POST'])]
-    public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    public function editVelo(int $id, EntityManagerInterface $entityManager, Request $request, SessionInterface $session): Response
     {
-        // Recherche du vélo par son ID
         $velo = $entityManager->getRepository(Velo::class)->find($id);
 
         if (!$velo) {
             $this->addFlash('error', 'Aucun vélo trouvé avec l\'ID spécifié.');
-            return $this->redirectToRoute('velo_liste'); // Redirection vers la liste des vélos
+            return $this->redirectToRoute('velo_liste');
         }
 
-        // Création du formulaire
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            $proprietaire = $velo->getProprietaire();
+            if ($proprietaire) {
+                $entityManager->persist($proprietaire);
+            }
+
+            $entityManager->persist($velo);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Les informations du vélo ont été mises à jour avec succès.');
+            $this->addFlash('success', 'Les informations du vélo et du propriétaire ont été mises à jour avec succès.');
 
-            // Redirection vers la page actuelle après la modification
             return $this->redirectToRoute('velo_edit', ['id' => $velo->getId()]);
         }
 
-        // Rendu de la vue pour afficher les détails et le formulaire
         return $this->render('velo/détails/velo_details.html.twig', [
             'velo' => $velo,
             'form' => $form->createView(),
+            'lieu' => $session->get('lieu'),
         ]);
     }
+
 
 }

@@ -38,129 +38,274 @@
         tbody tr:hover {
             background-color: #e9ecef;
         }
+
+        @media screen and (max-width: 500px) {
+            .logo-footer {
+                display: block;
+                position: relative;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 50px;
+                margin-top: 100px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 501px) and (max-width: 900px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 901px) {
+            .logo-footer {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table {
+                width: 100%;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="fixed top-0 left-0">
-        <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-    </div>
-    <div class="fixed top-0 right-0">
-        <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
-    </div>
+    <header class="relative w-full top-0 left-0 flex justify-between items-center">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
+        </div>
+    </header>
+
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold text-center text-black mb-8">Récapitulatif des Diagnostics</h1>
+
+
+
+        <!-- Formulaire de filtrage -->
+            <div class="flex flex-col space-y-4">
+
+                <div class="flex justify-center items-center w-full mt-4"> <!-- Adds space above the search bar -->
+                    <div class="relative w-full max-w-lg">
+                        <input type="text"
+                               id="mainSearch"
+                               name="ref_recyclerie"
+                               placeholder="ID Vélo, N° de Série, Bicycode; Ref Recyclerie; Nom Propriétaire"
+                               class="border-none rounded-full pl-3 pr-12 py-3 shadow-md focus:outline-none text-gray-700 transition-colors duration-200 w-full"
+                               style="border: 1px solid #E5E7EB; background-color: #F5F5F5;"
+                               onkeyup="filterTable()">
+
+                        <span class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                <i class="bi bi-search text-gray-500"></i>
+            </span>
+                    </div>
+                </div>
+
+
         <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+        <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
             {% if diagnostics is not empty %}
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <table class="table w-full text-lg text-left text-gray-650">
+                <thead class="text-lg text-gray-700 uppercase bg-gray-50">
                 <tr>
-            <th colspan="6" class="px-6 py-3 text-center">Informations sur le Diagnostic</th>
-            <th colspan="4" class="px-6 py-3 text-center">Informations sur le Lieu</th>
-            <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
-            <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
-        </tr>
+                    <th colspan="6" class="px-6 py-3 text-center docker compose up
+             border-right-black">Informations sur le Diagnostic</th>
+                    <th colspan="4" class="ppx-6 py-3 text-center border-left-black border-right-black">Informations sur le Lieu</th>
+                    <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
+                    <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
+                </tr>
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        fait par
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for nom in noms_uniques %}
-                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
-                                {% endfor %}
-                            </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>fait par</span>
+                            <button onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for nom in noms_uniques %}
+                                <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                            {% endfor %}
                         </div>
                     </th>
+
                     <th scope="col" class="px-6 py-3 text-center">ID </th>
                     <th scope="col" class="px-6 py-3">
-                        Date
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for date in dates_uniques %}
-                                    <a href="#" onclick="filterRows('date', '{{ date|date('d-m-Y') }}')"  style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ date|date('d-m-Y') }}</a>
-                                {% endfor %}
-                            </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Date</span>
+                            <button onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for date in dates_uniques %}
+                                <a href="#" onclick="filterRows('date', '{{ date|date('d-m-Y') }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ date|date('d-m-Y') }}</a>
+                            {% endfor %}
                         </div>
                     </th>
-                   <th scope="col" class="px-6 py-3">
-                        Type
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownTypeD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for type in types_uniquesd %}
-                                    <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
-                                {% endfor %}
-                            </div>
+
+                    <th scope="col" class="px-6 py-3">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Type</span>
+                            <button onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownTypeD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for type in types_uniquesd %}
+                                <a href="#" onclick="filterRows('type', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                            {% endfor %}
                         </div>
                     </th>
-                     <th scope="col" class="px-6 py-3">
-                        Conclusion
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownConclusion" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('conclusion', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for conclusion in conclusions_uniques %}
-                                    <a href="#" onclick="filterRows('conclusion', '{{ conclusion }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ conclusion }}</a>
-                                {% endfor %}
-                            </div>
+
+                    <th scope="col" class="px-6 py-3">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Conclusion</span>
+                            <button onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownConclusion" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('conclusion', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for conclusion in conclusions_uniques %}
+                                <a href="#" onclick="filterRows('conclusion', '{{ conclusion }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ conclusion }}</a>
+                            {% endfor %}
                         </div>
                     </th>
+
                     {#<th scope="col" class="px-6 py-3 text-center">Conclusion</th>#}
-                     <th scope="col" class="px-6 py-3">
-                        Status
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownStatusD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('status', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                {% for status in statusd_uniques %}
-                                    <a href="#" onclick="filterRows('status', '{{ status }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ status }}</a>
-                                {% endfor %}
-                            </div>
+                    <th scope="col" class="px-6 py-3">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Status</span>
+                            <button onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownStatusD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('status', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for status in statusd_uniques %}
+                                <a href="#" onclick="filterRows('status', '{{ status }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ status }}</a>
+                            {% endfor %}
                         </div>
                     </th>
-                    <th scope="col" class="px-6 py-3 border-left-black text-center">Type</th>
-                    <th scope="col" class="px-6 py-3 text-center">Nom</th>
-                    <th scope="col" class="px-6 py-3 text-center">Ville</th>
-                    <th scope="col" class="px-6 py-3">Code postal</th>
-                   {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
+
+
+                    <!-- Colonne Type -->
+                    <th scope="col" class="px-6 py-3 border-left-black text-center">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <span>Type</span>
+                            <button onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownTypeL" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('typeL', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for type in types_lieux_uniques %}
+                                <a href="#" onclick="filterRows('typeL', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
+                            {% endfor %}
+                        </div>
+                    </th>
+
+
+                    <!-- Colonne Nom -->
+                    <th scope="col" class="px-6 py-3 text-center">
+                        <div class="flex items-center justify-center">
+                            <span>Nom</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomLieu')">▼</button>
+                        </div>
+                        <div id="dropdownNomLieu" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
+                            <a href="#" onclick="filterRows('nomV', ''); closeDropdown('dropdownNomLieu');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
+                            {% for nom in noms_lieux_uniques %}
+                                <a href="#" onclick="filterRows('nomV', '{{ nom }}'); closeDropdown('dropdownNomLieu');" class="text-black px-4 py-3 block hover:bg-gray-200">{{ nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </th>
+
+
+                    <!-- Colonne Ville -->
+                    <th scope="col" class="px-6 py-3 text-center">
+                        <div class="flex items-center justify-center">
+                            <span>Ville</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownVille')">▼</button>
+                        </div>
+                        <div id="dropdownVille" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
+                            <a href="#" onclick="filterRows('villeV', ''); closeDropdown('dropdownVille');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
+                            {% for ville in villes_uniques %}
+                                <a href="#" onclick="filterRows('villeV', '{{ ville }}'); closeDropdown('dropdownVille');" class="text-black px-4 py-3 block hover:bg-gray-200">{{ ville }}</a>
+                            {% endfor %}
+                        </div>
+                    </th>
+
+
+                    <!-- Colonne Code postal -->
+                    <th scope="col" class="px-6 py-3">
+                        <div class="flex items-center justify-center">
+                            <span>Code postal</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownCodePostal')">▼</button>
+                        </div>
+                        <div id="dropdownCodePostal" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
+                            <a href="#" onclick="filterRows('codePostalV', ''); closeDropdown('dropdownCodePostal');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
+                            {% for code_postal in codes_postaux_uniques %}
+                                <a href="#" onclick="filterRows('codePostalV', '{{ code_postal }}'); closeDropdown('dropdownCodePostal');" class="text-black px-4 py-3 block hover:bg-gray-200">{{ code_postal }}</a>
+                            {% endfor %}
+                        </div>
+                    </th>
+
+
+
+                    {#} <th scope="col" class="px-6 py-3 text-center ">Status </th>#}
                     <th scope="col" class="px-6 py-3 border-left-black text-center">Vélo Id</th>
                     <th scope="col" class="px-6 py-3 text-center">N° de série</th>
                     <th scope="col" class="px-6 py-3 text-center">Bicycode</th>
                     <th scope="col" class="px-6 py-3">Ref Recyclerie</th>
-                     <th scope="col" class="px-6 py-3">
-                        Type
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownType')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownType" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                    <th scope="col" class="px-6 py-3">
+                        <div class="flex items-center justify-center">
+                            <span>Type</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypeV')">▼</button>
+                        </div>
+                            <div id="dropdownTypeV" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for type in types_uniquesv %}
                                     <a href="#" onclick="filterRows('typeV', '{{ type }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ type }}</a>
                                 {% endfor %}
                             </div>
-                        </div>
                     </th>
-                     <th scope="col" class="px-6 py-3">
-                        Marque
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownMarque')" style="background: none; border: none; cursor: pointer;">▼</button>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="flex items-center justify-center">
+                            <span>Marque</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownMarque')">▼</button>
+                        </div>
                             <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for marque in marques_uniques %}
                                     <a href="#" onclick="filterRows('marque', '{{ marque }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ marque }}</a>
                                 {% endfor %}
                             </div>
-                        </div>
+
                     </th>
 
                     <th scope="col" class="px-6 py-3">
-                        Public
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownPublic')" style="background: none; border: none; cursor: pointer;">▼</button>
+                        <div class="flex items-center justify-center">
+                            <span>Public</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownPublic')">▼</button>
+                        </div>
                             <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for public in publics_uniques %}
@@ -170,27 +315,29 @@
                         </div>
                     </th>
 
-                     <th scope="col" class="px-6 py-3">
-                        Nom
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownNom')" style="background: none; border: none; cursor: pointer;">▼</button>
-                            <div id="dropdownNom" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('nom_proprio', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="flex items-center justify-center">
+                            <span>Nom</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomProprietaire')">▼</button>
+                        </div>
+                            <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('nomP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for nom in nomsp_uniques %}
-                                    <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                                    <a href="#" onclick="filterRows('nomP', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
                                 {% endfor %}
                             </div>
                         </div>
                     </th>
 
-                     <th scope="col" class="px-6 py-3">
-                        Type
-                        <div style="position: relative; display: inline-block;">
-                            <button onclick="toggleDropdown('dropdownTypep')" style="background: none; border: none; cursor: pointer;">▼</button>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="flex items-center justify-center">
+                            <span>Type</span>
+                            <button class="bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
+                        </div>
                             <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                <a href="#" onclick="filterRows('statut', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
                                 {% for statut in statutp_uniques %}
-                                    <a href="#" onclick="filterRows('statut', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
+                                    <a href="#" onclick="filterRows('statutP', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -207,30 +354,44 @@
                         data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
                         data-conclusion="{{ diagnostic.conclusion }}"
                         data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
-                        data-type-lieu="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
-                        data-nom-lieu="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
-                        data-ville="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
-                        data-code-postal="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
+                        data-typeL="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
+                        data-nomV="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
+                        data-villeV="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+                        data-codepostalV="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
                         data-status="{{ diagnostic.status }}"
                         data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
                         data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
-                        data-nom_proprio="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
-                        data-statut="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
+                        data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
+                        data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
                     >
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.status }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-left-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}</td>
-                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-left-black border-b border-gray-300"
+                            data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300"
+                            data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
+                        </td>
+
+
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
                         <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
                         <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
@@ -251,6 +412,13 @@
             <a href="{{ path('app_accueil') }}" class="button-style">Retour à l'accueil</a>
         </div>
     </div>
+    </div>
+
+    <footer class="logo-footer fixed bottom-0 w-full bg-white">
+        <div class="flex justify-center content-center">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+        </div>
+    </footer>
 
     <style>
         h1 {
@@ -284,19 +452,42 @@
             var dropdown = document.getElementById(dropdownId);
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
-
+        // filtres combinés
+        let activeFilters = {}; // Objet pour stocker les filtres actifs
 
 
         function filterRows(attribute, value) {
-            const rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                const attrValue = row.getAttribute('data-' + attribute);
-                row.style.display = value === "" || attrValue === value ? "" : "none";
-            });
+            if (value === "") {
+                delete activeFilters[attribute]; // Supprimez le filtre s'il est vide
+            } else {
+                activeFilters[attribute] = value; // Ajoutez ou mettez à jour le filtre
+            }
+
+            applyFilters(); // Appliquez tous les filtres actifs
+
+            // Fermez tous les menus déroulants
             document.querySelectorAll('.dropdown-content').forEach(dropdown => {
                 dropdown.style.display = 'none';
             });
         }
+        function applyFilters() {
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                let isVisible = true;
+
+                for (const [attribute, value] of Object.entries(activeFilters)) {
+                    const attrValue = row.getAttribute('data-' + attribute);
+                    if (attrValue !== value) {
+                        isVisible = false; // Cachez la ligne si un filtre ne correspond pas
+                        break;
+                    }
+                }
+
+                row.style.display = isVisible ? "" : "none";
+            });
+        }
+
 
         function hover(element, isHovering) {
             if (isHovering) {
@@ -347,6 +538,73 @@
                 }
             }
         }
+
+
+        // Nouvelle fonction de filtrage global pour la barre de recherche principale
+
+        function filterTable() {
+            const input = document.getElementById("mainSearch").value.toUpperCase(); // Valeur de recherche principale
+            const rows = document.querySelectorAll("tbody tr"); // Sélectionne toutes les lignes du tableau
+
+            rows.forEach(row => {
+                // Récupère les cellules correspondant à chaque champ
+                const veloIdCell = row.querySelector("[data-velo-id]");
+                const serialCell = row.querySelector("[data-serial]");
+                const bicycodeCell = row.querySelector("[data-bicycode]");
+                const referenceCell = row.querySelector("[data-reference]");
+
+                // Récupère le texte des cellules (en majuscule pour une comparaison uniforme)
+                const veloIdText = veloIdCell ? veloIdCell.textContent.trim().toUpperCase() : "";
+                const serialText = serialCell ? serialCell.textContent.trim().toUpperCase() : "";
+                const bicycodeText = bicycodeCell ? bicycodeCell.textContent.trim().toUpperCase() : "";
+                const referenceText = referenceCell ? referenceCell.textContent.trim().toUpperCase() : "";
+
+                // Comparaison avec la valeur de la recherche (si vide, ignore la recherche)
+                let isMatch = false;
+
+                // Filtrage de la barre de recherche : recherche dans les colonnes spécifiques uniquement
+                if (input === "" ||
+                    veloIdText.includes(input) ||
+                    serialText.includes(input) ||
+                    bicycodeText.includes(input) ||
+                    referenceText.includes(input)
+                ) {
+                    isMatch = true; // Correspondance avec la recherche
+                }
+
+                // Filtrage avec les autres filtres (dropdowns)
+                for (const [attribute, value] of Object.entries(activeFilters)) {
+                    const cell = row.querySelector(`[data-${attribute}]`);
+                    if (cell && cell.textContent.trim().toUpperCase() !== value.toUpperCase()) {
+                        isMatch = false; // Si un filtre actif ne correspond pas, on cache la ligne
+                        break;
+                    }
+                }
+
+                // Affiche ou cache la ligne en fonction de la correspondance avec les filtres
+                if (isMatch) {
+                    row.style.display = ""; // Affiche la ligne
+                } else {
+                    row.style.display = "none"; // Cache la ligne
+                }
+            });
+        }
+
+        // Fonction pour gérer les filtres dropdown (exemple de gestion des filtres par attribut)
+        function filterByDropdown(attribute, value) {
+            if (value === "") {
+                delete activeFilters[attribute]; // Supprime le filtre si la valeur est vide
+            } else {
+                activeFilters[attribute] = value; // Ajoute ou met à jour le filtre
+            }
+
+            filterTable(); // Applique les filtres (y compris la recherche)
+        }
+
+        // Ajouter un écouteur d'événements pour la barre de recherche
+        document.getElementById("mainSearch").addEventListener("input", filterTable);
+
+
 
         document.addEventListener("DOMContentLoaded", () => {
             const openModalButtons = document.querySelectorAll('[data-modal-toggle]');
