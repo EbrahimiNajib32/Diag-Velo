@@ -144,7 +144,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>fait par</span>
-                            <button class="arrow" onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button data-value="nom" class="arrow" onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -158,7 +158,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Date</span>
-                            <button class="arrow" onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button data-value="date" class="arrow" onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -171,7 +171,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Type</span>
-                            <button class="arrow" onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button data-value="type" class="arrow" onclick="toggleDropdown('dropdownTypeD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownTypeD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('type', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -184,7 +184,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Conclusion</span>
-                            <button class="arrow" onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button data-value="conclusion" class="arrow" onclick="toggleDropdown('dropdownConclusion')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownConclusion" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('conclusion', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -198,7 +198,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                             <span>Status</span>
-                            <button class="arrow" onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                            <button data-value="status" class="arrow" onclick="toggleDropdown('dropdownStatusD')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
                         </div>
                         <div id="dropdownStatusD" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('status', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -213,7 +213,7 @@
                     <th scope="col" class="px-6 py-3 border-left-black text-center">
                         <div style="display: flex; align-items: center; justify-content: center;" class="filter">
                             <span>Type</span>
-                            <button onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer; margin-left: 5px;" class="arrow">▼</button>
+                            <button data-value="typeL" onclick="toggleDropdown('dropdownTypeL')" style="background: none; border: none; cursor: pointer; margin-left: 5px;" class="arrow">▼</button>
                         </div>
                         <div id="dropdownTypeL" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                             <a href="#" onclick="filterRows('typeL', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -228,7 +228,7 @@
                     <th scope="col" class="px-6 py-3 text-center">
                         <div class="filter flex items-center justify-center">
                             <span>Nom</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomLieu')">▼</button>
+                            <button data-value="nomV" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomLieu')">▼</button>
                         </div>
                         <div id="dropdownNomLieu" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('nomV', ''); closeDropdown('dropdownNomLieu');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -243,7 +243,7 @@
                     <th scope="col" class="px-6 py-3 text-center">
                         <div class="filter flex items-center justify-center">
                             <span>Ville</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownVille')">▼</button>
+                            <button data-value="villeV" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownVille')">▼</button>
                         </div>
                         <div id="dropdownVille" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('villeV', ''); closeDropdown('dropdownVille');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -258,7 +258,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Code postal</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownCodePostal')">▼</button>
+                            <button data-value="codePostalV" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownCodePostal')">▼</button>
                         </div>
                         <div id="dropdownCodePostal" class="dropdown-content hidden absolute bg-gray-100 min-w-[160px] shadow-lg z-10">
                             <a href="#" onclick="filterRows('codePostalV', ''); closeDropdown('dropdownCodePostal');" class="text-black px-4 py-3 block hover:bg-gray-200">Tout</a>
@@ -278,7 +278,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Type</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypeV')">▼</button>
+                            <button data-value="typeV" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypeV')">▼</button>
                         </div>
                             <div id="dropdownTypeV" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('typeV', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -290,7 +290,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Marque</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownMarque')">▼</button>
+                            <button data-value="marque" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownMarque')">▼</button>
                         </div>
                             <div id="dropdownMarque" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('marque', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -304,7 +304,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Public</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownPublic')">▼</button>
+                            <button data-value="public" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownPublic')">▼</button>
                         </div>
                             <div id="dropdownPublic" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('public', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -318,7 +318,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Nom</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomProprietaire')">▼</button>
+                            <button data-value="nomP" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownNomProprietaire')">▼</button>
                         </div>
                             <div id="dropdownNomProprietaire" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('nomP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -332,7 +332,7 @@
                     <th scope="col" class="px-6 py-3">
                         <div class="filter flex items-center justify-center">
                             <span>Type</span>
-                            <button class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
+                            <button data-value="statutP" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
                         </div>
                             <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
                                 <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
@@ -445,26 +445,43 @@
             z-index: 50;
         }
 
+
         .arrow {
             display: inline-block;
             transition: transform 0.3s ease;
             transform: rotate(0deg);
         }
 
-        .filter.active .arrow {
+        .filter-active .arrow {
             transform: rotate(180deg);
             color: #38a89d;
         }
+
+        .filter-active {
+            color: #38a89d;
+            font-weight: bold;
+        }
+
     </style>
 
      <script>
-         document.querySelectorAll('.filter').forEach(function(filter) {
-             filter.addEventListener('click', function() {
-                 this.classList.toggle('active');
-             });
-         });
+         // Fonction pour mettre à jour le style
+         function updateFilterStyles() {
+             const filterButtons = document.querySelectorAll('.filter button');
 
-        function toggleDropdown(dropdownId) {
+             filterButtons.forEach(button => {
+                 const attribute = button.getAttribute('data-value');
+                 if (attribute && activeFilters[attribute]) {
+                     button.parentElement.classList.add('filter-active');
+                     button.classList.add('active');
+                 } else {
+                     button.parentElement.classList.remove('filter-active');
+                     button.classList.remove('active');
+                 }
+             });
+         }
+
+         function toggleDropdown(dropdownId) {
             var dropdown = document.getElementById(dropdownId);
             dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
         }
@@ -480,6 +497,8 @@
             }
 
             applyFilters(); // Appliquez tous les filtres actifs
+
+            updateFilterStyles();
 
             // Fermez tous les menus déroulants
             document.querySelectorAll('.dropdown-content').forEach(dropdown => {
