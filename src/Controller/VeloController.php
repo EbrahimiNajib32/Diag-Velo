@@ -249,6 +249,9 @@ class VeloController extends AbstractController
             foreach ($data as $key => $value) {
                 if ($key !== 'proprietaireId') {
                     $setter = 'set' . ucfirst($key);
+                    if($key === "dateDeNaissance") {
+                        $value = new \DateTime($value);
+                    }
                     if (method_exists($proprietaire, $setter)) {
                         if ($value !== null && $value !== '') {
                             $proprietaire->$setter($value);
