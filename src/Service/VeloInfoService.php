@@ -123,6 +123,28 @@ class VeloInfoService
         return array_column($result, 'statut');
     }
 
+    public function getPrenomProprio(): array
+    {
+        $query = $this->entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.prenom')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return array_column($result, 'prenom');
+    }
+
+    public function getDateDeNaissanceProprio(): array
+    {
+        $query = $this->entityManager->getRepository(Proprietaire::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.date_de_naissance')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return array_column($result, 'date_de_naissance');
+    }
+
     public function getLieuxDetails(): array
     {
         $query = $this->entityManager->getRepository(Lieu::class)->createQueryBuilder('l')
