@@ -210,16 +210,31 @@
                             </th>
 
                             <th scope="col" class="px-6 py-3 text-center">ID </th>
+
+                            {# Input dates #}
                             <th scope="col" class="px-6 py-3">
                                 <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
                                     <span>Date</span>
-                                    <button data-value="date" class="arrow" onclick="toggleDropdown('dropdownDate')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                                    <button
+                                            data-value="date"
+                                            class="arrow"
+                                            onclick="toggleDropdown('dropdownDate')"
+                                            style="background: none; border: none; cursor: pointer; margin-left: 5px;"
+                                    >
+                                        ▼
+                                    </button>
                                 </div>
-                                <div id="dropdownDate" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                    <a href="#" onclick="filterRows('date', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                    {% for date in dates_uniques %}
-                                        <a href="#" onclick="filterRows('date', '{{ date|date('d-m-Y') }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ date|date('d-m-Y') }}</a>
-                                    {% endfor %}
+                                <div id="dropdownDate"
+                                     class="dropdown-content"
+                                     style="display: none; position: absolute; background-color: #f9f9f9; min-width: 200px; padding: 10px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 5px;">
+                                    <div style="margin-top: 10px;">
+                                        <label for="filterDateInput" style="display: block; font-size: 14px; margin-bottom: 5px;">Filtrer par date :</label>
+                                        <input
+                                                type="text"
+                                                id="filterDateInput"
+                                                style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"
+                                        />
+                                    </div>
                                 </div>
                             </th>
 
@@ -595,8 +610,47 @@
             }
         }
 
+        // **** DATE ****
+        // Récupération de toutes les dates
+         const datesWithData = {{ dates_uniques|json_encode|raw }};
 
-        // Nouvelle fonction de filtrage global pour la barre de recherche principale
+         // Format de la date (YYYY-MM-DD)
+         const formattedDates = datesWithData.map(item => {
+             if (item.date) {
+                 const dateString = item.date.split(' ')[0];
+                 return dateString;
+             }
+             return null;
+         }).filter(date => date !== null);
+
+         document.addEventListener("DOMContentLoaded", function () {
+             flatpickr("#filterDateInput", {
+                 locale: "fr",
+                 dateFormat: "Y-m-d",
+                 onChange: function (selectedDates, dateStr) {
+                     if (dateStr) {
+                         const [year, month, day] = dateStr.split("-");
+                         const formattedDate = `${day}-${month}-${year}`;
+                         filterRows("date", formattedDate);
+                     } else {
+                         filterRows("date", "");
+                     }
+                     closeDropdown("dropdownDate");
+                 },
+                 // Dates avec données colorées
+                 onDayCreate: function(dObj, dStr, fp, dayElem) {
+                     const date = dayElem.dateObj.toLocaleDateString('fr-CA');
+                     if (formattedDates.includes(date)) {
+                         dayElem.style.backgroundColor = "#38a89d";
+                         dayElem.style.color = "black";
+                         dayElem.style.borderRadius = "50%";
+                     }
+                 }
+             });
+         });
+
+
+         // Nouvelle fonction de filtrage global pour la barre de recherche principale
 
         function filterTable() {
             const input = document.getElementById("mainSearch").value.toUpperCase(); // Valeur de recherche principale
