@@ -121,7 +121,7 @@
                     <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
                         <li class="breadcrumb-item font-bold">
                             <a href="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
-                                <i class="fas fa-home mr-2"></i> 
+                                <i class="fas fa-home mr-2"></i>
                             </a>
                         </li>
                         <li><i class="fas fa-angle-right text-gray-400"></i></li>
@@ -148,45 +148,45 @@
                         Créer un diagnostic
                     </a>
 
-                </div>
-                <h1 class="text-2xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
-                <div class="table-container max-w-full">
-                    <table class="table max-w-3xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
-                        <thead class="bg-gray-200">
-                        <tr class=" text-black">
+            </div>
+            <h1 class="text-3xl font-bold text-center text-black mb-6">Diagnostics en cours</h1>
+            <div class="table-container max-w-full">
+                <table class="table-auto max-w-6xl mx-auto text-center border-2 border-gray-300 rounded-lg border-separate">
+                    <thead class="text-lg bg-gray-200">
+                    <tr class=" text-lg text-black">
 
-                            <th class="px-2 py-2">Numéro de série<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Bicycode<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Reference Recyclerie<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Marque<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Type<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Couleur<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">Date du diagnostic <i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2">propriétaire<i class="ml-1 bi bi-arrow-down-up"></i></th>
-                            <th class="px-2 py-2"></th>
+                        <th class="px-2 py-2 whitespace-nowrap">Numéro de série</th>
+                        <th class="px-2 py-2">Bicycode</th>
+                        <th class="px-2 py-2 whitespace-nowrap">Reference Recyclerie</th>
+                        <th class="px-2 py-2">Marque</th>
+                        <th class="px-2 py-2">Type</th>
+                        <th class="px-2 py-2">Couleur</th>
+                        <th class="px-2 py-2 whitespace-nowrap">Date du diagnostic </th>
+                        <th class="px-2 py-2">propriétaire</th>
+                        <th class="px-2 py-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in filteredDiagnostics %}
+                        <tr class="border">
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.numeroSerie }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.bicycode }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.diagnostic.dateDiagnostic|date('d/m/Y H:i') }}</td>
+                            <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.proprio.nomProprio }}</td>
+                            <td class="px-4 py-2 ">
+                                <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
+                                    Continuer
+                                </a>
+                            </td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {% for item in filteredDiagnostics %}
-                            <tr class="border">
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.numeroSerie }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.bicycode }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.refRecyclerie }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.marque }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.type }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.couleur }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.diagnostic.dateDiagnostic|date('d/m/Y H:i') }}</td>
-                                <td class="px-4 py-2 border-r border-b">{{ item.veloDetails.proprio.nomProprio }}</td>
-                                <td class="px-4 py-2 ">
-                                    <a href="{{ path('reprendre_Multidiagnostic', {'id': item.diagnostic.id}) }}" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
-                                        Continuer
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
             </div>
 
@@ -196,7 +196,7 @@
             <div id="bottom-logo" class="flex justify-center items-center py-6">
                 <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
             </div>
-        </footer>  
+        </footer>
     </body>
 
     <script>

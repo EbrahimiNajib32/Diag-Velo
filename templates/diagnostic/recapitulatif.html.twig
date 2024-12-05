@@ -6,30 +6,48 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
+        /* Styles globaux  jlv*/
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+
         .table-responsive {
             margin: 0 auto;
-            max-width: 90%;
+            width: 100%; /* Assurez-vous que la table occupe toute la largeur */
+            max-width: 100%; /* Empêche toute restriction de largeur */
+            overflow-x: auto; /* Permet de scroller horizontalement */
+            -webkit-overflow-scrolling: touch; /* Améliore le scroll sur mobile */
         }
+
         table {
-            width: 100%;
-            border-collapse: collapse;
+            width: 100%; /* Étendre la table sur toute la largeur */
+            border-collapse: collapse; /* Unifie les bordures */
         }
+
         thead {
             background-color: #343a40;
             color: #fff;
         }
+
         th, td {
-            padding: 15px;
+            padding: 10px; /* Ajustement pour une meilleure lisibilité */
             text-align: left;
             border: 1px solid #dee2e6;
         }
+
         tbody tr:nth-child(odd) {
             background-color: #f8f9fa;
         }
+
         tbody tr:hover {
             background-color: #e9ecef;
         }
+        @media (min-width:1536px){.container{max-width:1836px}}
 
+        /* Ajustements pour les petits écrans */
         @media screen and (max-width: 500px) {
 
             .table-container {
@@ -69,6 +87,7 @@
             }
         }
 
+        /* Bouton personnalisé */
         .reset-button {
             background-color: #38a89d;
             color: white;
@@ -85,20 +104,23 @@
             background-color: #60c6bc;
         }
 
-        .py-3 {
-            vertical-align: top;
-        }
-        .px-6 {
-            padding-left: 0.3rem;
-            padding-right: 0.3rem;
-        }
+        /* Spécificités pour .tab_ctn */
         .tab_ctn {
-            width: 95%;
-            margin: auto;
+            width: 100%; /* Ajusté pour éviter un débordement */
+            margin: 0; /* Supprimez toute marge */
         }
+
         .tab_ctn td:first-child, .tab_ctn th:first-child {
             padding: 0.5rem;
         }
+
+        .tab_ctn td.lieu-col {
+            white-space: nowrap; /* Empêche le retour à la ligne */
+            padding-left: 0.3rem;
+            padding-right: 0.3rem;
+        }
+
+        /* Pour un affichage modal */
         .modal-backdrop {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
@@ -106,7 +128,7 @@
             z-index: 50;
         }
 
-
+        /* Style des flèches dans les filtres */
         .arrow {
             display: inline-block;
             transition: transform 0.3s ease;
@@ -122,6 +144,7 @@
             color: #38a89d;
             font-weight: bold;
         }
+
     </style>
 {% endblock %}
 
@@ -183,31 +206,31 @@
                             <button class="reset-button px-4 py-2" onclick="resetFilters()">Réinitialiser</button>
                         </div>
 
-                        <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
-                <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
-                    {% if diagnostics is not empty %}
-                    <table class="table w-full text-lg text-left text-gray-650">
-                        <thead class="text-lg text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th colspan="6" class="px-6 py-3 text-center docker compose up
-                    border-right-black">Informations sur le Diagnostic</th>
-                            <th colspan="4" class="ppx-6 py-3 text-center border-left-black border-right-black">Informations sur le Lieu</th>
-                            <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
-                            <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
-                        </tr>
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
-                                    <span>fait par</span>
-                                    <button data-value="nom" class="arrow" onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
-                                </div>
-                                <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                    <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                    {% for nom in noms_uniques %}
-                                        <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
-                                    {% endfor %}
-                                </div>
-                            </th>
+                <div class="relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+        <div class="table-container relative overflow-x shadow-md sm:rounded-lg tab_ctn">
+            {% if diagnostics is not empty %}
+            <table class="table-auto w-full text-lg text-left text-gray-650">
+                <thead class="text-lg text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th colspan="6" class="px-6 py-3 text-center docker compose up
+             border-right-black">Informations sur le Diagnostic</th>
+                    <th colspan="4" class="ppx-6 py-3 text-center border-left-black border-right-black">Informations sur le Lieu</th>
+                    <th colspan="7" class="px-6 py-3 text-center border-left-black border-right-black">Informations sur le Vélo</th>
+                    <th colspan="2" class="px-6 py-3 text-center">Informations sur le propriétaire</th>
+                </tr>
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        <div style="display: flex; align-items: center; justify-content: space-between;" class="filter">
+                            <span>fait par</span>
+                            <button data-value="nom" class="arrow" onclick="toggleDropdown('dropdownNomUtilisateur')" style="background: none; border: none; cursor: pointer; margin-left: 5px;">▼</button>
+                        </div>
+                        <div id="dropdownNomUtilisateur" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                            <a href="#" onclick="filterRows('nom', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                            {% for nom in noms_uniques %}
+                                <a href="#" onclick="filterRows('nom', '{{ nom }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </th>
 
                             <th scope="col" class="px-6 py-3 text-center">ID </th>
 
@@ -399,77 +422,77 @@
                                 </div>
                             </th>
 
-                            <th scope="col" class="px-6 py-3">
-                                <div class="filter flex items-center justify-center">
-                                    <span>Type</span>
-                                    <button data-value="statutP" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
-                                </div>
-                                    <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
-                                        <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
-                                        {% for statut in statutp_uniques %}
-                                            <a href="#" onclick="filterRows('statutP', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% set rowNumber = 0 %}
-                        {% for diagnostic in diagnostics %}
-                            {% set rowNumber = rowNumber + 1 %}
-                            <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}"
-                                data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
-                                data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
-                                data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
-                                data-conclusion="{{ diagnostic.conclusion }}"
-                                data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
-                                data-typeL="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
-                                data-nomV="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
-                                data-villeV="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
-                                data-codepostalV="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
-                                data-status="{{ diagnostic.status }}"
-                                data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
-                                data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
-                                data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
-                                data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
-                            >
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
-                                <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.status }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-left-black border-b border-gray-300"
-                                    data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
-                                    {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300"
-                                    data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
-                                    {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300"
-                                    data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
-                                    {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300"
-                                    data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
-                                    {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
-                                </td>
+                    <th scope="col" class="px-6 py-3">
+                        <div class="filter flex items-center justify-center">
+                            <span>Type</span>
+                            <button data-value="statutP" class="arrow bg-none border-none cursor-pointer ml-2" onclick="toggleDropdown('dropdownTypep')">▼</button>
+                        </div>
+                            <div id="dropdownTypep" class="dropdown-content" style="display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                <a href="#" onclick="filterRows('statutP', '')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">Tout</a>
+                                {% for statut in statutp_uniques %}
+                                    <a href="#" onclick="filterRows('statutP', '{{ statut }}')" style="color: black; padding: 12px 16px; text-decoration: none; display: block;" onmouseover="hover(this, true)" onmouseout="hover(this, false)">{{ statut }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set rowNumber = 0 %}
+                {% for diagnostic in diagnostics %}
+                    {% set rowNumber = rowNumber + 1 %}
+                    <tr class="{{ rowNumber is even ? 'bg-gray-850 border-b' : 'bg-white border-b' }}"
+                        data-nom="{{ diagnostic.velo and diagnostic.utilisateur ? diagnostic.utilisateur.nom : 'N/A' }}"
+                        data-type="{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}"
+                        data-typeV="{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}"
+                        data-conclusion="{{ diagnostic.conclusion }}"
+                        data-date="{{ diagnostic.dateDiagnostic|date('d-m-Y') }}"
+                        data-typeL="{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}"
+                        data-nomV="{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}"
+                        data-villeV="{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}"
+                        data-codepostalV="{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}"
+                        data-status="{{ diagnostic.status }}"
+                        data-marque="{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}"
+                        data-public="{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}"
+                        data-nomP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}"
+                        data-statutP="{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}"
+                    >
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.utilisateur ? diagnostic.utilisateur.username : 'N/A' }}</td>
+                        <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.id }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.dateDiagnostic|date('d-m-Y') }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.diagnosticType ? diagnostic.diagnosticType.nomType : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.conclusion }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.status }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId and diagnostic.lieuId.typeLieuId ? diagnostic.lieuId.typeLieuId.nomTypeLieu : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.nomLieu : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.ville : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.lieuId ? diagnostic.lieuId.codePostal : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-left-black border-b border-gray-300"
+                            data-velo-id="{{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.id : 'N/A' }}
+                        </td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
+                            data-serial="{{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.numeroDeSerie : 'N/A' }}
+                        </td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
+                            data-bicycode="{{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.bicycode : 'N/A' }}
+                        </td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300"
+                            data-reference="{{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}">
+                            {{ diagnostic.velo ? diagnostic.velo.refRecyclerie : 'N/A' }}
+                        </td>
 
 
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}</td>
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.type : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.marque : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-right-black border-b border-gray-300">{{ diagnostic.velo ? diagnostic.velo.public : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.nomProprio : 'N/A' }}</td>
+                        <td class="lieu-col px-6 py-4 border-r border-b border-gray-300">{{ diagnostic.velo and diagnostic.velo.proprietaire ? diagnostic.velo.proprietaire.statut : 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
 
                     </table>
                     {% else %}
