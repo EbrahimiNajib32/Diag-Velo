@@ -370,7 +370,6 @@ public function diagnosticEnCours(EntityManagerInterface $entityManager, Session
         ]);
 
         $form->handleRequest($request);
-//dd($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             //$elements = $entityManager->getRepository(ElementControl::class)->findAll();
