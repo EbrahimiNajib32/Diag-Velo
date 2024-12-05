@@ -83,7 +83,7 @@
         }
     </style>
 
-    <body>
+    <body class="flex flex-col min-h-screen">
         <header class="flex relative w-full justify-between mb-2">
             <div id="headerLogoTissebands">
                 <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
@@ -93,37 +93,45 @@
             </div>
         </header>
 
-        <main class="mb-4">
+        <main class="flex-1 p-4">
             <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
-                {% if lieu %}
-                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
-                        <i class="fas fa-bicycle mr-2"></i> Modification
-                    </h1>
-                {% else %}
-                    <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
-                        <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
-                    </h1>
-                {% endif %}
+                <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
+                    <i class="bi bi-pencil mr-2"></i>Modifier vélo
+                </h1>
             </div>
 
             <nav class="py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
                 <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
                     <li class="breadcrumb-item font-bold">
                         <a href="{{ path('app_accueil') }}" 
-                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                            <i class="fas fa-home mr-2"></i> Accueil
-                        </a>
-                    </li>
-                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                    <li class="breadcrumb-item font-bold">
-                        <a href="/velo/all" 
-                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                            <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
+                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
+                            <i class="fas fa-home mr-2"></i> 
                         </a>
                     </li>
                     <li><i class="fas fa-angle-right text-gray-400"></i></li>
                     <li class="breadcrumb-item text-black font-bold flex items-center">
-                        <i class="bi bi-pencil mr-2"></i> Modifier vélo
+                        {% if lieu %}
+                            <i class="fas fa-tasks mr-2"></i>Diagnostic
+                        {% else %}
+                            <i class="fas fa-bicycle mr-2"></i>Gestion Vélo
+                        {% endif %}
+                    </li>
+                    {% if lieu %}
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                        <li class="breadcrumb-item text-black text-lg font-bold flex items-center space-x-2">
+                            . . .
+                    </li>
+                    {% endif %}
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item font-bold">
+                        <a href="/velo/all" 
+                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
+                            <i class="bi bi-search mr-2"></i>Créer/Sélectionner Vélo
+                        </a>
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item text-black font-bold flex items-center">
+                        <i class="bi bi-pencil mr-2"></i>Modifier vélo
                     </li>
                 </ol>
             </nav>
