@@ -49,6 +49,7 @@
     </style>
 
     <body class="flex flex-col min-h-screen">
+
         <header class="flex relative w-full justify-between mb-2">
             <div id="headerLogoTissebands">
                 <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
@@ -184,15 +185,23 @@
                     </div>
                 {% endfor %}
 
-                <div class="mb-6 text-center">
+                <div class="text-center">
                     {{ form_row(diagnosticForm.conclusion, {'label_attr': {'class': 'text-sm portrait:text-2xl'}, 'attr': {'class': 'space-x-4'}}) }}
-                </div>        <button type="submit" class="mt-4 py-2 px-4 bg-teal-500 hover:bg-indigo-700 text-white font-medium rounded-md">Sauvegarder</button>
+                </div>        
+                <div>
+                    {{ form_row(diagnosticForm.cout_reparation, {
+                        'attr': {
+                            'class': 'form-control mb-2 mt-4 h-6 w-16 p-2 border rounded border-black portrait:h-10 text-xs sm:text-sm md:text-base'
+                        }
+                    }) }}
+                </div>
+                <button type="submit" class="py-2 px-4 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">Sauvegarder</button>
                 {{ form_end(diagnosticForm) }}
             </div>
 
         </main>
 
-        <footer class="logo-footer bottom-0 w-full bg-white">
+        <footer class="logo-footer bottom-0 w-full">
             <div class="flex justify-center content-center">
                 <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo" class="">
             </div>
@@ -293,5 +302,13 @@
                 radio.addEventListener('change', updateCategoryBackground);
             });
         });
+
+        document.getElementById('form_diagnostic_cout_reparation').addEventListener('input', function (e) {
+            if (e.target.value < 0) {
+                e.target.value = '';
+                alert('Veuillez entrer un nombre positif.');
+            }
+        });
+
     </script>
 {% endblock %}
