@@ -234,74 +234,74 @@
 
 
 
-                <div class="table-container overflow-x-auto relative shadow-md sm:rounded-lg">
-                    <table class="table w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-2 py-3">ID</th>
-                            <th scope="col" class="px-2 py-3">Propriétaire</th>
-                            <th scope="col" class="px-2 py-3">Numéro de série</th>
-                            <th scope="col" class="px-2 py-3">Référence recyclerie</th>
-                            <th scope="col" class="px-2 py-3">Marque</th>
-                            <th scope="col" class="px-2 py-3">Couleur</th>
-                            <th scope="col" class="px-2 py-3">Type</th>
-                            <th scope="col" class="px-2 py-3">Public</th>
-                            <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
-                            <th scope="col" class="px-2 py-3">Date de vente</th>
-                            <th scope="col" class="px-2 py-3">Date de destruction</th>
-                            <th scope="col" class="px-2 py-3">Photo</th>
-                            <th scope="col" class="px-2 py-3">Détails vélo</th>
-                            <th scope="col" class="px-2 py-3">Historique</th>
-                            {% if lieu %}
-                                <th scope="col" class="px-2 py-3">Faire Diagnostic</th>
-                            {% endif %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for velo in pagination %}
-                            <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
-                                <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
-                                <td class="px-2 py-4 border-r border-b border-gray-300">
-                                    {% if velo.date_de_vente is not null %}
-                                        {{ velo.date_de_vente|date('d/m/Y') }}
-                                    {% endif %}
-                                </td>
+            <div class="table-container overflow-x-auto relative shadow-md sm:rounded-lg" style="padding-right: 0px; margin-right: -129px; margin-left: -131px;">
+                <table class="table-auto  w-full text-lg text-left text-gray-650">
+                    <thead class="text-lg text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-2 py-3">ID</th>
+                        <th scope="col" class="px-2 py-3">Propriétaire</th>
+                        <th scope="col" class="px-2 py-3">Numéro de série</th>
+                        <th scope="col" class="px-2 py-3">Référence recyclerie</th>
+                        <th scope="col" class="px-2 py-3">Marque</th>
+                        <th scope="col" class="px-2 py-3">Couleur</th>
+                        <th scope="col" class="px-2 py-3">Type</th>
+                        <th scope="col" class="px-2 py-3">Public</th>
+                        <th scope="col" class="px-2 py-3">Date d'enregistrement</th>
+                        <th scope="col" class="px-2 py-3">Date de vente</th>
+                        <th scope="col" class="px-2 py-3">Date de destruction</th>
+                        <th scope="col" class="px-2 py-3">Photo</th>
+                        <th scope="col" class="px-2 py-3">Détails vélo</th>
+                        <th scope="col" class="px-2 py-3">Historique</th>
+                        {% if lieu %}
+                            <th scope="col" class="px-2 py-3">Faire Diagnostic</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for velo in pagination %}
+                        <tr class="bg-white border-b data-row" data-type="{{ velo.type }}" data-public="{{ velo.public }}" data-marque="{{ velo.marque }}" data-couleur="{{ velo.couleur }}">
+                            <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
+                            <td class="marque-col px-2 py-4 border-r border-b border-gray-300">{{ velo.marque }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.couleur }}</td>
+                            <td class="marque-col px-2 py-4 border-r border-b border-gray-300">{{ velo.type }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.public }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">{{ velo.date_de_enregistrement|date('d/m/Y') }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">
+                                {% if velo.date_de_vente is not null %}
+                                    {{ velo.date_de_vente|date('d/m/Y') }}
+                                {% endif %}
+                            </td>
 
-                                <td class="px-2 py-4 border-r border-b border-gray-300">
-                                    {% if velo.date_destruction is not null %}
-                                        {{ velo.date_destruction|date('d/m/Y') }}
-                                    {% endif %}
-                                </td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300">
+                                {% if velo.date_destruction is not null %}
+                                    {{ velo.date_destruction|date('d/m/Y') }}
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-4">
+                                <button data-modal-target="photo-modal-{{ velo.id }}" data-modal-toggle="photo-modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white" type="button">
+                                    <i class="fa-solid fa-eye text-white hover:text-gray-700"></i>
+                                </button>
+                            </td>
+                            <td class="px-2 py-4">
+                                <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white">
+                                    Modifier
+                                </a>
+                            </td>
+                            <td class="px-2 py-4">
+                                <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white" type="button">
+                                    Voir
+                                </button>
+                            </td>
+                            {% if lieu %}
                                 <td class="px-2 py-4">
-                                    <button data-modal-target="photo-modal-{{ velo.id }}" data-modal-toggle="photo-modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
-                                        <i class="fa-solid fa-eye text-white hover:text-gray-700"></i>
-                                    </button>
-                                </td>
-                                <td class="px-2 py-4">
-                                    <a href="{{ path('velo_edit', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
-                                        Modifier
+                                    <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-lg px-3 py-2 text-center w-full text-white">
+                                        Faire
                                     </a>
                                 </td>
-                                <td class="px-2 py-4">
-                                    <button data-modal-target="modal-{{ velo.id }}" data-modal-toggle="modal-{{ velo.id }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white" type="button">
-                                        Voir
-                                    </button>
-                                </td>
-                                {% if lieu %}
-                                    <td class="px-2 py-4">
-                                        <a href="{{ path('app_type_diagnostic', { 'id': velo.id }) }}" class="block bg-teal-500 rounded-lg text-sm px-3 py-2 text-center w-full text-white">
-                                            Faire
-                                        </a>
-                                    </td>
-                                {% else %}
+                            {% else %}
 
                                 {% endif %}
 
