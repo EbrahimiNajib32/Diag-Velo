@@ -72,7 +72,7 @@
         }
     </style>
 
-    <body>
+    <body class="flex flex-col min-h-screen">
         <header class="flex relative w-full justify-between mb-2">
             <div id="headerLogoTissebands">
                 <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
@@ -82,7 +82,7 @@
             </div>
         </header>
 
-        <main class="mb-4">
+        <main class="flex-1 p-4">
             <!-- Modal de confirmation -->
             <div id="modal-erreur" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto hidden">
                 <div class="modal-backdrop fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40" aria-hidden="true"></div>
@@ -127,7 +127,7 @@
 
             <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
                 <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
-                    <i class="fas fa-tasks mr-2"></i> Diagnostic
+                    <i class="fas fa-edit mr-2"></i>Saisie du diagnostic
                 </h1>
                 <p class="text-sm sm:text-base text-gray-700 font-semibold text-center">
                     {{ lieu.nomType }} {{ lieu.nom }} à {{ lieu.ville }}
@@ -138,20 +138,28 @@
                 <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
                     <li class="breadcrumb-item font-bold">
                         <a id="OpenModalAccueil" href="#" data-url="{{ path('app_accueil') }}"
-                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                            <i class="fas fa-home mr-2"></i> Accueil
+                        class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
+                            <i class="fas fa-home mr-2"></i>
                         </a>
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                    <li class="breadcrumb-item text-black font-bold flex items-center">
+                        <i class="fas fa-tasks mr-2"></i>Diagnostic
+                    </li>
+                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                        <li class="breadcrumb-item text-black text-lg font-bold flex items-center space-x-2">
+                            . . .
                     </li>
                     <li><i class="fas fa-angle-right text-gray-400"></i></li>
                     <li class="breadcrumb-item font-bold">
                         <a id="OpenModalSelection" href="#" data-url="{{ path('app_type_diagnostic', { 'id': velo.id }) }}"
                         class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                            <i class="fas fa-list mr-2"></i> Type de diagnostic
+                            <i class="fas fa-list mr-2"></i>Type de diagnostic
                         </a>
                     </li>
                     <li><i class="fas fa-angle-right text-gray-400"></i></li>
                     <li class="breadcrumb-item text-black font-bold flex items-center">
-                        <i class="fas fa-edit mr-2"></i> Saisie du diagnostic
+                        <i class="fas fa-edit mr-2"></i>Saisie du diagnostic
                     </li>
                 </ol>
             </nav>
