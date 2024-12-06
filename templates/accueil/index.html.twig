@@ -61,7 +61,7 @@
                         </a>
 
                         <a href="{{ path('app_dashboard') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
-                            <i class="bi bi-speedometer text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i> 
+                            <i class="bi bi-speedometer text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
                             Tableau de bord
                         </a>
                     {% endif %}
@@ -148,7 +148,7 @@
 
             <div class="relative max-w-5xl w-full mx-4 sm:mx-auto bg-white rounded-lg shadow-lg p-4 md:p-5 overflow-y-auto max-h-[90vh] z-50">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b">
-                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">Créer/Séléctionner un lieu</h3>
+                    <h3 id="modal-title" class="text-xl font-semibold text-gray-900">    <i class="fas fa-home mr-2"></i> >  <i class="fas fa-tasks mr-2"></i> Diagnostic  >  Créer / Séléctionner un lieu</h3>
                     <button id="closeModalLieu" type="button" class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center" data-modal-hide="modal-lieu">
                         <i class="bi bi-x-lg"></i>
                     </button>
@@ -173,7 +173,7 @@
                                 </thead>
                                 <tbody>
                                     {% for lieu in lieux_actifs %}
-                                            <tr class= "cursor-pointer hover:bg-gray-400 transition-all ease-in-out duration-150" 
+                                            <tr class= "cursor-pointer hover:bg-gray-400 transition-all ease-in-out duration-150"
                                                 onclick="window.location.href='{{ path('app_lieu_choisi', {'id': lieu.id}) }}'">
                                                 <td class="px-4 py-2 border-b"> {{ lieu.typeLieuId.nomTypeLieu }} </td>
                                                 <td class="px-4 py-2 border-b">{{ lieu.nomLieu }}</td>
@@ -349,7 +349,7 @@
         /* Animation Slide-In */
         @keyframes slideIn {
             from {
-                transform: translateX(100%); 
+                transform: translateX(100%);
             }
             to {
                 transform: translateX(0);
@@ -399,10 +399,10 @@
 
                 setTimeout(() => {
                     flashMessage.remove();
-                }, 500); 
+                }, 500);
             }
         }
-        
+
         setTimeout(() => {
             hideFlashMessage();
         }, 5000);
@@ -414,10 +414,10 @@
             // Vérifier si le paramètre modal=open est présent dans l'URL
             if (urlParams.get('modal') === 'open') {
                 const modal = document.getElementById('modal-lieu');
-                modal.classList.remove('hidden');  
+                modal.classList.remove('hidden');
             }
         });
-    
+
         document.addEventListener("DOMContentLoaded", () => {
             // Modal Lieu
             const openModalLieu = document.querySelector('[data-modal-toggle="modal-lieu"]');
@@ -457,7 +457,7 @@
             closeModalParticipant?.addEventListener('click', function() {
                 modalParticipant.classList.add('hidden');
             });
-            
+
             // Fermer la modal des participants en cliquant sur le backdrop (fond)
             document.getElementById('backdrop-participant').addEventListener("click", (event) => {
                 // Vérifier si l'élément cliqué est le fond (backdrop)
