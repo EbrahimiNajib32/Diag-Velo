@@ -152,7 +152,7 @@ INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (N
 
 --Ajout types de lieu
 INSERT INTO `type_lieu` (`id`, `nom_type_lieu`, `actif`) VALUES
-     (1, 'Collège', 1),
-     (2, 'Ecole', 1),
+     (1, 'Ecole', 1),
+     (2, 'Collège', 1),
      (3, 'Lycée', 1);
 
