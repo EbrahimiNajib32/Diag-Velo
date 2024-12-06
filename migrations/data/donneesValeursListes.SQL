@@ -144,8 +144,7 @@ VALUES
     (66, 1, 51),
     (67, 1, 52),
     (68, 1, 53),
-    (69, 1, 54),
-    (70, 1, 55);
+    (69, 1, 54);
 
 
 -- Ajout de 1 utilisateur
@@ -155,5 +154,5 @@ INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (N
 INSERT INTO `type_lieu` (`id`, `nom_type_lieu`, `actif`) VALUES
      (1, 'Collège', 1),
      (2, 'Ecole', 1),
-     (3, 'Lycée', 1),
+     (3, 'Lycée', 1);
 
