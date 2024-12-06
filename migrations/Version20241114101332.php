@@ -33,6 +33,8 @@ final class Version20241114101332 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_FA7C8889EA6E93ED ON diagnostic (diagnostictype_lieu_type_id_id)');
         $this->addSql('ALTER TABLE proprietaire CHANGE statut statut VARCHAR(500) DEFAULT NULL');
 
+        // Insérer les données depuis le fichier SQL
+        $this->executeSqlFile(__DIR__ . '/data/donneesValeursListes.SQL');
     }
 
     public function down(Schema $schema): void
@@ -50,5 +52,19 @@ final class Version20241114101332 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_FA7C8889BA74394C ON diagnostic');
         $this->addSql('DROP INDEX IDX_FA7C8889EA6E93ED ON diagnostic');
         $this->addSql('ALTER TABLE diagnostic DROP lieu_id_id, DROP diagnostictype_lieu_type_id_id');
+    }
+
+    /**
+     * Fonction utilitaire pour exécuter un fichier SQL.
+     */
+    private function executeSqlFile(string $filePath): void
+    {
+        $sql = file_get_contents($filePath);
+        if ($sql === false) {
+            throw new \RuntimeException('Le fichier SQL ne peut pas être lu : ' . $filePath);
+        }
+
+        // Exécuter le SQL contenu dans le fichier
+        $this->addSql($sql);
     }
 }
