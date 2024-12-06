@@ -150,8 +150,9 @@ VALUES
 -- Ajout de 1 utilisateur
 INSERT INTO `utilisateur` (`id`, `nom`, `role`,`password`,`is_active`) VALUES (NULL, 'Admin', '0' , '$2a$04$WgkgpAoIA.lnn.I6CzLa2uOuJGgxOuUya2cThdkBqGJFwlTSeW3Fa','1');
 
---Ajout types de lieu
-INSERT INTO `type_lieu` (`id`, `nom_type_lieu`, `actif`) VALUES
+-- Ajout types de lieu
+INSERT INTO `type_lieu` (`id`, `nom_type_lieu`, `actif`)
+VALUES
      (1, 'Ecole', 1),
      (2, 'Collège', 1),
      (3, 'Lycée', 1);
