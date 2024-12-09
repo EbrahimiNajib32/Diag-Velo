@@ -32,7 +32,9 @@ final class Version20241114101332 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_FA7C8889BA74394C ON diagnostic (lieu_id_id)');
         $this->addSql('CREATE INDEX IDX_FA7C8889EA6E93ED ON diagnostic (diagnostictype_lieu_type_id_id)');
         $this->addSql('ALTER TABLE proprietaire CHANGE statut statut VARCHAR(500) DEFAULT NULL');
-        $this->addSql('ALTER TABLE velo CHANGE numero_de_serie numero_de_serie VARCHAR(255) NOT NULL, CHANGE taille_roues taille_roues VARCHAR(255) NOT NULL, CHANGE taille_cadre taille_cadre NUMERIC(10, 0) NOT NULL, CHANGE url_photo url_photo VARCHAR(255) NOT NULL, CHANGE date_de_vente date_de_vente DATETIME NOT NULL, CHANGE emplacement emplacement VARCHAR(255) NOT NULL, CHANGE commentaire commentaire LONGTEXT NOT NULL');
+
+
+
     }
 
     public function down(Schema $schema): void
@@ -46,10 +48,11 @@ final class Version20241114101332 extends AbstractMigration
         $this->addSql('DROP TABLE diagnostictype_lieutype');
         $this->addSql('DROP TABLE lieu');
         $this->addSql('DROP TABLE type_lieu');
-        $this->addSql('ALTER TABLE velo CHANGE numero_de_serie numero_de_serie VARCHAR(255) DEFAULT NULL, CHANGE taille_roues taille_roues VARCHAR(255) DEFAULT NULL, CHANGE taille_cadre taille_cadre NUMERIC(10, 0) DEFAULT NULL, CHANGE url_photo url_photo VARCHAR(255) DEFAULT NULL, CHANGE date_de_vente date_de_vente DATETIME DEFAULT NULL, CHANGE emplacement emplacement VARCHAR(255) DEFAULT NULL, CHANGE commentaire commentaire LONGTEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE proprietaire CHANGE statut statut VARCHAR(255) DEFAULT NULL');
         $this->addSql('DROP INDEX IDX_FA7C8889BA74394C ON diagnostic');
         $this->addSql('DROP INDEX IDX_FA7C8889EA6E93ED ON diagnostic');
         $this->addSql('ALTER TABLE diagnostic DROP lieu_id_id, DROP diagnostictype_lieu_type_id_id');
     }
+
+
 }

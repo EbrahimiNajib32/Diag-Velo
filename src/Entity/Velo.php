@@ -32,7 +32,7 @@ class Velo
     #[ORM\Column(length: 255)]
     private ?string $numero_de_serie = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
     private ?string $bicycode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
