@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\FormError;
 
 
+
 class VeloInfoType extends AbstractType
 {
     private $entityManager;
@@ -45,25 +46,8 @@ class VeloInfoType extends AbstractType
             ])
 
             ->add('bicycode', TextType::class, [
-                'constraints' => [
-                    new Length(['min' => 3, 'max' => 255]),
-                    new NotBlank(),
-                ],
+                'required' => false, // Si vous ne voulez pas que ce champ soit obligatoire
             ])
-            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-                $form = $event->getForm();
-                $bicycode = $form->get('bicycode')->getData();
-
-                // Utilisez l'EntityManager pour accéder au repository
-                $existingBicycode = $this->entityManager
-                    ->getRepository(Velo::class)
-                    ->findOneBy(['bicycode' => $bicycode]);
-
-                if ($existingBicycode) {
-                    // Ajoutez une erreur si le bicycode existe déjà
-                    $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
-                }
-            })
 
             ->add('marque', TextType::class, [
                 'label' => 'Marque'
