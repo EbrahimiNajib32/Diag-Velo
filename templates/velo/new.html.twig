@@ -351,9 +351,9 @@
                         </div>
 
                         <div class="new-prop-field" style="display:none;">
-                            {{ form_label(form.nom_proprio, 'Nom', {'label_attr': {'class': 'required-field'}}) }}
+                            {{ form_label(form.nom_proprio, 'Nom proprio', {'label_attr': {'class': 'required-field'}}) }}
                             <div class="w-full">
-                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
+                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
                             {{ form_label(form.prenom, 'Prénom') }}
                             <div class="w-full">
