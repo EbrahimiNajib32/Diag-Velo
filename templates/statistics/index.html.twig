@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <body class="flex flex-col min-h-screen">
+    <header class="flex relative w-full justify-between mb-2">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+        </div>
+    </header>
+
+    <main class="flex-1 p-4">
+
+        <div class="flex items-center justify-center">
+            <div class="container max-w-lg mx-auto p-8 bg-white shadow-lg rounded-lg">
+                <h1 class="text-2xl font-bold text-center text-gray-800 mb-8">Statistiques et Récapitulatif</h1>
+                <div class="grid grid-cols-1 gap-4">
+                    <a href="{{ path('diagnostics_recapitulatif') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                        <i class="bi bi-clipboard-data text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                        Récapitulatif des Diagnostics
+                    </a>
+                    <a href="{{ path('app_statistics_statistiques') }}" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-4 py-2 text-base lg:text-xl shadow transition-colors duration-200 mb-4 flex items-center justify-center w-full portrait:text-lg lg:portrait:text-4xl">
+                        <i class="bi bi-clipboard-data text-2xl lg:text-3xl mr-2 lg:mr-4 portrait:text-4xl lg:portrait:text-6xl"></i>
+                        Statistiques
+                    </a>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <a href="{{ path('app_accueil') }}" class="button-style hover:bg-green-400"><i class="bi bi-box-arrow-left text-xl mr-1"></i>Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full">
+        <div id="bottom-logo" class="flex justify-center items-center py-6">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise">
+        </div>
+    </footer>
+    </body>
+{% endblock %}
