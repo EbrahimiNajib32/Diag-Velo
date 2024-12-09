@@ -241,6 +241,7 @@
                         <th scope="col" class="px-2 py-3">ID</th>
                         <th scope="col" class="px-2 py-3">Propriétaire</th>
                         <th scope="col" class="px-2 py-3">Numéro de série</th>
+                        <th scope="col" class="px-2 py-3">Bicycode</th>
                         <th scope="col" class="px-2 py-3">Référence recyclerie</th>
                         <th scope="col" class="px-2 py-3">Marque</th>
                         <th scope="col" class="px-2 py-3">Couleur</th>
@@ -263,6 +264,7 @@
                             <td class="px-6 py-4 border-r border-b border-gray-300">{{velo.id }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap" data-owner="{{ velo.nom_proprio }}">{{ velo.nom_proprio }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap" data-serial="{{ velo.numero_de_serie }}">{{ velo.numero_de_serie }}</td>
+                            <td class="px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap" data-serial="{{ velo.bicycode }}">{{ velo.bicycode }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap" data-reference="{{ velo.ref_recyclerie }}">{{ velo.ref_recyclerie }}</td>
                             <td class="marque-col px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap">{{ velo.marque }}</td>
                             <td class="px-2 py-4 border-r border-b border-gray-300 whitespace-nowrap">{{ velo.couleur }}</td>
