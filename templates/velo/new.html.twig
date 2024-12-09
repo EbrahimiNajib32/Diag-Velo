@@ -5,6 +5,19 @@
 {% block body %}
     <style>
 
+        .text-red-500 {
+            color: red;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .block {
+            display: block;
+        }
+
+
         .ui-autocomplete {
             background-color: #ffffff;
             border: 1px solid #ccc;
@@ -157,34 +170,35 @@
             z-index: 50;
         }
     </style>
-    <body class="flex flex-col min-h-screen">
-        <header class="flex relative w-full justify-between mb-2">
-            <div id="headerLogoTissebands">
-                <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
-            </div>
-            <div id="headerLogoCite">
-                <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
-            </div>
-        </header>
 
-        <main class="flex-1 p-4">
-            {% for message in app.flashes('success') %}
-                <div class="fixed top-5 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
-                    <div class="text-green-500">
-                        <i class="bi bi-check-circle-fill text-green-500 text-xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-gray-800">{{ message }}</p>
-                    </div>
-                    <button
+    <body class="flex flex-col min-h-screen">
+    <header class="flex relative w-full justify-between mb-2">
+        <div id="headerLogoTissebands">
+            <img src="{{ asset('images/EBNtrans.png') }}" alt="EBN Logo" class="size-40">
+        </div>
+        <div id="headerLogoCite">
+            <img src="{{ asset('images/nouveau log 1.png') }}" alt="LCDRLR Logo">
+        </div>
+    </header>
+
+    <main class="flex-1 p-4">
+        {% for message in app.flashes('success') %}
+            <div class="fixed top-5 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
+                <div class="text-green-500">
+                    <i class="bi bi-check-circle-fill text-green-500 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-gray-800">{{ message }}</p>
+                </div>
+                <button
                         type="button"
                         class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 ml-auto inline-flex items-center"
                         onclick="hideFlashMessage()"
-                    >
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-            {% endfor %}
+                >
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        {% endfor %}
 
             {% if form.email.vars.errors|length > 0 %}
                 <div class="fixed top-5 right-0 z-50 bg-white border border-red-200 rounded-lg shadow-lg p-4 flex items-center gap-3 slide-in" id="flash-message">
@@ -221,141 +235,141 @@
     </div>
 {% endif %}
 
-            <!-- Modal de confirmation -->
-            <div id="modal-erreur" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 items-center justify-center overflow-y-auto hidden">
-                <div class="modal-backdrop fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40" aria-hidden="true"></div>
+        <!-- Modal de confirmation -->
+        <div id="modal-erreur" role="dialog" aria-labelledby="modal-title" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 items-center justify-center overflow-y-auto hidden">
+            <div class="modal-backdrop fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40" aria-hidden="true"></div>
 
-                <div class="fixed inset-0 z-50 w-screen overflow-y-auto">
-                    <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-                        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="fixed inset-0 z-50 w-screen overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+                    <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
 
-                            <button type="button" id="closeModalButton" class="absolute top-0 right-0 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 inline-flex items-center" data-modal-hide="modal-erreur">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
+                        <button type="button" id="closeModalButton" class="absolute top-0 right-0 text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-1.5 inline-flex items-center" data-modal-hide="modal-erreur">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
 
-                            <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                                <div class="sm:flex sm:items-start">
-                                    <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
-                                        <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                                        </svg>
-                                    </div>
-                                    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                        <h2 class="text-base font-bold text-red-600" id="modal-title">Attention</h2>
+                        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+                                    <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                    </svg>
+                                </div>
+                                <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                    <h2 class="text-base font-bold text-red-600" id="modal-title">Attention</h2>
 
-                                        <div class="mt-2">
-                                            <p class="text-base text-gray-900" id="modal-message">Attention si vous effectuer cette action cela n'enregistrera pas le vélo que vous êtes entrain de compléter.</p>
-                                        </div>
+                                    <div class="mt-2">
+                                        <p class="text-base text-gray-900" id="modal-message">Attention si vous effectuer cette action cela n'enregistrera pas le vélo que vous êtes entrain de compléter.</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                <button id="cancelButton" type="button" class="inline-flex w-full justify-center rounded-md bg-gray-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 sm:ml-3 sm:w-auto cursor-pointer">
-                                    Annuler
-                                </button>
-                                <button id="confirmButton" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto cursor-pointer">
-                                    Confirmer
-                                </button>
-                            </div>
-
                         </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                            <button id="cancelButton" type="button" class="inline-flex w-full justify-center rounded-md bg-gray-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 sm:ml-3 sm:w-auto cursor-pointer">
+                                Annuler
+                            </button>
+                            <button id="confirmButton" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto cursor-pointer">
+                                Confirmer
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
-                    <i class="fas fa-edit mr-2"></i>Saisir un vélo
-                </h1>
-                {% if lieu %}
+        <div class="container mx-auto mb-4 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-xl sm:text-2xl font-bold text-black text-center">
+                <i class="fas fa-edit mr-2"></i>Saisir un vélo
+            </h1>
+            {% if lieu %}
                 <p class="text-sm sm:text-base text-gray-700 font-semibold text-center">
                     {{ lieu.nomType }} {{ lieu.nom }} à {{ lieu.ville }}
                 </p>
-                {% else %}
-                {% endif %}
-            </div>
+            {% else %}
+            {% endif %}
+        </div>
 
-            <nav class="py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 mb-4">
-                <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
-                    <li class="breadcrumb-item font-bold">
-                        <a id="OpenModalAccueil" href="#" data-url="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
-                            <i class="fas fa-home mr-2"></i>
-                        </a>
-                    </li>
-                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                    <li class="breadcrumb-item text-black font-bold flex items-center">
-                        {% if lieu %}
-                            <i class="fas fa-tasks mr-2"></i> Diagnostic
-                        {% else %}
-                            <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
-                        {% endif %}
-                    </li>
+        <nav class="py-3 px-4 container mx-auto flex flex-col sm:flex-row justify-center sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 mb-4">
+            <ol class="breadcrumb flex flex-wrap items-center space-x-2 sm:space-x-4">
+                <li class="breadcrumb-item font-bold">
+                    <a id="OpenModalAccueil" href="#" data-url="{{ path('app_accueil') }}" class="text-blue-500 hover:text-blue-600 font-bold flex items-center">
+                        <i class="fas fa-home mr-2"></i>
+                    </a>
+                </li>
+                <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                <li class="breadcrumb-item text-black font-bold flex items-center">
                     {% if lieu %}
-                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                        <li class="breadcrumb-item text-black text-lg font-bold flex items-center space-x-2">
-                            . . .
-                    </li>
+                        <i class="fas fa-tasks mr-2"></i> Diagnostic
+                    {% else %}
+                        <i class="fas fa-bicycle mr-2"></i> Gestion Vélo
                     {% endif %}
+                </li>
+                {% if lieu %}
                     <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                    <li class="breadcrumb-item font-bold">
-                        <a id="OpenModalSelection" href="#" data-url="/velo/all" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
-                            <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
-                        </a>
+                    <li class="breadcrumb-item text-black text-lg font-bold flex items-center space-x-2">
+                        . . .
                     </li>
-                    <li><i class="fas fa-angle-right text-gray-400"></i></li>
-                    <li class="breadcrumb-item text-black font-bold flex items-center">
-                        <i class="fas fa-edit mr-2"></i> Saisir un vélo
-                    </li>
-                </ol>
-            </nav>
+                {% endif %}
+                <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                <li class="breadcrumb-item font-bold">
+                    <a id="OpenModalSelection" href="#" data-url="/velo/all" class="text-blue-500 hover:text-blue-600 font-bold flex items-center hover:underline">
+                        <i class="bi bi-search mr-2"></i> Créer/Sélectionner Vélo
+                    </a>
+                </li>
+                <li><i class="fas fa-angle-right text-gray-400"></i></li>
+                <li class="breadcrumb-item text-black font-bold flex items-center">
+                    <i class="fas fa-edit mr-2"></i> Saisir un vélo
+                </li>
+            </ol>
+        </nav>
 
-            <div class="bg-white flex flex-col min-h-screen justify-center" style="background-color: white;">
+        <div class="bg-white flex flex-col min-h-screen justify-center" style="background-color: white;">
 
-                <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                        {{ form_start(form, {'attr': {'class': 'space-y-4', 'style': 'max-width:500px; margin:auto;'}}) }}
-                        <div class="grid grid-cols-1 gap-4 mx-2 sm:mx-4 md:mx-25 lg:mx-42">
-                            <div class="border border-black rounded p-3 text-center">
-                                <div>
-                                    {{ form_label(form.chosir_ou_ajouter) }}
+                {{ form_start(form, {'attr': {'class': 'space-y-4', 'style': 'max-width:500px; margin:auto;'}}) }}
+                <div class="grid grid-cols-1 gap-4 mx-2 sm:mx-4 md:mx-25 lg:mx-42">
+                    <div class="border border-black rounded p-3 text-center">
+                        <div>
+                            {{ form_label(form.chosir_ou_ajouter) }}
 
-                                    <div class="choice-container flex-col-2 justify-around flex ">
-                                        <div class="existing-choice">
-                                            {{ form_widget(form.chosir_ou_ajouter[0]) }}
-                                            {{ form_label(form.chosir_ou_ajouter[0]) }}
-                                        </div>
-                                            <div class="new-choice">
-                                                {{ form_widget(form.chosir_ou_ajouter[1]) }}
-                                                {{ form_label(form.chosir_ou_ajouter[1]) }}
-                                            </div>
-                                        </div>
+                            <div class="choice-container flex-col-2 justify-around flex ">
+                                <div class="existing-choice">
+                                    {{ form_widget(form.chosir_ou_ajouter[0]) }}
+                                    {{ form_label(form.chosir_ou_ajouter[0]) }}
                                 </div>
-                                <div class="form-group existing-proprietaire" style="display:none;">
-                                    {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
-                                    {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
-                                    {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
+                                <div class="new-choice">
+                                    {{ form_widget(form.chosir_ou_ajouter[1]) }}
+                                    {{ form_label(form.chosir_ou_ajouter[1]) }}
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group existing-proprietaire" style="display:none;">
+                            {{ form_label(form.autocomplete_proprietaire, 'Propriétaire', {'label_attr': {'class': 'required-field'}}) }}
+                            {{ form_widget(form.autocomplete_proprietaire, {'attr': {'id': 'velo_info_autocomplete_proprietaire', 'autocomplete': 'off', 'class': 'ui-autocomplete-input'}}) }}
+                            {{ form_widget(form.proprietaire, {'attr': {'id': 'velo_info_proprietaire'}}) }}
+                        </div>
 
-                                <div class="new-prop-field" style="display:none;">
-                                    {{ form_label(form.nom_proprio, 'Nom', {'label_attr': {'class': 'required-field'}}) }}
-                                    <div class="w-full">
-                                        {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
-                                    </div>
-                                    {{ form_label(form.prenom, 'Prénom') }}
-                                    <div class="w-full">
-                                        {{ form_widget(form.prenom, {'attr': {'class': 'w-full text-center'}}) }}
-                                    </div>
-                                    {{ form_label(form.date_de_naissance, 'Date de naissance') }}
-                                    <div class="w-full">
-                                        {{ form_widget(form.date_de_naissance, {'attr': {'class': 'w-full text-center'}}) }}
-                                    </div>
-                                    {{ form_label(form.email, 'E-m@il') }}
-                                    <div class="w-full">
-                                        {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
-                                    </div>
-                                    {{ form_label(form.telephone, 'Numéro de téléphone') }}
-                                    <div class="w-full">
-                                        {{ form_widget(form.telephone, {
+                        <div class="new-prop-field" style="display:none;">
+                            {{ form_label(form.nom_proprio, 'Nom', {'label_attr': {'class': 'required-field'}}) }}
+                            <div class="w-full">
+                                {{ form_widget(form.nom_proprio, {'attr': {'class': 'w-full text-center', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
+                            </div>
+                            {{ form_label(form.prenom, 'Prénom') }}
+                            <div class="w-full">
+                                {{ form_widget(form.prenom, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
+                            {{ form_label(form.date_de_naissance, 'Date de naissance') }}
+                            <div class="w-full">
+                                {{ form_widget(form.date_de_naissance, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
+                            {{ form_label(form.email, 'E-m@il') }}
+                            <div class="w-full">
+                                {{ form_widget(form.email, {'attr': {'class': 'w-full text-center'}}) }}
+                            </div>
+                            {{ form_label(form.telephone, 'Numéro de téléphone') }}
+                            <div class="w-full">
+                                {{ form_widget(form.telephone, {
                                             'attr': {
                                                 'placeholder': 'Ex : +33 6 12 34 56 78',
                                                 'class': 'w-full text-center'
@@ -371,355 +385,366 @@
                                             </ul>
                                         </div>
                                     {% endif %}
-                                    </div>
-                                    <div class="w-full">
-                                        {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
-                                        {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
-                                    </div>
-                                </div>
-
                             </div>
-                            <div>
-                                <h1 class="text-center">Couleurs</h1>
-                                <div class="grid grid-cols-5 gap-1">
-                                    {% for color in form.couleur %}
-                                        <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
-                                            {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
-                            {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                            {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
-                            {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
-                            {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                            {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                            {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                            {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-                            {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
-
-                            <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center mb-4">
-                                <div class="text-center">
-                                    <button id="cameraIcon" type="button" class="cameraIcon text-4xl mt-10">
-                                        <i class="bi bi-camera"></i>
-                                    </button>
-                                    <h3>Prendre photo</h3>
-                                    <div id="videoCaptureDiv" style="display: none;">
-                                        <video id="videoElement" autoplay></video>
-                                        <img alt="feed video input caméra" id="capturedImage" src="" style="display: none;" />
-                                        <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon text-4xl"></button>
-                                        <h3 id="captureText">Capturer</h3>
-                                        <canvas id="canvasElement" style="display: none;"></canvas>
-                                        {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-center space-x-4">
-                                {% if lieu %}
-                                    <button type="submit" name="action" value="go_to_diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
-                                        <i class="bi bi-search text-lg lg:text-xl mr-2 lg:mr-3"></i>
-                                        Diagnostic
-                                    </button>
-                                {% endif %}
-
-                                <button type="submit" name="action" value="stay" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
-                                    <i class="bi bi-plus-circle text-lg lg:text-xl mr-2 lg:mr-3"></i>
-                                    Ajouter un vélo
-                                </button>
-                            </div>
-
-                            <div class="flex items-center justify-center mt-2">
-                                <button type="submit" name="action" value="return_home" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
-                                    <i class="bi bi-house-door text-lg lg:text-xl mr-2 lg:mr-3"></i>
-                                    Enregistrer et retour à l'accueil
-                                </button>
+                            <div class="w-full">
+                                {{ form_label(form.statut, 'Statut', {'label_attr': {'class': 'required-field'}}) }}
+                                {{ form_widget(form.statut, {'attr': {'class': 'w-full text-center'}}) }}
                             </div>
                         </div>
-                        {{ form_end(form) }}
+
+                    </div>
                     <div>
+                        <h1 class="text-center">Couleurs</h1>
+                        <div class="grid grid-cols-5 gap-1">
+                            {% for color in form.couleur %}
+                                <label class="color-choice" style="background-color: {{ color.vars.value|lower }};">
+                                    {{ form_widget(color, {'attr': {'class': 'screen-reader-only'}}) }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{ form_row(form.ref_recyclerie, {'attr': {'class': 'block border border-black  rounded w-full'}}) }}
+                    {{ form_row(form.numero_de_serie, {'attr': {'class': 'block border border-black rounded w-full', 'required': 'required'},'label_attr': {'class': 'required-field'}}) }}
+
+                    {{ form_row(form.bicycode, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+
+                    {% if form.bicycode.vars.errors|length > 0 %}
+                        <div class="text-red-500 text-sm">
+                            {% for error in form.bicycode.vars.errors %}
+                                <p>{{ error.message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {{ form_row(form.marque, {'attr': {'class': 'autocomplete-marque block border bg-white border-black rounded w-full', 'id': 'autocomplete-marque'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.type, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.public, {'attr': {'class': 'bg-white block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.etat, {'attr': {'class': 'block border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.taille_roues, {'attr': {'class': 'block bg-white border border-black rounded w-full'}, 'label_attr': {'class': 'required-field'}}) }}
+                    {{ form_row(form.taille_cadre, {'attr': {'class': 'block border bg-white border-black rounded w-full'}}) }}
+                    {{ form_row(form.poids, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.model, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.emplacement, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.commentaire, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+                    {{ form_row(form.origine, {'attr': {'class': 'block border border-black rounded w-full'}}) }}
+
+                    <div class="border border-black rounded pr-2 pl-2 flex items-center justify-center mb-4">
+                        <div class="text-center">
+                            <button id="cameraIcon" type="button" class="cameraIcon text-4xl mt-10">
+                                <i class="bi bi-camera"></i>
+                            </button>
+                            <h3>Prendre photo</h3>
+                            <div id="videoCaptureDiv" style="display: none;">
+                                <video id="videoElement" autoplay></video>
+                                <img alt="feed video input caméra" id="capturedImage" src="" style="display: none;" />
+                                <button id="captureButton" type="button" class="bi bi-record-circle button-black cameraIcon text-4xl"></button>
+                                <h3 id="captureText">Capturer</h3>
+                                <canvas id="canvasElement" style="display: none;"></canvas>
+                                {{ form_widget(form.url_photo, {'attr': {'id': 'url_photo'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center space-x-4">
+                        {% if lieu %}
+                            <button type="submit" name="action" value="go_to_diagnostic" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
+                                <i class="bi bi-search text-lg lg:text-xl mr-2 lg:mr-3"></i>
+                                Diagnostic
+                            </button>
+                        {% endif %}
+
+                        <button type="submit" name="action" value="stay" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
+                            <i class="bi bi-plus-circle text-lg lg:text-xl mr-2 lg:mr-3"></i>
+                            Ajouter un vélo
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-center mt-2">
+                        <button type="submit" name="action" value="return_home" class="bg-teal-500 hover:bg-green-400 text-white rounded-lg px-3 py-2 text-xs lg:text-sm shadow transition-colors duration-200 flex items-center justify-center max-w-xs">
+                            <i class="bi bi-house-door text-lg lg:text-xl mr-2 lg:mr-3"></i>
+                            Enregistrer et retour à l'accueil
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+                <div>
                 </div>
             </div>
-        <main>
+            <main>
 
-        <footer class="w-full">
-            <div id="bottom-logo" class="flex justify-center items-center py-6">
-                <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
-            </div>
-        </footer>  
+                <footer class="w-full">
+                    <div id="bottom-logo" class="flex justify-center items-center py-6">
+                        <img src="{{ asset('images/nouveau log 1.png') }}" alt="Logo de l'entreprise" >
+                    </div>
+                </footer>
     </body>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script>
-            function hideFlashMessage() {
-                const flashMessage = document.getElementById('flash-message');
-                if (flashMessage) {
-                    flashMessage.classList.remove('slide-in');
-                    flashMessage.classList.add('slide-out');
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.classList.remove('slide-in');
+                flashMessage.classList.add('slide-out');
 
-                    setTimeout(() => {
-                        flashMessage.remove();
-                    }, 500);
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 500);
+            }
+        }
+
+        setTimeout(() => {
+            hideFlashMessage();
+        }, 5000);
+
+        function hideErrorNotification() {
+            const errorNotification = document.getElementById('error-notification');
+            if (errorNotification) {
+                errorNotification.classList.remove('slide-in');
+                errorNotification.classList.add('slide-out');
+
+                setTimeout(() => {
+                    errorNotification.remove();
+                }, 500);
+            }
+        }
+
+        setTimeout(() => {
+            hideErrorNotification();
+        }, 7000);
+
+        const modal = document.getElementById("modal-erreur");
+        const openModalButtons = document.querySelectorAll('#OpenModalAccueil, #OpenModalSelection');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const confirmButton = document.getElementById('confirmButton');
+        let redirectUrl = '';
+
+        // Ouvrir la modal
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+                // Sauvegarde l'URL de destination du lien cliqué
+                redirectUrl = button.getAttribute('data-url');
+            });
+        });
+
+        // Fermer la modal (Annuler)
+        cancelButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        });
+
+        // Fermer la modal
+        closeModalButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        });
+
+        // Confirmer et rediriger vers l'URL spécifiée
+        confirmButton.addEventListener("click", () => {
+            window.location.href = redirectUrl;  // Redirige vers l'URL stockée
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorChoices = document.querySelectorAll('.color-choice');
+
+            colorChoices.forEach(choice => {
+                const checkbox = choice.querySelector('input[type=checkbox]');
+
+                const toggleCheckbox = function(event) {
+                    event.preventDefault(); // Prevent default behavior
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        choice.style.borderColor = 'blue';
+                        choice.style.boxShadow = '0 0 0 2px blue';
+                    } else {
+                        choice.style.borderColor = '#000000';
+                        choice.style.boxShadow = 'none';
+                    }
+                };
+
+                choice.addEventListener('click', toggleCheckbox);
+                choice.addEventListener('touchstart', toggleCheckbox);
+            });
+
+            const radios = document.querySelectorAll('input[type="radio"][name="velo_info[chosir_ou_ajouter]"]');
+            const existingProprietaireDiv = document.querySelector('.existing-proprietaire');
+            const newPropFieldsDiv = document.querySelector('.new-prop-field');
+            const newPropInputs = document.querySelectorAll('.new-prop-field input');
+
+            function toggleVisibility(showNewPropFields) {
+                if (showNewPropFields === '1') {
+                    existingProprietaireDiv.style.display = 'none';
+                    newPropFieldsDiv.style.display = 'block';
+                    newPropInputs.forEach(input => input.style.display = 'block');
+                } else {
+                    existingProprietaireDiv.style.display = 'block';
+                    newPropFieldsDiv.style.display = 'none';
+                    newPropInputs.forEach(input => input.style.display = 'none');
                 }
             }
 
-            setTimeout(() => {
-                hideFlashMessage();
-            }, 5000);
-
-            function hideErrorNotification() {
-                const errorNotification = document.getElementById('error-notification');
-                if (errorNotification) {
-                    errorNotification.classList.remove('slide-in');
-                    errorNotification.classList.add('slide-out');
-
-                    setTimeout(() => {
-                        errorNotification.remove();
-                    }, 500);
-                }
-            }
-
-            setTimeout(() => {
-                hideErrorNotification();
-            }, 7000);
-
-            const modal = document.getElementById("modal-erreur");
-            const openModalButtons = document.querySelectorAll('#OpenModalAccueil, #OpenModalSelection');
-            const closeModalButton = document.getElementById('closeModalButton');
-            const cancelButton = document.getElementById('cancelButton');
-            const confirmButton = document.getElementById('confirmButton');
-            let redirectUrl = '';
-
-            // Ouvrir la modal
-            openModalButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    modal.classList.remove("hidden");
-                    modal.classList.add("flex");
-                    // Sauvegarde l'URL de destination du lien cliqué
-                    redirectUrl = button.getAttribute('data-url');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    toggleVisibility(this.value);
                 });
             });
 
-            // Fermer la modal (Annuler)
-            cancelButton.addEventListener("click", () => {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-            });
+            const checkedRadio = Array.from(radios).find(radio => radio.checked);
+            if (checkedRadio) {
+                toggleVisibility(checkedRadio.value);
+            }
 
-            // Fermer la modal
-            closeModalButton.addEventListener("click", () => {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-            });
+            const video = document.getElementById('videoElement');
+            const canvas = document.getElementById('canvasElement');
+            const captureButton = document.getElementById('captureButton');
+            const photoInput = document.querySelector('input#velo_info_url_photo');
+            const capturedImage = document.getElementById('capturedImage');
+            const captureText = document.getElementById('captureText');
+            let isVideoPaused = false;
 
-            // Confirmer et rediriger vers l'URL spécifiée
-            confirmButton.addEventListener("click", () => {
-                window.location.href = redirectUrl;  // Redirige vers l'URL stockée
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-            });
-
-
-            document.addEventListener('DOMContentLoaded', function() {
-                const colorChoices = document.querySelectorAll('.color-choice');
-
-                colorChoices.forEach(choice => {
-                    const checkbox = choice.querySelector('input[type=checkbox]');
-
-                    const toggleCheckbox = function(event) {
-                        event.preventDefault(); // Prevent default behavior
-                        checkbox.checked = !checkbox.checked;
-                        if (checkbox.checked) {
-                            choice.style.borderColor = 'blue';
-                            choice.style.boxShadow = '0 0 0 2px blue';
-                        } else {
-                            choice.style.borderColor = '#000000';
-                            choice.style.boxShadow = 'none';
+            const startCamera = function() {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    // Try to get the rear camera first
+                    const constraints = {
+                        video: {
+                            facingMode: { exact: 'environment' }
                         }
                     };
 
-                    choice.addEventListener('click', toggleCheckbox);
-                    choice.addEventListener('touchstart', toggleCheckbox);
-                });
+                    navigator.mediaDevices.getUserMedia(constraints)
+                        .then(function(stream) {
+                            video.srcObject = stream;
+                            video.play();
+                        })
+                        .catch(function(error) {
+                            console.error('Error accessing rear camera:', error);
 
-                const radios = document.querySelectorAll('input[type="radio"][name="velo_info[chosir_ou_ajouter]"]');
-                const existingProprietaireDiv = document.querySelector('.existing-proprietaire');
-                const newPropFieldsDiv = document.querySelector('.new-prop-field');
-                const newPropInputs = document.querySelectorAll('.new-prop-field input');
+                            // Fallback to the front camera
+                            const fallbackConstraints = {
+                                video: true // Default to the front camera
+                            };
 
-                function toggleVisibility(showNewPropFields) {
-                    if (showNewPropFields === '1') {
-                        existingProprietaireDiv.style.display = 'none';
-                        newPropFieldsDiv.style.display = 'block';
-                        newPropInputs.forEach(input => input.style.display = 'block');
-                    } else {
-                        existingProprietaireDiv.style.display = 'block';
-                        newPropFieldsDiv.style.display = 'none';
-                        newPropInputs.forEach(input => input.style.display = 'none');
-                    }
-                }
-
-                radios.forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        toggleVisibility(this.value);
-                    });
-                });
-
-                const checkedRadio = Array.from(radios).find(radio => radio.checked);
-                if (checkedRadio) {
-                    toggleVisibility(checkedRadio.value);
-                }
-
-                const video = document.getElementById('videoElement');
-                const canvas = document.getElementById('canvasElement');
-                const captureButton = document.getElementById('captureButton');
-                const photoInput = document.querySelector('input#velo_info_url_photo');
-                const capturedImage = document.getElementById('capturedImage');
-                const captureText = document.getElementById('captureText');
-                let isVideoPaused = false;
-
-                const startCamera = function() {
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        // Try to get the rear camera first
-                        const constraints = {
-                            video: {
-                                facingMode: { exact: 'environment' }
-                            }
-                        };
-
-                        navigator.mediaDevices.getUserMedia(constraints)
-                            .then(function(stream) {
-                                video.srcObject = stream;
-                                video.play();
-                            })
-                            .catch(function(error) {
-                                console.error('Error accessing rear camera:', error);
-
-                                // Fallback to the front camera
-                                const fallbackConstraints = {
-                                    video: true // Default to the front camera
-                                };
-
-                                navigator.mediaDevices.getUserMedia(fallbackConstraints)
-                                    .then(function(stream) {
-                                        video.srcObject = stream;
-                                        video.play();
-                                    })
-                                    .catch(function(fallbackError) {
-                                        console.error('Error accessing camera:', fallbackError);
-                                        alert('Camera access was denied. Please allow camera access and try again.');
-                                    });
-                            });
-                    } else {
-                        alert('Your browser does not support camera access.');
-                    }
-                };
-
-                const toggleCapture = function(event) {
-                    event.preventDefault(); // Prevent default behavior
-                    if (!isVideoPaused) {
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        const context = canvas.getContext('2d');
-                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        let imageDataUrl = canvas.toDataURL('image/png');
-
-                        photoInput.value = imageDataUrl;
-                        capturedImage.src = imageDataUrl;
-                        capturedImage.style.display = 'block';
-                        video.pause();
-                        video.style.display = 'none';
-
-                        captureButton.classList.remove('button-black');
-                        captureButton.classList.add('button-red');
-                        captureText.textContent = 'Reprendre';
-                        isVideoPaused = true;
-                    } else {
-                        video.style.display = 'block';
-                        capturedImage.style.display = 'none';
-                        video.play();
-
-                        captureButton.classList.remove('button-red');
-                        captureButton.classList.add('button-black');
-                        captureText.textContent = 'Capturer';
-                        isVideoPaused = false;
-                    }
-                };
-
-                captureButton.addEventListener('click', toggleCapture);
-                captureButton.addEventListener('touchstart', toggleCapture);
-
-                const cameraIcon = document.getElementById('cameraIcon');
-                const videoCaptureDiv = document.getElementById('videoCaptureDiv');
-
-                const toggleVideoCaptureDiv = function() {
-                    if (videoCaptureDiv.style.display === 'none') {
-                        videoCaptureDiv.style.display = 'block';
-                        cameraIcon.style.display = 'none';
-                        startCamera(); // Start the camera when the div is shown
-                    } else {
-                        videoCaptureDiv.style.display = 'none';
-                        cameraIcon.style.display = 'block';
-                    }
-                };
-
-                cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
-                cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
-            });
-            $(document).ready(function() {
-                $('#velo_info_autocomplete_proprietaire').autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            url: '{{ path('autocomplete') }}',
-                            dataType: 'json',
-                            data: {
-                                term: request.term
-                            },
-                            success: function(data) {
-                                response($.map(data, function(item) {
-                                    return {
-                                        label: item.nom_proprio,
-                                        value: item.id_proprio
-                                    };
-                                }));
-                            }
+                            navigator.mediaDevices.getUserMedia(fallbackConstraints)
+                                .then(function(stream) {
+                                    video.srcObject = stream;
+                                    video.play();
+                                })
+                                .catch(function(fallbackError) {
+                                    console.error('Error accessing camera:', fallbackError);
+                                    alert('Camera access was denied. Please allow camera access and try again.');
+                                });
                         });
-                    },
-                    minLength: 2,
-                    select: function(event, ui) {
-                        $('#velo_info_proprietaire').val(ui.item.value);
-                        $('#velo_info_autocomplete_proprietaire').val(ui.item.label);
-                        return false;
-                    }
-                });
+                } else {
+                    alert('Your browser does not support camera access.');
+                }
+            };
+
+            const toggleCapture = function(event) {
+                event.preventDefault(); // Prevent default behavior
+                if (!isVideoPaused) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    let imageDataUrl = canvas.toDataURL('image/png');
+
+                    photoInput.value = imageDataUrl;
+                    capturedImage.src = imageDataUrl;
+                    capturedImage.style.display = 'block';
+                    video.pause();
+                    video.style.display = 'none';
+
+                    captureButton.classList.remove('button-black');
+                    captureButton.classList.add('button-red');
+                    captureText.textContent = 'Reprendre';
+                    isVideoPaused = true;
+                } else {
+                    video.style.display = 'block';
+                    capturedImage.style.display = 'none';
+                    video.play();
+
+                    captureButton.classList.remove('button-red');
+                    captureButton.classList.add('button-black');
+                    captureText.textContent = 'Capturer';
+                    isVideoPaused = false;
+                }
+            };
+
+            captureButton.addEventListener('click', toggleCapture);
+            captureButton.addEventListener('touchstart', toggleCapture);
+
+            const cameraIcon = document.getElementById('cameraIcon');
+            const videoCaptureDiv = document.getElementById('videoCaptureDiv');
+
+            const toggleVideoCaptureDiv = function() {
+                if (videoCaptureDiv.style.display === 'none') {
+                    videoCaptureDiv.style.display = 'block';
+                    cameraIcon.style.display = 'none';
+                    startCamera(); // Start the camera when the div is shown
+                } else {
+                    videoCaptureDiv.style.display = 'none';
+                    cameraIcon.style.display = 'block';
+                }
+            };
+
+            cameraIcon.addEventListener('click', toggleVideoCaptureDiv);
+            cameraIcon.addEventListener('touchstart', toggleVideoCaptureDiv);
+        });
+        $(document).ready(function() {
+            $('#velo_info_autocomplete_proprietaire').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: '{{ path('autocomplete') }}',
+                        dataType: 'json',
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.nom_proprio,
+                                    value: item.id_proprio
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#velo_info_proprietaire').val(ui.item.value);
+                    $('#velo_info_autocomplete_proprietaire').val(ui.item.label);
+                    return false;
+                }
             });
-            $(document).ready(function() {
-                $('.autocomplete-marque').autocomplete({
-                    source: [ 'Autres', 'Nakamura' , 'Decathlon' , 'Brompton' , 'Dilecta' , 'Colnago France' , 'Caminade' , 'Montreal' , 'Skyde' ,
-                        'Time Bicycles' , 'Zéfal' , 'Helium Cycles' , 'Automoto' , 'Bergamont' , 'Mavic' , 'Cyfac' , 'B`Twin' ,
-                        'Gitane' , 'MBK' , 'Look Cycle' , 'Lapierre' , 'Time Sport','Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
-                        'Canyon', 'Cinelli', 'Cleary Bikes', 'Colnago', 'Commençal', 'Co-op Cycles (REI)', 'Dahon', 'De Rosa',
-                        'Diamondback', 'Dynacraft', 'Eddy Merckx', 'Electra', 'Evil Bike Co.', 'Fairdale', 'Felt', 'Focus',
-                        'Fuji', 'Ghost', 'GT', 'Holdsworth', 'Huffy', 'Ibis', 'Jamis', 'Kona', 'Lapierre', 'LeMond', 'Linus',
-                        'Look', 'Marin', 'Masi', 'Mercier', 'Mikado', 'Mongoose', 'Mondraker', 'Norco', 'Orange Bikes', 'Orient Bikes',
-                        'Orbea', 'Pashley Cycles', 'Peugeot', 'Pinarello', 'Pivot', 'Planet X', 'Polygon', 'Public Bikes', 'Quintana Roo',
-                        'Rabeneick', 'Raleigh', 'Ridley', 'Ritte', 'Rocky Mountain', 'Salsa', 'Saracen', 'Schwinn', 'Sekine', 'Serotta',
-                        'Simcoe', 'Sole Bicycles', 'Sommer', 'Soma', 'Spot Brand', 'Staiger', 'State Bicycle Co.', 'Storck', 'Strider',
-                        'Stromer', 'Surly', 'Tern', 'Throne Cycles', 'Tokyobike', 'Torpado', 'Transition', 'Union', 'Van Nicholas',
-                        'VanMoof', 'Veloretti', 'Vitus', 'Wilier Triestina', 'Woom', 'Yeti Cycles', 'Zinn' ],
-                    minLength: 2
-                });
-
+        });
+        $(document).ready(function() {
+            $('.autocomplete-marque').autocomplete({
+                source: [ 'Autres', 'Nakamura' , 'Decathlon' , 'Brompton' , 'Dilecta' , 'Colnago France' , 'Caminade' , 'Montreal' , 'Skyde' ,
+                    'Time Bicycles' , 'Zéfal' , 'Helium Cycles' , 'Automoto' , 'Bergamont' , 'Mavic' , 'Cyfac' , 'B`Twin' ,
+                    'Gitane' , 'MBK' , 'Look Cycle' , 'Lapierre' , 'Time Sport','Basso', 'BH', 'BMC', 'Boardman Bikes', 'Breezer', 'Brooklyn Bicycle Co.',
+                    'Canyon', 'Cinelli', 'Cleary Bikes', 'Colnago', 'Commençal', 'Co-op Cycles (REI)', 'Dahon', 'De Rosa',
+                    'Diamondback', 'Dynacraft', 'Eddy Merckx', 'Electra', 'Evil Bike Co.', 'Fairdale', 'Felt', 'Focus',
+                    'Fuji', 'Ghost', 'GT', 'Holdsworth', 'Huffy', 'Ibis', 'Jamis', 'Kona', 'Lapierre', 'LeMond', 'Linus',
+                    'Look', 'Marin', 'Masi', 'Mercier', 'Mikado', 'Mongoose', 'Mondraker', 'Norco', 'Orange Bikes', 'Orient Bikes',
+                    'Orbea', 'Pashley Cycles', 'Peugeot', 'Pinarello', 'Pivot', 'Planet X', 'Polygon', 'Public Bikes', 'Quintana Roo',
+                    'Rabeneick', 'Raleigh', 'Ridley', 'Ritte', 'Rocky Mountain', 'Salsa', 'Saracen', 'Schwinn', 'Sekine', 'Serotta',
+                    'Simcoe', 'Sole Bicycles', 'Sommer', 'Soma', 'Spot Brand', 'Staiger', 'State Bicycle Co.', 'Storck', 'Strider',
+                    'Stromer', 'Surly', 'Tern', 'Throne Cycles', 'Tokyobike', 'Torpado', 'Transition', 'Union', 'Van Nicholas',
+                    'VanMoof', 'Veloretti', 'Vitus', 'Wilier Triestina', 'Woom', 'Yeti Cycles', 'Zinn' ],
+                minLength: 2
             });
 
-        </script>
+        });
 
-        {% endblock %}
+    </script>
+
+{% endblock %}
+
