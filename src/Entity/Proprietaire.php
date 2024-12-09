@@ -19,7 +19,7 @@ class Proprietaire
     private ?string $nom_proprio = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $telephone = null;
+    private ?string $telephone = null; 
 
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $email = null;
@@ -57,7 +57,7 @@ class Proprietaire
         return $this;
     }
 
-    public function getTelephone(): ?int
+    public function getTelephone(): ?string
     {
         return $this->telephone;
     }
