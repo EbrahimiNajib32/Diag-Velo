@@ -46,32 +46,8 @@ class VeloInfoType extends AbstractType
             ])
 
             ->add('bicycode', TextType::class, [
-                'constraints' => [
-                    new Length(['min' => 3, 'max' => 255]),
-                ],
                 'required' => false, // Si vous ne voulez pas que ce champ soit obligatoire
             ])
-
-//            ->add('bicycode', TextType::class, [
-//                'constraints' => [
-//                    new Length(['min' => 3, 'max' => 255]),  // Utilisation de Length ici
-//                ],
-//                'required' => false, // Le champ n'est pas obligatoire
-//            ])
-//            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-//                $form = $event->getForm();
-//                $bicycode = $form->get('bicycode')->getData();
-//
-//                // Vérifiez si le bicycode existe déjà
-//                $existingBicycode = $this->getDoctrine()
-//                    ->getRepository(Velo::class)
-//                    ->findOneBy(['bicycode' => $bicycode]);
-//
-//                if ($existingBicycode) {
-//                    // Ajoutez une erreur si le bicycode existe déjà
-//                    $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
-//                }
-//            })
 
             ->add('marque', TextType::class, [
                 'label' => 'Marque'

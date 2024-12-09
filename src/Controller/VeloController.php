@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Form\FormError;
 
 class VeloController extends AbstractController
 {
@@ -30,16 +31,25 @@ class VeloController extends AbstractController
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
+        // Vérification de l'unicité du Bicycode si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+
             $bicycode = $velo->getBicycode();
 
-            // Vérifier si le bicycode existe déjà dans la base de données
-            $existingBicycode = $entityManager->getRepository(Velo::class)->findOneBy(['bicycode' => $bicycode]);
-            if ($existingBicycode) {
-                // Ajoutez une erreur sur le champ 'bicycode'
-                $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
-            } else {
+            // Vérifiez uniquement si le bicycode est renseigné
+            if ($bicycode) {
+                // Cherchez si le bicycode existe déjà dans la base de données
+                $existingBicycode = $entityManager->getRepository(Velo::class)->findOneBy(['bicycode' => $bicycode]);
+                if ($existingBicycode) {
+                    // Ajoutez une erreur si le bicycode existe déjà
+                    $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
+                }
+            }
+
+            // Si aucune erreur n'est présente pour le bicycode, on continue l'enregistrement
+            if (!$form->get('bicycode')->getErrors()->count()) {
                 $velo->setDateDeEnregistrement(new \DateTime());
+
 
                 // Traitement de l'image
                 $base64Image = $form->get('url_photo')->getData();
