@@ -18,7 +18,7 @@ class Proprietaire
     #[ORM\Column(length: 255)]
     private ?string $nom_proprio = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $telephone = null;
 
     #[ORM\Column(length: 500, nullable: true)]
@@ -62,11 +62,14 @@ class Proprietaire
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): self
+
+    public function setTelephone(?string $telephone): self
     {
         $this->telephone = $telephone;
+
         return $this;
     }
+
 
     public function getEmail(): ?string
     {
