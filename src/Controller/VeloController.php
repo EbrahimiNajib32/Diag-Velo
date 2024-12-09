@@ -24,63 +24,68 @@ class VeloController extends AbstractController
 {
     // Route pour créer un nouveau vélo
     #[Route('/velo/new', name: 'velo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,  SessionInterface $session): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $velo = new Velo();
         $form = $this->createForm(VeloInfoType::class, $velo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $velo->setDateDeEnregistrement(new \DateTime());
+            $bicycode = $velo->getBicycode();
 
-            // Traitement de l'image
-            $base64Image = $form->get('url_photo')->getData();
-            if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
-                $data = substr($base64Image, strpos($base64Image, ',') + 1);
-                $data = base64_decode($data);
+            // Vérifier si le bicycode existe déjà dans la base de données
+            $existingBicycode = $entityManager->getRepository(Velo::class)->findOneBy(['bicycode' => $bicycode]);
+            if ($existingBicycode) {
+                // Ajoutez une erreur sur le champ 'bicycode'
+                $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
+            } else {
+                $velo->setDateDeEnregistrement(new \DateTime());
 
-                $imageName = uniqid() . '.' . $type[1];
-                $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+                // Traitement de l'image
+                $base64Image = $form->get('url_photo')->getData();
+                if ($base64Image && preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type) && in_array($type[1], ['png', 'jpg', 'jpeg', 'gif'])) {
+                    $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                    $data = base64_decode($data);
 
-                if (!file_exists($this->getParameter('images_directory'))) {
-                    mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                    $imageName = uniqid() . '.' . $type[1];
+                    $filePath = $this->getParameter('images_directory') . '/' . $imageName;
+
+                    if (!file_exists($this->getParameter('images_directory'))) {
+                        mkdir($this->getParameter('images_directory'), 0777, true); // Ensure directory exists
+                    }
+                    file_put_contents($filePath, $data);
+
+                    $webPath = '/images/velo/' . $imageName;
+                    $velo->setUrlPhoto($webPath);
                 }
-                file_put_contents($filePath, $data);
 
-                $webPath = '/images/velo/' . $imageName;
-                $velo->setUrlPhoto($webPath);
-            }
+                if ($velo->getProprietaire()) {
+                    $entityManager->persist($velo->getProprietaire());
+                }
 
-            if ($velo->getProprietaire()) {
-                $entityManager->persist($velo->getProprietaire());
-            }
+                $entityManager->persist($velo);
+                $entityManager->flush();
 
-            $entityManager->persist($velo);
-            $entityManager->flush();
+                // Vérifier l'action demandée par le bouton
+                $action = $request->request->get('action');
+                if ($action === 'return_home') {
+                    $this->addFlash('success', 'Vélo enregistré avec succès !');
+                    return $this->redirectToRoute('app_accueil');
+                }
+                if ($action === 'go_to_diagnostic') {
+                    $this->addFlash('success', 'Vélo enregistré avec succès !');
+                    return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
+                }
 
-
-            // Vérifier l'action demandée par le bouton
-            $action = $request->request->get('action');
-            if ($action === 'return_home') {
-                // Si "Retour Accueil", on redirige vers la page d'accueil
+                // Si "Enregistrer un autre vélo", on recharge la page
                 $this->addFlash('success', 'Vélo enregistré avec succès !');
-                return $this->redirectToRoute('app_accueil');
+                return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
             }
-            if ($action === 'go_to_diagnostic') {
-                // Si "Aller au Diagnostic", on redirige vers la page de diagnostic avec l'ID du vélo
-                $this->addFlash('success', 'Vélo enregistré avec succès !');
-                return $this->redirectToRoute('app_type_diagnostic', ['id' => $velo->getId()]);
-            }
-
-            // Si "Enregistrer un autre vélo", on recharge la page
-            $this->addFlash('success', 'Vélo enregistré avec succès !');
-            return $this->redirectToRoute('velo_new'); // Recharge la page pour un nouvel enregistrement
         }
 
         return $this->render('velo/new.html.twig', [
             'form' => $form->createView(),
             'lieu' => $session->get('lieu'),
-
         ]);
     }
 
