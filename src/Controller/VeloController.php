@@ -85,9 +85,29 @@ class VeloController extends AbstractController
     }
 
 
+//    #[Route('/velo/check-bicycode', name: 'velo_check_bicycode', methods: ['GET'])]
+//    public function checkBicycode(Request $request, EntityManagerInterface $entityManager): JsonResponse
+//    {
+//        $bicycode = $request->query->get('bicycode');
+//
+//        // Vérifier si un vélo avec ce Bicycode existe
+//        $veloRepository = $entityManager->getRepository(Velo::class);
+//        $velo = $veloRepository->findOneBy(['bicycode' => $bicycode]);
+//
+//        if ($velo) {
+//            return new JsonResponse([
+//                'valid' => false,
+//                'message' => 'Le Bicycode est unique. Veuillez saisir un Bicycode différent.'
+//            ]);
+//        }
+//
+//        return new JsonResponse(['valid' => true]);
+//    }
 
 
-   #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
+
+
+    #[Route('/velo/all', name: 'velo_info', methods: ['GET'])]
    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, SessionInterface $session): Response
    {
        // Préparation des vélos paginés

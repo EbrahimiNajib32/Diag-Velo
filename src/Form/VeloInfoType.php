@@ -22,6 +22,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\FormError;
+
 
 class VeloInfoType extends AbstractType
 {
@@ -39,10 +43,28 @@ class VeloInfoType extends AbstractType
                 'required' => false,
                 'label' => 'Référence Recyclerie'
             ])
+
             ->add('bicycode', TextType::class, [
-                'required' => false,
-                'label' => 'Bicycode'
+                'constraints' => [
+                    new Length(['min' => 3, 'max' => 255]),
+                    new NotBlank(),
+                ],
             ])
+            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+                $form = $event->getForm();
+                $bicycode = $form->get('bicycode')->getData();
+
+                // Utilisez l'EntityManager pour accéder au repository
+                $existingBicycode = $this->entityManager
+                    ->getRepository(Velo::class)
+                    ->findOneBy(['bicycode' => $bicycode]);
+
+                if ($existingBicycode) {
+                    // Ajoutez une erreur si le bicycode existe déjà
+                    $form->get('bicycode')->addError(new FormError('Le Bicycode est unique. Veuillez saisir un Bicycode différent.'));
+                }
+            })
+
             ->add('marque', TextType::class, [
                 'label' => 'Marque'
             ])
