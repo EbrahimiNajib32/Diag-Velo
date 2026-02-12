@@ -32,4 +32,12 @@ return [
         'version' => '2.3.1',
         'type' => 'css',
     ],
+    'tom-select/dist/css/tom-select.bootstrap4.css' => [
+        'version' => '2.5.1',
+        'type' => 'css',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap5.css' => [
+        'version' => '2.5.1',
+        'type' => 'css',
+    ],
 ];
